@@ -5,6 +5,6 @@ Evoregions: mapping shifts in phylogenetic turnover across biogeographic regions
 
 To install Evoregions package type:
 
-`devtools::install_github(GabrielNakamura/Evoregions, ref = "main")`
+`devtools::install_github("GabrielNakamura/Evoregions", ref = "main")`
 
 
