@@ -1,15 +1,28 @@
 Package: Evoregions
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Mapping shifts in phylogenetic turnover across biogeographical regions
+Version: 0.0.1
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(
+            person(given = "Gabriel",
+           family = "Nakamura",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+           email = "gabriel.nakamura.souza@gmail.com",
+           comment = c(ORCID = "0000-0002-5144-5312")
+                  ),
+           person(given = "Leandro",
+           family = "Duarte",
+           role = "aut",
+           email = "duarte.ldas@gmail.com"
+                  ),
+           person(given = "Renan",
+           family = "Maestri",
+           role = "aut",
+           email = "renanmaestri@gmail.com"
+                  )
+           )
+Description: Evoregion execute biogeographical regionalization of important biogegions based on phylogenetic 
+    turnover calculated using fuzzy-sets.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
