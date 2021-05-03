@@ -7,6 +7,7 @@
 find.max.nclust(
   x,
   threshold,
+  esp,
   runs = 100,
   method = "kmeans",
   stat = "BIC",
@@ -20,6 +21,8 @@ find.max.nclust(
 \item{x}{A data.frame or matrix object containing eigenvectors by sites data.}
 
 \item{threshold}{Scalar. The number of eigenvectors used to perform classification.}
+
+\item{esp}{Coordinates for assemblages}
 
 \item{runs}{Scalar. Number of times classification will be performed.}
 
