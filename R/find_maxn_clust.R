@@ -9,6 +9,7 @@
 #' @param max.nclust Value of set of values defining the maximum number of groups to be evaluated.
 #' @param subset number of cells used in the analysis. It is particularly important whenever the total number of cells is large (> 1000).
 #' @param confidence.level threshold confidence level used to estimate congruence in the classification pattern.
+#' @param esp Coordinates for assemblages
 #'
 #' @return Matrix containing congruence values ranging between 0-1 for each max.nclust value (see Arguments) and confidence level.
 #' 
@@ -17,6 +18,7 @@
 #' @examples
 find.max.nclust <- function(x, 
                             threshold, 
+                            esp,
                             runs = 100, 
                             method = "kmeans", 
                             stat = "BIC", 
