@@ -1,10 +1,11 @@
 #' Tip-based metrics of trait evolution
 #' 
-#' @param tree - a phylogenetic tree as an object of class "phylo"
-#' @param traits - a named vector containing the tip states for a discretely valued character. The names must match the tip labels of the tree.
-#' @param nsim - number of simulations to stochastic character maps.
-#' @param method - tip-based metric, partial match to "transition_rates", "last_transition_time" and "stasis_time".
+#' @param tree A phylogenetic tree as an object of class "phylo"
+#' @param trait A named vector containing the tip states for a discretely valued character. The names must match the tip labels of the tree.
+#' @param nsim Number of simulations to stochastic character mapping.
+#' @param method Tip-based metric, partial match to "transition_rates", "last_transition_time" and "stasis_time".
 #' @return A list (length equal to nsim) with tip-based metrics estimated per species.
+#' @examples 
 
 tip.based.trait.evo <- function(tree, trait, nsim = 1, method = c("transition_rates", "last_transition_time", "stasis_time")) {
   ## Internal function
