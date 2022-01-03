@@ -9,6 +9,11 @@ Authors@R:
            email = "gabriel.nakamura.souza@gmail.com",
            comment = c(ORCID = "0000-0002-5144-5312")
                   ),
+           person(given = "André",
+           family = "Luza",
+           role = "aut",
+           email = "luza.andre@gmail.com"
+                  ),       
            person(given = "Leandro",
            family = "Duarte",
            role = "aut",
@@ -20,7 +25,7 @@ Authors@R:
            email = "renanmaestri@gmail.com"
                   )
            )
-Description: Evoregion execute biogeographical regionalization of important biogegions based on phylogenetic 
+Description: Evoregion executes biogeographical regionalization of important bioregions based on phylogenetic 
     turnover calculated using fuzzy-sets.
 License: MIT + file LICENSE
 Encoding: UTF-8
