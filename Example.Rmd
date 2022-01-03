@@ -1,0 +1,46 @@
+---
+title: "Evoregions: Working examples of its functionality"
+author: "ALLuza"
+date: "03/01/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Working example
+```{r, include=T,echo=T, results ="asis", warning=F,message=F}
+require(phytools)
+# create a phylogenetic tree
+tree <- read.tree(text = "(s1:0.9,((s2:0.5,(s3:0.1,s4:0.1)n4:0.4)n3:0.1,(s5:0.5,s6:0.5)n5:0.1)n2:0.3)n1;")
+
+# Trait states
+trait <- c("General", "Fruit", "Fruit", "Fruit", "Plant", "Plant")
+names(trait) <- tree$tip.label
+
+# Plot
+color <- c("gray", "white", "black") # set colors to the states
+plot.phylo(tree, label.offset = 0.05, show.node.label = TRUE)
+tiplabels(pch = 22, bg = color[as.numeric(as.factor(trait))], cex = 2, adj = 0.5)
+legend("topleft", fill = color, legend = levels(as.factor(trait)), bty = "n")
+
+```
+
+### Now that we have data we will go ahead and calculate the tip based metrics
+
+
+```{r, echo = T}
+
+source ("R/transition_rates_function.R")
+results <- tip.based.trait.evo(tree, 
+                               trait, 
+                               nsim = 2, 
+                               method = c("transition_rates", 
+                                          "last_transition_time", 
+                                          "stasis_time"))
+results[[1]]
+
+
+```
+
