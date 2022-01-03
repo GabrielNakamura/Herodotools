@@ -3,7 +3,7 @@ Title: Mapping shifts in phylogenetic turnover across biogeographical regions
 Version: 0.0.1
 Authors@R: 
     c(
-            person(given = "Gabriel",
+           person(given = "Gabriel",
            family = "Nakamura",
            role = c("aut", "cre"),
            email = "gabriel.nakamura.souza@gmail.com",
@@ -12,7 +12,9 @@ Authors@R:
            person(given = "André",
            family = "Luza",
            role = "aut",
-           email = "luza.andre@gmail.com"
+           email = "luza.andre@gmail.com",
+           comment = c(ORCID = "0000-0003-0302-529X",
+                      ResearcherID = "O-1134-2017")
                   ),
            person(given = "Vanderlei",
            family = "Debastiani",
@@ -37,3 +39,9 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    daee,
+    ape
