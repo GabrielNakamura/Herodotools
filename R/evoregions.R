@@ -53,7 +53,7 @@ evoregions <- function(comm,
   vec.bray <- pcps.comm.bray$vectors
   find.max.number.cluster <- find.max.nclust(x = vec.bray[, 1:thresh.bray],
                                              threshold = thresh.bray, 
-                                             nperm = 1000, 
+                                             runs = 1000, 
                                              max.nclust = c(10, 15, 20, 25, 30),
                                              subset = 350, 
                                              confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99)
