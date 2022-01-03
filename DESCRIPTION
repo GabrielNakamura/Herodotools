@@ -13,7 +13,12 @@ Authors@R:
            family = "Luza",
            role = "aut",
            email = "luza.andre@gmail.com"
-                  ),       
+                  ),
+           person(given = "Vanderlei",
+           family = "Debastiani",
+           role = "aut",
+           email = "vanderleidebastiani@yahoo.com.br"
+                  ),
            person(given = "Leandro",
            family = "Duarte",
            role = "aut",
