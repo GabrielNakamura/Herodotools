@@ -1,20 +1,28 @@
 #' Defining groups based on phylogenetic turnover
 #'
-#' @param comm Community occurrence matrix. Assemblages are rows and species are columns
+#' @param comm Species occurrence matrix. Assemblages are rows and species are columns
 #' @param coords Numerical matrix with coordinates for assemblages in comm
 #' @param phy Newick object with phylogenetic tree containing the species in comm
-#' @param method.dist Character with the method to be used to compute phyogenetic distances.
+#' @param method.dist Character. The method to be used to compute phyogenetic distances among assemblages.
 #'      Default is "bray"
-#' @param tresh.dist A scalar informing the distance treshold value to select eigenvectors. 
-#'     Defalt is 0.05 (eigenvector with at least 5% of variation)
+#' @param tresh.dist A scalar informing the threshold value to select eigenvectors based on the amount of variation of each eigenvector. 
+#'     Default is 0.05 (eigenvector with at least 5% of variation)
 #' @param method.clust Character indicating the grouping algorithm to be used in cluster analysis. 
 #'     Defalt is "kmeans"
-#' @param stat.clust Character
-#' @param n.iter.clust Scalar indicating the number of interections to be used in \code{\link{find.clusters}} function of adegenet package
+#' @param stat.clust Character to be used in \code{\link{find.clusters}} indicating the statistic to be computed for each model. Can be 
+#'     "BIC" (default), "AIC" or "WSS". 
+#' @param n.iter.clust Integer to be used in \code{\link{find.clusters}} 
+#'     function of adegenet package to indicate the number of iterations to be used in each run of K-means algorithm
 #' @param criterion.clust Character
-#' @param max.n.clust Scalar indicating the maximum number of clusters to be returned
+#' @param max.n.clust Integer value to be used in \code{\link{find.clusters}}. 
+#'     Indicates the maximum number of clusters to be tried. 
 #'
-#' @return A adgenet object containing the clusters 
+#' @return A list of length four containing
+#'     1 - Kstat: Numeric vector with the values of the summary statistics for different K values
+#'     2 - stat: Numeric value representing the summary statistic for the retained model
+#'     3 - grp: A list with three components, the K statistic for each group, the group that each 
+#'         assemblage was classified
+#'     4 - Size: The number of assemblages in each group
 #' 
 #' @export
 #'
