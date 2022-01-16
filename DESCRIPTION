@@ -1,5 +1,5 @@
-Package: Evoregions
-Title: Mapping shifts in phylogenetic turnover across biogeographical regions
+Package: Rrodotus
+Title: Tools for Historical Biogeography analysis
 Version: 0.0.1
 Authors@R: 
     c(
@@ -18,10 +18,19 @@ Authors@R:
            family = "Maestri",
            role = "aut",
            email = "renanmaestri@gmail.com"
+                  ),
+           person(given = "Andre",
+           family = "Luza",
+           role = "aut",
+           email = "luza.andre@gmail.com"
+                  ),
+           person(given = "Vanderlei",
+           family = "Debastiani",
+           role = "aut",
+           email = "vanderleidebastiani@yahoo.com.br"
                   )
            )
-Description: Evoregion execute biogeographical regionalization of important biogegions based on phylogenetic 
-    turnover calculated using fuzzy-sets.
+Description: Rrodotus contains a set of functions to analyze patterns associated with historical processes.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

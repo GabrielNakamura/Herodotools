@@ -1,10 +1,11 @@
-# Evoregions
-Evoregions: mapping shifts in phylogenetic turnover across biogeographic regions
+# Rrodotus
+
+Rrodotus: an R package for historical biogeographical analyses
 
 ## Install
 
-To install Evoregions package type:
+To install Rrodotus type:
 
-`devtools::install_github("GabrielNakamura/Evoregions", ref = "main")`
+`devtools::install_github("GabrielNakamura/Rrodotus", ref = "main")`
 
 
