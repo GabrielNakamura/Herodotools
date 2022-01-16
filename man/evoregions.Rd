@@ -18,31 +18,39 @@ evoregions(
 )
 }
 \arguments{
-\item{comm}{Community occurrence matrix. Assemblages are rows and species are columns}
+\item{comm}{Species occurrence matrix. Assemblages are rows and species are columns}
 
 \item{coords}{Numerical matrix with coordinates for assemblages in comm}
 
 \item{phy}{Newick object with phylogenetic tree containing the species in comm}
 
-\item{method.dist}{Character with the method to be used to compute phyogenetic distances.
+\item{method.dist}{Character. The method to be used to compute phyogenetic distances among assemblages.
 Default is "bray"}
 
-\item{tresh.dist}{A scalar informing the distance treshold value to select eigenvectors.
-Defalt is 0.05 (eigenvector with at least 5\% of variation)}
+\item{tresh.dist}{A scalar informing the threshold value to select eigenvectors based on the amount of variation of each eigenvector.
+Default is 0.05 (eigenvector with at least 5\% of variation)}
 
 \item{method.clust}{Character indicating the grouping algorithm to be used in cluster analysis.
 Defalt is "kmeans"}
 
-\item{stat.clust}{Character}
+\item{stat.clust}{Character to be used in \code{\link{find.clusters}} indicating the statistic to be computed for each model. Can be
+"BIC" (default), "AIC" or "WSS".}
 
-\item{n.iter.clust}{Scalar indicating the number of}
+\item{n.iter.clust}{Integer to be used in \code{\link{find.clusters}}
+function of adegenet package to indicate the number of iterations to be used in each run of K-means algorithm}
 
 \item{criterion.clust}{Character}
 
-\item{max.n.clust}{Scalar indicating the maximum number of clusters to be returned}
+\item{max.n.clust}{Integer value to be used in \code{\link{find.clusters}}.
+Indicates the maximum number of clusters to be tried.}
 }
 \value{
-A adgenet object containing the clusters
+A list of length four containing
+1 - Kstat: Numeric vector with the values of the summary statistics for different K values
+2 - stat: Numeric value representing the summary statistic for the retained model
+3 - grp: A list with three components, the K statistic for each group, the group that each
+assemblage was classified
+4 - Size: The number of assemblages in each group
 }
 \description{
 Defining groups based on phylogenetic turnover

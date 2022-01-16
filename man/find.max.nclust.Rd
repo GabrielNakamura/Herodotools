@@ -7,8 +7,7 @@
 find.max.nclust(
   x,
   threshold,
-  esp,
-  runs = 100,
+  nperm = 100,
   method = "kmeans",
   stat = "BIC",
   criterion = "diffNgroup",
@@ -22,9 +21,7 @@ find.max.nclust(
 
 \item{threshold}{Scalar. The number of eigenvectors used to perform classification.}
 
-\item{esp}{Coordinates for assemblages}
-
-\item{runs}{Scalar. Number of times classification will be performed.}
+\item{nperm}{Scalar. Number of times classification will be performed.}
 
 \item{method}{c("kmeans","ward"). See \code{\link{find.clusters}} of adegenet package.}
 

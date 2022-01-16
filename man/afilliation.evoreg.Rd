@@ -4,17 +4,18 @@
 \alias{afilliation.evoreg}
 \title{Affiliation values for assemblages according to phylogenetic turnover}
 \usage{
-afilliation.evoreg(evo.vectors, n.groups = 4, method = "euclidean")
+afilliation.evoreg(evo.vectors, method = "euclidean")
 }
 \arguments{
-\item{evo.vectors}{An object returned from evoregions function}
-
-\item{n.groups}{Scalar indicating the number of groups that will be evaluated for affiliation}
+\item{evo.vectors}{An object returned from \code{\link{evoregions}} function}
 
 \item{method}{Character indicating the method used to compute the distance in fuzzy matrix}
+
+\item{n.groups}{Scalar indicating the number of groups that will be evaluated for affiliation}
 }
 \value{
-A list with two elements containing affiliation values and species coordinates
+A list with two matrix, one containing affiliation values and the group in which each cell
+is classified and the other containing cell coordinates
 }
 \description{
 Affiliation values for assemblages according to phylogenetic turnover
