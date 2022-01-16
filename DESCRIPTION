@@ -32,6 +32,14 @@ Authors@R:
            )
 Description: Rrodotus contains a set of functions to analyze patterns associated with historical processes.
 License: MIT + file LICENSE
+Imports:
+    adegenet,
+    ape, 
+    gtools,
+    picante,
+    phyloregion,
+    phytools,
+    PCPS
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
