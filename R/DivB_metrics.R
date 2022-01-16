@@ -161,7 +161,7 @@ DivB_metrics <-function(W,
                                yes = as.numeric(substr(x1, 2, nchar(x1))),
                                no = NA)
         if(!is.na(rec.anc.node)){
-          n.path <- nodepath(tree,
+          n.path <- ape::nodepath(tree,
                              rec.anc.node,
                              which(tree$tip.label==pres[j]))
 
@@ -506,7 +506,7 @@ DivB_metrics <-function(W,
       names(list_matrix_edges_allTips)<- names(list_matrix_edges)
       for(i in 1:length(list_matrix_edges)){
         #i= 42
-        tip_edges<- do.call(rbind, lapply(nodepath(tree)[which(W[i,] == 1)], function(x){
+        tip_edges<- do.call(rbind, lapply(ape::nodepath(tree)[which(W[i,] == 1)], function(x){
           x[(length(x) - 1):length(x)]
         }))
         if(is.na(list_matrix_edges[[i]])){
