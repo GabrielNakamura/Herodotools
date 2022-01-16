@@ -142,7 +142,7 @@ DivB_metrics <-function(W,
 
         rec.anc.node <- as.numeric(substr(x, 2, nchar(x))) # number of ancestral node
 
-        n.path <- nodepath(tree,
+        n.path <- ape::nodepath(tree,
                            rec.anc.node,
                            which(tree$tip.label==pres[j]))
 
