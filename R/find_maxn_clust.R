@@ -15,52 +15,80 @@
 #' @export
 #'
 #' @examples
+#' 
+
 find.max.nclust <- function(x, 
                             threshold, 
+                            max.nclust,
                             nperm = 100, 
                             method = "kmeans", 
                             stat = "BIC", 
-                            criterion = "diffNgroup", 
-                            max.nclust = c(10, 15, 20, 25, 30), 
+                            criterion = "diffNgroup",
                             subset = 100, confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99)
-                            ) 
-  {
-  group.affinity <- matrix(NA, subset, subset)
-  grouping <- matrix(NA, (subset*(subset-1))/2, nperm)
+) 
+{
+  
+  if(dim(x) > 1000){
+    group.affinity <- matrix(NA, subset, subset)
+    grouping <- matrix(NA, (subset*(subset-1))/2, nperm)
+    group.sample <- sample(1:nrow(x), size = subset, replace = FALSE)
+    congruence <- matrix(NA, length(max.nclust), length(confidence.level), dimnames = list(paste("max.", 
+                                                                                                 max.nclust, 
+                                                                                                 "groups", 
+                                                                                                 sep=" "), 
+                                                                                           paste("Confidence.level=", confidence.level, "%",sep="")))
+  } else{
+    subset <- dim(x)[1]
+  }
+  vec.perm <- 1:nperm
   group.sample <- sample(1:nrow(x), size = subset, replace = FALSE)
-  congruence <- matrix(NA, length(max.nclust), length(confidence.level), dimnames = list(paste("max.", 
-                                                                                               max.nclust, 
-                                                                                               "groups", 
-                                                                                               sep=" "), 
-                                                                                         paste("Confidence.level=", confidence.level, "%",sep="")))
-  for (m in 1:length(confidence.level)){
-    for (l in 1:length(max.nclust)){
-      for (k in 1:nperm){
-        clust.vec <- adegenet::find.clusters(x[, 1:threshold],
-                                           clust = NULL,
-                                           choose.n.clust = FALSE,
-                                           n.pca = threshold,
-                                           method = method,
-                                           stat = stat,
-                                           n.iter = 1e7,
-                                           criterion = criterion,
-                                           max.n.clust = max.nclust[[l]]
-        )
-        rownames(as.data.frame(clust.vec$grp)) == rownames(x)
-        groups <- as.matrix(clust.vec$grp)
-        group.subset <- as.matrix(groups[group.sample,])
-        tgroups<-as.matrix(t(group.subset))
-        for(j in 1:subset){
-          for (i in 1:subset){
-            group.affinity[i, j] <- group.subset[i, ] == tgroups[ ,j]
-          }
-        }
-        grouping[,k] <- as.vector(as.dist(group.affinity, diag = FALSE, upper=FALSE))
-      }
-      cor.grouping <- as.matrix(cor(grouping))
-      diag(cor.grouping) <- NA
-      congruence[l, m] <- sum(ifelse(rowMeans(cor.grouping, na.rm = T) > confidence.level[[m]], 1, 0))/nperm
-    }
-  }  
-  congruence
+  group_perm <- lapply(max.nclust, function(z){
+    lapply(vec.perm, function(y){
+      clust_vec <- adegenet::find.clusters(
+        x = x[, 1:threshold],
+        clust = NULL,
+        choose.n.clust = FALSE,
+        n.pca = threshold,
+        method = "kmeans",
+        stat = "BIC",
+        n.iter = 1e7,
+        criterion = criterion,
+        max.n.clust = z)
+      groups <- as.matrix(clust_vec$grp)
+      group.subset <- as.matrix(groups[group.sample,])
+      return(group.subset)
+    })
+  })
+  
+  names(group_perm) <- c(paste("group.max", max.nclust, sep =""))
+  
+  bin_matrix <- lapply(group_perm, function(k){
+    do.call(cbind, k)
+  })
+  
+  
+  group_affinity <- lapply(bin_matrix, function(x) lapply(apply(x, MARGIN = 2, 
+                                                                function(z) lapply(z, function(p) p == z)), function(k) do.call(rbind, k)))
+  
+  means_corGroup <- lapply(lapply(lapply(group_affinity, function(x){
+    lapply(x, function(z){
+      as.vector(as.dist(z, diag = FALSE, upper = FALSE))
+    })
+  }), function(y){
+    cor_grouping <- cor(do.call(cbind, y))
+    diag(cor_grouping) <- NA
+    cor_grouping
+  }), function(m) rowMeans(m, na.rm = TRUE))
+  
+  congruence_matrix <- matrix(unlist(lapply(means_corGroup, function(x){
+    lapply(confidence.level, function(y){
+      sum(ifelse(x >= y, 1, 0))/nperm
+    })
+  })), nrow = length(max.nclust), ncol = length(confidence.level), 
+  dimnames = list(paste("max.n.clus", 
+                        max.nclust, sep = ""), 
+                  paste("conf.level", confidence.level, sep = "")))
+  
+  
+  congruence_matrix
 }

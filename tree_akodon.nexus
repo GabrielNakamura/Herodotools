@@ -1,0 +1,73 @@
+#NEXUS
+[R-package APE, Thu Jan 20 16:16:02 2022]
+
+BEGIN TAXA;
+	DIMENSIONS NTAX = 30;
+	TAXLABELS
+		Akodon_aerosus
+		Akodon_affinis
+		Akodon_albiventer
+		Akodon_azarae
+		Akodon_boliviensis
+		Akodon_budini
+		Akodon_cursor
+		Akodon_dayi
+		Akodon_dolores
+		Akodon_fumeus
+		Akodon_iniscatus
+		Akodon_juninensis
+		Akodon_kofordi
+		Akodon_lindberghi
+		Akodon_lutescens
+		Akodon_mimus
+		Akodon_mollis
+		Akodon_montensis
+		Akodon_mystax
+		Akodon_orophilus
+		Akodon_paranaensis
+		Akodon_reigi
+		Akodon_siberiae
+		Akodon_simulator
+		Akodon_spegazzinii
+		Akodon_subfuscus
+		Akodon_sylvanus
+		Akodon_toba
+		Akodon_torques
+		Akodon_varius
+	;
+END;
+BEGIN TREES;
+	TRANSLATE
+		1	Akodon_aerosus,
+		2	Akodon_affinis,
+		3	Akodon_albiventer,
+		4	Akodon_azarae,
+		5	Akodon_boliviensis,
+		6	Akodon_budini,
+		7	Akodon_cursor,
+		8	Akodon_dayi,
+		9	Akodon_dolores,
+		10	Akodon_fumeus,
+		11	Akodon_iniscatus,
+		12	Akodon_juninensis,
+		13	Akodon_kofordi,
+		14	Akodon_lindberghi,
+		15	Akodon_lutescens,
+		16	Akodon_mimus,
+		17	Akodon_mollis,
+		18	Akodon_montensis,
+		19	Akodon_mystax,
+		20	Akodon_orophilus,
+		21	Akodon_paranaensis,
+		22	Akodon_reigi,
+		23	Akodon_siberiae,
+		24	Akodon_simulator,
+		25	Akodon_spegazzinii,
+		26	Akodon_subfuscus,
+		27	Akodon_sylvanus,
+		28	Akodon_toba,
+		29	Akodon_torques,
+		30	Akodon_varius
+	;
+	TREE * UNTITLED = [&R] (16:3.278136108,((14:2.283191293,(((((26:0.6927346896,15:0.6927346893):0.5252857122,(27:0.8001606727,(5:0.4305618141,25:0.4305618163):0.3695988546):0.4178597314):0.1442651463,4:1.362285546):0.2230127746,((10:0.332482669,13:0.3324826691):0.8729351956,12:1.205417862):0.3798804567):0.3810272846,(7:1.63441603,(18:1.232377757,(22:0.9287657053,(21:0.3108529101,19:0.3108529101):0.6179127948):0.3036120499):0.4020382821):0.3319095704):0.3168656796):0.6045375725,(((((1:1.184141548,2:1.184141544):0.2635952069,((17:0.4879775811,20:0.4879775817):0.3803899293,29:0.8683675113):0.5793692398):0.4464779849,((6:0.4851059957,23:0.4851059959):1.176009327,(24:0.541344161,30:0.5413441612):1.119771164):0.2330994037):0.3094169325,3:2.203631666):0.4519150709,(11:1.799970464,(8:1.024914571,(28:0.5079579978,9:0.5079580003):0.516956573):0.7750558931):0.8555762755):0.2321821194):0.3904072639);
+END;
