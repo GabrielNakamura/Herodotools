@@ -216,7 +216,7 @@ DivB_metrics <-function(W,
           JetzLocal <- 0.00001
         }else{
           ED_div <- sum(internal.brlen_div,
-                        tree$edge.length[which.edge(tree, sp)]) #Local ED - modifyed ED considering only the edges of ancestros inside the biogeo of local i for species j
+                        tree$edge.length[ape::which.edge(tree, sp)]) #Local ED - modifyed ED considering only the edges of ancestros inside the biogeo of local i for species j
 
           EDtotal_spp <- EDtotal$w[which(EDtotal$Species==sp)]
           Jetz_total_spp<-Jetz_total[sp] #Diversificatio calculated according to Jetz for species j
