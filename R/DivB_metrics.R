@@ -1,27 +1,28 @@
 #' Diversification Based (DivB) Metrics for Community Phylogenetics
 #'
-#' Compute in each site DivB metrics for diversification (Jetz and Frecklerton),
+#' Compute model-based diversification metrics (Jetz et al 2008 and Freckleton et al 2008),
 #' diversity metrics (Phylogenenic diversity and phylogenetic endemism),
-#' age of arrival in the biogeographic area, and frequency of dispersal
-#' from other areas
+#' age of ancestor arrival in assemblages, and frequency of dispersal
+#' from one biogeographic area to another
 #'
-#' @param W community matrix (site x species)
+#' @param W community matrix (sites in the rows and species in the columns)
 #' @param tree phylogenetic tree
 #' @param ancestral.area biogeographic area for ancestral. Must be a single
 #'   column data.frame in which rows are nodes in the tree. Each area must be a
-#'   single letter that could be combined (eg. "A", "AB", "B" ).
-#' @param biogeo sinlge collum data.frame with biogeographic area for each site.
-#' @param diversification character. Diversification index sensu Jetz et al. or
-#'   sensu Frecklerton et al. Defaut = c("jetz", "freck").
-#' @param PD logical. calculate phylogenetic diversity and its diversification based version (PDlocal). Defaut = TRUE.
-#' @param PE logical. calculate phylogenetic endemism and its diversification based version (Db-PE). Defaut = TRUE.
-#' @param age.arrival logical. Calculate mean age of arrival of species in the
-#'   site's biogeographic area. Defaut = TRUE.
-#' @param age.no.ancestor how to deal with age arrival for species in which the
+#'   single letter that could be combined or not (eg. "A", "AB", "B" ).
+#' @param biogeo single column data frame with biogeographic area for each site. The areas must match with the same code provided in
+#'     ancestral.area argument
+#' @param diversification A character indicating the Diversification index that will be computed.
+#'     Defaut = c("jetz", "freck").
+#' @param PD Logical. calculate phylogenetic diversity and its diversification based version (PDlocal). Defaut = TRUE.
+#' @param PE Logical. calculate phylogenetic endemism and its diversification based version (Db-PE). Defaut = TRUE. See details for more
+#'     information
+#' @param age.arrival logical. Calculate mean age of arrival of species in a given site. Default = TRUE.
+#' @param age.no.ancestor How to deal with age arrival for species in which the
 #'   late ancestor wasn't in the site's biogeographic area. Options: NA,
-#'   numeric(), or 'half.edge'. Defalt = NA.  See Details.
-#' @param dispersal.from logical. Calculate frequecy of dipersal from each
-#'   biogeografic area of ancestors for each site
+#'   numeric(), or 'half.edge'. Default = NA.  See Details. (not implemented yet)
+#' @param dispersal.from logical. Calculate frequency of dispersal from each
+#'   biogeographic area of ancestors for each site
 #'
 #' @export
 #'
