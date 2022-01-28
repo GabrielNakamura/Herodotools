@@ -8,13 +8,14 @@ evoregions(
   comm,
   coords,
   phy,
+  max.n.clust = NULL,
+  max.n.clust.method = "elbow",
   method.dist = "bray",
   tresh.dist = 0.05,
   method.clust = "kmeans",
   stat.clust = "BIC",
   n.iter.clust = 1e+07,
-  criterion.clust = "diffNgroup",
-  max.n.clust = 10
+  criterion.clust = "diffNgroup"
 )
 }
 \arguments{
@@ -23,6 +24,11 @@ evoregions(
 \item{coords}{Numerical matrix with coordinates for assemblages in comm}
 
 \item{phy}{Newick object with phylogenetic tree containing the species in comm}
+
+\item{max.n.clust}{Integer value to be used in \code{\link{find.clusters}}.
+Indicates the maximum number of clusters to be tried.}
+
+\item{max.n.clust.method}{}
 
 \item{method.dist}{Character. The method to be used to compute phyogenetic distances among assemblages.
 Default is "bray"}
@@ -39,19 +45,23 @@ Defalt is "kmeans"}
 \item{n.iter.clust}{Integer to be used in \code{\link{find.clusters}}
 function of adegenet package to indicate the number of iterations to be used in each run of K-means algorithm}
 
-\item{criterion.clust}{Character}
-
-\item{max.n.clust}{Integer value to be used in \code{\link{find.clusters}}.
-Indicates the maximum number of clusters to be tried.}
+\item{criterion.clust}{Character indicating the type of method to be used to define the maximum number of clusters. Default option
+is "elbow" method, implemented in \code{\link{find.clusters}} of phyloregion package.}
 }
 \value{
 A list of length four containing
-1 - Kstat: Numeric vector with the values of the summary statistics for different K values
-2 - stat: Numeric value representing the summary statistic for the retained model
-3 - grp: A list with three components, the K statistic for each group, the group that each
-assemblage was classified
-4 - Size: The number of assemblages in each group
+\item{PCPS_vectors}: A matrix with PCPS vectors
+\item{Cluster_Evoregion}: A vector indicating the group in which each assemblage was classified
+\item{Coordinates}: A matrix with spatial coordinates of assemblages
+\item{Matrix_P}: Phylogenetic composition matrix obtained from \code{\link[=matrix.p]{matrix.p()}} function from SYNCSA package
+\item{Total_vec_var}: A numeric vector with the amount of variation in the PCPS vectors selected accordingly with the threshold argument
 }
 \description{
 Defining groups based on phylogenetic turnover
+}
+\examples{
+
+}
+\seealso{
+\code{\link[=find.max.nclust]{find.max.nclust()}} to decide the maximum number of clusters to be used
 }
