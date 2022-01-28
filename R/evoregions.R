@@ -43,7 +43,7 @@ evoregions <- function(comm,
                        method.clust = "kmeans",
                        stat.clust = "BIC", 
                        n.iter.clust = 1e7, 
-                       criterion.clust = "diffNgroup",
+                       criterion.clust = "diffNgroup"
                        )
 {
   
