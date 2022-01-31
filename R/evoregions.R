@@ -56,7 +56,7 @@ evoregions <- function(comm,
   comm <- match$comm
   if(is.null(max.n.clust)){
     match_clust <- pmatch(max.n.clust.method, "elbow")
-    if(is.na(match_clus)){
+    if(is.na(match_clust)){
       stop("wrong method to define the number of clusters")
     }
     if(match_clust == 1){ # elbow method
