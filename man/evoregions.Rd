@@ -6,7 +6,6 @@
 \usage{
 evoregions(
   comm,
-  coords,
   phy,
   max.n.clust = NULL,
   max.n.clust.method = "elbow",
@@ -20,8 +19,6 @@ evoregions(
 }
 \arguments{
 \item{comm}{Species occurrence matrix. Assemblages are rows and species are columns}
-
-\item{coords}{Numerical matrix with coordinates for assemblages in comm}
 
 \item{phy}{Newick object with phylogenetic tree containing the species in comm}
 
