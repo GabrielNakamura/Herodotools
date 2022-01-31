@@ -1,7 +1,6 @@
 #' Defining groups based on phylogenetic turnover
 #'
 #' @param comm Species occurrence matrix. Assemblages are rows and species are columns
-#' @param coords Numerical matrix with coordinates for assemblages in comm
 #' @param phy Newick object with phylogenetic tree containing the species in comm
 #' @param method.dist Character. The method to be used to compute phyogenetic distances among assemblages.
 #'      Default is "bray"
@@ -34,7 +33,6 @@
 #' 
 
 evoregions <- function(comm, 
-                       coords, 
                        phy, 
                        max.n.clust = NULL,
                        max.n.clust.method = "elbow",
@@ -53,7 +51,6 @@ evoregions <- function(comm,
   
   zero.comm <- which(rowSums(comm) <= 1) # remove cells with zero, one and two spp
   comm.clean <- comm[-zero.comm, ]
-  esp <- coords[-zero.comm, ]
   match <- picante::match.phylo.comm(phy, comm.clean) #standardize species in phylo and comm
   phy <- match$phy
   comm <- match$comm
@@ -84,12 +81,11 @@ evoregions <- function(comm,
                                             n.iter = n.iter.clust, 
                                             criterion = criterion.clust, 
                                             max.n.clust = max.n.clust)
-  list_res <- vector(mode = "list", length = 5)
+  list_res <- vector(mode = "list", length = 4)
   list_res[[1]] <- vec.bray
   list_res[[2]] <- clust.vec.bray
-  list_res[[3]] <- coords
-  list_res[[4]] <- P
-  list_res[[5]] <- cum.sum.thresh.bray
-  names(list_res) <- c("PCPS_vectors", "Cluster_Evoregions", "Coordinates", "Matrix_P", "Total_vec_var")
+  list_res[[3]] <- P
+  list_res[[4]] <- cum.sum.thresh.bray
+  names(list_res) <- c("PCPS_vectors", "Cluster_Evoregions", "Matrix_P", "Total_vec_var")
   return(list_res)
 }
