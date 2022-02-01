@@ -1,34 +1,32 @@
-#' Affiliation values for assemblages according to phylogenetic turnover 
-#'
-#' @param evo.vectors An object returned from \code{\link{evoregions}} function
-#' @param method Character indicating the method used to compute the distance in fuzzy matrix
-#'
-#' @return A list with two matrix, one containing affiliation values and the group in which each cell 
-#'     is classified and the other containing cell coordinates
-#'
-#' @export
-#'
-#' @examples
-afilliation.evoreg <- function(evo.vectors,
+evo.vectors <- phylo_evoregion
+method <- "euclidean"
+dist.matrix <- pb$phylo.beta.sim
+groups <- phylo_regionalization$region.df
+afilliation.evoreg <- function(evo.vectors, dist.matrix = NULL, phyloregion.classification = NULL,
                                method = "euclidean"){
-  if(class(evo.vectors) == "matrix"){
+  if(!is.null(dist.matrix) == TRUE){
+    if(!is.null(phyloregion.classification) == TRUE){
+      groups.vec.bray <- phylo_regionalization$region.df$cluster
+      names(groups.vec.bray) <- phylo_regionalization$region.df$grids
+      groups.vec.bray <- as.factor(groups.vec.bray)
+      n.groups <- length(levels(as.factor(groups.vec.bray)))
+    }
     
-  } else{
-    n.groups <- length(as.numeric(levels(evo.vectors[[2]]$grp)))
-    groups.vec.bray <- evo.vectors[[2]]$grp
-    vec.bray <- evo.vectors[[1]]
-    Gs <- lapply(1:n.groups, function(x){
-      which(groups.vec.bray == x)
-    })
-    names(Gs) <- paste("G", 1:n.groups, sep = "")
-    dist.P.fuzzy <- as.matrix(vegan::vegdist(
-      x = vec.bray,
-      method = method,
-      diag = T,
-      upper = T
-    )
-    )
   }
+  n.groups <- length(as.numeric(levels(evo.vectors[[2]]$grp)))
+  groups.vec.bray <- evo.vectors[[2]]$grp
+  vec.bray <- evo.vectors[[1]]
+  Gs <- lapply(1:n.groups, function(x){
+    which(groups.vec.bray == x)
+  })
+  names(Gs) <- paste("G", 1:n.groups, sep = "")
+  dist.P.fuzzy <- as.matrix(vegan::vegdist(
+    x = vec.bray,
+    method = method,
+    diag = T,
+    upper = T
+  )
+  )
   
   PGall <- lapply(Gs, function(x){
     dist.P.fuzzy[x, x]
