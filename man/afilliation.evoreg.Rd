@@ -10,8 +10,6 @@ afilliation.evoreg(evo.vectors, method = "euclidean")
 \item{evo.vectors}{An object returned from \code{\link{evoregions}} function}
 
 \item{method}{Character indicating the method used to compute the distance in fuzzy matrix}
-
-\item{n.groups}{Scalar indicating the number of groups that will be evaluated for affiliation}
 }
 \value{
 A list with two matrix, one containing affiliation values and the group in which each cell
