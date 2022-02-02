@@ -3,9 +3,7 @@ devtools::install_github("GabrielNakamura/Rrodotus", force = TRUE)
 library(Rrodotus)
 library(phyloregion)
 data(africa)
-
 sparse_comm <- africa$comm
-africa$polys
 
 # pb-sim as distance matrix -----------------------------------------------
 
@@ -14,9 +12,6 @@ tree <- ape::keep.tip(tree, intersect(tree$tip.label, colnames(sparse_comm)))
 pb <- phylobeta(sparse_comm, tree)
 optimal <- optimal_phyloregion(x = pb$phylo.beta.sim, method = "average", k = 20)
 phylo_regionalization <- phyloregion(x = pb$phylo.beta.sim, k = optimal$optimal$k, method = "average")
-
-names(phylo_regionalization$region.dist)
-
 
 # phylogenetic fuzzy as distance matrix -----------------------------------
 
