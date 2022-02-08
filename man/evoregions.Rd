@@ -47,11 +47,16 @@ is "elbow" method, implemented in \code{\link{find.clusters}} of phyloregion pac
 }
 \value{
 A list of length four containing
-\item{PCPS_vectors} A matrix with PCPS vectors
-\item{Cluster_Evoregion} A vector indicating the group in which each assemblage was classified
-\item{Coordinates} A matrix with spatial coordinates of assemblages
-\item{Matrix_P} Phylogenetic composition matrix obtained from \code{\link[=matrix.p]{matrix.p()}} function from SYNCSA package
-\item{Total_vec_var} A numeric vector with the amount of variation in the PCPS vectors selected accordingly with the threshold argument
+\item{PCPS_vectors}
+A matrix with PCPS vectors
+\item{Cluster_Evoregion}
+A vector indicating the group in which each assemblage was classified
+\item{Coordinates}
+A matrix with spatial coordinates of assemblages
+\item{Matrix_P}
+Phylogenetic composition matrix obtained from \code{\link[=matrix.p]{matrix.p()}} function from SYNCSA package
+\item{Total_vec_var}
+A numeric vector with the amount of variation in the PCPS vectors selected accordingly with the threshold argument
 }
 \description{
 Defining groups based on phylogenetic turnover
