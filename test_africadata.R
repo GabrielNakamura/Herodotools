@@ -1,9 +1,23 @@
-devtools::install_github("GabrielNakamura/Rrodotus", force = TRUE)
+# devtools::install_github("GabrielNakamura/Rrodotus", force = TRUE)
 
+
+# data and packages -------------------------------------------------------
+
+# library
 library(Rrodotus)
 library(phyloregion)
+library(magrittr)
+library(ggplot2)  
+library(tidyverse)
+library(sf)
+library(patchwork)
+
+
+# data
 data(africa)
 sparse_comm <- africa$comm
+sf_africa <- sf::st_as_sf(africa$polys)
+
 
 # pb-sim as distance matrix -----------------------------------------------
 
@@ -40,64 +54,54 @@ grp_evoregions <- phylo_evoregion$Cluster_Evoregions$grp
 df_evoregion <- data.frame(grids = names(phylo_evoregion$Cluster_Evoregions$grp), 
                            cluster = phylo_evoregion$Cluster_Evoregions$grp)
 sf_evoregion <- sf_africa %>%
-  st_transform(crs = "+proj=robin") %>% 
-  left_join(df_evoregion)
+  sf::st_transform(crs = "+proj=robin") %>% 
+  dplyr::left_join(df_evoregion)
 
 
 # calculating affiliation of each cell ------------------------------------
 
-
-
-
-help(package = "Rrodotus")
 afilliation_evoregion <- afilliation.evoreg(evo.vectors = phylo_evoregion, method = "euclidean")
-afilliation_belonging <- affiliation_evoregion[[2]]
-affiliation_belonging <- data.frame(afilliation = afilliation_belonging[, 1], 
+afilliation_belonging <- afilliation_evoregion[[2]]
+afilliation_belonging <- data.frame(afilliation = afilliation_belonging[, 1], 
                                     group = afilliation_belonging[, 2],
                                     grids = rownames(afilliation_belonging))
 sf_evoregion_belonging <- sf_evoregion %>%
-  left_join(affiliation_belonging)
+  dplyr::left_join(afilliation_belonging)
 
+quartz()
 ggplot() +
   geom_sf(data = sf_africa, aes(geometry = geometry), fill = NA) +
-  geom_sf(data = sf_evoregion_belonging %>% filter(group == 4), aes(geometry = geometry, 
+  geom_sf(data = sf_evoregion_belonging %>% dplyr::filter(group == 6), aes(geometry = geometry, 
                                      fill = afilliation),
           size = 0.1) +
-  rcartocolor::scale_fill_carto_c(palette = "SunsetDark", 
+  rcartocolor::scale_fill_carto_c(palette = "Peach", 
                                   direction = 1, 
                                   limits = c(0, 1)) +
   ggnewscale::new_scale("fill") +
-    geom_sf(data = sf_evoregion_belonging %>% filter(group == 1), aes(geometry = geometry, 
+    geom_sf(data = sf_evoregion_belonging %>% dplyr::filter(group == 1), aes(geometry = geometry, 
                                                                     fill = afilliation),
           color = "transparent", size = 0.1) +
   rcartocolor::scale_fill_carto_c(palette = "TealGrn", 
                                   direction = 1, 
                                   limits = c(0, 1)) +
   ggnewscale::new_scale("fill") +
-  geom_sf(data = sf_evoregion_belonging %>% filter(group == 5), aes(geometry = geometry, 
+  geom_sf(data = sf_evoregion_belonging %>% dplyr::filter(group == 5), aes(geometry = geometry, 
                                                                     fill = afilliation),
           color = "transparent", size = 0.1) +
   rcartocolor::scale_fill_carto_c(palette = "Magenta", 
                                   direction = 1, 
                                   limits = c(0, 1)) 
 
-
 quartz()
-rcartocolor::display_carto_all(
-)
+rcartocolor::display_carto_all()
 
 
 # spatialization ----------------------------------------------------------
 
-library(ggplot2)  
-library(tidyverse)
-library(sf)
-library(patchwork)
 
-sf_africa <- sf::st_as_sf(africa$polys)
 sf_phyloregion <- sf_africa %>%
   st_transform(crs = "+proj=robin") %>% 
-  left_join(phylo_regionalization$region.df)
+  dplyr::left_join(phylo_regionalization$region.df)
 
 map_phyloregion <- ggplot() +
   geom_sf(data = sf_phyloregion, aes(geometry = geometry, 
@@ -116,7 +120,7 @@ map_phyloregion <- ggplot() +
 
 sf_fuzzy <- sf_africa %>%
   st_transform(crs = "+proj=robin") %>% 
-  left_join(phylo_regionalization_fuzzy$region.df)
+  dplyr::left_join(phylo_regionalization_fuzzy$region.df)
 
 map_phyloregion_fuzzy <- ggplot() +
   geom_sf(data = sf_fuzzy, aes(geometry = geometry, 
