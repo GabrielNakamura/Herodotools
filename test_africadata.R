@@ -1,4 +1,5 @@
 # devtools::install_github("GabrielNakamura/Rrodotus", force = TRUE)
+help(package = "Rrodotus")
 
 
 # data and packages -------------------------------------------------------

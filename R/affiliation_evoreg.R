@@ -1,7 +1,8 @@
 #' Affiliation values for assemblages according to phylogenetic turnover 
 #'
-#' @param evo.vectors An object returned from \code{\link{evoregions}} function
+#' @param evo.classification An object returned from \code{\link{evoregions}} function or phyloregion
 #' @param method Character indicating the method used to compute the distance in fuzzy matrix
+#' @param distance A distance matrix, only applies if the object in evo.classification is from class phyloregion
 #'
 #' @return A list with two matrix, one containing affiliation values and the group in which each cell 
 #'     is classified and the other containing cell coordinates
@@ -9,19 +10,28 @@
 #' @export
 #'
 #' @examples
-afilliation.evoreg <- function(evo.vectors,
+afilliation.evoreg <- function(evo.classification, distance = NULL, 
                                method = "euclidean"){
-  if(class(evo.vectors) == "matrix"){
-    
-  } else{
-    n.groups <- length(as.numeric(levels(evo.vectors[[2]]$grp)))
-    groups.vec.bray <- evo.vectors[[2]]$grp
-    vec.bray <- evo.vectors[[1]]
+  if(class(evo.classification) == "phyloregion"){
+    n.groups <- phylo_regionalization$k
+    comm.groups <- evo.classification$region.df[, 2]
+    names(comm.groups) <- evo.classification$region.df[, 1]
     Gs <- lapply(1:n.groups, function(x){
-      which(groups.vec.bray == x)
+      which(comm.groups == x)
     })
     names(Gs) <- paste("G", 1:n.groups, sep = "")
-    dist.P.fuzzy <- as.matrix(vegan::vegdist(
+    dist.matrix <- distance
+    dist.matrix <- as.matrix(dist.matrix)
+  } 
+  if(class(evo.classification) == "evoregion"){
+    n.groups <- length(as.numeric(levels(evo.classification[[2]]$grp)))
+    comm.groups <- evo.classification[[2]]$grp
+    vec.bray <- evo.classification[[1]]
+    Gs <- lapply(1:n.groups, function(x){
+      which(comm.groups == x)
+    })
+    names(Gs) <- paste("G", 1:n.groups, sep = "")
+    dist.matrix <- as.matrix(vegan::vegdist(
       x = vec.bray,
       method = method,
       diag = T,
@@ -31,30 +41,22 @@ afilliation.evoreg <- function(evo.vectors,
   }
   
   PGall <- lapply(Gs, function(x){
-    dist.P.fuzzy[x, x]
+    dist.matrix[x, x]
   })
-  fuzzy.OGU.x <- lapply(PGall, function(x){
-    fuzzy.OGU.x <- matrix(NA, nrow(x), 2, dimnames = list(rownames(x), c("fuzzy.belonging", "group")))
+  afilliation_by_grp <- lapply(PGall, function(x){
+    afilliation_by_grp <- matrix(NA, nrow(x), 2, dimnames = list(rownames(x), c("afilliation", "group")))
     for (z in 1:nrow(x)) {
       dis <- as.data.frame(x[z,])[-z,]
-      fuzzy.OGU.x[z, 1] <- mean(dis)
+      afilliation_by_grp[z, 1] <- mean(dis)
     }
-    return(fuzzy.OGU.x)
+    return(afilliation_by_grp)
   })
-  list_fuzzy.OGU.all.pad <- vector(mode = "list", length = length(fuzzy.OGU.x))
-  for(i in 1:length(fuzzy.OGU.x)){
-    fuzzy.OGU.x.pad <- scales::rescale(fuzzy.OGU.x[[i]], c(0, 1))
-    fuzzy.OGU.x.pad[, 2] <- i
-    list_fuzzy.OGU.all.pad[[i]] <- fuzzy.OGU.x.pad
+  list_afilliation_by_grp <- vector(mode = "list", length = length(afilliation_by_grp))
+  for(l in 1:length(afilliation_by_grp)){
+    afilliation_by_grp_pad <- scales::rescale(afilliation_by_grp[[l]], c(0, 1))
+    afilliation_by_grp_pad[, 2] <- l
+    list_afilliation_by_grp[[l]] <- afilliation_by_grp_pad
   }
-  fuzzy.OGU.all.pad <- do.call(rbind, list_fuzzy.OGU.all.pad)
-  
-  org <- SYNCSA::organize.syncsa(comm = fuzzy.OGU.all.pad, envir = evo.vectors[[3]])
-  fuzzy.OGU.all.pad.org <- org$community
-  fuzzy.OGU.all.pad.org[, 1] <- 1 - fuzzy.OGU.all.pad.org[, 1]
-  esp.fuzzy <- org$environmental
-  list_res <- vector(mode = "list", length = 2)
-  list_res[[1]] <- esp.fuzzy
-  list_res[[2]] <- fuzzy.OGU.all.pad.org
-  list_res
+  matrix_afilliation <- do.call(rbind, list_afilliation_by_grp)
+  matrix_afilliation
 }
