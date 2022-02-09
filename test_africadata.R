@@ -25,7 +25,10 @@ tree <- africa$phylo
 tree <- ape::keep.tip(tree, intersect(tree$tip.label, colnames(sparse_comm)))
 pb <- phylobeta(sparse_comm, tree)
 optimal <- optimal_phyloregion(x = pb$phylo.beta.sim, method = "average", k = 20)
-phylo_regionalization <- phyloregion(x = pb$phylo.beta.sim, k = optimal$optimal$k, method = "average")
+phylo_regionalization <- phyloregion(x = pb$phylo.beta.sim,
+                                     k = optimal$optimal$k,
+                                     method = "average",
+                                     shp = africa$polys)
 
 # phylogenetic fuzzy as distance matrix -----------------------------------
 
@@ -94,6 +97,8 @@ ggplot() +
 
 quartz()
 rcartocolor::display_carto_all()
+
+phyloregion::plot_swatch
 
 
 # spatialization ----------------------------------------------------------

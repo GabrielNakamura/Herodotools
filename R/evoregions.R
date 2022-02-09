@@ -92,5 +92,6 @@ evoregions <- function(comm,
   list_res[[3]] <- P
   list_res[[4]] <- cum.sum.thresh.bray
   names(list_res) <- c("PCPS_vectors", "Cluster_Evoregions", "Matrix_P", "Total_vec_var")
+  class(list_res) <- "evoregion"
   return(list_res)
 }
