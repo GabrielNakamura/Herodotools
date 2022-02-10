@@ -4,10 +4,12 @@
 \alias{afilliation.evoreg}
 \title{Affiliation values for assemblages according to phylogenetic turnover}
 \usage{
-afilliation.evoreg(evo.vectors, method = "euclidean")
+afilliation.evoreg(evo.classification, distance = NULL, method = "euclidean")
 }
 \arguments{
-\item{evo.vectors}{An object returned from \code{\link{evoregions}} function}
+\item{evo.classification}{An object returned from \code{\link{evoregions}} function or phyloregion}
+
+\item{distance}{A distance matrix, only applies if the object in evo.classification is from class phyloregion}
 
 \item{method}{Character indicating the method used to compute the distance in fuzzy matrix}
 }
