@@ -1,7 +1,6 @@
 # devtools::install_github("GabrielNakamura/Rrodotus", force = TRUE)
 help(package = "Rrodotus")
 
-
 # data and packages -------------------------------------------------------
 
 # library
@@ -64,11 +63,22 @@ sf_evoregion <- sf_africa %>%
 
 # calculating affiliation of each cell ------------------------------------
 
-afilliation_evoregion <- afilliation.evoreg(evo.vectors = phylo_evoregion, method = "euclidean")
-afilliation_belonging <- afilliation_evoregion[[2]]
-afilliation_belonging <- data.frame(afilliation = afilliation_belonging[, 1], 
-                                    group = afilliation_belonging[, 2],
-                                    grids = rownames(afilliation_belonging))
+afilliation_evoregion <- afilliation.evoreg(evo.classification = phylo_evoregion, method = "euclidean")
+afilliation_phyloregion <- afilliation.evoreg(evo.classification = phylo_regionalization, distance = pb$phylo.beta.sim)
+NA_rm_phyloregion <- which(is.na(match(rownames(afilliation_phyloregion), rownames(afilliation_evoregion))) == TRUE) # check why NA in phyloregion
+afilliation_phyloregion <- afilliation_phyloregion[-NA_rm_phyloregion, ]
+afilliation_phyloregion <- afilliation_phyloregion[match(rownames(afilliation_phyloregion), rownames(afilliation_evoregion)), ]
+rownames(afilliation_phyloregion) <- rownames(afilliation_evoregion)[match(rownames(afilliation_phyloregion), rownames(afilliation_evoregion))]
+
+
+afilliation_grid <- data.frame(afilliation_evoregion = afilliation_evoregion[, 1], 
+                               group_evoregion = afilliation_evoregion[, 2],
+                               afilliation_phyloregion = afilliation_phyloregion[, 1],
+                               group_phyloregion = afilliation_phyloregion[, 2],
+                               grids = rownames(afilliation_phyloregion))
+
+
+
 sf_evoregion_belonging <- sf_evoregion %>%
   dplyr::left_join(afilliation_belonging)
 
