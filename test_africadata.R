@@ -67,8 +67,12 @@ afilliation_evoregion <- afilliation.evoreg(evo.classification = phylo_evoregion
 afilliation_phyloregion <- afilliation.evoreg(evo.classification = phylo_regionalization, distance = pb$phylo.beta.sim)
 NA_rm_phyloregion <- which(is.na(match(rownames(afilliation_phyloregion), rownames(afilliation_evoregion))) == TRUE) # check why NA in phyloregion
 afilliation_phyloregion <- afilliation_phyloregion[-NA_rm_phyloregion, ]
-afilliation_phyloregion <- afilliation_phyloregion[match(rownames(afilliation_phyloregion), rownames(afilliation_evoregion)), ]
-rownames(afilliation_phyloregion) <- rownames(afilliation_evoregion)[match(rownames(afilliation_phyloregion), rownames(afilliation_evoregion))]
+afilliation_evoregion <- afilliation_evoregion[match(rownames(afilliation_phyloregion), rownames(afilliation_evoregion)), ]
+
+
+
+# spatialization of regions and afilliation -------------------------------
+
 
 
 afilliation_grid <- data.frame(afilliation_evoregion = afilliation_evoregion[, 1], 
@@ -77,36 +81,67 @@ afilliation_grid <- data.frame(afilliation_evoregion = afilliation_evoregion[, 1
                                group_phyloregion = afilliation_phyloregion[, 2],
                                grids = rownames(afilliation_phyloregion))
 
+sf_regionalization_membership <- sf_africa %>%
+  dplyr::left_join(afilliation_grid) %>% 
+  dplyr::left_join(phylo_regionalization$region.df[, c(1,4)])
 
-
-sf_evoregion_belonging <- sf_evoregion %>%
-  dplyr::left_join(afilliation_belonging)
-
-quartz()
 ggplot() +
-  geom_sf(data = sf_africa, aes(geometry = geometry), fill = NA) +
-  geom_sf(data = sf_evoregion_belonging %>% dplyr::filter(group == 6), aes(geometry = geometry, 
-                                     fill = afilliation),
+  geom_sf(data = sf_regionalization_membership,
+          aes(geometry = geometry, 
+              fill = as.factor(group_phyloregion)
+              )
+          )
+
+
+
+ggplot() + 
+  geom_sf(data = sf_regionalization_membership, aes(fill = as.factor(group_phyloregion), alpha = afilliation_phyloregion, colour = NA)) + 
+  scale_fill_manual(values = levels(as.factor(sf_regionalization_membership$COLOURS)), alpha = sf_regionalization_membership$afilliation_phyloregion)
+
+ggplot(data = sf_regionalization_membership) +
+  geom_sf(aes(geometry = geometry, fill = afilliation_evoregion)) +
+  scale_fill_manual(values = levels(as.character(sf_regionalization_membership$COLOURS)))
+
+
+ggplot() +
+  geom_sf(data = sf_regionalization_membership, aes(geometry = geometry), fill = NA, labels = NA) +
+  geom_sf(data = sf_regionalization_membership %>% dplyr::filter(group_phyloregion == 1), aes(geometry = geometry, 
+                                     fill = afilliation_phyloregion),
           size = 0.1) +
   rcartocolor::scale_fill_carto_c(palette = "Peach", 
                                   direction = 1, 
                                   limits = c(0, 1)) +
   ggnewscale::new_scale("fill") +
-    geom_sf(data = sf_evoregion_belonging %>% dplyr::filter(group == 1), aes(geometry = geometry, 
-                                                                    fill = afilliation),
+    geom_sf(data = sf_regionalization_membership %>% dplyr::filter(group_phyloregion == 2), aes(geometry = geometry, 
+                                                                    fill = afilliation_phyloregion),
           color = "transparent", size = 0.1) +
   rcartocolor::scale_fill_carto_c(palette = "TealGrn", 
                                   direction = 1, 
                                   limits = c(0, 1)) +
   ggnewscale::new_scale("fill") +
-  geom_sf(data = sf_evoregion_belonging %>% dplyr::filter(group == 5), aes(geometry = geometry, 
-                                                                    fill = afilliation),
+  geom_sf(data = sf_regionalization_membership %>% dplyr::filter(group_phyloregion == 3), aes(geometry = geometry, 
+                                                                    fill = afilliation_phyloregion),
           color = "transparent", size = 0.1) +
   rcartocolor::scale_fill_carto_c(palette = "Magenta", 
+                                  direction = 1, 
+                                  limits = c(0, 1)) +
+  ggnewscale::new_scale("fill") +
+  geom_sf(data = sf_regionalization_membership %>% dplyr::filter(group_phyloregion == 4), aes(geometry = geometry, 
+                                                                                              fill = afilliation_phyloregion),
+          color = "transparent", size = 0.1) +
+  rcartocolor::scale_fill_carto_c(palette = "Mint", 
+                                  direction = 1, 
+                                  limits = c(0, 1)) +
+  ggnewscale::new_scale("fill") +
+  geom_sf(data = sf_regionalization_membership %>% dplyr::filter(group_phyloregion == 5), aes(geometry = geometry, 
+                                                                                              fill = afilliation_phyloregion),
+          color = "transparent", size = 0.1) +
+  rcartocolor::scale_fill_carto_c(palette = "Teal", 
                                   direction = 1, 
                                   limits = c(0, 1)) 
 
 quartz()
+
 rcartocolor::display_carto_all()
 
 phyloregion::plot_swatch

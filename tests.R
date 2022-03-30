@@ -18,3 +18,22 @@ test_leandro <- DivB_metrics(W = comm_data,
                              ED.type = "equal.splits"
 )
 
+
+
+# test ada function -------------------------------------------------------
+
+nsp <- 50
+ncomm <- 20
+comm <- matrix(rpois(nsp*ncomm, 1), nrow = ncomm, ncol = nsp,
+               dimnames = list(paste("comm", 1:ncomm, sep = "_"),
+                               paste("s", 1:nsp, sep = ""))
+)
+phy <- geiger::sim.bdtree(b = 1, d = 0, n = nsp)
+x <- comm 
+phy <- phy
+sp.bin = "Sturges"
+marginal = FALSE
+lik.threshold = FALSE
+threshold = 0.7
+compute.fields = F
+

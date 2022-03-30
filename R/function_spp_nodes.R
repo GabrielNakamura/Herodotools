@@ -5,7 +5,7 @@
 #' @return
 #'
 #' @examples
-spp_nodes <- function(tree){
+spp_nodes <- function(tree, node.prefix = "N"){
   tree_base <- phylobase::phylo4(tree)
   n.nodes <- tree$Nnode
   n.spp <- length(tree$tip.label)
@@ -13,7 +13,9 @@ spp_nodes <- function(tree){
                     nrow =  length(tree$tip.label), 
                     ncol =  n.nodes, 
                     dimnames = list(tree$tip.label,
-                                    paste("N",(n.spp+1):(n.spp+(n.spp-1)),sep="")
+                                    paste(node.prefix, 
+                                          (n.spp+1):(n.spp+(n.spp-1)),
+                                          sep="")
                                     )
                     )
   for (i in 1:n.spp){
