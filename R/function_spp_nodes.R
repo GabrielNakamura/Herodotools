@@ -1,8 +1,9 @@
 #' Species and their respective ancestral nodes - internal
 #'
-#' @param tree phylogenetic tree
+#' @param tree Phylogenetic tree
+#' @param node.prefix Character indicating the prefix to be used to name nodes, default is the letter "N"
 #'
-#' @return
+#' @return A matrix species in lines and nodes in columns. 1 indicates that the node corresponds to the ancestor of that species
 #'
 #' @examples
 spp_nodes <- function(tree, node.prefix = "N"){
