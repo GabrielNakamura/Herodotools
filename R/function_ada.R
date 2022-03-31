@@ -20,7 +20,8 @@ ada <- function(x,
                 lik.threshold = FALSE, 
                 threshold = 0.7, 
                 compute.fields = F, 
-                plot.results = TRUE){
+                plot.results = FALSE,
+                coords = NULL){
   if(any(x > 1) == TRUE){
     x <- ifelse(x >= 1, 1, 0)
   }
@@ -202,6 +203,7 @@ ada <- function(x,
     Species.Fields<-"Tell me to compute them, dude!!!"
     }   
     
+  
 # Define outputs: 
   Res<-list(Phylogeny=phy,
             Root.Age=root.age,
@@ -212,6 +214,27 @@ ada <- function(x,
             Cell.Metrics=res.dens,
             Species.Fields)
   return(Res)
+  
+  # Spatial objects
+  if(plot.results == TRUE){
+    if(length(coords) == 0){
+      stop("Provide a matrix with coordinates to plot the results")
+    }
+    if(dim(coords) > 2){
+      stop("The coordinate matrix should contain two columns (lat and long)")
+    }
+    shp_earth <- rnaturalearth::ne_countries(returnclass = "sf")
+    box <- c(xmin = min(coords[, 1]), xmax = max(coords[, 1]), ymin = min(coords[, 2]), ymax = max(coords[, 2]))
+    shp_data <- st_crop(shp_earth, bst_bbox(box))
+    cell_metrics_df <- data.frame(Res$Cell.Metrics, ID_comm = rownames(comm))
+    sf_cell_metrics <-
+      shp_data %>% 
+      dplyr::left_join(cell_metrics_df)
+      
+  
+  }
+  
+  
 }
   
   
