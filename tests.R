@@ -1,9 +1,16 @@
+
+# general installation ----------------------------------------------------
+
 devtools::install_github("GabrielNakamura/Rrodotus", ref = "main", force = TRUE)
 library(Rrodotus)
 data("comm_data")
 data("biogeo")
 data("node_biogeo")
 data("tree_aves")
+
+
+
+# testing DB metrics function ---------------------------------------------
 
 test_leandro <- DivB_metrics(W = comm_data,
                              tree = tree_aves,
@@ -21,6 +28,15 @@ test_leandro <- DivB_metrics(W = comm_data,
 
 
 # test ada function -------------------------------------------------------
+
+# Tyranidae data
+
+load(here::here("data", ""))
+spp_afrotropic <- listSpp_afrotropic
+outra_planilha <- outra_planilha_noRData
+usethis::use_data(neotropical_comm, FishPhyloMaker)
+usethis::use_data(outra_planilha, Pacote)
+
 
 nsp <- 100
 ncomm <- 20
