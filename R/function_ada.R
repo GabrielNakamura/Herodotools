@@ -1,5 +1,14 @@
 #' Ancestral Diversity Analysis
 #'
+#' @description This function computes different assemblage level 
+#'     metrics using an ancestral community reconstruction
+#' 
+#' @details ada function calculates an ancestral assemblage reconstruciton for each assemblage 
+#'     in a matrix using for this reconstruction ace function from ape package
+#'
+#' 
+#'
+#'
 #' @param x Community occurrence matrix. Rows are sites and columns are species
 #' @param phy Phylogenetic tree
 #' @param sp.bin Character indicating the methods to be used to compute the number of time slices in which metrics will be computed. Default is "Sturges"
@@ -8,20 +17,24 @@
 #' @param threshold Scalar indicating the threshold value used to select the likelihood of a given species be present at a site
 #' @param compute.fields Logical, indicates if phylogenetic fields will be computed. Default is FALSE
 #'
-#' @return 
+#' @return A list of size eight containing the following objects
+#' \item{Phylogeny}{Phylogenetic tree} \item{Root.Age}{Numeric containing root age of the tree used} 
+#' \item{Per.node.ancestral.area}{Matrix containing the ancestors (nodes) for each species } 
+#' \item{Diversity.Through.Time}{Age of each node in the phylogeny} 
+#' \item{Cell.Metric}{Matrix containing the values of ancestral diversity for each cell}
+#'
+#' 
 #' @export
 #'
 #' @examples
 #' 
 ada <- function(x,
                 phy, 
-                sp.bin = "Sturges", # eu mudaria para breaks aqui 
+                sp.bin = "Sturges", 
                 marginal = FALSE, 
                 lik.threshold = FALSE, 
                 threshold = 0.7, 
-                compute.fields = F, 
-                plot.results = FALSE,
-                coords = NULL){
+                compute.fields = F){
   if(any(x > 1) == TRUE){
     x <- ifelse(x >= 1, 1, 0)
   }
@@ -204,7 +217,7 @@ ada <- function(x,
     }   
     
   
-# Define outputs: 
+  # Define outputs: 
   Res<-list(Phylogeny=phy,
             Root.Age=root.age,
             Species.per.node.matrix=spp.nodes,
@@ -214,27 +227,6 @@ ada <- function(x,
             Cell.Metrics=res.dens,
             Species.Fields)
   return(Res)
-  
-  # Spatial objects
-  if(plot.results == TRUE){
-    if(length(coords) == 0){
-      stop("Provide a matrix with coordinates to plot the results")
-    }
-    if(dim(coords) > 2){
-      stop("The coordinate matrix should contain two columns (lat and long)")
-    }
-    shp_earth <- rnaturalearth::ne_countries(returnclass = "sf")
-    box <- c(xmin = min(coords[, 1]), xmax = max(coords[, 1]), ymin = min(coords[, 2]), ymax = max(coords[, 2]))
-    shp_data <- st_crop(shp_earth, bst_bbox(box))
-    cell_metrics_df <- data.frame(Res$Cell.Metrics, ID_comm = rownames(comm))
-    sf_cell_metrics <-
-      shp_data %>% 
-      dplyr::left_join(cell_metrics_df)
-      
-  
-  }
-  
-  
 }
   
   

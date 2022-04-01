@@ -1,10 +1,8 @@
-
-
-#' Title
+#' Plotting ancestral area character in space
 #'
 #' @param ada.res An object from ada function
 #' @param grid An spatial object containing the cells used to calculate ancestral diversity distribution with ada
-#' @param patterns Character, a verctor or a single name containing the name oof variable to be plotted
+#' @param patterns Character, a vector or a single name containing the name of variable to be plotted
 #' @param palette Character. The name of the palette to be used in spatial maps. It can be any of the palettes from rcartocolor package
 #'
 #' @return An spatial plot
