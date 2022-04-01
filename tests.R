@@ -29,14 +29,15 @@ test_leandro <- DivB_metrics(W = comm_data,
 
 # test ada function -------------------------------------------------------
 
-# Tyranidae data
+# akodon data
 
-load(here::here("data", ""))
-spp_afrotropic <- listSpp_afrotropic
-outra_planilha <- outra_planilha_noRData
-usethis::use_data(neotropical_comm, FishPhyloMaker)
-usethis::use_data(outra_planilha, Pacote)
+comm_akodon <- read.table("comm_akodon.txt", header = TRUE)
+coords_akodon <- read.table("coord_akodon.txt", header = TRUE)
+size_akodon <- read.table("size_akodon.txt", header = TRUE)
+phy_akodon <- ape::read.nexus("tree_akodon.nexus")
 
+
+# simulating communities
 
 nsp <- 100
 ncomm <- 20
@@ -53,14 +54,37 @@ lik.threshold = FALSE
 threshold = 0.7
 compute.fields = F
 
-ada <- function(x,
-                phy, 
-                sp.bin = "Sturges", # eu mudaria para breaks aqui 
-                marginal = FALSE, 
-                lik.threshold = FALSE, 
-                threshold = 0.7, 
-                compute.fields = F, 
-                plot.results = TRUE){
+# akodon communities
+phy <- phy_akodon
+x <- comm_akodon 
+sp.bin = "Sturges"
+marginal = FALSE
+lik.threshold = FALSE
+threshold = 0.7
+compute.fields = F
+plot.results = F
+coords = coords_akodon
+
+# tyranidae communities
+phy <- phylo_tyranidae
+x <- comm_tyranidae 
+sp.bin = "Sturges"
+marginal = FALSE
+lik.threshold = FALSE
+threshold = 0.7
+compute.fields = F
+plot.results = F
+coords = coord_tyranidae
+
+
+function(x,
+         phy, 
+         sp.bin = "Sturges", # eu mudaria para breaks aqui 
+         marginal = FALSE, 
+         lik.threshold = FALSE, 
+         threshold = 0.7, 
+         compute.fields = F, 
+         plot.results = FALSE){
   if(any(x > 1) == TRUE){
     x <- ifelse(x >= 1, 1, 0)
   }
@@ -83,10 +107,7 @@ ada <- function(x,
   rownames(ages) <- c(phy$tip.label, colnames(spp.nodes))
   
   # Compute "LTT":
-  
-  #h <- hist(ages,breaks=round(length(ages)/15,0),plot=F)
   h <- hist(ages, breaks = sp.bin, plot = F)
-  #hist(ages, breaks = 20)
   breaks <- h$breaks[-1]
   n.breaks <- length(breaks)
   mid.time <- as.vector(h$mids)
@@ -106,7 +127,7 @@ ada <- function(x,
   }
   spp.weight.class <- spp.weight.class[-length(spp.weight.class)]
   spp.weight.class[lengths(spp.weight.class) == 0] <- NA
-  isna.spp.weight.class <- which(is.na(spp.weight.class))
+  isna.spp.weight.class<-which(is.na(spp.weight.class))
   if(length(isna.spp.weight.class) == 0){
     spp.weight.class.clean <- spp.weight.class
   } else{
@@ -216,6 +237,10 @@ ada <- function(x,
                                       c(mid.time[-which(is.na(spp.weight.class))])
                       )
   )
+  names_time_slice <- vector(length = (length(breaks) -1))
+  for(i in 1:(length(breaks) -1)){
+    names_time_slice[i] <- paste(breaks[i], breaks[i+1], sep = "-")
+  }
   for(d in 1:length(spp.weight.class.clean)){
     if(length(spp.weight.class.clean[[d]])>1){
       div.nodes[ , d] <- rowSums(joint.x[ , spp.weight.class.clean[[d]]])
@@ -223,11 +248,6 @@ ada <- function(x,
       div.nodes[, d] <- joint.x[ , spp.weight.class.clean[[d]]]
     }
   }
-  time_slices <- vector(length = (length(h$breaks)-1))
-  for(i in 1:(length(h$breaks)-1)){
-    time_slices[i] <- paste(h$breaks[i], h$breaks[i+1], sep = "-")
-  }
-  colnames(div.nodes) <- time_slices
   
   # Compute species fields:
   if(compute.fields == TRUE){
@@ -247,8 +267,9 @@ ada <- function(x,
     Species.Fields<-"Tell me to compute them, dude!!!"
   }   
   
+  
   # Define outputs: 
-  Res <- list(Phylogeny=phy,
+  Res<-list(Phylogeny=phy,
             Root.Age=root.age,
             Species.per.node.matrix=spp.nodes,
             Node.ages=ages,
@@ -257,7 +278,26 @@ ada <- function(x,
             Cell.Metrics=res.dens,
             Species.Fields)
   return(Res)
+  
+  # Spatial objects
+  if(plot.results == TRUE){
+    if(length(coords) == 0){
+      stop("Provide a matrix with coordinates to plot the results")
+    }
+    if(dim(coords) > 2){
+      stop("The coordinate matrix should contain two columns (lat and long)")
+    }
+    shp_earth <- rnaturalearth::ne_countries(returnclass = "sf")
+    box <- c(xmin = min(coords[, 1]), xmax = max(coords[, 1]), ymin = min(coords[, 2]), ymax = max(coords[, 2]))
+    shp_data <- sf::st_crop(shp_earth, sf::st_bbox(box))
+    cell_metrics_df <- data.frame(Res$Cell.Metrics, ID_comm = rownames(comm))
+    sf_cell_metrics <-
+      shp_data %>% 
+      dplyr::left_join(cell_metrics_df)
+  }
+  
 }
+
 
 Res$Cell.Metrics
 Res$Diversity.Through.Time
