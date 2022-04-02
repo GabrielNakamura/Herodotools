@@ -341,11 +341,24 @@ plot_ada <-
             rcartocolor::scale_fill_carto_c(palette = color_palette)
         })
       names(res_plot) <- names_div
+    } else{
+      names_div <- colnames(test_sf)[4:ncol(test_sf)]
+      patterns_plot <- pmatch(patterns, names_div)
+      names_div <- names_div[patterns_plot]
+      res_plot <- 
+        lapply(names_div, function(x){
+          ggplot2::ggplot() +
+            geom_sf(data = test_sf_proj, aes_string(geometry = "geometry", 
+                                                    fill = x), 
+                    color = "transparent", size = 0.1) +
+            rcartocolor::scale_fill_carto_c(palette = color_palette)
+        })
+      names(res_plot) <- names_div
     }
-   
+   res_plot
   }
 
-
+patterns <- c("rich", "Nnodes")
 
 list_res
 rename_()

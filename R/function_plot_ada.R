@@ -4,9 +4,10 @@
 #' @param grid An spatial object containing the cells used to calculate ancestral diversity distribution with ada
 #' @param patterns Character, a vector containing the names of the metrics to be spatialized or "all" to create a map for all metrics. The 
 #'    characters allowed to be passed are "rich", "Nnodes", "PeakDiv", "Skewness", "LowDistPeak", "HighDistPeak", "PeakRange"
-#' @param palette Character. The name of the palette to be used in spatial maps. It can be any of the palettes from rcartocolor package
+#' @param palette Character. The name of the palette to be used in spatial maps. It can be any of the palette from \link[rcartocolor]{scale_fill_carto_c} function
 #'
-#' @return An spatial plot
+#' @return A list containing spatial plots for the metrics calculated in ada.res
+#' 
 #' @export
 #'
 #' @examples
