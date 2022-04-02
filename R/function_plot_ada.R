@@ -2,7 +2,8 @@
 #'
 #' @param ada.res An object from ada function
 #' @param grid An spatial object containing the cells used to calculate ancestral diversity distribution with ada
-#' @param patterns Character, a vector or a single name containing the name of variable to be plotted
+#' @param patterns Character, a vector containing the names of the metrics to be spatialized or "all" to create a map for all metrics. The 
+#'    characters allowed to be passed are "rich", "Nnodes", "PeakDiv", "Skewness", "LowDistPeak", "HighDistPeak", "PeakRange"
 #' @param palette Character. The name of the palette to be used in spatial maps. It can be any of the palettes from rcartocolor package
 #'
 #' @return An spatial plot
@@ -58,6 +59,19 @@ plot_ada <-
             rcartocolor::scale_fill_carto_c(palette = color_palette)
         })
       names(res_plot) <- names_div
+    } else{
+      names_div <- colnames(test_sf)[4:ncol(test_sf)]
+      patterns_plot <- pmatch(patterns, names_div)
+      names_div <- names_div[patterns_plot]
+      res_plot <- 
+        lapply(names_div, function(x){
+          ggplot2::ggplot() +
+            geom_sf(data = test_sf_proj, aes_string(geometry = "geometry", 
+                                                    fill = x), 
+                    color = "transparent", size = 0.1) +
+            rcartocolor::scale_fill_carto_c(palette = color_palette)
+        })
+      names(res_plot) <- names_div
     }
-    return(res_plot)
+    res_plot
   }
