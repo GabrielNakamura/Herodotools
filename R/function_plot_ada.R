@@ -11,7 +11,15 @@
 #' @examples
 #' 
 plot_ada <- 
-  function(ada.res, grid,  coords, resolution, patterns, color_palette = "SunsetDark"){
+  function(ada.res,
+           grid,
+           coords, 
+           resolution, 
+           patterns = c("Species Richness",
+                        "Ancestral Richness",
+                        "Density peak"),
+           color_palette = "SunsetDark")
+    {
     ada.res <- ada.res$Cell.Metrics
     extend_grid <- raster::extend(grid)
     r <- raster::raster(vals = NA, xmn = extend_grid[1],

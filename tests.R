@@ -309,41 +309,56 @@ resolution <- 1
 coords <- coords
 
 plot_ada <- 
-  function(ada.res, grid, coords, patterns, col_palette = "SunsetDark"){
+  function(ada.res,
+           grid,
+           coords, 
+           resolution, 
+           patterns = "all",
+           color_palette = "SunsetDark")
+  {
     ada.res <- ada.res$Cell.Metrics
-    # box <- c(xmin = min(coords[, 1]), xmax = max(coords[, 1]), ymin = min(coords[, 2]), ymax = max(coords[, 2]))
-    extend_grid <- grid@bbox
-    r <- raster::raster(vals = NA, xmn = extend_grid[1, 1],
-                        xmx = extend_grid[1, 2],
-                        ymn = extend_grid[2, 1],
-                        ymx = extend_grid[2, 2], resolution = resolution
+    extend_grid <- raster::extend(grid)
+    r <- raster::raster(vals = NA, xmn = extend_grid[1],
+                        xmx = extend_grid[2],
+                        ymn = extend_grid[3],
+                        ymx = extend_grid[4]
     )
-     r <- raster::raster(vals = NA, xmn = -170.2166 , xmx = -13.21288, ymn = -55.37714, ymx = 83.6236,
-                        resolution = resolution)
-    #r <- raster::raster(vals = NA, 
-    #                    xmn =  min(coords[, 1]), 
-    #                    xmx = max(coords[, 1]), 
-    #                    ymn = min(coords[, 2]), 
-    #                    ymx = max(coords[, 2]),
-    #                    resolution = resolution)
     cell.r <- raster::cellFromXY(r, coords[rownames(ada.res),])
     values_cell <- rep(NA, raster::ncell(r))
+    values_cell2 <- rep(NA, raster::ncell(r))
+    values_cell3 <- rep(NA, raster::ncell(r))
     names(values_cell) <- 1:raster::ncell(r)
+    names(values_cell2) <- 1:raster::ncell(r)
+    names(values_cell3) <- 1:raster::ncell(r)
     val.cells <- 1:raster::ncell(r) %in% cell.r
-    values_cell[val.cells] <- ada.res[, 2]
-    r.n_nodes <- raster::setValues(r, values = values_cell)
-    projcrs <- "+proj=robin"
-    raster::projection(r.n_nodes) <- projcrs
-    df_r_nodes <- raster::as.data.frame(r.n_nodes, xy = T)
+    
+    sf::st_as_sf(r.n_nodes)
+    test_sf <- sf::st_as_sf(raster::rasterToPolygons(r.n_nodes))
+    test_sf$ID <- names(values_cell[val.cells])
+    test_sf$Nnodes[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 2]
+    if(patterns == "all"){
+      values_cell[val.cells] <- ada.res[, 1]
+      values_cell2[val.cells] <- ada.res[, 2]
+      values_cell3[val.cells] <- ada.res[, 3]
+      r.n_nodes <- raster::setValues(r, values = values_cell)
+      raster::values(r.n_nodes) <- values_cell2
+      projcrs <- "+proj=robin"
+      projection(r.n_nodes) <- projcrs
+      df_r_nodes <- as.data.frame(r.n_nodes, xy = T)
+      data.frame(df_r_nodes, node.rich = ada.res[which(rownames(ada.res) == which(val.cells == TRUE)), 2])
+      spatial_plot <- 
+        ggplot2::ggplot() +
+        ggplot2::geom_raster(data = na.omit(df_r_nodes), aes(x = x, y = y, fill = layer), ) +
+        rcartocolor::scale_fill_carto_c(palette = col_palette
+        ) +
+        labs(fill = "Node Richness")
+      spatial_plot
+    }
     spatial_plot <- 
       ggplot2::ggplot() +
       ggplot2::geom_raster(data = na.omit(df_r_nodes), aes(x = x, y = y, fill = layer), ) +
       rcartocolor::scale_fill_carto_c(palette = col_palette
       ) +
-      labs("N ancestors")
+      labs(fill = "Node Richness")
     spatial_plot
   }
-
-
-
-
