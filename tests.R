@@ -197,7 +197,7 @@ function(x,
                                          colnames(joint.x))
   )
   for (p in 1:nrow(joint.x)){
-    age.anc.area[p,] <- ages*t(joint.x)[,p]
+    age.anc.area[p,] <- ages*t(joint.x)[, p]
   }
   
   # Compute results:
@@ -224,7 +224,7 @@ function(x,
       hdi.dens <- suppressWarnings(HDInterval::hdi(dens.area, allowSplit = F, 0.9))
       res.dens[l,5] <- as.numeric(hdi.dens[1]) # lowest distance to peak (myr)
       res.dens[l,6] <- as.numeric(hdi.dens[2]) # highest distance to peak (myr)
-      res.dens[l,7]<-res.dens[l,6]-res.dens[l,5] # peak range
+      res.dens[l,7] <- res.dens[l,6]-res.dens[l,5] # peak range
     } else{
       res.dens[l,3:7] <- NA
     }
@@ -269,32 +269,16 @@ function(x,
   
   
   # Define outputs: 
-  Res<-list(Phylogeny=phy,
-            Root.Age=root.age,
-            Species.per.node.matrix=spp.nodes,
-            Node.ages=ages,
-            Per.node.ancestral.area=node.anc.area,
-            Diversity.Through.Time=div.nodes,
-            Cell.Metrics=res.dens,
-            Species.Fields)
+  Res <- list(Phylogeny=phy,
+              Root.Age=root.age,
+              Species.per.node.matrix=spp.nodes,
+              Node.ages=ages,
+              Per.node.ancestral.area=node.anc.area,
+              Diversity.Through.Time=div.nodes,
+              Cell.Metrics=res.dens,
+              Species.Fields)
   return(Res)
   
-  # Spatial objects
-  if(plot.results == TRUE){
-    if(length(coords) == 0){
-      stop("Provide a matrix with coordinates to plot the results")
-    }
-    if(dim(coords) > 2){
-      stop("The coordinate matrix should contain two columns (lat and long)")
-    }
-    shp_earth <- rnaturalearth::ne_countries(returnclass = "sf")
-    box <- c(xmin = min(coords[, 1]), xmax = max(coords[, 1]), ymin = min(coords[, 2]), ymax = max(coords[, 2]))
-    shp_data <- sf::st_crop(shp_earth, sf::st_bbox(box))
-    cell_metrics_df <- data.frame(Res$Cell.Metrics, ID_comm = rownames(comm))
-    sf_cell_metrics <-
-      shp_data %>% 
-      dplyr::left_join(cell_metrics_df)
-  }
   
 }
 
@@ -306,7 +290,8 @@ grid_tyranidae <- readRDS(file = "grid_tyranidae.rds")
 grid <- grid_tyranidae
 col_palette = "SunsetDark"
 resolution <- 1
-coords <- coords
+coords <- coord_tyranidae
+color_palette = "SunsetDark"
 
 plot_ada <- 
   function(ada.res,
@@ -316,49 +301,51 @@ plot_ada <-
            patterns = "all",
            color_palette = "SunsetDark")
   {
+    
+
+    # preparing data and generating raster ------------------------------------
+    
     ada.res <- ada.res$Cell.Metrics
-    extend_grid <- raster::extend(grid)
-    r <- raster::raster(vals = NA, xmn = extend_grid[1],
-                        xmx = extend_grid[2],
-                        ymn = extend_grid[3],
-                        ymx = extend_grid[4]
+    extend_grid <- grid@bbox
+    r <- raster::raster(vals = NA, xmn = extend_grid[1, 1],
+                        xmx = extend_grid[1, 2],
+                        ymn = extend_grid[2, 1],
+                        ymx = extend_grid[2, 2], 
+                        resolution = resolution
     )
     cell.r <- raster::cellFromXY(r, coords[rownames(ada.res),])
     values_cell <- rep(NA, raster::ncell(r))
-    values_cell2 <- rep(NA, raster::ncell(r))
-    values_cell3 <- rep(NA, raster::ncell(r))
     names(values_cell) <- 1:raster::ncell(r)
-    names(values_cell2) <- 1:raster::ncell(r)
-    names(values_cell3) <- 1:raster::ncell(r)
     val.cells <- 1:raster::ncell(r) %in% cell.r
     
-    sf::st_as_sf(r.n_nodes)
+
+    # transforming to sf object -----------------------------------------------
     test_sf <- sf::st_as_sf(raster::rasterToPolygons(r.n_nodes))
     test_sf$ID <- names(values_cell[val.cells])
+    test_sf$rich[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 1]
     test_sf$Nnodes[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 2]
+    test_sf$PeakDiv[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 3]
+    test_sf$Skewness[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 4]
+    test_sf$LowDistPeak[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 5]
+    test_sf$HighDistPeak[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 6]
+    test_sf$PeakRange[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 7]
+    
     if(patterns == "all"){
-      values_cell[val.cells] <- ada.res[, 1]
-      values_cell2[val.cells] <- ada.res[, 2]
-      values_cell3[val.cells] <- ada.res[, 3]
-      r.n_nodes <- raster::setValues(r, values = values_cell)
-      raster::values(r.n_nodes) <- values_cell2
-      projcrs <- "+proj=robin"
-      projection(r.n_nodes) <- projcrs
-      df_r_nodes <- as.data.frame(r.n_nodes, xy = T)
-      data.frame(df_r_nodes, node.rich = ada.res[which(rownames(ada.res) == which(val.cells == TRUE)), 2])
-      spatial_plot <- 
-        ggplot2::ggplot() +
-        ggplot2::geom_raster(data = na.omit(df_r_nodes), aes(x = x, y = y, fill = layer), ) +
-        rcartocolor::scale_fill_carto_c(palette = col_palette
-        ) +
-        labs(fill = "Node Richness")
-      spatial_plot
+      names_div <- colnames(test_sf)[4:ncol(test_sf)]
+      res_plot <- 
+        lapply(names_div, function(x){
+          ggplot2::ggplot() +
+            geom_sf(data = test_sf_proj, aes_string(geometry = "geometry", 
+                                             fill = x), 
+                    color = "transparent", size = 0.1) +
+            rcartocolor::scale_fill_carto_c(palette = color_palette)
+        })
+      names(res_plot) <- names_div
     }
-    spatial_plot <- 
-      ggplot2::ggplot() +
-      ggplot2::geom_raster(data = na.omit(df_r_nodes), aes(x = x, y = y, fill = layer), ) +
-      rcartocolor::scale_fill_carto_c(palette = col_palette
-      ) +
-      labs(fill = "Node Richness")
-    spatial_plot
+   
   }
+
+
+
+list_res
+rename_()

@@ -15,37 +15,49 @@ plot_ada <-
            grid,
            coords, 
            resolution, 
-           patterns = c("Species Richness",
-                        "Ancestral Richness",
-                        "Density peak"),
+           patterns = "all",
            color_palette = "SunsetDark")
-    {
+  {
+    
+    
+    # preparing data and generating raster ------------------------------------
+    
     ada.res <- ada.res$Cell.Metrics
-    extend_grid <- raster::extend(grid)
-    r <- raster::raster(vals = NA, xmn = extend_grid[1],
-                        xmx = extend_grid[2],
-                        ymn = extend_grid[3],
-                        ymx = extend_grid[4]
+    extend_grid <- grid@bbox
+    r <- raster::raster(vals = NA, xmn = extend_grid[1, 1],
+                        xmx = extend_grid[1, 2],
+                        ymn = extend_grid[2, 1],
+                        ymx = extend_grid[2, 2], 
+                        resolution = resolution
     )
     cell.r <- raster::cellFromXY(r, coords[rownames(ada.res),])
     values_cell <- rep(NA, raster::ncell(r))
     names(values_cell) <- 1:raster::ncell(r)
     val.cells <- 1:raster::ncell(r) %in% cell.r
-    values_cell[val.cells] <- ada.res[, 2]
-    r.n_nodes <- raster::setValues(r, values = values_cell)
-    projcrs <- "+proj=robin"
-    projection(r.n_nodes) <- projcrs
-    df_r_nodes <- as.data.frame(r.n_nodes, xy = T)
-    spatial_plot <- 
-      ggplot() +
-      geom_raster(data = na.omit(df_r_nodes), aes(x = x, y = y, fill = layer)) +
-      rcartocolor::scale_fill_carto_c(palette = palette
-      )
-    spatial_plot <- 
-      ggplot2::ggplot() +
-      ggplot2::geom_raster(data = na.omit(df_r_nodes), aes(x = x, y = y, fill = layer), ) +
-      rcartocolor::scale_fill_carto_c(palette = col_palette
-      ) +
-      labs(fill = "Node Richness")
-    spatial_plot
+    
+    
+    # transforming to sf object -----------------------------------------------
+    test_sf <- sf::st_as_sf(raster::rasterToPolygons(r.n_nodes))
+    test_sf$ID <- names(values_cell[val.cells])
+    test_sf$rich[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 1]
+    test_sf$Nnodes[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 2]
+    test_sf$PeakDiv[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 3]
+    test_sf$Skewness[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 4]
+    test_sf$LowDistPeak[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 5]
+    test_sf$HighDistPeak[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 6]
+    test_sf$PeakRange[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 7]
+    
+    if(patterns == "all"){
+      names_div <- colnames(test_sf)[4:ncol(test_sf)]
+      res_plot <- 
+        lapply(names_div, function(x){
+          ggplot2::ggplot() +
+            geom_sf(data = test_sf_proj, aes_string(geometry = "geometry", 
+                                                    fill = x), 
+                    color = "transparent", size = 0.1) +
+            rcartocolor::scale_fill_carto_c(palette = color_palette)
+        })
+      names(res_plot) <- names_div
+    }
+    return(res_plot)
   }

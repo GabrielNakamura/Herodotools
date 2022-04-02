@@ -5,6 +5,9 @@
 #' @param nsim Number of simulations to stochastic character mapping.
 #' @param method Tip-based metric, partial match to "transition_rates", "last_transition_time" and "stasis_time".
 #' @return A list (length equal to nsim) with tip-based metrics estimated per species.
+#' 
+#' @author André Luza and Vanderlei Debastiani
+#' 
 #' @examples 
 
 tip.based.trait.evo <- function(tree, trait, nsim = 1, method = c("transition_rates", "last_transition_time", "stasis_time")) {
