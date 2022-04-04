@@ -3,11 +3,8 @@
 #' @description This function computes different assemblage level 
 #'     metrics using an ancestral community reconstruction
 #' 
-#' @details ada function calculates an ancestral assemblage reconstruciton for each assemblage 
-#'     in a matrix using for this reconstruction ace function from ape package
-#'
-#' 
-#'
+#' @details ada function calculates an ancestral assemblage reconstruction for each assemblage 
+#'     in a matrix using for this reconstruction \link[ape]{ace} function from ape package
 #'
 #' @param x Community occurrence matrix. Rows are sites and columns are species
 #' @param phy Phylogenetic tree
@@ -21,7 +18,7 @@
 #' \item{Phylogeny}{Phylogenetic tree} \item{Root.Age}{Numeric containing root age of the tree used} 
 #' \item{Per.node.ancestral.area}{Matrix containing the ancestors (nodes) for each species } 
 #' \item{Diversity.Through.Time}{Age of each node in the phylogeny} 
-#' \item{Cell.Metric}{Matrix containing the values of ancestral diversity for each cell}
+#' \item{Cell.Metric}{Matrix containing the assemblage level metrics for richness and ancestral diversity}
 #'
 #' 
 #' @export

@@ -1,10 +1,15 @@
-#' Species and their respective ancestral nodes - internal
+#' Species and their respective ancestral nodes
+#'
+#' @description This function computes a matrix containing species and their respective ancestral nodes
 #'
 #' @param tree Phylogenetic tree
 #' @param node.prefix Character indicating the prefix to be used to name nodes, default is the letter "N"
 #'
-#' @return A matrix species in lines and nodes in columns. 1 indicates that the node corresponds to the ancestor of that species
-#'
+#' @return A matrix with species in lines and nodes in columns. 1 indicates that the node corresponds to the ancestor of that species and zero indicates that species 
+#'     does not share the ancestor node
+#'     
+#' @export
+#' 
 #' @examples
 spp_nodes <- function(tree, node.prefix = "N"){
   tree_base <- phylobase::phylo4(tree)
