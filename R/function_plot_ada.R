@@ -16,6 +16,10 @@
 #'   
 #' @return A list containing spatial plots for the metrics calculated in ada.res
 #' 
+#' @import ggplot2
+#' @importFrom sf st_transform
+#' @importFrom rcartocolor scale_fill_carto_c
+#' 
 #' @export
 #'
 #' @examples
