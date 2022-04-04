@@ -1,11 +1,19 @@
 #' Plotting ancestral area character in space
 #'
 #' @param ada.res An object from ada function
-#' @param grid An spatial object containing the cells used to calculate ancestral diversity distribution with ada
-#' @param patterns Character, a vector containing the names of the metrics to be spatialized or "all" to create a map for all metrics. The 
-#'    characters allowed to be passed are "rich", "Nnodes", "PeakDiv", "Skewness", "LowDistPeak", "HighDistPeak", "PeakRange"
-#' @param palette Character. The name of the palette to be used in spatial maps. It can be any of the palette from \link[rcartocolor]{scale_fill_carto_c} function
-#'
+#' @param grid An spatial object containing the cells used to calculate ancestral diversity distribution 
+#'     with ada
+#' @param patterns Character, a vector containing the names of the metrics to be spatialized or "all" to 
+#'     create a map for all metrics. The  characters allowed to be passed are "rich", "Nnodes", "PeakDiv",
+#'     "Skewness", "LowDistPeak", "HighDistPeak", "PeakRange". Default is "all"
+#' @param coords A two column matrix containing the values of 
+#'     Longitude (first column) and Latitude (second column)
+#' @param resolution Scalar informing the resolution of grids in grid object
+#' @param color_palette Character indicating the palette to be used to plot spatial patterns. it can be one
+#'      of the option present in \link[rcartocolor]{scale_fill_carto_c} function. Default is "SunsetDark"
+#' @param projection Character indicating the projection to be used in spatial plots.
+#'      Default is "+proj=robin"
+#'   
 #' @return A list containing spatial plots for the metrics calculated in ada.res
 #' 
 #' @export
@@ -18,7 +26,8 @@ plot_ada <-
            coords, 
            resolution, 
            patterns = "all",
-           color_palette = "SunsetDark")
+           color_palette = "SunsetDark", 
+           projection = "+proj=robin")
   {
     
     
@@ -37,39 +46,45 @@ plot_ada <-
     names(values_cell) <- 1:raster::ncell(r)
     val.cells <- 1:raster::ncell(r) %in% cell.r
     
+    values_cell[val.cells] <- ada.res[, 1] # just richness
+    r.values <- raster::setValues(r, values = values_cell)
+    
     
     # transforming to sf object -----------------------------------------------
-    test_sf <- sf::st_as_sf(raster::rasterToPolygons(r.n_nodes))
-    test_sf$ID <- names(values_cell[val.cells])
-    test_sf$rich[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 1]
-    test_sf$Nnodes[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 2]
-    test_sf$PeakDiv[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 3]
-    test_sf$Skewness[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 4]
-    test_sf$LowDistPeak[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 5]
-    test_sf$HighDistPeak[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 6]
-    test_sf$PeakRange[which(test_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 7]
+    data_sf <- sf::st_as_sf(raster::rasterToPolygons(r.values))
+    data_sf$ID <- names(values_cell[val.cells])
+    data_sf$Nnodes[which(data_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 2]
+    data_sf$PeakDiv[which(data_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 3]
+    data_sf$Skewness[which(data_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 4]
+    data_sf$LowDistPeak[which(data_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 5]
+    data_sf$HighDistPeak[which(data_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 6]
+    data_sf$PeakRange[which(data_sf$ID == names(values_cell[val.cells]))] <- ada.res[, 7]
+    
+    data_sf_proj <- 
+      data_sf %>%
+      st_transform(crs = projection)
     
     if(patterns == "all"){
-      names_div <- colnames(test_sf)[4:ncol(test_sf)]
+      names_div <- colnames(data_sf)[4:ncol(data_sf)]
       res_plot <- 
         lapply(names_div, function(x){
           ggplot2::ggplot() +
-            geom_sf(data = test_sf_proj, aes_string(geometry = "geometry", 
-                                                    fill = x), 
-                    color = "transparent", size = 0.1) +
+            ggplot2::geom_sf(data = data_sf_proj, aes_string(geometry = "geometry", 
+                                                             fill = x), 
+                             color = "transparent", size = 0.1) +
             rcartocolor::scale_fill_carto_c(palette = color_palette)
         })
       names(res_plot) <- names_div
     } else{
-      names_div <- colnames(test_sf)[4:ncol(test_sf)]
+      names_div <- colnames(data_sf)[4:ncol(data_sf)]
       patterns_plot <- pmatch(patterns, names_div)
       names_div <- names_div[patterns_plot]
       res_plot <- 
         lapply(names_div, function(x){
           ggplot2::ggplot() +
-            geom_sf(data = test_sf_proj, aes_string(geometry = "geometry", 
-                                                    fill = x), 
-                    color = "transparent", size = 0.1) +
+            ggplot2::geom_sf(data = data_sf_proj, aes_string(geometry = "geometry", 
+                                                             fill = x), 
+                             color = "transparent", size = 0.1) +
             rcartocolor::scale_fill_carto_c(palette = color_palette)
         })
       names(res_plot) <- names_div
