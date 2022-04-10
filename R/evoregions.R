@@ -1,5 +1,11 @@
 #' Defining groups based on phylogenetic turnover
 #'
+#' @details evoregions performs biogeographical regionalization analysis, differently from other methods, evoregions
+#'     uses a phylogenetic turnover metric based on fuzzy sets, therefore accounting for characteristics of evolutionary history, 
+#'     e.g tree imbalance, that is not accounted by other metrics of phylogenetic turnover. Besides that, evoregion also
+#'     computes Principal Coordinates of Phylogenetic Strucuture (PCPS) and a matrix of phylogenetic structure of communities
+#'     based on phylogenetic fuzzy-weighting
+#'
 #' @param comm Species occurrence matrix. Assemblages are rows and species are columns
 #' @param phy Newick object with phylogenetic tree containing the species in comm
 #' @param method.dist Character. The method to be used to compute phyogenetic distances among assemblages.
@@ -36,6 +42,7 @@
 #'
 #' @examples
 #' 
+
 
 evoregions <- function(comm, 
                        phy, 
