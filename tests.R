@@ -91,6 +91,8 @@ library(ggplot2)
 library(sf)
 library(raster)
 
+
+data(res_ada)
 res_plot_test <- plot_ada(ada.res = res_ada, 
                           grid = shp_tyranidae, 
                           coords = coord_tyranidae, 
@@ -99,6 +101,6 @@ res_plot_test <- plot_ada(ada.res = res_ada,
                           color_palette = "SunsetDark")
 dev.new()
 res_plot_test$Nnodes
-res_plot_test$HighDistPeak
 dev.new()
+res_plot_test$HighDistPeak
 
