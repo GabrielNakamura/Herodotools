@@ -64,30 +64,15 @@ DivB_metrics <-function(W,
 
   # species vs Node matrix --------------------------------------------------
 
-  spxnode <- matrix(data = 0, nrow =  s, ncol =  n)
   ages <- abs(ape::node.depth.edgelength(phy = tree)
               -max(ape::node.depth.edgelength(tree)))[-c(1:length(tree$tip.label))]
   ages <- data.frame(age = ages)
   rownames(ages) <- paste("N", (s+1):(s+(s-1)), sep = "")
   spxnode <- spp_nodes(tree = tree)
+
   # Ancestral species matrix [AS] -------------------------------------------
 
-  AS <- spxnode #Ancestral State matrix
-  AS <- matrix(data = 0, nrow = nrow(spxnode), 
-               ncol = ncol(spxnode), 
-               dimnames = list(rownames(spxnode), 
-                               colnames(spxnode)
-                               )
-               )
-  for(i in 1:nrow(spxnode)){
-    pres <- which(spxnode[i,]==1)
-    AS[i, pres] <- as.character(ancestral.area[i, 1]) #matriz - a informacao em cada celula representa o estado do ancestral de cada especie
-  }
-  for(i in 1:nrow(AS)){
-    zero<-which(AS[i,]==0)
-    AS[i,zero]<-NA #NAs indicam nos que nao contem a especie
-  }
-
+  AS <- ancestral_state(tree = tree, ancestral.area = ancestral.area, prefix = "N")
 
   # Decomposing local metrics -----------------------------------------------
 
@@ -96,11 +81,13 @@ DivB_metrics <-function(W,
                         nrow = nrow(W),
                         ncol = ncol(W),
                         dimnames = list(rownames(W), colnames(W)))
+  
   #matrix to receive the results of local Freckleton metric
   matrix_XFreck<- matrix(0,
                          nrow = nrow(W),
                          ncol = ncol(W),
                          dimnames = list(rownames(W), colnames(W)))
+  
   #matrix to receive the age from which local diversification occurs in the area
   age_arrival<-  matrix(0,
                         nrow = nrow(W),
@@ -123,14 +110,12 @@ DivB_metrics <-function(W,
   # List with node path and dispersal node ----------------------------------
 
   nodes.list <- lapply(1:nrow(W), function(i){
-    #i= 15
     pres <- which(W[i, ] >= 1)
     pres <- names_spComm[pres]
     nodes_species <- vector(mode= "list")
     disp.anc.node <- vector("numeric", length = length(pres))
 
     for(j in 1:length(pres)){
-      #j= 6
       nodes_sp <- AS[,pres[j]][!is.na(AS[,pres[j]])]
       nodes_sp<- nodes_sp[length(nodes_sp):1] #nodes for species j in community i
 
