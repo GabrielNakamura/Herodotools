@@ -9,6 +9,13 @@
 #' @export
 #'
 #' @examples
+#' 
+
+W <- W
+tree <- tree
+AS <- AS
+biogeo <- biogeo
+
 nodes_info_core <- function(W,
                             tree,
                             AS, 
