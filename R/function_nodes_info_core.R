@@ -1,0 +1,74 @@
+#' Auxiliary function to compute information of node path and dispersal path for each species 
+#'
+#' @param W Numerical matrix, rows are assemblages and columns are species
+#' @param tree Phylogenetic tree in newick format
+#' @param AS Ancestral State data frame. Rows are nodes and columns are species. Each cell contains information on the occurrence area (biome)
+#' @param biogeo Data frame containing the information of the biome/area/ecoregion of each assemblage
+#'
+#' @return
+#' @export
+#'
+#' @examples
+nodes_info_core <- function(W,
+                            tree,
+                            AS, 
+                            biogeo){
+  
+  names_spComm <- colnames(W)
+  
+  nodes.list <- lapply(1:nrow(W), function(i){
+    pres <- which(W[i, ] == 1)
+    pres <- names_spComm[pres]
+    nodes_species <- vector(mode= "list")
+    disp.anc.node <- vector("numeric", length = length(pres))
+    
+    for(j in 1:length(pres)){
+      # j = 2
+      nodes_sp <- AS[, pres[j]][!is.na(AS[, pres[j]])]
+      nodes_sp <- nodes_sp[length(nodes_sp):1] #nodes for species j in community i
+      nodes.T <- grep(biogeo[i, 1], nodes_sp)
+      nodes_all <- numeric(length = length(nodes_sp))
+      nodes_all[nodes.T] <- 1
+      
+      if(all(nodes_all == 1)){ #if all ancestors of species j are in the same ecoregion of local 1 this will be TRUE
+        x <- names(nodes_sp[length(nodes_sp)]) # if TRUE, take basal node as the reference node for calculation of local diversification
+        
+        rec.anc.node <- as.numeric(substr(x, 2, nchar(x))) # number of ancestral node
+        
+        n.path <- ape::nodepath(tree,
+                                rec.anc.node,
+                                which(tree$tip.label == pres[j]))
+        
+        nodes_species[[j]] <- sort(n.path[-length(n.path)]) # node path from root to tip
+        disp.anc.node[j] <- NA # no dispersal
+        
+      }else
+      { # node for the ancestor previous to dispersal
+        out.situ.anc.pos <- which(nodes_all == 0)[1]
+        x <- names(nodes_sp)[out.situ.anc.pos]
+        disp.anc.node[j] <- as.numeric(substr(x, 2, nchar(x)))
+        
+        # node for the early ancestor in the same ecoregion
+        x1 <- names(nodes_sp)[out.situ.anc.pos - 1]
+        rec.anc.node <- ifelse(length(x1) == 1,
+                               yes = as.numeric(substr(x1, 2, nchar(x1))),
+                               no = NA)
+        if(!is.na(rec.anc.node)){
+          n.path <- ape::nodepath(tree,
+                                  rec.anc.node,
+                                  which(tree$tip.label==pres[j]))
+          
+          nodes_species[[j]] <- sort(n.path[-length(n.path)])
+        }else{ nodes_species[[j]] <- NA} # options to half length should be implemented here
+        
+      }
+    }
+    names(nodes_species) <- pres
+    names(disp.anc.node) <- pres
+    list(nodes_species = nodes_species,
+         disp.anc.node = disp.anc.node)
+  })
+  return(nodes.list)
+}
+
+

@@ -28,6 +28,18 @@
 #'
 #'
 
+W = W_toy
+tree = toy_treeEx
+ancestral.area = ancestral_area_toy
+biogeo = biogeo_toy
+diversification = c("jetz", "freck")
+PD = TRUE
+PE = TRUE
+age.arrival = TRUE
+age.no.ancestor = NA # 'half.edge' or numeric()
+dispersal.from = TRUE
+ED.type = "equal.splits"
+
 DivB_metrics <-function(W,
                         tree,
                         ancestral.area,
@@ -41,7 +53,7 @@ DivB_metrics <-function(W,
                         ED.type = "equal.splits"
 ){
   
-  W <- ifelse(comm_data >= 1, 1, 0)
+  W <- ifelse(W >= 1, 1, 0)
   s <- length(tree$tip.label)
   n <- tree$Nnode
   names_spComm <- colnames(W)
@@ -105,32 +117,36 @@ DivB_metrics <-function(W,
                     nrow= nrow(W),
                     ncol= 1,
                     dimnames= list(rownames(W), "PD_local"))
-
+  
+  # matrix to receive the results of local PE metric
+  PE_local<- matrix(NA,
+                    nrow= nrow(W),
+                    ncol= 1,
+                    dimnames= list(rownames(W), "PE_local"))
 
   # List with node path and dispersal node ----------------------------------
 
   nodes.list <- lapply(1:nrow(W), function(i){
-    pres <- which(W[i, ] >= 1)
+    pres <- which(W[i, ] == 1)
     pres <- names_spComm[pres]
     nodes_species <- vector(mode= "list")
     disp.anc.node <- vector("numeric", length = length(pres))
 
     for(j in 1:length(pres)){
-      nodes_sp <- AS[,pres[j]][!is.na(AS[,pres[j]])]
-      nodes_sp<- nodes_sp[length(nodes_sp):1] #nodes for species j in community i
-
-      nodes.T <- grep(biogeo[i,1], nodes_sp)
+      nodes_sp <- AS[, pres[j]][!is.na(AS[, pres[j]])]
+      nodes_sp <- nodes_sp[length(nodes_sp):1] #nodes for species j in community i
+      nodes.T <- grep(biogeo[i, 1], nodes_sp)
       nodes_all <- numeric(length = length(nodes_sp))
       nodes_all[nodes.T] <- 1
 
-      if(all(nodes_all==1)){ #if all ancestors of species j are in the same ecoregion of local 1 this will be TRUE
+      if(all(nodes_all == 1)){ #if all ancestors of species j are in the same ecoregion of local 1 this will be TRUE
         x <- names(nodes_sp[length(nodes_sp)]) # if TRUE, take basal node as the reference node for calculation of local diversification
 
         rec.anc.node <- as.numeric(substr(x, 2, nchar(x))) # number of ancestral node
 
         n.path <- ape::nodepath(tree,
                            rec.anc.node,
-                           which(tree$tip.label==pres[j]))
+                           which(tree$tip.label == pres[j]))
 
         nodes_species[[j]] <- sort(n.path[-length(n.path)]) # node path from root to tip
         disp.anc.node[j] <- NA # no dispersal
@@ -152,7 +168,7 @@ DivB_metrics <-function(W,
                              which(tree$tip.label==pres[j]))
 
           nodes_species[[j]] <- sort(n.path[-length(n.path)])
-        }else{ nodes_species[[j]] <- NA}
+        }else{ nodes_species[[j]] <- NA} # options to half length should be implemented here
 
       }
     }
@@ -174,9 +190,9 @@ DivB_metrics <-function(W,
         nodes_div <- site$nodes_species[[j]]
         sp <- names(site$nodes_species)[j]
 
-        if(length(nodes_div)==1){
+        if(length(nodes_div) == 1){
           internal.brlen_div <- tree$edge.length[which(tree$edge[,
-                                                                 2] %in% nodes_div)] #branch lenghts (in times) for internal branch lengts of the most ancient ancestral
+                                                                 2] %in% nodes_div)] #branch lenghts (in times) for internal branch lengths of the most ancient ancestral
         } else{
           nodes_div <- nodes_div[-1] #internal nodes that form the path from most ancient ancestral that was presented at Ecoregion of local i to species j
           internal.brlen_div <- tree$edge.length[which(tree$edge[,
@@ -306,7 +322,7 @@ DivB_metrics <-function(W,
   # Age arrival -------------------------------------------------------------
 
   if(age.arrival){
-    # site; species; fisrt node (root in the ecorregion)
+    # site; species; first node (root in the ecoregion)
 
     ## NA means the time of arrival is unknown
     for(site in 1:length(nodes.list)){

@@ -31,8 +31,8 @@ W_toy<- matrix(c(1, 1, 0, 0, 0,
                              ), 
                byrow= TRUE)
 
-biogeo_toy<- data.frame(Ecoregion= c("A", "A", "B", "C", "D"))
-ancestral_area_toy<- data.frame(state= c("ABC", "AB", "A", "C"))
+biogeo_toy <- data.frame(Ecoregion= c("A", "A", "B", "C", "D"))
+ancestral_area_toy <- data.frame(state= c("ABC", "AB", "A", "C"))
 
 ####calculating age arrival with toy example#####
 age_arrival_toy <- diversification.assembly(W = W_toy, tree = toy_treeEx, ancestral.area = ancestral_area_toy, biogeo = biogeo_toy)$age_arrival
