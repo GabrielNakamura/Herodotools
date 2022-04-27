@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' 
 ancestral_state <- function(tree, 
                             ancestral.area, 
                             prefix = "N")
@@ -23,12 +24,11 @@ ancestral_state <- function(tree,
                                colnames(spxnode)
                )
   )
-  spxnodes_area <- cbind(spxnodes, ancestral.area)
-  AS_res <- apply(spxnodes_area, MARGIN = 1, function(x){
-    AS[which(x == 1), ] <- as.character(x[ncol(spxnodes_area)])
-    AS[which(x == 0), ] <- NA
-  })
-
-  return(AS_res)
-  
+  for(i in 1:nrow(AS)){
+    pres_nodes <- which(spxnodes[i, ] == 1)
+    absence_nodes <- which(spxnodes[i, ] == 0)
+    AS[i, pres_nodes] <- ancestral.area[i, ]
+    AS[i, absence_nodes] <- NA
+  }
+  return(AS)
 }
