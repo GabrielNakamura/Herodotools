@@ -1,6 +1,6 @@
 ####Supplementary material - Toy example########
 
-toy_treeEx<- ape::read.tree(here::here("data", "toy_tree.new"))
+toy_treeEx<- ape::read.tree(here::here("dados_exemplo", "toy_tree.new"))
 toy_treeEx<- ape::makeNodeLabel(toy_treeEx, method= "user", nodeList= list(N6ABC= c("s"), 
                                                                            N7AB= c("s1", "s2", "s3"),
                                                                            N9C= c("s4", "s5"),
@@ -35,7 +35,7 @@ biogeo_toy<- data.frame(Ecoregion= c("A", "A", "B", "C", "D"))
 ancestral_area_toy<- data.frame(state= c("ABC", "AB", "A", "C"))
 
 ####calculating age arrival with toy example#####
-age_arrival_toy<- diversification.assembly(W = W_toy, tree = toy_treeEx, ancestral.area = ancestral_area_toy, biogeo = biogeo_toy)$age_arrival
+age_arrival_toy <- diversification.assembly(W = W_toy, tree = toy_treeEx, ancestral.area = ancestral_area_toy, biogeo = biogeo_toy)$age_arrival
 apply(age_arrival_toy, MARGIN = 1, function(x) mean(x[which(x != 0)]))
 abs(node.depth.edgelength(phy = toy_treeEx)
     -max(node.depth.edgelength(toy_treeEx)))[-c(1:length(toy_treeEx$tip.label))]
