@@ -29,6 +29,12 @@ function(W,
          diversification = "jetz",
          type = "equal.splits"){
   
+  
+  if(all(diversification != c("jetz", "freckleton")) == TRUE){
+    stop("Tip-based diversification measures must be one of jetz of freckleton")
+  }
+  
+  # Jetz tip-based diversification
   EDtotal <- picante::evol.distinct(tree = tree, type = type)
   Jetz_total <- 1/EDtotal$w
   names(Jetz_total)<- tree$tip.label
@@ -149,23 +155,91 @@ function(W,
     
     #harmonic mean for Jetz local diversification
     JetzLocalComm_harmonic <- (JetzTotalComm_harmonic*(sum_localDiv/sum_totalDiv))
+    list_res_jetz <- vector(mode = "list", length = 5)
+    list_res_jetz[[1]] <- Jetz_total
+    list_res_jetz[[2]] <- matrix_totalDiv_Jetz
+    list_res_jetz[[3]] <- JetzTotalComm_harmonic # jetz harmonic mean diversification per community
+    list_res_jetz[[4]] <- matrix_XJetz # model-based metric per community per species
+    list_res_jetz[[5]] <- JetzLocalComm_harmonic # model-based metric harmonic mean 
+    names(list_res_jetz) <- c("Jetz_per_spp",
+                         "Jetz_species_site",
+                         "Jetz_harmonic_mean_site",
+                         "model_based_Jetz_species_sites", 
+                         "model_based_Jetz_harmonic_mean_site")
     
   }
+    
+    
+    if(any(diversification == "freck")){
+      ## Freckleton local
+      # modifyed equation 4 from Freckleton et al (2008) considering only the nodes
+      # that diversified in ecoregion of local i, plus one is only a correction of the
+      # previous step
+      
+      Freck_total <- numeric(length = length(tree$tip.label))
+      names(Freck_total) <- tree$tip.label
+      T_freck <- max(cophenetic(tree))/2
+      for(l in 1:length(tree$tip.label)){
+        nodes_Freck <- picante::.get.nodes(tree, tree$tip.label[l])
+        Freck_total[l] <- length(nodes_Freck)/T_freck
+      }
+      
+      matrix_XFreck<- matrix(0,
+                             nrow = nrow(W),
+                             ncol = ncol(W),
+                             dimnames = list(rownames(W), colnames(W)))
+      
+      for(site in 1:length(nodes.list)){
+        for(sp in 1:length(nodes.list[[site]]$nodes_species)){
+          pres<- which(W[site,]>=1)
+          pres<- names_spComm[pres]
+          nodes_div <- nodes.list[[site]]$nodes_species[[sp]]
+          matrix_XFreck[site, pres[sp]] <- ifelse(is.na(nodes_div),
+                                                  0.00001,
+                                                  (length(nodes_div))/T_freck)[1]
+        }
+      }
+      
+      FreckLocalComm_mean <- sapply(1:nrow(matrix_XFreck), function(i){
+        pres <- matrix_XFreck[i, ][W[i, ] >= 1]
+        mean(pres, na.rm = T)
+      })
+      
+      #objet to receive Jetz diversification values
+      matrix_totalDiv_Freck <- W
+      
+      #substitui a matrix de ocorrencia pelos valores de div total do Freck
+      for(i in colnames(W)){
+        matrix_totalDiv_Freck[, i] <- ifelse(matrix_totalDiv_Freck[, i] >= 1, Freck_total[i], 0)
+      }
+      
+      FreckTotalComm_mean <- sapply(1:nrow(matrix_totalDiv_Freck), function(i){
+        pres <- matrix_totalDiv_Freck[i, ][W[i, ] >= 1]
+        mean(pres, na.rm = T)
+      })
+      
+      list_res_freckleton <-  data.frame(FreckTotal = FreckTotalComm_mean,
+                                         FreckLocal = FreckLocalComm_mean,
+                                         FreckLocalProp = FreckLocalComm_mean/
+                                           FreckTotalComm_mean,
+                                         row.names = row.names(W))
+      
+    }
   
- #if{any(diversification) == "Freckleton"}{
- #  
- #}
   
-  list_res <- vector(mode = "list", length = 5)
-  list_res[[1]] <- Jetz_total
-  list_res[[2]] <- matrix_totalDiv_Jetz
-  list_res[[3]] <- JetzTotalComm_harmonic # jetz harmonic mean diversification per community
-  list_res[[4]] <- matrix_XJetz # model-based metric per community per species
-  list_res[[5]] <- JetzLocalComm_harmonic # model-based metric harmonic mean 
-  names(list_res) <- c("Jetz_per_spp",
-                       "Jetz_species_site",
-                       "Jetz_harmonic_mean_site",
-                       "model_based_Jetz_species_sites", 
-                       "model_based_Jetz_harmonic_mean_site")
-  return(list_res)
+  
+  if(all(diversification == c("jetz", "freckleton")) == TRUE){
+    list_res$Freckleton <- list_res_freckleton
+    list_res$Jetz <- list_res
+    return(list_res)
+  }
+  
+  if(diversification == "jetz"){
+    return(list_res_jetz)
+  }
+  
+  if(diversification == "freckleton"){
+    return(lis_res_freckleton)
+  }
+    
 }
