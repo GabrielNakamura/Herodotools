@@ -1,7 +1,28 @@
 
+#' Tip-based and model-based diversification metrics 
+#'
+#' @param W Assemblage occurrence matrix, rows are assemblages and columns are species
+#' @param tree Phylogenetic tree in newick format
+#' @param biogeo Data frame with one column indicating the Ecoregion of each assemblage
+#' @param diversification Character indicating the tip-based diversification metric to be calculated. Default is "jetz"
+#' @param type Character indicating the type of calculation to be used in the calculation of tip-based metric, "equal-splits" is the default
+#' @param ancestral.area One column data frame indicating the Ecoregion of occurrence of each node (rows)
+#'
+#' @details model-based measure of diversification is calculated as the proportion of total tip-based diversification
+#'     metric corresponded only to the branches of a given species that diversified in the current area of occurrence of that species
+#'     \deqn{Jetz_total \times (ED_div/ED_total)}
+#'
+#' @return \item{Jetz_per_spp}{Jetz tip-based metric of diversification for each species} \item{Jetz_species_site}{Matrix containing
+#'     the values of Jetz tip-based diversification metric for each assemblage} \item{Jetz_harmonic_mean_site}{Harmonic mean of Jetz tip-based
+#'     diversification metric} \item{model_based_Jetz_species_sites}{Matrix with model-based Jetz metric for each species
+#'     in each assemblage} \item{model_based_Jetz_harmonic_mean_site}{Harmonic mean of model-based Jetz diversification}
+#'     
+#' @export
+#'
+#' @examples
 function(W,
          tree,
-         AS, 
+         ancestral.area, 
          biogeo, 
          diversification = "jetz",
          type = "equal.splits"){
@@ -17,6 +38,8 @@ function(W,
                         ncol = ncol(W),
                         dimnames = list(rownames(W), colnames(W)))
   
+  AS <- ancestral_state(tree = tree, ancestral.area = ancestral.area)
+  
   # matrix to receive the results of local Freckleton metric
   # matrix_XFreck<- matrix(0,
   #                        nrow = nrow(W),
@@ -30,6 +53,8 @@ function(W,
     ## Jetz local para cada espécie
     l.Jetz.local <- lapply(nodes.list , function(site){
       lapply(1:length(site$nodes_species), function(j){
+        # nodes_div <- nodes.list[[3]]$nodes_species[[1]]
+        # sp <- names(nodes.list[[3]]$nodes_species)[1]
         nodes_div <- site$nodes_species[[j]]
         sp <- names(site$nodes_species)[j]
         
@@ -60,47 +85,48 @@ function(W,
           JetzLocal <- 0.00001
         }else{
           ED_div <- sum(internal.brlen_div,
-                        tree$edge.length[ape::which.edge(tree, sp)]) #Local ED - modifyed ED considering only the edges of ancestros inside the biogeo of local i for species j
+                        tree$edge.length[ape::which.edge(tree, sp)]) #Local ED - modifyed ED considering only the edges of ancestors inside the biogeo of local i for species j
           
-          EDtotal_spp <- EDtotal$w[which(EDtotal$Species==sp)]
-          Jetz_total_spp<-Jetz_total[sp] #Diversificatio calculated according to Jetz for species j
-          JetzLocal<- (Jetz_total_spp*(ED_div/EDtotal_spp)) #Modified Jetz to calculate only for local diversification
+          EDtotal_spp <- EDtotal$w[which(EDtotal$Species == sp)]
+          Jetz_total_spp <- Jetz_total[sp] # Diversification calculated according to Jetz for species j
+          JetzLocal <- (Jetz_total_spp*(ED_div/EDtotal_spp)) # Modified Jetz to calculate only for local diversification
           
         }
         JetzLocal #Jetz local diversification
         
-      })#lapply j
+      })#lapply j == species
     })#lapply site
     
     # populate the matrix
     for(site in 1:length(l.Jetz.local)){
+      # site = 1
       for(sp in 1:length(l.Jetz.local[[site]])){
-        pres<- which(W[site,]>=1)
-        pres<- names_spComm[pres]
-        matrix_XJetz[site, pres[sp]] <- l.Jetz.local[[site]][[sp]]
+        # sp = 1
+        pres <- which(W[site,] >= 1)
+        pres <- names_spComm[pres]
+        matrix_XJetz[site, pres[sp]] <- l.Jetz.local[[site]][[sp]] # model-base diversification for each species in each site
       }
     }
     
     
     # Summarazing results for each site ---------------------------------------
 
-    ##calculating harmonic mean for Jetz
+    ## calculating harmonic mean for Jetz
     
-    #sum of communities local diversification
+    # sum of communities local diversification
     sum_localDiv <- apply(matrix_XJetz,
                          1,
                          function(x) sum(x[which(x != 0 & x != 0.00001)]))
     
     
-    #objet to receive Jetz diversification values
+    #object to receive Jetz diversification values
     matrix_totalDiv_Jetz <- W
     
-    #substitui a matrix de ocorrencia pelos valores de div total do Jetz
+    # Total jetz values for each community
     for(i in colnames(W)){
-      #i=1
-      matrix_totalDiv_Jetz[ , i] <- ifelse(matrix_totalDiv_Jetz[ , i] >= 1, 
+      matrix_totalDiv_Jetz[ , i] <- ifelse(matrix_totalDiv_Jetz[ , i] == 1, 
                                            Jetz_total[i],
-                                           0) #input Jetz total diversification values in occurence matrix
+                                           0) # input Jetz total diversification values in occurence matrix
     }
     
     #sum of communities total diversification
@@ -118,6 +144,7 @@ function(W,
     
     #harmonic mean for Jetz total diversification
     JetzTotalComm_harmonic <- denom_values/numerator_values
+    
     #harmonic mean for Jetz local diversification
     JetzLocalComm_harmonic <- (JetzTotalComm_harmonic*(sum_localDiv/sum_totalDiv))
     
@@ -127,10 +154,16 @@ function(W,
  #  
  #}
   
-  list_res <- vector(mode = "list", length = 4)
+  list_res <- vector(mode = "list", length = 5)
   list_res[[1]] <- Jetz_total
-  list_res[[2]] <- matrix_XJetz
-  list_res[[3]] <- JetzLocalComm_harmonic # model-based metric
-  names(list_res) <- c("Jetz_per_spp", "model-basedJetz_species_site", "model-based_totalJetz_persite")
+  list_res[[2]] <- matrix_totalDiv_Jetz
+  list_res[[3]] <- JetzTotalComm_harmonic # jetz harmonic mean diversification per community
+  list_res[[4]] <- matrix_XJetz # model-based metric per community per species
+  list_res[[5]] <- JetzLocalComm_harmonic # model-based metric harmonic mean 
+  names(list_res) <- c("Jetz_per_spp",
+                       "Jetz_species_site",
+                       "Jetz_harmonic_mean_site",
+                       "model_based_Jetz_species_sites", 
+                       "model_based_Jetz_harmonic_mean_site")
   return(list_res)
 }
