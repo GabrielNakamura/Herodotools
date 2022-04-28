@@ -1,4 +1,3 @@
-
 #' Ancestral State per Assemblage
 #'
 #' @param tree A newick phylogenetic tree object

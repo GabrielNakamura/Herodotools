@@ -1,4 +1,3 @@
-
 #' Proportional contribution of each region to the species of another region
 #'
 #' @param W Occurrence matrix, rows are assemblages and columns are species 

@@ -1,4 +1,3 @@
-
 #' Tip-based and model-based diversification metrics 
 #'
 #' @param W Assemblage occurrence matrix, rows are assemblages and columns are species

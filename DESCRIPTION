@@ -1,4 +1,4 @@
-Package: Rrodotus
+Package: Herodotools
 Title: Tools for Historical Biogeography analysis
 Version: 0.0.1
 Authors@R: 
@@ -42,12 +42,9 @@ Authors@R:
            email = "vanderleidebastiani@yahoo.com.br"
                   )
            )
-<<<<<<< HEAD
-Description: Rrodotus contains a set of functions to analyze patterns associated with historical processes.
-=======
-Description: Evoregion executes biogeographical regionalization of important bioregions based on phylogenetic 
-    turnover calculated using fuzzy-sets.
->>>>>>> luza
+           
+Description: Herodotools contains a set of functions to analyze patterns associated with historical processes.
+
 License: MIT + file LICENSE
 Imports:
     adegenet,
@@ -60,16 +57,12 @@ Imports:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-<<<<<<< HEAD
 RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10)
-=======
-RoxygenNote: 7.1.1
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     daee,
     ape
->>>>>>> luza

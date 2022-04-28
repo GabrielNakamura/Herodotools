@@ -1,4 +1,3 @@
-
 #' Diversification-based PD and PE
 #'
 #' @param W Occurrence matrix, rows are assemblages and columns are species

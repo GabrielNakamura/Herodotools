@@ -1,5 +1,3 @@
-
-
 #' Computes the arrival ages of each species in the assemblages 
 #'
 #' @param W Occurrence matrix, rows are assemblages and columns are species
