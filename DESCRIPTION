@@ -1,7 +1,7 @@
 Package: Herodotools
 Title: Tools for Historical Biogeography analysis
 Version: 0.0.1
-Authors@R: 
+Authors: 
     c(
            person(given = "Gabriel",
            family = "Nakamura",
@@ -42,9 +42,7 @@ Authors@R:
            email = "vanderleidebastiani@yahoo.com.br"
                   )
            )
-           
 Description: Herodotools contains a set of functions to analyze patterns associated with historical processes.
-
 License: MIT + file LICENSE
 Imports:
     adegenet,
@@ -63,6 +61,3 @@ Depends:
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Imports: 
-    daee,
-    ape
