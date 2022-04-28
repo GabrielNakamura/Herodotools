@@ -7,8 +7,11 @@
 #' @param prefix A single character string to be used to name nodes
 #'
 #' @return A data frame with assemblages in lines and nodes in columns. 
-#'     Each cell contains the ancestral area of occurrence for each node. 
+#'     Each cell contains the ancestral area/Ecoregion of occurrence for each node and its respective species. 
+#'  
 #'     
+#' @author Gabriel Nakamura <gabriel.nakamura.souza@@gmail.com>
+#'    
 #' @export
 #'
 #' @examples

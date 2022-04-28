@@ -2,26 +2,22 @@
 #'
 #' @param W Numerical matrix, rows are assemblages and columns are species
 #' @param tree Phylogenetic tree in newick format
-#' @param AS Ancestral State data frame. Rows are nodes and columns are species. Each cell contains information on the occurrence area (biome)
 #' @param biogeo Data frame containing the information of the biome/area/ecoregion of each assemblage
+#' @param ancestral.area Single column data frame with nodes in rows and ancestral area/Ecoregion of occurrence in columns. If the reconstruction
+#'     comes from BioGeoBears this data frame can be obtained with (\code{\link{get.node.range_BioGeoBEARS}})
 #'
 #' @return
 #' @export
 #'
 #' @examples
 #' 
-
-W <- W
-tree <- tree
-AS <- AS
-biogeo <- biogeo
-
 nodes_info_core <- function(W,
                             tree,
-                            AS, 
+                            ancestral.area, 
                             biogeo){
   
   names_spComm <- colnames(W)
+  AS <- ancestral_state(tree = tree, ancestral.area = ancestral.area)
   
   nodes.list <- lapply(1:nrow(W), function(i){
     pres <- which(W[i, ] == 1)

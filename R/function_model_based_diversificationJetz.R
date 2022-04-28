@@ -16,7 +16,9 @@
 #'     the values of Jetz tip-based diversification metric for each assemblage} \item{Jetz_harmonic_mean_site}{Harmonic mean of Jetz tip-based
 #'     diversification metric} \item{model_based_Jetz_species_sites}{Matrix with model-based Jetz metric for each species
 #'     in each assemblage} \item{model_based_Jetz_harmonic_mean_site}{Harmonic mean of model-based Jetz diversification}
-#'     
+#' 
+#' @author Gabriel Nakamura <gabriel.nakamura.souza@@gmail.com> and Arthur V Rodrigues
+#'      
 #' @export
 #'
 #' @examples
