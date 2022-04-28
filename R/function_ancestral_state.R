@@ -20,7 +20,7 @@ ancestral_state <- function(tree,
                             ancestral.area, 
                             prefix = "N")
   {
-  spxnodes <- spp_nodes(tree = tree, node.prefix = prefix)
+  spxnode <- spp_nodes(tree = tree, node.prefix = prefix)
   AS <- matrix(data = 0, nrow = nrow(spxnode), 
                ncol = ncol(spxnode), 
                dimnames = list(rownames(spxnode), 
@@ -28,8 +28,8 @@ ancestral_state <- function(tree,
                )
   )
   for(i in 1:nrow(AS)){
-    pres_nodes <- which(spxnodes[i, ] == 1)
-    absence_nodes <- which(spxnodes[i, ] == 0)
+    pres_nodes <- which(spxnode[i, ] == 1)
+    absence_nodes <- which(spxnode[i, ] == 0)
     AS[i, pres_nodes] <- ancestral.area[i, ]
     AS[i, absence_nodes] <- NA
   }

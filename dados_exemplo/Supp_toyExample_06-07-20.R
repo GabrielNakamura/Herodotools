@@ -7,7 +7,7 @@ toy_treeEx<- ape::makeNodeLabel(toy_treeEx, method= "user", nodeList= list(N6ABC
                                                                            N8A= c("s1", "s2")
 )
 )
-quartz()
+
 plot(toy_treeEx,  show.node.label = T)
 ape::axisPhylo()
 
@@ -35,6 +35,7 @@ biogeo_toy <- data.frame(Ecoregion= c("A", "A", "B", "C", "D"))
 ancestral_area_toy <- data.frame(state= c("ABC", "AB", "A", "C"))
 
 ####calculating age arrival with toy example#####
+
 age_arrival_toy <- diversification.assembly(W = W_toy, tree = toy_treeEx, ancestral.area = ancestral_area_toy, biogeo = biogeo_toy)$age_arrival
 apply(age_arrival_toy, MARGIN = 1, function(x) mean(x[which(x != 0)]))
 abs(node.depth.edgelength(phy = toy_treeEx)
