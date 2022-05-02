@@ -1,0 +1,31 @@
+---
+title: "Introduction to Herodotools"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using Herodotools to analyses of historical biogeography}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this article we will show the basic usage of `Herodotools` package by investigating the effects of deep past processes, here represented by diversification and
+    historical dispersal, on the structure of assemblages of species of the genus *Akodon*. 
+
+
+```{r install_pkg, echo=TRUE, eval=FALSE}
+devtools::install_github("GabrielNakamura/Herodotools", ref = "main")
+```
+
+To read the files corresponding to the distribution of species, phylogenetic relationship and trait values (represented by size) type:
+
+```{r readData, echo=TRUE, eval=FALSE}
+system.file("extdata", "Table_Akodon_coords_pa.txt", package = "Herodotools")
+```
+
