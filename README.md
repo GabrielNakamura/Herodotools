@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- <img src="man/figures/Logo_FishPhyloMaker.png" alt="fish logo" width="200px" align="right"/> -->
+<img src="man/figures/logo_herodotools.png" alt="package logo with a map and a phylogeny inside" width="200px" align="right"/>
 
 # Herodotools
 
