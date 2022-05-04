@@ -1,0 +1,50 @@
+---
+title: "Package issues"
+author: "Arthur Rodrigues"
+date: '2022-05-04'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## `evoregions`
+
+the function `evoregions` need to be revised with care. It was working well, but I implement a set of changes in the behaviour of the function.
+
+Some changes are:
+
+-   the cleaning of `tree` and `comm` inside the function was removed. Now the code `picante::match.phylo.comm(phy, comm)` only assure if the order of the names is correct. If any species is misssing in `tree` or `comm`the function `stop`s and inform the user to use `picante::match.phylo.comm` before `evoregions`. This makes sure that the funcion will not delete anything, and the output could be easaly merged with the initial data.
+
+-   The output was dramatically changed:
+
+    1)  the PCPS results was organized in a single list, with i) PCPS vectors, ii) proportinal explanation of the vectors, iii) the threshold value to used to select the number of PCPS axis in the cluster step.
+    2)  I changed the output of the `Cluster_Evoregions` list to return only the vector with the groups. I think the other results are not necessarry.
+    3)  I removed the `Matrix_P` output. I think this is not a important result, since it is only used to calculate PCPS vectors.
+    4)  also removed the cumulative explanation of the axis used in the cluster step. This could be get by the output in the current PCPS list.
+
+Also, I have some sugestions to be implemented:\
+\* The argument `max.n.clust.method` should be removed. It only provides one option, and do not need an argument. In addition, I think that this functionality shouldn't be within the `evoregions` function. It should be provided as sepated function to find the maximun number of cluster. In the `evoregions` function, we can set the `max.n.clust` with a default number (i think 10 or 15 is ok) and explain what functions could be used to define this number.
+
+## `afilliation.evoreg`
+
+Not working well.
+
+The function calculates the affiliation without error (using evoregion class) but the order of the sites in the output differs from the input. As this function is intented to be used to map the zones of transition, this mismatch in the output generates a map without recognizable pattern.
+
+Then, I think this function need to be reviewed e re-written.
+
+some issues in this function:  
+* line 21: this object `phylo_regionalization` is not in the argument list;
+* line 40 (and 34) - the distance matrix is calculated from all PCPS axis. I think it should be only the same as used in the regionalization. Maybe the PCPS output in the `evoregion` function should return only the axis used in `adegenet::find.cluster`. 
+* argument `method` have not being used with `phylregion` class.
+
+some suggestion:
+I think the `evo.classification` could be transformed into two new arguments. `phylo.comp`, `regions`. The first a matrix to be computed the distance among sites, the second the regions provided by the phylogenetic classification. 
+I allows to remove the necessity of predict the behaviour of each class (`phyloregion` or `evoregion`)
+
+
+
+
+

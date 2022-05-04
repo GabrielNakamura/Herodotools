@@ -10,8 +10,13 @@
 #' @export
 #'
 #' @examples
+#' 
+#' 
+
 afilliation.evoreg <- function(evo.classification, distance = NULL, 
                                method = "euclidean"){
+  
+  
   if(class(evo.classification) == "phyloregion"){
     n.groups <- phylo_regionalization$k
     comm.groups <- evo.classification$region.df[, 2]
@@ -24,9 +29,9 @@ afilliation.evoreg <- function(evo.classification, distance = NULL,
     dist.matrix <- as.matrix(dist.matrix)
   } 
   if(class(evo.classification) == "evoregion"){
-    n.groups <- length(as.numeric(levels(evo.classification[[2]]$grp)))
-    comm.groups <- evo.classification[[2]]$grp
-    vec.bray <- evo.classification[[1]]
+    n.groups <- length(as.numeric(levels(evo.classification[[2]])))
+    comm.groups <- evo.classification[[2]]
+    vec.bray <- evo.classification[[1]]$vectors
     Gs <- lapply(1:n.groups, function(x){
       which(comm.groups == x)
     })
@@ -43,6 +48,7 @@ afilliation.evoreg <- function(evo.classification, distance = NULL,
   PGall <- lapply(Gs, function(x){
     dist.matrix[x, x]
   })
+  
   afilliation_by_grp <- lapply(PGall, function(x){
     afilliation_by_grp <- matrix(NA, nrow(x), 2, dimnames = list(rownames(x), c("afilliation", "group")))
     for (z in 1:nrow(x)) {

@@ -20,3 +20,7 @@ is classified and the other containing cell coordinates
 \description{
 Affiliation values for assemblages according to phylogenetic turnover
 }
+\examples{
+
+
+}

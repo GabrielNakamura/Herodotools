@@ -26,3 +26,6 @@ A list (length equal to nsim) with tip-based metrics estimated per species.
 \description{
 Tip-based metrics of trait evolution
 }
+\author{
+André Luza and Vanderlei Debastiani
+}

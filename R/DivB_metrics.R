@@ -28,17 +28,17 @@
 #'
 #'
 
-W = W_toy
-tree = toy_treeEx
-ancestral.area = ancestral_area_toy
-biogeo = biogeo_toy
-diversification = c("jetz", "freck")
-PD = TRUE
-PE = TRUE
-age.arrival = TRUE
-age.no.ancestor = NA # 'half.edge' or numeric()
-dispersal.from = TRUE
-ED.type = "equal.splits"
+##  W = W_toy
+##  tree = toy_treeEx
+##  ancestral.area = ancestral_area_toy
+##  biogeo = biogeo_toy
+##  diversification = c("jetz", "freck")
+##  PD = TRUE
+##  PE = TRUE
+##  age.arrival = TRUE
+##  age.no.ancestor = NA # 'half.edge' or numeric()
+##  dispersal.from = TRUE
+##  ED.type = "equal.splits"
 
 DivB_metrics <-function(W,
                         tree,
