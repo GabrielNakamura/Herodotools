@@ -1,6 +1,6 @@
 #' Affiliation values for assemblages according to phylogenetic turnover 
 #'
-#' @param evo.classification An object returned from \code{\link{evoregions}} function or phyloregion
+#' @param evo.classification An object returned from \code{\link{evoregions}} function or phyloregion package
 #' @param method Character indicating the method used to compute the distance in fuzzy matrix
 #' @param distance A distance matrix, only applies if the object in evo.classification is from class phyloregion
 #'

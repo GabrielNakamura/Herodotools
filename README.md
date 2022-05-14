@@ -49,4 +49,4 @@ page](https://gabrielnakamura.github.io/Herodotools/)
 
 # Next steps
 
-  - [x] CRAN release
+  - [ ] CRAN release
