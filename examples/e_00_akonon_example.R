@@ -34,9 +34,6 @@ akodon.pa <- akodon.sites %>%
 akodon.tree$tip.label <- akodon.tree$tip.label %>% 
   str_replace_all("Akodon", "A")
 
-### save a newick to use in BioGeoBEARS
-write.tree(akodon.tree, here("examples", "akodon.new"))
-
 akodon.newick <- read.tree(here("examples", "akodon.new"))
 
 spp.in.tree <- names(akodon.pa) %in% akodon.newick$tip.label
@@ -238,5 +235,11 @@ nodelabels(nodes.biomes, cex = 0.75)
 tiplabels(tip.biomes[(order.tip)], cex = 0.75)
 axisPhylo()
 
+
+
+# saving objects ----------------------------------------------------------
+
+### save a newick to use in BioGeoBEARS
+write.tree(akodon.tree, here("examples", "akodon.new"))
 
 

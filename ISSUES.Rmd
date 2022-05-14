@@ -11,11 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## `evoregions`
 
-the function `evoregions` need to be revised with care. It was working well, but I implement a set of changes in the behaviour of the function.
+the function `evoregions` need to be revised with care. It was working well, but I implement a set of changes in the behavior of the function.
 
 Some changes are:
 
--   the cleaning of `tree` and `comm` inside the function was removed. Now the code `picante::match.phylo.comm(phy, comm)` only assure if the order of the names is correct. If any species is misssing in `tree` or `comm`the function `stop`s and inform the user to use `picante::match.phylo.comm` before `evoregions`. This makes sure that the funcion will not delete anything, and the output could be easaly merged with the initial data.
+-   the cleaning of `tree` and `comm` inside the function was removed. Now the code `picante::match.phylo.comm(phy, comm)` only assure if the order of the names is correct. If any species is misssing in `tree` or `comm`the function `stop`s and inform the user to use `picante::match.phylo.comm` before `evoregions`. This makes sure that the function will not delete anything, and the output could be easaly merged with the initial data.
 
 -   The output was dramatically changed:
 
@@ -36,13 +36,18 @@ The function calculates the affiliation without error (using evoregion class) bu
 Then, I think this function need to be reviewed e re-written.
 
 some issues in this function:  
-* line 21: this object `phylo_regionalization` is not in the argument list;
-* line 40 (and 34) - the distance matrix is calculated from all PCPS axis. I think it should be only the same as used in the regionalization. Maybe the PCPS output in the `evoregion` function should return only the axis used in `adegenet::find.cluster`. 
-* argument `method` have not being used with `phylregion` class.
+
+- [x] line 21: this object `phylo_regionalization` is not in the argument list;
+
+- [x] line 40 (and 34) - the distance matrix is calculated from all PCPS axis. I think it should be only the same as used in the regionalization. Maybe the PCPS output in the `evoregion` function should return only the axis used in `adegenet::find.cluster`. 
+
+- [x] argument `method` have not being used with `phylregion` class. - this argument was removed
 
 some suggestion:
 I think the `evo.classification` could be transformed into two new arguments. `phylo.comp`, `regions`. The first a matrix to be computed the distance among sites, the second the regions provided by the phylogenetic classification. 
 I allows to remove the necessity of predict the behaviour of each class (`phyloregion` or `evoregion`)
+
+- [x] I followed your suggestion and changed the arguments as explained above
 
 ## `tipranges_to_BioGeoBEARS`
 
