@@ -120,7 +120,7 @@ bind_cols(site.xy, site.region =  site.region) %>%
     ) +
   geom_sf(data = coastline) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("Akodon's Evoregion") + 
+  ggtitle("Evoregion for Akodon Genus") + 
   theme_bw() +
   theme(
     legend.position = "bottom",
@@ -136,12 +136,14 @@ ggsave(
   height = 5
 )
 
-# |- evoregion's transition sozes ----
-#### afiliation tem problemas!
-afi <- afilliation.evoreg(regions)
+# |- evoregion's transition zones ----
+
+PCPS_thresh <- regions$PCPS$vectors[, which(regions$PCPS$prop_explainded >= regions$PCPS$tresh_dist)] # only axis with more than 5% of explained variance
+dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean") # distance matrix from 4 significant PCPS axis
+afi <- afilliation.evoreg(phylo.comp.dist = dist_phylo_PCPS,
+                          groups = regions$Cluster_Evoregions) # affiliation values for each assemblage 
 
 sites <- bind_cols(site.xy, site.region =  site.region, afi)
-sum(!sites$site.region == sites$group)
 bind_cols(site.xy, site.region =  site.region, afi) %>% 
   ggplot() + 
   geom_raster(aes(x = LONG, y = LAT, fill = afilliation)) + 
@@ -151,6 +153,30 @@ bind_cols(site.xy, site.region =  site.region, afi) %>%
   theme(
     legend.position = "bottom"
   )
+
+
+# mapping evoregions and afilliation --------------------------------------
+
+
+(map_evoregion_afilliation <- 
+   bind_cols(site.xy, site.region =  site.region, afilliation = afi[, 1]) %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = site.region), alpha = afi[, 1]) + 
+   scale_fill_manual(
+     name = "Evoregions", 
+     labels = LETTERS[1:5],
+     values = rev(col_five_hues)
+   ) +
+   geom_sf(data = coastline) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("Afilliation for Akodon Genus") + 
+   theme_bw() +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank(),
+     plot.title.position =  "plot"
+   )
+)
 
 
 # definig regional merbership of species ----------------------------------

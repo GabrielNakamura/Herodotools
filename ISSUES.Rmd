@@ -53,5 +53,12 @@ I allows to remove the necessity of predict the behaviour of each class (`phylor
 
 Function included in the package to save a phyllip file as required by BioGeoBEARS
 
+# Issues - May 15 2022
+
+- [ ] Function `tipranges_to_BioGeoBEARS` ain't working
+- [ ] I haven't found the result of DEC model in biogeobears
+
+
+
 
 

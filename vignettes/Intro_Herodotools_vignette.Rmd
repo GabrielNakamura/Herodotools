@@ -15,9 +15,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this article we will show the basic usage of `Herodotools` package by investigating the effects of deep past processes, here represented by diversification and
-    historical dispersal, on the structure of assemblages of species of the genus *Akodon*. 
+In this article we will show the basic usage of `Herodotools` package by investigating the effects of deep past processes, here represented by diversification and historical dispersal, on the structure of assemblages of species of the genus *Akodon*. 
 
+# Reading data and libraries
 
 ```{r install_pkg, echo=TRUE, eval=FALSE}
 devtools::install_github("GabrielNakamura/Herodotools", ref = "main")
@@ -26,6 +26,80 @@ devtools::install_github("GabrielNakamura/Herodotools", ref = "main")
 To read the files corresponding to the distribution of species, phylogenetic relationship and trait values (represented by size) type:
 
 ```{r readData, echo=TRUE, eval=FALSE}
-system.file("extdata", "Table_Akodon_coords_pa.txt", package = "Herodotools")
+devtools::load_all()
+library(ape)
+library(dplyr)
+library(raster)
+library(ggplot2)
+library(stringr)
+library(here)
+akodon.sites <- read.table(system.file("extdata", "Table_Akodon_coords_pa.txt", package = "Herodotools"), 
+                           header = TRUE)
+akodon.tree <- read.nexus(system.file("extdata", "tree_akodon.nexus", package = "Herodotools"))
+akodon.newick <- read.tree(system.file(here("examples", "akodon.new")))
+```
+# Data processing and exploratory analysis
+
+Some data process to separate spatial information from species occurrence 
+
+```{r dataproc, echo=TRUE, eval=FALSE}
+site.xy <- akodon.sites %>% 
+  dplyr::select(LONG, LAT)
+
+akodon.pa <- akodon.sites %>% 
+  dplyr::select(-LONG, -LAT)
+
+```
+
+Checking names between occurrence matrix and phylogenetic tree
+
+```{r match_data, echo=TRUE, eval=FALSE}
+
+akodon.tree$tip.label <- akodon.tree$tip.label %>% 
+  str_replace_all("Akodon", "A")
+
+spp.in.tree <- names(akodon.pa) %in% akodon.newick$tip.label
+
+akodon.pa.tree <- akodon.pa[, spp.in.tree]
+
+```
+
+# Exploring spatial patterns
+
+Here we can observe the richness pattern associated with Akodon species
+
+```{r richpattern, echo=TRUE, eval=TRUE}
+coastline <- ne_coastline(returnclass = "sf")
+map.limits <- list(
+  x = c(-95, -30),
+  y = c(-55, 12)
+)
+
+rich.tree <- rowSums(akodon.pa.tree)
+
+(map_rich_tree <- 
+bind_cols(site.xy, rich =  rich, rich.tree = rich.tree) %>% 
+  ggplot() + 
+  geom_raster(aes(x = LONG, y = LAT, fill = rich.tree)) + 
+  scale_fill_viridis(option = "plasma") +
+  geom_sf(data = coastline) +
+  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  theme_bw()
+)
+
+
+```
+
+# Calculating evoregions
+
+```{r evoregion_calc, echo=TRUE, eval=FALSE}
+regions <- evoregions(
+  comm = akodon.pa.tree,
+  phy = akodon.tree, 
+  max.n.clust = 10)
+
+length(regions$PCPS)
+site.region <- regions$Cluster_Evoregions
+
 ```
 
