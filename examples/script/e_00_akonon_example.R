@@ -92,7 +92,7 @@ bind_cols(site.xy, rich =  rich, rich.tree = rich.tree) %>%
 set.seed(12)
 regions <- evoregions(
   comm = akodon.pa.tree,
-  phy = akodon.tree, 
+  phy = akodon.newick, 
   max.n.clust = 10)
 
 site.region <- regions$Cluster_Evoregions
@@ -198,6 +198,42 @@ ggsave(
   width = 8,
   height = 5
 )
+
+
+# alternative plot for afilliation + evoregion ----------------------------
+
+(map_joint_evoregion_afilliation <- 
+   evoregion.df %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = site.region), 
+               alpha = sites[, "afilliation"]) + 
+   scale_fill_manual(
+     name = "Evoregions", 
+     labels = LETTERS[1:5],
+     values = rev(col_five_hues)
+   ) +
+   geom_sf(data = coastline, size = 0.4) +
+   geom_sf(
+     data = sf.evoregion, 
+     color = rev(col_five_hues),
+     fill = NA, 
+     size = 0.7) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("Evoregion and afilliation for Akodon Genus") + 
+   theme_bw() +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank(),
+     plot.title.position =  "plot"
+   )
+)
+
+ggsave(filename = here::here("examples",
+                             "output", 
+                             "fig", "Fig_joint_evoregion_afilliation.png"), 
+       plot = map_joint_evoregion_afilliation,
+       width = 8, height = 5, 
+       dpi = 300)
 
 # defining regional merbership of species ----------------------------------
 
