@@ -8,6 +8,9 @@ library(here)
 library(rnaturalearth)
 library(viridis)
 library(devtools)
+library(terra)
+library(sf)
+library(patchwork)
 load_all()
 
 # load data ---------------------------------------------------------------
@@ -34,7 +37,10 @@ akodon.pa <- akodon.sites %>%
 akodon.tree$tip.label <- akodon.tree$tip.label %>% 
   str_replace_all("Akodon", "A")
 
-akodon.newick <- read.tree(here("examples", "akodon.new"))
+### save a newick to use in BioGeoBEARS
+write.tree(akodon.tree, here("examples", "data", "akodon.new"))
+
+akodon.newick <- read.tree(here("examples", "data", "akodon.new"))
 
 spp.in.tree <- names(akodon.pa) %in% akodon.newick$tip.label
 
@@ -83,12 +89,25 @@ bind_cols(site.xy, rich =  rich, rich.tree = rich.tree) %>%
 
 # evoregions --------------------------------------------------------------
 
+set.seed(12)
 regions <- evoregions(
   comm = akodon.pa.tree,
   phy = akodon.tree, 
   max.n.clust = 10)
 
 site.region <- regions$Cluster_Evoregions
+
+evoregion.df <- data.frame(
+  site.xy, 
+  site.region
+)
+
+r.evoregion <- rast(evoregion.df)
+
+sf.evoregion <- as.polygons(r.evoregion) %>% 
+  st_as_sf()
+
+st_crs(sf.evoregion) <- st_crs(coastline)
 
 col_five_hues <- c(
   "#3d291a",
@@ -98,18 +117,9 @@ col_five_hues <- c(
   "#fcc573"
 )
 
-col_blue_gold_red <- c(
-  "#303260",
-  "#88beca",
-  "#fcc573",
-  "#7b5a28",
-  "#EC7D2E",
-  "#a9344f"
-)
-
 # |- map evoregion ----
 (map_evoregion <- 
-bind_cols(site.xy, site.region =  site.region) %>% 
+evoregion.df %>% 
   ggplot() + 
   geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
   scale_fill_manual(
@@ -118,6 +128,11 @@ bind_cols(site.xy, site.region =  site.region) %>%
     values = rev(col_five_hues)
     ) +
   geom_sf(data = coastline) +
+  geom_sf(
+    data = sf.evoregion, 
+    color = "#040400",
+    fill = NA, 
+    size = 0.2) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggtitle("Evoregion for Akodon Genus") + 
   theme_bw() +
@@ -129,7 +144,7 @@ bind_cols(site.xy, site.region =  site.region) %>%
 )
 
 ggsave(
-  here("examples", "fig_01_akodon_evoregion.png"),
+  here("examples", "output", "fig", "fig_01_akodon_evoregion.png"),
   map_evoregion,
   width = 4,
   height = 5
@@ -137,48 +152,54 @@ ggsave(
 
 # |- evoregion's transition zones ----
 
-PCPS_thresh <- regions$PCPS$vectors[, which(regions$PCPS$prop_explainded >= regions$PCPS$tresh_dist)] # only axis with more than 5% of explained variance
-dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean") # distance matrix from 4 significant PCPS axis
+# only axis with more than 5% of explained variance
+axis_sel <- which(regions$PCPS$prop_explainded >= regions$PCPS$tresh_dist)
+PCPS_thresh <- regions$PCPS$vectors[, axis_sel] 
+
+# distance matrix from 4 significant PCPS axis
+dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean")
+
+# affiliation values for each assemblage 
 afi <- afilliation.evoreg(phylo.comp.dist = dist_phylo_PCPS,
-                          groups = regions$Cluster_Evoregions) # affiliation values for each assemblage 
+                          groups = regions$Cluster_Evoregions) 
 
 sites <- bind_cols(site.xy, site.region =  site.region, afi)
-bind_cols(site.xy, site.region =  site.region, afi) %>% 
+
+# |- mapping evoregions and afilliation --------------------------------------
+
+(map_afiliation <- 
+sites %>% 
   ggplot() + 
   geom_raster(aes(x = LONG, y = LAT, fill = afilliation)) + 
+  scale_fill_gradient(
+    name = "Afiliation",
+    low = "#8EC1CD",
+    high = "#3B3C68") + 
   geom_sf(data = coastline) +
+  geom_sf(
+    data = sf.evoregion, 
+    color = "#040400",
+    fill = NA, 
+    size = 0.2) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   theme_bw() +
   theme(
-    legend.position = "bottom"
+    legend.position = "bottom",
+    axis.title = element_blank()
   )
-
-
-# mapping evoregions and afilliation --------------------------------------
-
-
-(map_evoregion_afilliation <- 
-   bind_cols(site.xy, site.region =  site.region, afilliation = afi[, 1]) %>% 
-   ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = site.region), alpha = afi[, 1]) + 
-   scale_fill_manual(
-     name = "Evoregions", 
-     labels = LETTERS[1:5],
-     values = rev(col_five_hues)
-   ) +
-   geom_sf(data = coastline) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("Afilliation for Akodon Genus") + 
-   theme_bw() +
-   theme(
-     legend.position = "bottom",
-     axis.title = element_blank(),
-     plot.title.position =  "plot"
-   )
 )
 
 
-# definig regional merbership of species ----------------------------------
+map_evoregion_afilliation <- map_evoregion + map_afiliation
+
+ggsave(
+  here("examples", "output", "fig", "fig_02_akodon_evo_affiliation.png"),
+  map_evoregion_afilliation,
+  width = 8,
+  height = 5
+)
+
+# defining regional merbership of species ----------------------------------
 
 akodon.evoregion.data <- 
   bind_cols(
@@ -223,28 +244,34 @@ a.regions <- akodon.evoregion.data[,-1]
 rownames(a.regions) <- species.names
 
 # save phyllip file
-tipranges_to_BioGeoBEARS(a.regions, 
-                         filename = here("examples", "geo_area_akodon.data"),
-                         areanames = NULL)
+tipranges_to_BioGeoBEARS(
+  a.regions, 
+  filename = here("examples", "data", "geo_area_akodon.data"),
+  areanames = NULL
+  )
 
 
 # run DEC model with BioGeoBears ------------------------------------------
 
 ## this run DEC model for akodon species using BioGeoBEARS
-source(here("examples", "e_01_run_DEC_model.R"))
+source(here("examples", "script", "e_01_run_DEC_model.R"))
 
 ## the object with results is 'resDEC'
+saveRDS(resDEC, here("examples", "output", "resDEC_akodon.rds"))
 
 # |- exploring DEC results ----
+resDEC <- readRDS(here("examples", "output", "resDEC_akodon.rds"))
+
 node.area <- 
 get.node.range_BioGeoBEARS(
   resDEC,
-  phyllip.file = "lagrange_area_data_file.data",
+  phyllip.file = here("examples", "data", "geo_area_akodon.data"),
   akodon.tree,
   max.range.size = 4 
 )
 
 nodes.biomes <- node.area$biome[-c(1:30)]
+
 tip.biomes <- apply(a.regions, 1, function(x){
   paste(names(x)[x == 1], collapse = "")
 })
@@ -262,9 +289,6 @@ axisPhylo()
 
 
 
-# saving objects ----------------------------------------------------------
 
-### save a newick to use in BioGeoBEARS
-write.tree(akodon.tree, here("examples", "akodon.new"))
 
 
