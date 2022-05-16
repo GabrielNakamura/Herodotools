@@ -88,7 +88,6 @@ regions <- evoregions(
   phy = akodon.tree, 
   max.n.clust = 10)
 
-length(regions$PCPS)
 site.region <- regions$Cluster_Evoregions
 
 col_five_hues <- c(
