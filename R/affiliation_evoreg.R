@@ -33,7 +33,9 @@ afilliation.evoreg <- function(phylo.comp.dist, groups){
     dist.matrix[x, x]
   })
   
-  afilliation_by_grp <- lapply(PGall, function(x){
+  PGall_similarity <- lapply(PGall, function(x) 1 - x) # distance to similarity
+  
+  afilliation_by_grp <- lapply(PGall_similarity, function(x){
     afilliation_by_grp <- matrix(NA, nrow(x), 2, dimnames = list(rownames(x), c("afilliation", "group")))
     for (z in 1:nrow(x)) {
       dis <- as.data.frame(x[z,])[-z,]
