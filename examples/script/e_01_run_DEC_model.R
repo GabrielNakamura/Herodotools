@@ -32,7 +32,7 @@ library(here)
 # 6. DON'T USE SPACES IN SPECIES NAMES, USE E.G. "_"
 #######################################################
 
-phy.path <-  here("examples", "akodon.new")
+phy.path <-  here("examples", "data", "akodon.new")
 
 trfn = np(phy.path)
 
@@ -79,7 +79,7 @@ trfn = np(phy.path)
 #    In summary, you should collapse multiple specimens into species/lineages if 
 #    data indicates they are the same genetic population.
 ######################################################
-geog.path <- here("examples", "geo_area_akodon.data")
+geog.path <- here("examples", "data" , "geo_area_akodon.data")
 
 # This is the example geography file for Hawaiian Psychotria
 # (from Ree & Smith 2008)
