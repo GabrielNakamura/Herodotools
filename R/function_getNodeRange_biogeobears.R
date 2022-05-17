@@ -12,8 +12,11 @@
 #' @examples
 #' 
 get.node.range_BioGeoBEARS <-
-  function(BioGeoBEARS.data, phyllip.file, tree, max.range.size){
-    tipranges <- BioGeoBEARS::getranges_from_LagrangePHYLIP(lgdata_fn=geogfn)
+  function(BioGeoBEARS.data,
+           phyllip.file,
+           tree,
+           max.range.size){
+    tipranges <- BioGeoBEARS::getranges_from_LagrangePHYLIP(lgdata_fn = phyllip.file)
     trtable <- BioGeoBEARS::prt(tree, printflag=FALSE)
     prob_state <- BioGeoBEARS.data$ML_marginal_prob_each_state_at_branch_bottom_below_node
     areas <- BioGeoBEARS::getareas_from_tipranges_object(tipranges)

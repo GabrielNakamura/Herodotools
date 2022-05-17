@@ -235,7 +235,7 @@ ggsave(filename = here::here("examples",
        width = 8, height = 5, 
        dpi = 300)
 
-# defining regional merbership of species ----------------------------------
+# defining regional membership of species ----------------------------------
 
 akodon.evoregion.data <- 
   bind_cols(
