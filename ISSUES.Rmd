@@ -55,8 +55,13 @@ Function included in the package to save a phyllip file as required by BioGeoBEA
 
 # Issues - May 15 2022
 
-- [ ] Function `tipranges_to_BioGeoBEARS` ain't working
-- [ ] I haven't found the result of DEC model in biogeobears
+- [x] Function `tipranges_to_BioGeoBEARS` ain't working
+- [x] I haven't found the result of DEC model in biogeobears
+
+# Issues - May 17 2022
+
+- [ ] Evoregions output in number and all other in Letter (something related with phyllip file)
+- [ ] Change the output of get.node.range_BioGeoBEARS to keep only internal nodes
 
 
 
