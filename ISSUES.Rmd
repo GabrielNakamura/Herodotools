@@ -60,8 +60,12 @@ Function included in the package to save a phyllip file as required by BioGeoBEA
 
 # Issues - May 17 2022
 
-- [ ] Evoregions output in number and all other in Letter (something related with phyllip file)
-- [ ] Change the output of get.node.range_BioGeoBEARS to keep only internal nodes
+- [x] Evoregions output in number and all other in Letter (something related with phyllip file)
+- [x] Change the output of get.node.range_BioGeoBEARS to keep only internal nodes
+
+# Issues - May 18 2022
+
+- [ ] Error in diversification based jetz metric
 
 
 

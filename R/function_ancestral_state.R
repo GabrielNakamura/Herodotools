@@ -1,7 +1,7 @@
 #' Ancestral State per Assemblage
 #'
 #' @param tree A newick phylogenetic tree object
-#' @param ancestral.area  A two column data frame. Lines are nodes the column are the biomes/region of occurrence
+#' @param ancestral.area  One column data frame. Lines are nodes the column are the biomes/region of occurrence
 #'     for each ancestors. Can be obtained by using (\code{\link{get.node.range_BioGeoBEARS}}) 
 #' @param prefix A single character string to be used to name nodes
 #'

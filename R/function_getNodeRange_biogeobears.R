@@ -43,9 +43,12 @@ get.node.range_BioGeoBEARS <-
                        ]
     ) # taking the max probability value
     
-    nodes.range <- data.frame(node = 1:length(unlist(teste_max)), biome = unlist(teste_max))
+    nodes.area <- data.frame(node = 1:length(unlist(teste_max)), biome = unlist(teste_max))
+    nodes.range <- data.frame(area = nodes.area[-c(1:length(tree$tip.label)), 2])
+    rownames(nodes.range) <- paste("N", 
+                                    nodes.area[-c(1:length(tree$tip.label)), 1],
+                                    sep = "")
+    
     return(nodes.range)
-
-}
-
-
+    
+  }

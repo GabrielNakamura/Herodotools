@@ -12,7 +12,7 @@
 #' @examples
 #' 
 #' 
-afilliation.evoreg <- function(phylo.comp.dist, groups){
+affiliation.evoreg <- function(phylo.comp.dist, groups){
   
   if(class(phylo.comp.dist) != "dist"){
     stop("phylo.comp.dist might be from class dist")

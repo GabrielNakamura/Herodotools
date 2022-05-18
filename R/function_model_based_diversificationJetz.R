@@ -21,6 +21,7 @@
 #' @export
 #'
 #' @examples
+db_diversification <- 
 function(W,
          tree,
          ancestral.area, 
@@ -53,7 +54,7 @@ function(W,
   #                        ncol = ncol(W),
   #                        dimnames = list(rownames(W), colnames(W)))
   
-  nodes.list <- nodes_info_core(W = W, tree = tree, AS = AS, biogeo = biogeo) # calculating basic info for db-diversification metrics
+  nodes.list <- nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo) # calculating basic info for db-diversification metrics
   
   if(any(diversification == "jetz")){
     
