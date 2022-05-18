@@ -39,12 +39,14 @@ node.area <-
     max.range.size = 4 
   )
 node_data <- data.frame(area = node.area[, 2])
-nodes.biomes <- node.area$biome[-c(1:30)]
+nodes.biomes <- data.frame(area_node = node.area$biome[-c(1:30)])
+rownames(nodes.biomes) <- paste("N", node.area[-c(1:30), 1], sep = "")
+
 
 
 # calculating age arrival -------------------------------------------------
 
 biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion.df$site.region))
 
-age_comm <- age_arrival(W = akodon.pa, tree = akodon.pa.tree, ancestral.area = node_data, biogeo = biogeo_area)
+age_comm <- age_arrival(W = akodon.pa, tree = akodon.pa.tree, ancestral.area = nodes.biomes, biogeo = biogeo_area)
 ?age_arrival
