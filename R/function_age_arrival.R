@@ -16,10 +16,12 @@
 age_arrival <- function(W, 
                         tree, 
                         ancestral.area, 
-                        biogeo){
+                        biogeo,
+                        age.no.ancestor = "recent"){
   ages <- abs(ape::node.depth.edgelength(phy = tree)
               -max(ape::node.depth.edgelength(tree)))[-c(1:length(tree$tip.label))]
   ages <- data.frame(age = ages)
+  s <- length(tree$tip.label)
   rownames(ages) <- paste("N", (s+1):(s+(s-1)), sep = "")
   
   age_arrival<-  matrix(0,
@@ -27,9 +29,7 @@ age_arrival <- function(W,
                         ncol = ncol(W),
                         dimnames = list(rownames(W), colnames(W)))
   names_spComm <- colnames(W)
-  AS <- ancestral_state(tree = tree, ancestral.area = ancestral.area)
-  
-  nodes.list <- nodes_info_core(W = W, tree = tree, AS = AS, biogeo = biogeo)
+  nodes.list <- nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
   # site; species; first node (root in the ecoregion)
   
   ## NA means the time of arrival is unknown
@@ -47,9 +47,9 @@ age_arrival <- function(W,
   
   ## age.no.ancestor is an option to atribute an age time when diversification
   ## wasn't local
-  if(!is.na(age.no.ancestor)){
+  if(age.no.ancestor == "recent"){
     if(is.numeric(age.no.ancestor)){
-      age_arrival[is.na(age_arrival)] <- age.no.ancestor
+      age_arrival[is.na(age_arrival)] <- 10e-5
     }
     
     if(age.no.ancestor == "half.edge"){

@@ -279,6 +279,15 @@ a.regions <- akodon.evoregion.data[,-1]
 
 rownames(a.regions) <- species.names
 
+# BioGeoBears analysis ----------------------------------------------------
+
+## this run DEC model for akodon species using BioGeoBEARS
+source(here("examples", "script", "e_01_run_DEC_model.R"))
+
+## the object with results is 'resDEC'
+saveRDS(resDEC, here("examples", "output", "resDEC_akodon.rds"))
+
+
 # save phyllip file
 tipranges_to_BioGeoBEARS(
   a.regions, 
@@ -287,41 +296,6 @@ tipranges_to_BioGeoBEARS(
   )
 
 
-# run DEC model with BioGeoBears ------------------------------------------
-
-## this run DEC model for akodon species using BioGeoBEARS
-source(here("examples", "script", "e_01_run_DEC_model.R"))
-
-## the object with results is 'resDEC'
-saveRDS(resDEC, here("examples", "output", "resDEC_akodon.rds"))
-
-# |- exploring DEC results ----
-resDEC <- readRDS(here("examples", "output", "resDEC_akodon.rds"))
-
-node.area <- 
-get.node.range_BioGeoBEARS(
-  resDEC,
-  phyllip.file = here("examples", "data", "geo_area_akodon.data"),
-  akodon.tree,
-  max.range.size = 4 
-)
-
-nodes.biomes <- node.area$biome[-c(1:30)]
-
-tip.biomes <- apply(a.regions, 1, function(x){
-  paste(names(x)[x == 1], collapse = "")
-})
-
-order.tip <- match(
-  akodon.newick$tip.label,
-  rownames(a.regions)
-  )
-
-
-plot(akodon.newick)
-nodelabels(nodes.biomes, cex = 0.75)
-tiplabels(tip.biomes[(order.tip)], cex = 0.75)
-axisPhylo()
 
 
 
