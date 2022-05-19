@@ -33,6 +33,7 @@ library(raster)
 library(ggplot2)
 library(stringr)
 library(here)
+library(sf)
 akodon.sites <- read.table(system.file("extdata", "Table_Akodon_coords_pa.txt", package = "Herodotools"), 
                            header = TRUE)
 akodon.newick <- read.tree(system.file("extdata", "akodon.new", package = "Herodotools"))
@@ -65,7 +66,7 @@ akodon.pa.tree <- akodon.pa[, spp.in.tree]
 
 Here we can observe the richness pattern associated with Akodon species
 
-```{r richpattern, echo=TRUE, eval=TRUE}
+```{r richpattern, echo=TRUE, eval=FALSE}
 coastline <- ne_coastline(returnclass = "sf")
 map.limits <- list(
   x = c(-95, -30),
@@ -193,7 +194,7 @@ sites <- bind_cols(site.xy, site.region =  site.region, afi)
 
 Now we can map both evoregions and the affiliation of each cell. As fadded the color of the cell, lesser the affiliation of that cell to its evoregion. Those cell can be interpreted as being zones of high phylogenetic turnover.
 
-```{r mapAffiliation}
+```{r mapAffiliation, echo=TRUE, eval=FALSE}
 (map_joint_evoregion_afilliation <- 
    evoregion.df %>% 
    ggplot() + 
@@ -224,7 +225,7 @@ Now we can map both evoregions and the affiliation of each cell. As fadded the c
 
 Next we can define the membership for each species
 
-```{r}
+```{r echo=TRUE, eval=FALSE}
 
 akodon.evoregion.data <- 
   bind_cols(
@@ -272,7 +273,7 @@ rownames(a.regions) <- species.names
 
 With this object we can construct Phyllip file required for ancestral area reconstruction using Biogeobears
 
-```{r}
+```{r echo=TRUE, eval=FALSE}
 # save phyllip file
 tipranges_to_BioGeoBEARS(
   a.regions, 
@@ -285,7 +286,7 @@ tipranges_to_BioGeoBEARS(
 
 We can run an analysis of ancestral area reconstruction using Biogeobears and the evoregions. Since it take some time to run BioGeoBears we can just read from the package a reconstruction model fom DEC model
 
-```{r}
+```{r echo=TRUE, eval=FALSE}
 
 library(BioGeoBEARS)
 ancestral_rec <- readRDS(file = here("examples", "output", "resDEC_akodon.rds")) # ancestral reconstruction
@@ -300,7 +301,7 @@ The fun part to work with Herodotools starts from here. Since we have an occurre
 # converting numbers to character
 biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion.df$site.region)) 
 
-# getting the area for each node 
+# getting the ancestral range area for each node 
 node.area <- 
   get.node.range_BioGeoBEARS(
     ancestral_rec,
@@ -365,6 +366,148 @@ db_diversification(W = akodon.pa.tree,
                    biogeo = biogeo_area, 
                    diversification = "jetz",
                    type = "equal.splits")
+
+```
+
+
+As with age, we can plot the model based diversification metric to look at the spatial patterns
+
+```{r mapdiversification, echo=TRUE, eval=FALSE}
+sites <- bind_cols(site.xy,
+                   site.region =  site.region, 
+                   afi, 
+                   age = age_comm$mean_age_per_assemblage,
+                   diversification = akodon_diversification$Jetz_harmonic_mean_site)
+
+(map_diversification <- 
+   sites %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = diversification)) + 
+   geom_sf(data = coastline, size = 0.4) +
+   geom_sf(
+     data = sf.evoregion, 
+     color = rev(col_five_hues),
+     fill = NA, 
+     size = 0.7) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("Diversification of assemblages for Akodon Genus") + 
+   theme_bw() +
+   labs(fill = "Harmonic mean diversification model-based") +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank(),
+     plot.title.position =  "plot"
+   )
+)
+
+
+```
+
+We can also investigate the importance of dispersal events related to each region. By using the function `dispersal_from` we can quantify the contribution of a given region to all others by calculating the percentage of dispersal events of a focal region to all other regions.
+
+```{r dispersal, echo=TRUE, eval=FALSE}
+
+akodon_dispersal <- 
+dispersal_from(W = akodon.pa.tree,
+               tree = akodon.newick, 
+               ancestral.area = node.area, 
+               biogeo = biogeo_area)
+
+
+```
+We also can map the contribution of dispersal for all regions
+
+```{r}
+rm(sites)
+sites <- bind_cols(site.xy,
+                   site.region =  site.region, 
+                   afi, 
+                   age = age_comm$mean_age_per_assemblage,
+                   diversification = akodon_diversification$Jetz_harmonic_mean_site,
+                   dispersal.A = akodon_dispersal[,1], 
+                   dispersal.C = akodon_dispersal[, 2],
+                   dispersal.B = akodon_dispersal[, 3],
+                   dispersal.AE = akodon_dispersal[, 4],
+                   dispersal.E = akodon_dispersal[, 5])
+
+map_dispersal_A <- 
+   sites %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.A)) + 
+   geom_sf(data = coastline, size = 0.4) +
+   geom_sf(
+     data = sf.evoregion, 
+     color = rev(col_five_hues),
+     fill = NA, 
+     size = 0.7) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("A") + 
+   theme_bw() +
+   labs(fill = "Percentage of contribution") +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank(),
+     plot.title.position =  "plot"
+   )
+
+map_dispersal_C <- 
+   sites %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.C)) + 
+   geom_sf(data = coastline, size = 0.4) +
+   geom_sf(
+     data = sf.evoregion, 
+     color = rev(col_five_hues),
+     fill = NA, 
+     size = 0.7) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("B") + 
+   theme_bw() +
+   labs(fill = "Percentage of contribution") +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank(),
+     plot.title.position =  "plot"
+   )
+
+map_dispersal_B <- 
+   sites %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.B)) + 
+   geom_sf(data = coastline, size = 0.4) +
+   scale_fill_continuous(na.value="white") +
+   geom_sf(
+     data = sf.evoregion, 
+     color = rev(col_five_hues),
+     fill = NA, 
+     size = 0.7) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("C") + 
+   theme_bw() +
+   labs(fill = "Percentage of contribution") +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank(),
+     plot.title.position =  "plot"
+   )
+
+library(patchwork)
+map_dispersal_A + map_dispersal_C + map_dispersal_B
+
+```
+
+We also can calculate common used metrics in Community Phylogenetics, but now considering the macroevolutionary dynamics in the calculation.
+These model-based community phylogenetic metrics allows to disentangle the effects of in situ diversification and dispersal 
+
+```{r}
+
+akodon_db_metrics <- 
+div_based_metrics(W = akodon.pa.tree,
+                  tree = akodon.newick, 
+                  ancestral.area = node.area, 
+                  biogeo = biogeo_area, 
+                  PD = TRUE, 
+                  PE = TRUE)
 
 ```
 

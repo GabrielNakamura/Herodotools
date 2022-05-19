@@ -65,7 +65,14 @@ Function included in the package to save a phyllip file as required by BioGeoBEA
 
 # Issues - May 18 2022
 
-- [ ] Error in diversification based jetz metric
+- [x] Error in diversification based jetz metric
+
+# Issues - May 19th 2022
+
+- [ ] Find a better way to represent the percentage of contribution of dispersal events in a map
+- [ ] Describe dispersal_from function
+- [x] Error in db-PD and PE
+- [x] Fixing minor issue with Db-metrics function - different number of nodes in reconstruction object and node names object
 
 
 
