@@ -1,8 +1,8 @@
 #' Affiliation values for assemblages according to phylogenetic turnover 
 #'
-#' @param evo.classification An object returned from \code{\link{evoregions}} function or phyloregion
-#' @param method Character indicating the method used to compute the distance in fuzzy matrix
-#' @param distance A distance matrix, only applies if the object in evo.classification is from class phyloregion
+#' @param phylo.comp.dist A distance matrix indicating the phylogenetic (or taxonomic/functional) distance composition
+#'     among assemblages
+#' @param groups A character vector indicating the group of each assemblage
 #'
 #' @return A list with two matrix, one containing affiliation values and the group in which each cell 
 #'     is classified and the other containing cell coordinates
@@ -12,44 +12,30 @@
 #' @examples
 #' 
 #' 
-
-afilliation.evoreg <- function(evo.classification, distance = NULL, 
-                               method = "euclidean"){
+affiliation.evoreg <- function(phylo.comp.dist, groups){
   
-  
-  if(class(evo.classification) == "phyloregion"){
-    n.groups <- phylo_regionalization$k
-    comm.groups <- evo.classification$region.df[, 2]
-    names(comm.groups) <- evo.classification$region.df[, 1]
-    Gs <- lapply(1:n.groups, function(x){
-      which(comm.groups == x)
-    })
-    names(Gs) <- paste("G", 1:n.groups, sep = "")
-    dist.matrix <- distance
-    dist.matrix <- as.matrix(dist.matrix)
-  } 
-  if(class(evo.classification) == "evoregion"){
-    n.groups <- length(as.numeric(levels(evo.classification[[2]])))
-    comm.groups <- evo.classification[[2]]
-    vec.bray <- evo.classification[[1]]$vectors
-    Gs <- lapply(1:n.groups, function(x){
-      which(comm.groups == x)
-    })
-    names(Gs) <- paste("G", 1:n.groups, sep = "")
-    dist.matrix <- as.matrix(vegan::vegdist(
-      x = vec.bray,
-      method = method,
-      diag = T,
-      upper = T
-    )
-    )
+  if(class(phylo.comp.dist) != "dist"){
+    stop("phylo.comp.dist might be from class dist")
   }
+  if(length(groups) != nrow(as.matrix(phylo.comp.dist))){
+    stop("Phylogenetic Distance Matrix and group vectors might have the same sites")
+  }
+  
+  n.groups <- length(as.numeric(levels(groups)))
+  comm.groups <- groups
+  Gs <- lapply(1:n.groups, function(x){
+    which(comm.groups == x)
+  })
+  names(Gs) <- paste("G", 1:n.groups, sep = "")
+  dist.matrix <- as.matrix(phylo.comp.dist)
   
   PGall <- lapply(Gs, function(x){
     dist.matrix[x, x]
   })
   
-  afilliation_by_grp <- lapply(PGall, function(x){
+  PGall_similarity <- lapply(PGall, function(x) 1 - x) # distance to similarity
+  
+  afilliation_by_grp <- lapply(PGall_similarity, function(x){
     afilliation_by_grp <- matrix(NA, nrow(x), 2, dimnames = list(rownames(x), c("afilliation", "group")))
     for (z in 1:nrow(x)) {
       dis <- as.data.frame(x[z,])[-z,]
@@ -63,6 +49,8 @@ afilliation.evoreg <- function(evo.classification, distance = NULL,
     afilliation_by_grp_pad[, 2] <- l
     list_afilliation_by_grp[[l]] <- afilliation_by_grp_pad
   }
+  
   matrix_afilliation <- do.call(rbind, list_afilliation_by_grp)
-  matrix_afilliation
+  matrix_afilliation_org <- matrix_afilliation[match(rownames(dist.matrix), rownames(matrix_afilliation)), ] # organizing the assemblages in the same sequence as PCPS vectors
+  return(matrix_afilliation_org)
 }

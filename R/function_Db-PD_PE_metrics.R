@@ -7,7 +7,8 @@
 #' @param PD Logical, if TRUE (default) Db-PD will be computed
 #' @param PE Logical, if TRUE (default) Db-PE will be computed
 #'
-#' @return
+#' @return A data frame containing the values of original PD and PE and also their model
+#'     based version
 #' 
 #' @author Gabriel Nakamura <gabriel.nakamura.souza@@gmail.com>
 #' 
@@ -50,16 +51,15 @@ div_based_metrics <- function(W,
   nodes_species_noNull_org <- nodes_species_noNull
   list_matrix_nodes <- vector(mode = "list", length = length(nodes_species_noNull_org))
   for(i in 1:length(nodes_species_noNull)){
-    #i=1
+    #i= 488
     if(length(nodes_species_noNull[[i]]) == 0){
-      
       list_matrix_nodes[[i]] <- NA
     } else{
       names_spp <- names(nodes_species_noNull[[i]])
       list_nodes_org <- vector(mode = "list", length = length(names_spp))
       for(j in 1:length(names_spp)){
         #j= 1
-        matrix_nodesSpp_nonull<- matrix(NA, nrow= round(length(unlist(nodes_species_noNull[[i]][j]))), ncol= 2)
+        matrix_nodesSpp_nonull <- matrix(NA, nrow = round(length(unlist(nodes_species_noNull[[i]][j]))), ncol= 2)
         nodes_org <- c(sort(nodes_species_noNull[[i]][j][[1]],
                             decreasing = FALSE),
                        which(tree$tip.label == names_spp[j]))
@@ -161,7 +161,7 @@ div_based_metrics <- function(W,
       if(any(is.na(list_occurence[[i]]))){
         list_occurence[[i]]<- NA
       } else{
-        colnames(list_occurence[[i]])<- biogeo[-i, 1]
+        colnames(list_occurence[[i]]) <- biogeo[-i, 1]
       }
     }
     
@@ -172,8 +172,7 @@ div_based_metrics <- function(W,
     }
     
     ####correcting denominator of PE for ancestral state occurrence
-    node_ancestral<- seq((ncol(W) + 1), ncol(W) + (ncol(W) - 1), by= 1) # names of internal nodes
-    ancestral_nodes<- cbind(ancestral.area, node_ancestral) # binding nodes name with ancestral state
+    ancestral_nodes <- cbind(ancestral.area, node = rownames(ancestral.area)) # binding nodes name with ancestral state
     
     
     ### ancestral state for each node that compose each community
@@ -278,5 +277,4 @@ div_based_metrics <- function(W,
   return(Db_comm_metrics)
   
 }
-
 

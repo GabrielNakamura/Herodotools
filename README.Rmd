@@ -49,4 +49,4 @@ For more details and examples of usage visit [Herodotools web page](https://gabr
 
 # Next steps
 
-- [x] CRAN release
+- [ ] CRAN release

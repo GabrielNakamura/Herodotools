@@ -64,7 +64,7 @@ evoregions <- function(comm,
                        stat.clust = "BIC", 
                        n.iter.clust = 1e7, 
                        criterion.clust = "diffNgroup"
-                       )
+)
 {
   
   if(ape::is.ultrametric(phy) != TRUE){
@@ -79,13 +79,13 @@ evoregions <- function(comm,
   sp_match_2 <- phy$tip.label %in% names(comm)
   
   if(!any(c(sp_match_1, sp_match_2))){
-    stop("The names of species in the 'comm' and 'phy' do not match. Please use picante::match.phylo.comm() for solve for species matching.")
+    stop("The names of species in the 'comm' and 'phy' do not match. Please use picante::match.phylo.comm() to solve species matching.")
   }
   
   match <- picante::match.phylo.comm(phy, comm) #standardize species in phylo and comm
   phy <- match$phy
   comm <- match$comm
-
+  
   if(is.null(max.n.clust)){
     match_clust <- pmatch(max.n.clust.method, "elbow")
     if(is.na(match_clust)){
@@ -96,17 +96,17 @@ evoregions <- function(comm,
       optimal_matrixP <- phyloregion::optimal_phyloregion(
         x = sqrt(vegan::vegdist(matrixP$matrix.P)), 
         method = "average"
-        )
+      )
       max.n.clust <- optimal_matrixP$optimal$k
     }
   }
   
-
+  
   pcps.comm.bray <- PCPS::pcps(
     comm,
     phylodist = cophenetic(phy), 
     method = method.dist
-    )
+  )
   
   P <- pcps.comm.bray$P
   values.bray <- pcps.comm.bray$values
@@ -123,14 +123,14 @@ evoregions <- function(comm,
                                             n.iter = n.iter.clust, 
                                             criterion = criterion.clust, 
                                             max.n.clust = max.n.clust)
-  list_res <- vector(mode = "list", length = 4)
+  list_res <- vector(mode = "list", length = 2)
   
   
   list_res[[1]] <- list(
     vectors = vec.bray,
     prop_explainded = values.bray[,2],
     tresh_dist = tresh.dist
-    )
+  )
   list_res[[2]] <- clust.vec.bray$grp
   
   

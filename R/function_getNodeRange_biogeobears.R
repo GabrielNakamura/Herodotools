@@ -12,8 +12,11 @@
 #' @examples
 #' 
 get.node.range_BioGeoBEARS <-
-  function(BioGeoBEARS.data, phyllip.file, tree, max.range.size){
-    tipranges <- BioGeoBEARS::getranges_from_LagrangePHYLIP(lgdata_fn=geogfn)
+  function(BioGeoBEARS.data,
+           phyllip.file,
+           tree,
+           max.range.size){
+    tipranges <- BioGeoBEARS::getranges_from_LagrangePHYLIP(lgdata_fn = phyllip.file)
     trtable <- BioGeoBEARS::prt(tree, printflag=FALSE)
     prob_state <- BioGeoBEARS.data$ML_marginal_prob_each_state_at_branch_bottom_below_node
     areas <- BioGeoBEARS::getareas_from_tipranges_object(tipranges)
@@ -40,9 +43,12 @@ get.node.range_BioGeoBEARS <-
                        ]
     ) # taking the max probability value
     
-    nodes.range <- data.frame(node = 1:length(unlist(teste_max)), biome = unlist(teste_max))
+    nodes.area <- data.frame(node = 1:length(unlist(teste_max)), biome = unlist(teste_max))
+    nodes.range <- data.frame(area = nodes.area[-c(1:length(tree$tip.label)), 2])
+    rownames(nodes.range) <- paste("N", 
+                                    nodes.area[-c(1:length(tree$tip.label)), 1],
+                                    sep = "")
+    
     return(nodes.range)
-
-}
-
-
+    
+  }
