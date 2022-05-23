@@ -2,13 +2,10 @@
 #' 
 #' 
 #' @details evoregions performs biogeographical regionalization analysis, 
-#'     differently from other methods, evoregions uses a phylogenetic turnover 
+#'     differently from other methods, evoregion uses a phylogenetic turnover 
 #'     metric based on fuzzy sets, therefore accounting for characteristics of 
 #'     evolutionary history, e.g tree imbalance, that is not accounted by other
-#'     metrics of phylogenetic turnover. Besides that, evoregion also computes 
-#'     Principal Coordinates of Phylogenetic Strucuture (PCPS) and a matrix of
-#'     phylogenetic structure of communities based on phylogenetic 
-#'     fuzzy-weighting
+#'     metrics of phylogenetic turnover.
 #'
 #' @param comm Species occurrence matrix. Assemblages are rows and species are
 #'   columns
@@ -42,16 +39,11 @@
 #'   functionallity could be described in @@details, but do not need to be a 
 #'   separated argument. 
 #'
-#' @return A list of length four containing
+#' @return A list of length four containing:
 #' \itemize{
 #'    \item `PCPS_vectors` A matrix with PCPS vectors
 #'    \item `Cluster_Evoregion` A vector indicating the region in which each 
 #'      assemblage was classified
-#'    \item `Matrix_P` Phylogenetic composition matrix obtained from 
-#'     [matrix.p()] function from SYNCSA package
-#'    \item `Total_vec_var` A numeric vector with the amount of variation in
-#'      the PCPS vectors selected accordingly with the threshold argument
-#'    
 #' }
 #' 
 #' @seealso [find.max.nclust()] to decide the maximum number of clusters to be 
