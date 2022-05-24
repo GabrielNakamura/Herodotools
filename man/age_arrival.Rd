@@ -4,7 +4,7 @@
 \alias{age_arrival}
 \title{Computes the arrival ages of each species in the assemblages}
 \usage{
-age_arrival(W, tree, ancestral.area, biogeo)
+age_arrival(W, tree, ancestral.area, biogeo, age.no.ancestor = "recent")
 }
 \arguments{
 \item{W}{Occurrence matrix, rows are assemblages and columns are species}
@@ -14,6 +14,8 @@ age_arrival(W, tree, ancestral.area, biogeo)
 \item{ancestral.area}{One column data frame, nodes in row and one column containing the occurrence of the nodes}
 
 \item{biogeo}{One column data frame, assemblages in rows and one column containing the region in which the assemblage is located}
+
+\item{age.no.ancestor}{a character string "recent" (default) or "half-life".}
 }
 \value{
 A list of length two. \item{age_arrival}{A matrix with the arrival age of each species in each assemblage}

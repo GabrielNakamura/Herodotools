@@ -12,6 +12,8 @@
 #'
 #' @return Matrix containing congruence values ranging between 0-1 for each max.nclust value (see Arguments) and confidence level.
 #' 
+#' @importFrom stats as.dist cor
+#' 
 #' @export
 #'
 #' @examples
@@ -24,7 +26,8 @@ find.max.nclust <- function(x,
                             method = "kmeans", 
                             stat = "BIC", 
                             criterion = "diffNgroup",
-                            subset = 100, confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99)
+                            subset = 100,
+                            confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99)
 ) 
 {
   

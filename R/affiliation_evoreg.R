@@ -8,11 +8,11 @@
 #'     is classified and the other containing cell coordinates
 #'
 #' @export
-#'
-#' @examples
+#' 
+#' @examples 
 #' 
 #' 
-affiliation.evoreg <- function(phylo.comp.dist, groups){
+affiliation_evoreg <- function(phylo.comp.dist, groups){
   
   if(class(phylo.comp.dist) != "dist"){
     stop("phylo.comp.dist might be from class dist")

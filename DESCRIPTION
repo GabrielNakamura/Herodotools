@@ -1,8 +1,7 @@
 Package: Herodotools
 Title: Tools for Historical Biogeography analysis
 Version: 0.0.1
-Authors@R: 
-    c(
+Authors@R: c(
            person(given = "Gabriel",
            family = "Nakamura",
            role = c("aut", "cre"),
@@ -20,8 +19,7 @@ Authors@R:
            family = "Rodrigues",
            role = "aut",
            email = "rodrigues.arthur.v@gmail.com",
-           comment = c(ORCID = "0000-0003-0302-529X",
-                      ResearcherID = "O-1134-2017")
+           comment = c(ORCID = "0000-0003-2656-558X")
                   ),
            person(given = "Vanderlei",
            family = "Debastiani",
@@ -37,32 +35,42 @@ Authors@R:
            family = "Maestri",
            role = "aut",
            email = "renanmaestri@gmail.com"
-                  ),
-           person(given = "Andre",
-           family = "Luza",
-           role = "aut",
-           email = "luza.andre@gmail.com"
-                  ),
-           person(given = "Vanderlei",
-           family = "Debastiani",
-           role = "aut",
-           email = "vanderleidebastiani@yahoo.com.br"
                   )
            )
-Description: Herodotools contains a set of functions to analyze patterns associated with historical processes.
+Description: Herodotools contains a set of functions to analyze patterns
+    associated with historical processes.
 License: MIT + file LICENSE
+URL: https://gabrielnakamura.github.io/Herodotools/
+Depends: 
+    R (>= 2.10)
 Imports:
     adegenet,
-    ape, 
+    ape,
     gtools,
-    picante,
+    magrittr,
+    PCPS,
+    phylobase,
     phyloregion,
     phytools,
-    PCPS
+    picante,
+    scales,
+    SYNCSA,
+    vegan
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Depends: 
-    R (>= 2.10)
-URL: https://gabrielnakamura.github.io/Herodotools/
+Suggests: 
+    BioGeoBEARS (>= 1.1.2),
+    cladoRcpp,
+    daee,
+    ggplot2,
+    HDInterval,
+    moments,
+    phangorn,
+    raster,
+    rcartocolor,
+    sf
+Remotes: 
+    nmatzke/BioGeoBEARS
+    vanderleidebastiani/daee

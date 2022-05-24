@@ -4,3 +4,7 @@
 ^\.github$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^ISSUES\.Rmd$
+^ISSUES\.html$
+^LICENSE\.md$
+^README\.Rmd$

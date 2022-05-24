@@ -8,10 +8,23 @@
 #' 
 #' @author André Luza and Vanderlei Debastiani
 #' 
+#' @importFrom stats setNames
 #' @examples 
 
 tip.based.trait.evo <- function(tree, trait, nsim = 1, method = c("transition_rates", "last_transition_time", "stasis_time")) {
-  ## Internal function
+ 
+  pkg_req <- c("daee")
+  
+  for(pkg in pkg_req) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      stop(
+        paste0("Package '", pkg, "' must be installed to use this function."),
+        call. = FALSE
+      )
+    }
+  }
+  
+   ## Internal function
   adjacency.tree <- function(tree){
     temp <- ape::prop.part(tree)
     result <- matrix(0, nrow = length(tree$tip), ncol = length(temp), dimnames = list(tree$tip.label, tree$node.label))
@@ -20,6 +33,7 @@ tip.based.trait.evo <- function(tree, trait, nsim = 1, method = c("transition_ra
     }
     return(result)	
   }
+  
   tree <- daee::node.tree(tree)$tree
   n.sp <- ape::Ntip(tree)
   n.no <- ape::Nnode(tree)
@@ -43,7 +57,7 @@ tip.based.trait.evo <- function(tree, trait, nsim = 1, method = c("transition_ra
   ## Internal function 
   f.int <- function(scm, spxnode, sp.edge, trait, n.sp, n.no, method){
     states <- setNames(sapply(scm$maps, function(x) names(x)[1]), scm$edge[, 1])
-    states <- states[as.character(Ntip(scm) + 1:scm$Nnode)]
+    states <- states[as.character(ape::Ntip(scm) + 1:scm$Nnode)]
     sp.node.trait <- sweep(spxnode, 2, STATS = cbind(states), function(x, z) ifelse(x==1, z, NA))
     METHOD <- c("transition_rates", "last_transition_time", "stasis_time")
     method <- pmatch(method, METHOD)

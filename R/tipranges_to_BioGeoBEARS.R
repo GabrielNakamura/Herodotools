@@ -11,6 +11,8 @@
 #' @param areanames the names of the areas. By defaut the areanames are generated
 #'  as sequencial upper case letters. 
 #'  
+#' @importFrom utils write.table
+#'  
 #' @examples
 #' 
 #' \dontrun{

@@ -13,6 +13,9 @@ GridFilter <- function(shape,
                        resol = 1,
                        prop = 0)
 {
+  
+  
+  
   grid <- raster::raster(raster::extent(shape))
   terra::res(grid) <- resol
   sp::proj4string(grid) <- sp::proj4string(shape)

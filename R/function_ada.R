@@ -21,6 +21,9 @@
 #' \item{Cell.Metric}{Matrix containing the assemblage level metrics for richness and ancestral diversity}
 #'
 #' 
+#' @importFrom graphics hist
+#' @importFrom stats cophenetic density
+#' 
 #' @export
 #'
 #' @examples
@@ -32,6 +35,19 @@ ada <- function(x,
                 lik.threshold = FALSE, 
                 threshold = 0.7, 
                 compute.fields = F){
+  
+  pkg_req <- c("HDInterval", "moments", "phangorn", "rlist")
+  
+  for(pkg in pkg_req) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      stop(
+        paste0("Package '", pkg, "' must be installed to use this function."),
+        call. = FALSE
+      )
+    }
+  }
+  
+  
   if(any(x > 1) == TRUE){
     x <- ifelse(x >= 1, 1, 0)
   }

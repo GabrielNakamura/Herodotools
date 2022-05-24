@@ -4,7 +4,8 @@
 #' @param tree Phylogenetic tree in newick format
 #' @param ancestral.area One column data frame, nodes in row and one column containing the occurrence of the nodes
 #' @param biogeo One column data frame, assemblages in rows and one column containing the region in which the assemblage is located 
-#'
+#' @param age.no.ancestor a character string "recent" (default) or "half-life".
+#' 
 #' @return A list of length two. \item{age_arrival}{A matrix with the arrival age of each species in each assemblage} 
 #'     \item{mean_age_arrival}{mean age values for each assemblage}
 #' 
@@ -18,6 +19,7 @@ age_arrival <- function(W,
                         ancestral.area, 
                         biogeo,
                         age.no.ancestor = "recent"){
+  
   ages <- abs(ape::node.depth.edgelength(phy = tree)
               -max(ape::node.depth.edgelength(tree)))[-c(1:length(tree$tip.label))]
   ages <- data.frame(age = ages)
