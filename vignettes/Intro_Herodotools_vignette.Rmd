@@ -12,8 +12,9 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  eval = TRUE,
-  dpi = 300
+  eval = FALSE,
+  dpi = 300, 
+  fig.retina = 2
 )
 ```
 
