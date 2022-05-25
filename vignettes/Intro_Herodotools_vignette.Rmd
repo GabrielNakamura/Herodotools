@@ -13,8 +13,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
   eval = FALSE,
-  dpi = 300, 
-  fig.retina = 2
+  knitr::opts_chunk$set(collapse = TRUE,
+                      fig.retina = 3)
 )
 ```
 
@@ -22,8 +22,8 @@ In this article we will show the main function  of `Herodotools`. To do so we wi
 
 For this aim we will perform the following steps:
 
-1. [Processing](#methods) raw occurrence data and phylogenetic information 
-2. [Classify](#evoregion) Akodon assemblages in meaningful regions using `evoregion` function
+1. [Processing](methods) raw occurrence data and phylogenetic information 
+2. [Classify](evoregion) Akodon assemblages in meaningful regions using `evoregion` function
 3. [Calculate]() macroevolutionary model-based metrics of diversification 
 4. [Calculate]() model-based community phylogenetic metrics 
 

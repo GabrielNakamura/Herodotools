@@ -15,7 +15,10 @@ age_arrival(W, tree, ancestral.area, biogeo, age.no.ancestor = "recent")
 
 \item{biogeo}{One column data frame, assemblages in rows and one column containing the region in which the assemblage is located}
 
-\item{age.no.ancestor}{a character string "recent" (default) or "half-life".}
+\item{age.no.ancestor}{a character string "recent" (default) or "half.edge" indicating how to deal
+with cases in which the most recent aancestor of a tip node are not on the same region. "recent"
+attributes a small age (10e-5), while "half.edge" attributes the age as half the length of the branch
+linking the ancestor to the tip.}
 }
 \value{
 A list of length two. \item{age_arrival}{A matrix with the arrival age of each species in each assemblage}

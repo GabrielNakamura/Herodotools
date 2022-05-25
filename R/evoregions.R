@@ -25,7 +25,7 @@
 #' @param n.iter.clust Integer to be used in \code{\link[adegenet]{find.clusters}} 
 #'   function of adegenet package to indicate the number of iterations to be
 #'   used in each run of K-means algorithm
-#' @param criterion.clust a character string matching "diffNgroup" (dafault),
+#' @param criterion.clust a character string matching "diffNgroup" (default),
 #'   "min", "goesup", "smoothNgoesup", or "goodfit", indicating the criterion 
 #'   for automatic selection of the optimal number of clusters. 
 #'   See `criterion` argument in \code{\link[adegenet]{find.clusters} for an explanation
@@ -40,13 +40,12 @@
 #'      assemblage was classified
 #' }
 #' 
-#' @seealso [find.max.nclust()] to decide the maximum number of clusters to be 
+#' @seealso [find_max_nclust()] to decide the maximum number of clusters to be 
 #'   used
 #' @importFrom stats cophenetic
+#' 
 #' @export
 #'
- 
-
 evoregions <- function(comm, 
                        phy, 
                        max.n.clust = NULL,
