@@ -77,9 +77,9 @@ Function included in the package to save a phyllip file as required by BioGeoBEA
 
 # Issues - May 24th 2022 [AVR]
 
-- [ ] remove 'DivB_metrics.R'
+- [x] remove 'DivB_metrics.R'
 
-- [ ] change 'Herodotools/inst/extdata/resDEC_akodon.rds' to an '.RData' file. Or 
+- [x] change 'Herodotools/inst/extdata/resDEC_akodon.rds' to an '.RData' file. Or 
 ```
 Add dependency on R >= 3.5.0 because serialized objects in
      serialize/load version 3 cannot be read in older versions of R.
@@ -89,13 +89,12 @@ Add dependency on R >= 3.5.0 because serialized objects in
 
 - [ ] from which package does the function `.node.desc` belong to? [line 82 of 'function_model_based_diversificationJetz.R']. it must be included in Imports/Suggests of the DESCRIPTION file or be refered as `pkg::.node.desc`
 
-- [ ] keep coherent pattern for function names. I suggest use always "_" instead of ".". For example, `find_max_nclust()` instead of `find.max.nclust()`
+- [x] keep coherent pattern for function names. I suggest use always "_" instead of ".". For example, `find_max_nclust()` instead of `find.max.nclust()`
 
 
 - [x] ggplot2, sf and rcartocolor were removed from @import in the`plot_ada()`. They are suggested packages in DECRIPTION file. 
 
-
-- [ ] function `GridFilter()` is based on `rgeos` [Please note that rgeos will be retired by the end of 2023, plan transition to sf functions using GEOS at your earliest convenience]. I suggest to remove the function if it has no clear utility. If the function will keeped in the package run the following code in the console: 
+- [x] function `GridFilter()` is based on `rgeos` [Please note that rgeos will be retired by the end of 2023, plan transition to sf functions using GEOS at your earliest convenience]. I suggest to remove the function if it has no clear utility. If the function will keeped in the package run the following code in the console: 
 ```
 use_this::use_package("sp", "suggest")
 use_this::use_package("rgeos", "suggest")
@@ -119,7 +118,7 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 
 ```
 
-- [ ] add documentation for argument `age.no.ancestor` in 'function_age_arrival.R'.
+- [x] add documentation for argument `age.no.ancestor` in 'function_age_arrival.R'.
 
 - [x] `max.n.clust.method` argument was removed from `evoregions()`. The behavior of `max.n.clust = NULL` argument was maintained. 
 

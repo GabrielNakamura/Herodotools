@@ -19,7 +19,7 @@
 #' @examples
 #' 
 
-find.max.nclust <- function(x, 
+find_max_nclust <- function(x, 
                             threshold, 
                             max.nclust,
                             nperm = 100, 

@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' 
-get.node.range_BioGeoBEARS <-
+get_node_range_BioGeoBEARS <-
   function(BioGeoBEARS.data,
            phyllip.file,
            tree,
