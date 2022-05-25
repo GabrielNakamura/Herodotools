@@ -4,7 +4,7 @@
 #' @param tree Phylogenetic tree in newick format
 #' @param biogeo Data frame containing the information of the biome/area/ecoregion of each assemblage
 #' @param ancestral.area Single column data frame with nodes in rows and ancestral area/Ecoregion of occurrence in columns. If the reconstruction
-#'     comes from BioGeoBears this data frame can be obtained with (\code{\link{get.node.range_BioGeoBEARS}})
+#'     comes from BioGeoBears this data frame can be obtained with (\code{\link{get_node_range_BioGeoBEARS}})
 #'
 #' @return
 #' @export

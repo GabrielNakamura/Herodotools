@@ -12,7 +12,7 @@ nodes_info_core(W, tree, ancestral.area, biogeo)
 \item{tree}{Phylogenetic tree in newick format}
 
 \item{ancestral.area}{Single column data frame with nodes in rows and ancestral area/Ecoregion of occurrence in columns. If the reconstruction
-comes from BioGeoBears this data frame can be obtained with (\code{\link{get.node.range_BioGeoBEARS}})}
+comes from BioGeoBears this data frame can be obtained with (\code{\link{get_node_range_BioGeoBEARS}})}
 
 \item{biogeo}{Data frame containing the information of the biome/area/ecoregion of each assemblage}
 }

@@ -10,7 +10,7 @@ ancestral_state(tree, ancestral.area, prefix = "N")
 \item{tree}{A newick phylogenetic tree object}
 
 \item{ancestral.area}{One column data frame. Lines are nodes the column are the biomes/region of occurrence
-for each ancestors. Can be obtained by using (\code{\link{get.node.range_BioGeoBEARS}})}
+for each ancestors. Can be obtained by using (\code{\link{get_node_range_BioGeoBEARS}})}
 
 \item{prefix}{A single character string to be used to name nodes}
 }

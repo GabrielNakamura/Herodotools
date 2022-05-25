@@ -48,11 +48,13 @@ Imports:
     ape,
     gtools,
     magrittr,
+    knitr,
     PCPS,
     phylobase,
     phyloregion,
     phytools,
     picante,
+    rmarkdown,
     scales,
     SYNCSA,
     vegan

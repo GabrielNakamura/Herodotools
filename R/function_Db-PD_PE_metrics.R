@@ -23,9 +23,16 @@ div_based_metrics <- function(W,
                               PE = TRUE){
   
   # total phylogenetic diversity and endemism -------------------------------
-  
+  if(!is.matrix(W) == TRUE){
+    if(is.data.frame(W) == TRUE){
+      W <- as.matrix(W)
+      rownames(W) <- 1:nrow(W)
+    } else{
+      stop("W must be a occurrence matrix with presences (1) or absences (0)")
+    }
+  }
   PDt <- picante::pd(samp = W, tree = tree)$PD # faster option
-  PEt <- phyloregion::phylo_endemism(x = as.matrix(W), phy = tree, weighted = TRUE) #Phylogenetic endemism sensu Rosauer
+  PEt <- phyloregion::phylo_endemism(x = W , phy = tree, weighted = TRUE) #Phylogenetic endemism sensu Rosauer
   
   # basic information from nodes and ancestral reconstruction ---------------
   nodes.list <- nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)

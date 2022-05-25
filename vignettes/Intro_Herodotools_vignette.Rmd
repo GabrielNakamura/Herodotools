@@ -97,7 +97,7 @@ map.limits <- list(
 
 rich.tree <- rowSums(akodon.pa.tree)
 
-(map_rich_tree <- 
+map_rich_tree <- 
 bind_cols(site.xy, rich.tree = rich.tree) %>% 
   ggplot() + 
   geom_raster(aes(x = LONG, y = LAT, fill = rich.tree)) + 
@@ -106,10 +106,20 @@ bind_cols(site.xy, rich.tree = rich.tree) %>%
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggtitle("Richness for Akodon Genus") +
   theme_bw()
-)
-
 
 ```
+
+```{r saveFig1, echo=FALSE}
+
+ggplot2::ggsave(plot = map_rich_tree,  filename = "Fig1_richmap_akodon.png", path = here::here("vignettes"), dpi = "retina")
+
+```
+
+
+```{r fig1_rich, echo=FALSE, eval=TRUE}
+knitr::include_graphics(here::here("vignettes", "Fig1_richmap_akodon.png"))
+```
+
 
 # Obtaining evoregions {#evoregions}
 
@@ -170,7 +180,7 @@ Evoregions can now be mapped using the following code
 
 ```{r mapEvoregion, echo=TRUE}
 
-(map_evoregion <- 
+map_evoregion <- 
 evoregion.df %>% 
   ggplot() + 
   geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
@@ -193,8 +203,19 @@ evoregion.df %>%
     axis.title = element_blank(),
     legend.text = element_text(family = "Arial", color = "black", size = 8)
   )
-)
+
 ```
+
+```{r saveFig2, echo=FALSE}
+
+ggplot2::ggsave(plot = map_evoregion,  filename = "Fig2_evoregion_akodon.png", path = here::here("vignettes"), dpi = "retina")
+
+```
+
+```{r fig2_evoregions, echo=FALSE, eval=TRUE}
+knitr::include_graphics(here::here("vignettes", "Fig2_evoregion_akodon.png"))
+```
+
 
 `evoregion` produced five distinct regions, but not all cells have the same degree of affiliation in associated with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to [turnover areas](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492)
     
@@ -208,7 +229,7 @@ PCPS_thresh <- regions$PCPS$vectors[, axis_sel]
 dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean")
 
 # calculating affiliation values for each assemblage 
-afi <- affiliation.evoreg(phylo.comp.dist = dist_phylo_PCPS,
+afi <- affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,
                           groups = regions$Cluster_Evoregions) 
 
 # binding the information in a data frame
@@ -219,7 +240,7 @@ sites <- bind_cols(site.xy, site.region =  site.region, afi)
 Now we can map both evoregions and the affiliation of each cell. The degree of affiliation of cells are showed as the degree of fade for each color. As fade the color of the cell, lesser the affiliation of that cell to its evoregion. Those cell can be interpreted as being zones of high phylogenetic turnover.
 
 ```{r mapAffiliation, echo=TRUE}
-(map_joint_evoregion_afilliation <- 
+map_joint_evoregion_afilliation <- 
    evoregion.df %>% 
    ggplot() + 
    geom_raster(aes(x = LONG, y = LAT, fill = site.region), 
@@ -243,9 +264,21 @@ Now we can map both evoregions and the affiliation of each cell. The degree of a
      legend.position = "bottom",
      axis.title = element_blank()
    )
-)
 
 ```
+
+```{r saveFig3, echo=FALSE}
+ggplot2::ggsave(plot = map_joint_evoregion_afilliation,  
+                filename = "Fig3_afilliation_akodon.png",
+                path = here::here("vignettes"),
+                dpi = "retina")
+```
+
+
+```{r fig3_afilliation, echo=FALSE, eval=TRUE}
+knitr::include_graphics(here::here("vignettes", "Fig3_afilliation_akodon.png"))
+```
+
 
 # Ancestral area reconstruction for Akodon species {#mergeMacroAssemblage}
 
@@ -314,9 +347,8 @@ tipranges_to_BioGeoBEARS(
 Since it take some time to run BioGeoBears, and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. To read the file containing the results of this reconstruction type:
 
 ```{r echo=TRUE}
-
 library(BioGeoBEARS)
-ancestral_rec <- readRDS(file = here("inst", "extdata", "resDEC_akodon.rds")) # ancestral reconstruction
+load(file = here::here("inst", "extdata", "resDEC_akodon.RData")) # ancestral reconstruction
 
 ```
 
@@ -337,8 +369,8 @@ biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion.df$site.re
 
 # getting the ancestral range area for each node 
 node.area <- 
-  get.node.range_BioGeoBEARS(
-    ancestral_rec,
+  get_node_range_BioGeoBEARS(
+    DEC_akodon,
     phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),
     akodon.newick,
     max.range.size = 4 
@@ -360,7 +392,7 @@ With mean age for each assemblage we can map the ages for all assemblages
 
 sites <- bind_cols(site.xy, site.region =  site.region, afi, age = age_comm$mean_age_per_assemblage)
 
-(map_age <- 
+map_age <- 
    sites %>% 
    ggplot() + 
    geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
@@ -385,9 +417,22 @@ sites <- bind_cols(site.xy, site.region =  site.region, afi, age = age_comm$mean
      legend.position = "bottom",
      axis.title = element_blank()
    )
-)
-
 ```
+
+```{r saveFig4, echo=FALSE}
+ggplot2::ggsave(plot = map_age,  
+                filename = "Fig4_age_akodon.png",
+                path = here::here("vignettes"),
+                dpi = "retina")
+```
+
+
+```{r fig4_age, echo=FALSE, eval=TRUE}
+knitr::include_graphics(here::here("vignettes", 
+                                   "Fig4_age_akodon.png")
+                        )
+```
+
 
 ## Model-based diversification metrics
 
@@ -419,7 +464,7 @@ sites <- bind_cols(site.xy,
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site)
 
-(map_diversification <- 
+map_diversification <- 
    sites %>% 
    ggplot() + 
    geom_raster(aes(x = LONG, y = LAT, fill = diversification)) + 
@@ -444,10 +489,21 @@ sites <- bind_cols(site.xy,
      legend.position = "bottom",
      axis.title = element_blank()
    )
-)
-
 
 ```
+
+```{r saveFig5, echo=FALSE}
+ggplot2::ggsave(plot = map_diversification,  
+                filename = "Fig5_diversification_akodon.png",
+                path = here::here("vignettes"),
+                dpi = "retina")
+```
+
+
+```{r fig5_afilliation, echo=FALSE, eval=TRUE}
+knitr::include_graphics(here::here("vignettes", "Fig5_diversification_akodon.png"))
+```
+
 
 # Historical dispersal events
 
@@ -568,8 +624,21 @@ map_dispersal_B <-
 
 library(patchwork)
 
-map_evoregion / (map_dispersal_A | map_dispersal_B | map_dispersal_C) +
+map_dispersion_from <- map_evoregion / (map_dispersal_A | map_dispersal_B | map_dispersal_C) +
   plot_layout(heights = c(1, .75))
+
+```
+
+```{r saveFig6, echo=FALSE}
+ggplot2::ggsave(plot = map_dispersion_from,  
+                filename = "Fig5_map_dispersion_from_akodon.png",
+                path = here::here("vignettes"),
+                dpi = "retina")
+```
+
+
+```{r fig6_afilliation, echo=FALSE, eval=TRUE}
+knitr::include_graphics(here::here("vignettes", "Fig5_map_dispersion_from_akodon.png"))
 ```
 
 ## Model based community phylogetic metrics
@@ -591,4 +660,85 @@ div_based_metrics(W = akodon.pa.tree,
 
 
 As the other metrics we can plot PDdb and PEdb in a map
+
+```{r map_community_metrics, echo=TRUE}
+sites <- bind_cols(site.xy,
+                   site.region =  site.region, 
+                   afi, 
+                   age = age_comm$mean_age_per_assemblage,
+                   diversification = akodon_diversification$Jetz_harmonic_mean_site,
+                   PE = akodon_db_metrics$PE, 
+                   PEdb = akodon_db_metrics$Db_PE,
+                   PD = akodon_db_metrics$PD,
+                   PDdb = akodon_db_metrics$PDlocal)
+
+map_PE <- 
+   sites %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = PE)) + 
+   scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
+   geom_sf(data = coastline, size = 0.4) +
+   geom_sf(
+     data = sf.evoregion, 
+     color = rev(col_five_hues),
+     fill = NA, 
+     size = 0.7) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("PE for Akodon Genus") + 
+   theme_bw() +
+   labs(fill = "PE value") +
+    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                               direction = "horizontal",
+                               ticks.colour = "grey20",
+                               title.position = "top",
+                               label.position = "bottom",
+                               title.hjust = 0.5)) +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank()
+   )
+
+map_PEdb <- 
+   sites %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = PEdb)) + 
+   scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
+   geom_sf(data = coastline, size = 0.4) +
+   geom_sf(
+     data = sf.evoregion, 
+     color = rev(col_five_hues),
+     fill = NA, 
+     size = 0.7) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("PEdb for Akodon Genus") + 
+   theme_bw() +
+   labs(fill = "PEdb value") +
+    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                               direction = "horizontal",
+                               ticks.colour = "grey20",
+                               title.position = "top",
+                               label.position = "bottom",
+                               title.hjust = 0.5)) +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank()
+   )
+
+map_PEdb <- map_PE + map_PEdb
+
+```
+
+
+```{r saveFig7, echo=FALSE}
+ggplot2::ggsave(plot = map_PEdb,  
+                filename = "Fig6_map_PEdb.png",
+                path = here::here("vignettes"),
+                dpi = "retina")
+```
+
+
+```{r fig6_PEdb, echo=FALSE, eval=TRUE}
+knitr::include_graphics(here::here("vignettes", "Fig6_map_PEdb.png"))
+```
+
 
