@@ -16,9 +16,6 @@
 #'   
 #' @return A list containing spatial plots for the metrics calculated in ada.res
 #' 
-#' @import ggplot2
-#' @importFrom sf st_transform
-#' @importFrom rcartocolor scale_fill_carto_c
 #' 
 #' @export
 #'
@@ -34,6 +31,16 @@ plot_ada <-
            projection = "+proj=robin")
   {
     
+    pkg_req <- c("ggplot2", "raster", "rcartocolor", "sf")
+    
+    for(pkg in pkg_req) {
+      if (!requireNamespace(pkg, quietly = TRUE)) {
+        stop(
+          paste0("Package '", pkg, "' must be installed to use this function."),
+          call. = FALSE
+        )
+      }
+    }
     
     # preparing data and generating raster ------------------------------------
     
@@ -66,15 +73,16 @@ plot_ada <-
     
     data_sf_proj <- 
       data_sf %>%
-      st_transform(crs = projection)
+      sf::st_transform(crs = projection)
     
     if(patterns == "all"){
       names_div <- colnames(data_sf)[4:ncol(data_sf)]
       res_plot <- 
         lapply(names_div, function(x){
           ggplot2::ggplot() +
-            ggplot2::geom_sf(data = data_sf_proj, aes_string(geometry = "geometry", 
-                                                             fill = x), 
+            ggplot2::geom_sf(data = data_sf_proj, 
+                             ggplot2::aes_string(geometry = "geometry", 
+                                        fill = x), 
                              color = "transparent", size = 0.1) +
             rcartocolor::scale_fill_carto_c(palette = color_palette)
         })
@@ -86,8 +94,9 @@ plot_ada <-
       res_plot <- 
         lapply(names_div, function(x){
           ggplot2::ggplot() +
-            ggplot2::geom_sf(data = data_sf_proj, aes_string(geometry = "geometry", 
-                                                             fill = x), 
+            ggplot2::geom_sf(data = data_sf_proj, 
+                             ggplot2::aes_string(geometry = "geometry", 
+                                                 fill = x), 
                              color = "transparent", size = 0.1) +
             rcartocolor::scale_fill_carto_c(palette = color_palette)
         })

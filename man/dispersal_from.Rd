@@ -2,7 +2,7 @@
 % Please edit documentation in R/function_dispersal_from.R
 \name{dispersal_from}
 \alias{dispersal_from}
-\title{Proportional contribution of each region to the species of another region}
+\title{Proportional contribution of an ancestral area to the species in other region}
 \usage{
 dispersal_from(W, tree, ancestral.area, biogeo)
 }
@@ -19,7 +19,9 @@ dispersal_from(W, tree, ancestral.area, biogeo)
 
 }
 \description{
-Proportional contribution of each region to the species of another region
+For the lineages that do not have the entire diversification in the region,
+the function calculates theProportional contribution of an ancestral area
+from where the dispersal to the current region comes.
 }
 \author{
 Arthur V Rodrigues \href{mailto:rodrigues.arthur.v@gmail.com}{rodrigues.arthur.v@gmail.com}

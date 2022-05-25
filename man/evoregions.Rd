@@ -8,7 +8,6 @@ evoregions(
   comm,
   phy,
   max.n.clust = NULL,
-  max.n.clust.method = "elbow",
   method.dist = "bray",
   tresh.dist = 0.05,
   method.clust = "kmeans",
@@ -24,19 +23,12 @@ columns}
 \item{phy}{phylogenetic tree of class \code{phylo} containing the species in
 \code{comm}.}
 
-\item{max.n.clust}{Integer value to be used in \code{\link{find.clusters}}.
+\item{max.n.clust}{Integer value to be used in \code{\link[adegenet]{find.clusters}}.
 Indicates the maximum number of clusters to be tried.}
-
-\item{max.n.clust.method}{Character indicating the type of method to be used to
-define the maximum number of clusters. Default option is "elbow" method,
-implemented in \code{\link{find.clusters}} of phyloregion package.
--- options??? --- AVR_notes: this argument have just one option. This
-functionallity could be described in details, but do not need a separated
-argument.}
 
 \item{method.dist}{Character. The method to be used to compute phyogenetic
 distances among assemblages. Dissimilarity index, as accepted by
-\code{\link{vegdist}} (Default "bray").}
+\code{\link[vegan]{vegdist}} (Default "bray").}
 
 \item{tresh.dist}{A scalar informing the threshold value to select
 eigenvectors based on the amount of variation of each eigenvector.
@@ -49,21 +41,16 @@ in cluster analysis. Options avalible are "kmeans" (default) or "ward".}
 \code{\link[adegenet]{find.clusters}} indicating the statistic to be
 computed for each model. Can be "BIC" (default), "AIC" or "WSS".}
 
-\item{n.iter.clust}{Integer to be used in \code{\link{find.clusters}}
+\item{n.iter.clust}{Integer to be used in \code{\link[adegenet]{find.clusters}}
 function of adegenet package to indicate the number of iterations to be
 used in each run of K-means algorithm}
 }
 \value{
-A list of length four containing
+A list of length four containing:
 \itemize{
 \item \code{PCPS_vectors} A matrix with PCPS vectors
 \item \code{Cluster_Evoregion} A vector indicating the region in which each
 assemblage was classified
-\item \code{Matrix_P} Phylogenetic composition matrix obtained from
-\code{\link[=matrix.p]{matrix.p()}} function from SYNCSA package
-\item \code{Total_vec_var} A numeric vector with the amount of variation in
-the PCPS vectors selected accordingly with the threshold argument
-
 }
 }
 \description{
@@ -71,16 +58,10 @@ Defining biogeographic regions based on phylogenetic turnover
 }
 \details{
 evoregions performs biogeographical regionalization analysis,
-differently from other methods, evoregions uses a phylogenetic turnover
+differently from other methods, evoregion uses a phylogenetic turnover
 metric based on fuzzy sets, therefore accounting for characteristics of
 evolutionary history, e.g tree imbalance, that is not accounted by other
-metrics of phylogenetic turnover. Besides that, evoregion also computes
-Principal Coordinates of Phylogenetic Strucuture (PCPS) and a matrix of
-phylogenetic structure of communities based on phylogenetic
-fuzzy-weighting
-}
-\examples{
-
+metrics of phylogenetic turnover.
 }
 \seealso{
 \code{\link[=find.max.nclust]{find.max.nclust()}} to decide the maximum number of clusters to be

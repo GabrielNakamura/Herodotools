@@ -20,7 +20,8 @@ div_based_metrics(W, tree, ancestral.area, biogeo, PD = TRUE, PE = TRUE)
 \item{PE}{Logical, if TRUE (default) Db-PE will be computed}
 }
 \value{
-
+A data frame containing the values of original PD and PE and also their model
+based version
 }
 \description{
 Diversification-based PD and PE

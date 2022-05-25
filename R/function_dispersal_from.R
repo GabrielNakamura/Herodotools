@@ -1,4 +1,8 @@
-#' Proportional contribution of each region to the species of another region
+#' Proportional contribution of an ancestral area to the species in other region
+#' 
+#' For the lineages that do not have the entire diversification in the region, 
+#' the function calculates theProportional contribution of an ancestral area
+#' from where the dispersal to the current region comes. 
 #'
 #' @param W Occurrence matrix, rows are assemblages and columns are species 
 #' @param tree Phylogenetic tree in newick format

@@ -25,9 +25,11 @@
 #' 
 #' @author Gabriel Nakamura <gabriel.nakamura.souza@@gmail.com> and Arthur V Rodrigues
 #'      
+#' @importFrom stats cophenetic    
+#'      
 #' @export
 #'
-#' @examples
+
 db_diversification <- 
   function(W,
            tree,
@@ -38,7 +40,7 @@ db_diversification <-
     
     
     if(all(diversification != c("jetz", "freckleton")) == TRUE){
-      stop("Tip-based diversification measures must be one of jetz of freckleton")
+      stop("Tip-based diversification measures must be one of 'jetz' or 'freckleton'")
     }
     
     # Jetz tip-based diversification
@@ -239,7 +241,7 @@ db_diversification <-
     }
     
     if(diversification == "freckleton"){
-      return(lis_res_freckleton)
+      return(list_res_freckleton)
     }
     
   }

@@ -13,7 +13,7 @@
 #'   `comm`.
 #' @param method.dist Character. The method to be used to compute phyogenetic 
 #'   distances among assemblages. Dissimilarity index, as accepted by 
-#'   \code{\link{vegdist}} (Default "bray").
+#'   \code{\link[vegan]{vegdist}} (Default "bray").
 #' @param tresh.dist A scalar informing the threshold value to select 
 #'   eigenvectors based on the amount of variation of each eigenvector. 
 #'   Default is 0.05 (eigenvector with at least 5% of variation). See details. 
@@ -22,22 +22,16 @@
 #' @param stat.clust Character to be used in 
 #'   \code{\link[adegenet]{find.clusters}} indicating the statistic to be 
 #'   computed for each model. Can be "BIC" (default), "AIC" or "WSS". 
-#' @param n.iter.clust Integer to be used in \code{\link{find.clusters}} 
+#' @param n.iter.clust Integer to be used in \code{\link[adegenet]{find.clusters}} 
 #'   function of adegenet package to indicate the number of iterations to be
 #'   used in each run of K-means algorithm
 #' @param criterion.clust a character string matching "diffNgroup" (dafault),
 #'   "min", "goesup", "smoothNgoesup", or "goodfit", indicating the criterion 
 #'   for automatic selection of the optimal number of clusters. 
-#'   See `criterion` argument in \code{\link{find.clusters} for an explanation
+#'   See `criterion` argument in \code{\link[adegenet]{find.clusters} for an explanation
 #'   of these procedures.
-#' @param max.n.clust Integer value to be used in \code{\link{find.clusters}}. 
+#' @param max.n.clust Integer value to be used in \code{\link[adegenet]{find.clusters}}. 
 #'   Indicates the maximum number of clusters to be tried. 
-#' @param max.n.clust.method Character indicating the type of method to be used to
-#'   define the maximum number of clusters. Default option is "elbow" method, 
-#'   implemented in \code{\link{find.clusters}} of phyloregion package. 
-#'   -- options??? --- AVR_notes: this argument have just one option. This 
-#'   functionallity could be described in @@details, but do not need to be a 
-#'   separated argument. 
 #'
 #' @return A list of length four containing:
 #' \itemize{
@@ -48,16 +42,14 @@
 #' 
 #' @seealso [find.max.nclust()] to decide the maximum number of clusters to be 
 #'   used
-#' 
+#' @importFrom stats cophenetic
 #' @export
 #'
-#' @examples
-#' 
+ 
 
 evoregions <- function(comm, 
                        phy, 
                        max.n.clust = NULL,
-                       max.n.clust.method = "elbow",
                        method.dist = "bray",
                        tresh.dist = 0.05, 
                        method.clust = "kmeans",
@@ -87,18 +79,12 @@ evoregions <- function(comm,
   comm <- match$comm
   
   if(is.null(max.n.clust)){
-    match_clust <- pmatch(max.n.clust.method, "elbow")
-    if(is.na(match_clust)){
-      stop("wrong method to define the maximum number of clusters")
-    }
-    if(match_clust == 1){ # elbow method
       matrixP <- SYNCSA::matrix.p(comm = comm, phylodist = cophenetic(phy))
       optimal_matrixP <- phyloregion::optimal_phyloregion(
         x = sqrt(vegan::vegdist(matrixP$matrix.P)), 
         method = "average"
       )
       max.n.clust <- optimal_matrixP$optimal$k
-    }
   }
   
   

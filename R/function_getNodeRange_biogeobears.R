@@ -16,6 +16,18 @@ get.node.range_BioGeoBEARS <-
            phyllip.file,
            tree,
            max.range.size){
+    
+    pkg_req <- c("BioGeoBEARS", "cladoRcpp")
+    
+    for(pkg in pkg_req) {
+      if (!requireNamespace(pkg, quietly = TRUE)) {
+        stop(
+          paste0("Package '", pkg, "' must be installed to use this function."),
+          call. = FALSE
+        )
+      }
+    }
+    
     tipranges <- BioGeoBEARS::getranges_from_LagrangePHYLIP(lgdata_fn = phyllip.file)
     trtable <- BioGeoBEARS::prt(tree, printflag=FALSE)
     prob_state <- BioGeoBEARS.data$ML_marginal_prob_each_state_at_branch_bottom_below_node
