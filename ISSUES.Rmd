@@ -123,6 +123,13 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 - [x] `max.n.clust.method` argument was removed from `evoregions()`. The behavior of `max.n.clust = NULL` argument was maintained. 
 
 
+# Open issues May 25
+
+- [ ] from which package does the function `.node.desc` belong to? [line 82 of 'function_model_based_diversificationJetz.R']. it must be included in Imports/Suggests of the DESCRIPTION file or be refered as `pkg::.node.desc` - I have no idea where this function comes from 
+
+- [ ] Find a better way to represent the percentage of contribution of dispersal events in a map
+
+- [ ] Describe dispersal_from function
 
 
 
