@@ -131,6 +131,12 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 
 - [ ] Describe dispersal_from function
 
+# Open issues May 26
+
+- [ ] build a toy example
+
+- [ ] fix website (working just locally but not on the server)
+
 
 
 
