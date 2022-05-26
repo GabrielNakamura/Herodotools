@@ -462,6 +462,7 @@ sites <- bind_cols(site.xy,
                    site.region =  site.region, 
                    afi, 
                    age = age_comm$mean_age_per_assemblage,
+                   diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site)
 
 map_diversification <- 
@@ -476,7 +477,33 @@ map_diversification <-
      fill = NA, 
      size = 0.7) +
    coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("In-situ Diversification for assemblages for Akodon Genus") + 
+   ggtitle("Diversification *sensu* Jetz") + 
+   theme_bw() +
+   labs(fill = "Harmonic mean diversification") +
+    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                               direction = "horizontal",
+                               ticks.colour = "grey20",
+                               title.position = "top",
+                               label.position = "bottom",
+                               title.hjust = 0.5)) +
+   theme(
+     legend.position = "bottom",
+     axis.title = element_blank()
+   )
+
+map_diversification_model_based <- 
+   sites %>% 
+   ggplot() + 
+   geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
+   scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
+   geom_sf(data = coastline, size = 0.4) +
+   geom_sf(
+     data = sf.evoregion, 
+     color = rev(col_five_hues),
+     fill = NA, 
+     size = 0.7) +
+   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggtitle("In-situ Diversification") + 
    theme_bw() +
    labs(fill = "Harmonic mean in-situ diversification") +
     guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
@@ -490,10 +517,13 @@ map_diversification <-
      axis.title = element_blank()
    )
 
+
+map_diversification_complete <- map_diversification + map_diversification_model_based
+
 ```
 
 ```{r saveFig5, echo=FALSE}
-ggplot2::ggsave(plot = map_diversification,  
+ggplot2::ggsave(plot = map_diversification_complete,  
                 filename = "Fig5_diversification_akodon.png",
                 path = here::here("vignettes"),
                 dpi = "retina")
