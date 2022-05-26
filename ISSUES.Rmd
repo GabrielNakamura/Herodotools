@@ -137,6 +137,7 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 
 - [ ] fix website (working just locally but not on the server)
 
+- [ ] add examples to the functions
 
 
 
