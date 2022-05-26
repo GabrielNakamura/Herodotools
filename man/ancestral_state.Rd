@@ -22,7 +22,9 @@ Each cell contains the ancestral area/Ecoregion of occurrence for each node and 
 Ancestral State per Assemblage
 }
 \examples{
-
+biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
+ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
+ancestral_state(toy_treeEx, ancestral_area_toy)
 }
 \author{
 Gabriel Nakamura \href{mailto:gabriel.nakamura.souza@gmail.com}{gabriel.nakamura.souza@gmail.com}

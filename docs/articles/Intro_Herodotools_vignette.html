@@ -83,17 +83,17 @@
 
     
     
-<p>In this article we will show the main function of <code>Herodotools</code>. To do so we will evaluate the effects of deep past processes, represented by diversification and historical dispersal, on the structure and phenotype of assemblages of species from the genus <em>Akodon</em>.</p>
+<p>In this article we will show the main functions of <code>Herodotools</code>. To do so we will evaluate the effects of deep past processes, represented by diversification and historical dispersal, on the structure and phenotype of assemblages of species from the genus <em>Akodon</em>.</p>
 <p>For this aim we will perform the following steps:</p>
 <ol style="list-style-type: decimal">
 <li>
-<a href="methods">Processing</a> raw occurrence data and phylogenetic information</li>
+<a href="#processing">Process</a> raw occurrence data and phylogenetic information</li>
 <li>
-<a href="evoregion">Classify</a> Akodon assemblages in meaningful regions using <code>evoregion</code> function</li>
+<a href="#evoregions">Classify</a> Akodon assemblages in meaningful regions using <code>evoregion</code> function</li>
 <li>
-<a href="">Calculate</a> macroevolutionary model-based metrics of diversification</li>
+<a href="#modelBasedMetrics">Calculate</a> macroevolutionary model-based metrics of diversification using an ancestral state reconstruction model</li>
 <li>
-<a href="">Calculate</a> model-based community phylogenetic metrics</li>
+<a href="#phylomodelmetrics">Calculate</a> model-based community phylogenetic metrics</li>
 </ol>
 <div id="reading-data-and-libraries" class="section level1">
 <h1 class="hasAnchor">
@@ -340,9 +340,9 @@
 <span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"resDEC_akodon.RData"</span><span class="op">)</span><span class="op">)</span> <span class="co"># ancestral reconstruction</span></code></pre></div>
 <p>It is worth to note that the procedures decribed from here will work with any output model from BioGeoBear, but for sake of simplicity we decided to use just the <a href="https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html">DEC model</a>.</p>
 </div>
-<div id="merging-macroevolutionary-models-with-assemblage-level-metrics" class="section level1">
+<div id="modelBasedMetrics" class="section level1">
 <h1 class="hasAnchor">
-<a href="#merging-macroevolutionary-models-with-assemblage-level-metrics" class="anchor"></a>Merging macroevolutionary models with assemblage level metrics</h1>
+<a href="#modelBasedMetrics" class="anchor"></a>Merging macroevolutionary models with assemblage level metrics</h1>
 <p>The novelties associated with Herodotools starts from here. Since we have an occurrence data distribution, a biogeographical regionalization and the ancestral area reconstruction we can combine those three information to calculate metrics implemented in Herodotools.</p>
 <div id="age-of-assemblages" class="section level2">
 <h2 class="hasAnchor">
@@ -400,9 +400,9 @@
    <span class="op">)</span></code></pre></div>
 <p><img src="Fig4_age_akodon.png" width="747"></p>
 </div>
-<div id="model-based-diversification-metrics" class="section level2">
+<div id="phylomodelmetrics" class="section level2">
 <h2 class="hasAnchor">
-<a href="#model-based-diversification-metrics" class="anchor"></a>Model-based diversification metrics</h2>
+<a href="#phylomodelmetrics" class="anchor"></a>Model-based diversification metrics</h2>
 <p>We can also calculate measures of diversification considering the macroevolutionary dynamics. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by <a href="https://www.nature.com/articles/nature11631">Jetz et al</a>.</p>
 <p>We modified the original metric to take into account only the portion of evolutionary history that are associated with the region in which the species currently occupy, this value represent the diversification that occurred due to <em>in situ diversification process</em></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">

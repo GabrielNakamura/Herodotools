@@ -15,6 +15,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' W_toy<- matrix(c(0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0),
 #' nrow= 3,
 #' ncol= 5,
@@ -25,6 +26,7 @@
 #'  ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
 #'  assemblage_phylo_metrics <- div_based_metrics(W_toy, toy_treeEx, ancestral_area_toy, biogeo_toy)
 #' 
+#' }
 div_based_metrics <- function(W,
                               tree,
                               ancestral.area, 

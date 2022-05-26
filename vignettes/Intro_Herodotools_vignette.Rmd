@@ -18,14 +18,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this article we will show the main function  of `Herodotools`. To do so we will evaluate the effects of deep past processes, represented by diversification and historical dispersal, on the structure and phenotype of assemblages of species from the genus *Akodon*. 
+In this article we will show the main functions  of `Herodotools`. To do so we will evaluate the effects of deep past processes, represented by diversification and historical dispersal, on the structure and phenotype of assemblages of species from the genus *Akodon*. 
 
 For this aim we will perform the following steps:
 
-1. [Processing](methods) raw occurrence data and phylogenetic information 
-2. [Classify](evoregion) Akodon assemblages in meaningful regions using `evoregion` function
-3. [Calculate]() macroevolutionary model-based metrics of diversification 
-4. [Calculate]() model-based community phylogenetic metrics 
+1. [Process](#processing) raw occurrence data and phylogenetic information 
+2. [Classify](#evoregions) Akodon assemblages in meaningful regions using `evoregion` function
+3. [Calculate](#modelBasedMetrics) macroevolutionary model-based metrics of diversification using an ancestral state reconstruction model
+4. [Calculate](#phylomodelmetrics) model-based community phylogenetic metrics 
 
 # Reading data and libraries
 
@@ -354,7 +354,7 @@ load(file = here::here("inst", "extdata", "resDEC_akodon.RData")) # ancestral re
 
 It is worth to note that the procedures decribed from here will work with any output model from BioGeoBear, but for sake of simplicity we decided to use just the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html).
 
-# Merging macroevolutionary models with assemblage level metrics
+# Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
 
 The novelties associated with Herodotools starts from here. Since we have an occurrence data distribution, a biogeographical regionalization and the ancestral area  reconstruction we can combine those three information to calculate metrics implemented in Herodotools. 
 
@@ -434,7 +434,7 @@ knitr::include_graphics(here::here("vignettes",
 ```
 
 
-## Model-based diversification metrics
+## Model-based diversification metrics {#phylomodelmetrics}
 
 We can also calculate measures of diversification considering the macroevolutionary dynamics. 
 The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and 
@@ -740,5 +740,7 @@ ggplot2::ggsave(plot = map_PEdb,
 ```{r fig6_PEdb, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig6_map_PEdb.png"))
 ```
+
+
 
 

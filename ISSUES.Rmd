@@ -133,11 +133,11 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 
 # Open issues May 26
 
-- [ ] build a toy example
+- [x] build a toy example -> I used the same toy example that I made for the Tyrannidae paper
 
-- [ ] fix website (working just locally but not on the server)
+- [x] fix website (working just locally but not on the server) -> Ive fixed it by changing the folder used to build the site
 
-- [ ] add examples to the functions
+- [ ] add examples to the functions -> working in progress 
 
 
 
