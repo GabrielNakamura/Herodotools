@@ -106,7 +106,8 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://here.r-lib.org/" class="external-link">here</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ropenscilabs/rnaturalearth" class="external-link">rnaturalearth</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Nowosad/rcartocolor" class="external-link">rcartocolor</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Nowosad/rcartocolor" class="external-link">rcartocolor</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></code></pre></div>
 <p>If you do not have Herodotools installed use the following code to install the package from github repository:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"GabrielNakamura/Herodotools"</span>, ref <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></code></pre></div>
@@ -333,6 +334,7 @@
 <p>Since it take some time to run BioGeoBears, and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. To read the file containing the results of this reconstruction type:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://phylo.wikidot.com/biogeobears" class="external-link">BioGeoBEARS</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"resDEC_akodon.RData"</span><span class="op">)</span><span class="op">)</span> <span class="co"># ancestral reconstruction</span></code></pre></div>
 <p>It is worth to note that the procedures decribed from here will work with any output model from BioGeoBear, but for sake of simplicity we decided to use just the <a href="https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html" class="external-link">DEC model</a>.</p>
 </div>
@@ -352,7 +354,7 @@
 <span class="co"># getting the ancestral range area for each node </span>
 <span class="va">node.area</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="../reference/get_node_range_BioGeoBEARS.html">get_node_range_BioGeoBEARS</a></span><span class="op">(</span>
-    <span class="va">DEC_akodon</span>,
+    <span class="va">resDEC</span>,
     phyllip.file <span class="op">=</span> <span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,
     <span class="va">akodon.newick</span>,
     max.range.size <span class="op">=</span> <span class="fl">4</span> 
@@ -510,7 +512,7 @@
      data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
      color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
      fill <span class="op">=</span> <span class="cn">NA</span>, 
-     size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+     size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"From A"</span><span class="op">)</span> <span class="op">+</span> 
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -530,19 +532,19 @@
                                   size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
    <span class="op">)</span>
 
-<span class="va">map_dispersal_C</span> <span class="op">&lt;-</span> 
+<span class="va">map_dispersal_E</span> <span class="op">&lt;-</span> 
    <span class="va">sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">dispersal.C</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">dispersal.E</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
    <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, palette <span class="op">=</span> <span class="st">"SunsetDark"</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>
      data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
      color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
      fill <span class="op">=</span> <span class="cn">NA</span>, 
-     size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+     size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"From C"</span><span class="op">)</span> <span class="op">+</span> 
+   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"From E"</span><span class="op">)</span> <span class="op">+</span> 
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html" class="external-link">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
@@ -568,7 +570,7 @@
      data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
      color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
      fill <span class="op">=</span> <span class="cn">NA</span>, 
-     size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+     size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"From B"</span><span class="op">)</span> <span class="op">+</span> 
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -587,9 +589,8 @@
      plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>   
    <span class="op">)</span>
 
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span>
 
-<span class="va">map_dispersion_from</span> <span class="op">&lt;-</span> <span class="va">map_evoregion</span> <span class="op">/</span> <span class="op">(</span><span class="va">map_dispersal_A</span> <span class="op">|</span> <span class="va">map_dispersal_B</span> <span class="op">|</span> <span class="va">map_dispersal_C</span><span class="op">)</span> <span class="op">+</span>
+<span class="va">map_dispersion_from</span> <span class="op">&lt;-</span> <span class="va">map_evoregion</span> <span class="op">/</span> <span class="op">(</span><span class="va">map_dispersal_A</span> <span class="op">|</span> <span class="va">map_dispersal_B</span> <span class="op">|</span> <span class="va">map_dispersal_E</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">plot_layout</span><span class="op">(</span>heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">.75</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="Fig5_map_dispersion_from_akodon.png"><!-- --></p>
 <div class="section level3">
