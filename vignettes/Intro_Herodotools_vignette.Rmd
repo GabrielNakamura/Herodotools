@@ -43,6 +43,7 @@ library(here)
 library(sf)
 library(rnaturalearth)
 library(rcartocolor)
+library(patchwork)
 ```
 
 
@@ -348,6 +349,7 @@ Since it take some time to run BioGeoBears, and this is not the objective of thi
 
 ```{r echo=TRUE}
 library(BioGeoBEARS)
+source()
 load(file = here::here("inst", "extdata", "resDEC_akodon.RData")) # ancestral reconstruction
 
 ```
@@ -370,7 +372,7 @@ biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion.df$site.re
 # getting the ancestral range area for each node 
 node.area <- 
   get_node_range_BioGeoBEARS(
-    DEC_akodon,
+    resDEC,
     phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),
     akodon.newick,
     max.range.size = 4 
@@ -575,7 +577,7 @@ map_dispersal_A <-
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
-     size = 0.7) +
+     size = 0.5) +
    coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggtitle("From A") + 
    theme_bw() +
@@ -595,19 +597,19 @@ map_dispersal_A <-
                                   size = 10)
    )
 
-map_dispersal_C <- 
+map_dispersal_E <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.C)) + 
+   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.E)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
    geom_sf(data = coastline, size = 0.4) +
    geom_sf(
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
-     size = 0.7) +
+     size = 0.5) +
    coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("From C") + 
+   ggtitle("From E") + 
    theme_bw() +
    labs(fill = "") +
    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
@@ -633,7 +635,7 @@ map_dispersal_B <-
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
-     size = 0.7) +
+     size = 0.5) +
    coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggtitle("From B") + 
    theme_bw() +
@@ -652,9 +654,8 @@ map_dispersal_B <-
      plot.subtitle = element_text(hjust = 0.5)   
    )
 
-library(patchwork)
 
-map_dispersion_from <- map_evoregion / (map_dispersal_A | map_dispersal_B | map_dispersal_C) +
+map_dispersion_from <- map_evoregion / (map_dispersal_A | map_dispersal_B | map_dispersal_E) +
   plot_layout(heights = c(1, .75))
 
 ```
@@ -757,7 +758,6 @@ map_PEdb <-
 map_PEdb <- map_PE + map_PEdb
 
 ```
-
 
 ```{r saveFig7, echo=FALSE}
 ggplot2::ggsave(plot = map_PEdb,  
