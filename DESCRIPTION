@@ -76,7 +76,8 @@ Suggests:
     phangorn,
     raster,
     rcartocolor,
+    rlist,
     sf
 Remotes: 
-    nmatzke/BioGeoBEARS
+    nmatzke/BioGeoBEARS,
     vanderleidebastiani/daee
