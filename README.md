@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="man/figures/logo_herodotools.png" alt="package logo with a map and a phylogeny inside" width="200px" align="right"/>
+<img src="man/figures/logo_herodotools2.png" alt="package logo with a map and a phylogeny inside" width="300px" align="right"/>
 
 # Herodotools
 
@@ -44,9 +44,10 @@ devtools::install_github("GabrielNakamura/Herodotools", ref = "main")
 
 # Example
 
-For more details and examples of usage visit [Herodotools web
+For more details and examples please visit [Herodotools web
 page](https://gabrielnakamura.github.io/Herodotools/)
 
-# Next steps
+# Authors
 
-  - [ ] CRAN release
+Gabriel Nakamura, Arthur Rodrigues, André Luza, Renan Maestri, Vanderlei
+Debastiani and Leandro Duarte

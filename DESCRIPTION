@@ -8,6 +8,12 @@ Authors@R: c(
            email = "gabriel.nakamura.souza@gmail.com",
            comment = c(ORCID = "0000-0002-5144-5312")
                   ),
+           person(given = "Arthur",
+           family = "Rodrigues",
+           role = "aut",
+           email = "rodrigues.arthur.v@gmail.com",
+           comment = c(ORCID = "0000-0003-2656-558X")
+                  ),
            person(given = "André",
            family = "Luza",
            role = "aut",
@@ -15,30 +21,28 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-0302-529X",
                       ResearcherID = "O-1134-2017")
                   ),
-           person(given = "Arthur",
-           family = "Rodrigues",
-           role = "aut",
-           email = "rodrigues.arthur.v@gmail.com",
-           comment = c(ORCID = "0000-0003-2656-558X")
-                  ),
            person(given = "Vanderlei",
            family = "Debastiani",
            role = "aut",
-           email = "vanderleidebastiani@yahoo.com.br"
-                  ),
-           person(given = "Leandro",
-           family = "Duarte",
-           role = "aut",
-           email = "duarte.ldas@gmail.com"
+           email = "vanderleidebastiani@yahoo.com.br",
+            comment = c(ORCID = "0000-0003-0807-025X")
+                  )
                   ),
            person(given = "Renan",
            family = "Maestri",
            role = "aut",
-           email = "renanmaestri@gmail.com"
+           email = "renanmaestri@gmail.com",
+           comment = c(ORCID = "0000-0001-9134-2943")
                   )
-           )
-Description: Herodotools contains a set of functions to analyze patterns
-    associated with historical processes.
+           ),          
+           person(given = "Leandro",
+           family = "Duarte",
+           role = "aut",
+           email = "duarte.ldas@gmail.com",
+           comment = c(ORCID = "0000-0003-1771-0407",
+                      ResearcherID = "B-6552-2012")
+                  )
+Description: Toolset to analyze patterns and processess associated with historical events.
 License: MIT + file LICENSE
 URL: https://gabrielnakamura.github.io/Herodotools/
 Depends: 
