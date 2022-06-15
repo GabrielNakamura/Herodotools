@@ -18,14 +18,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this article we will show the main functions  of `Herodotools`. To do so we will evaluate the effects of deep past processes, represented by diversification and historical dispersal, on the structure and phenotype of assemblages of species from the genus *Akodon*. 
+In this article we will show the main functions of `Herodotools`. To do so we will evaluate the effects of deep past processes, represented by diversification and historical dispersal, on the structure and phenotype of assemblages of species from the genus *Akodon*.
 
 For this aim we will perform the following steps:
 
-1. [Process](#processing) raw occurrence data and phylogenetic information 
-2. [Classify](#evoregions) Akodon assemblages in meaningful regions using `evoregion` function
-3. [Calculate](#modelBasedMetrics) macroevolutionary model-based metrics of diversification using an ancestral state reconstruction model
-4. [Calculate](#phylomodelmetrics) model-based community phylogenetic metrics 
+1.  [Process](#processing) raw occurrence data and phylogenetic information
+2.  [Classify](#evoregions) Akodon assemblages in meaningful regions using `evoregion` function
+3.  [Calculate](#modelBasedMetrics) macroevolutionary model-based metrics of diversification using an ancestral state reconstruction model
+4.  [Calculate](#phylomodelmetrics) model-based community phylogenetic metrics
 
 # Reading data and libraries
 
@@ -45,7 +45,6 @@ library(rnaturalearth)
 library(rcartocolor)
 library(patchwork)
 ```
-
 
 If you do not have Herodotools installed use the following code to install the package from github repository:
 
@@ -116,11 +115,9 @@ ggplot2::ggsave(plot = map_rich_tree,  filename = "Fig1_richmap_akodon.png", pat
 
 ```
 
-
 ```{r fig1_rich, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig1_richmap_akodon.png"))
 ```
-
 
 # Obtaining evoregions {#evoregions}
 
@@ -138,9 +135,8 @@ site.region <- regions$Cluster_Evoregions
 
 ```
 
-We have to transform the evoregion results to spatial object in order to visualize in a map the regions. This can 
-    be done using the following code:
-    
+We have to transform the evoregion results to spatial object in order to visualize in a map the regions. This can be done using the following code:
+
 ```{r spatProcessEvoregion, echo=TRUE}
 
 evoregion.df <- data.frame(
@@ -217,9 +213,8 @@ ggplot2::ggsave(plot = map_evoregion,  filename = "Fig2_evoregion_akodon.png", p
 knitr::include_graphics(here::here("vignettes", "Fig2_evoregion_akodon.png"))
 ```
 
-
 `evoregion` produced five distinct regions, but not all cells have the same degree of affiliation in associated with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to [turnover areas](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492)
-    
+
 ```{r affiliationCalc, echo=TRUE}
 
 # Selecting only axis with more than 5% of explained variance from evoregion output
@@ -275,11 +270,9 @@ ggplot2::ggsave(plot = map_joint_evoregion_afilliation,
                 dpi = "retina")
 ```
 
-
 ```{r fig3_afilliation, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig3_afilliation_akodon.png"))
 ```
-
 
 # Ancestral area reconstruction for Akodon species {#mergeMacroAssemblage}
 
@@ -332,6 +325,7 @@ a.regions <- akodon.evoregion.data[,-1]
 rownames(a.regions) <- species.names
 
 ```
+
 The object created in the last step allows us to enter in a auxiliary function present in Herodotools to easily produce the [Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) file required to run the analysis of ancestral area reconstruction using BioGeoBears.
 
 ```{r echo=TRUE}
@@ -343,7 +337,6 @@ tipranges_to_BioGeoBEARS(
   )
 
 ```
-
 
 Since it take some time to run BioGeoBears, and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. To read the file containing the results of this reconstruction type:
 
@@ -358,7 +351,7 @@ It is worth to note that the procedures decribed from here will work with any ou
 
 # Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
 
-The novelties associated with Herodotools starts from here. Since we have an occurrence data distribution, a biogeographical regionalization and the ancestral area  reconstruction we can combine those three information to calculate metrics implemented in Herodotools. 
+The novelties associated with Herodotools starts from here. Since we have an occurrence data distribution, a biogeographical regionalization and the ancestral area reconstruction we can combine those three information to calculate metrics implemented in Herodotools.
 
 ## Age of assemblages
 
@@ -428,23 +421,17 @@ ggplot2::ggsave(plot = map_age,
                 dpi = "retina")
 ```
 
-
 ```{r fig4_age, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", 
                                    "Fig4_age_akodon.png")
                         )
 ```
 
-
 ## Model-based diversification metrics {#phylomodelmetrics}
 
-We can also calculate measures of diversification considering the macroevolutionary dynamics. 
-The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and 
-historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by 
-[Jetz et al](https://www.nature.com/articles/nature11631).
+We can also calculate measures of diversification considering the macroevolutionary dynamics. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by [Jetz et al](https://www.nature.com/articles/nature11631).
 
-We modified the original metric to take into account only the portion of evolutionary history that are associated with the region
-in which the  species currently occupy, this value represent the diversification that occurred due to *in situ diversification process*
+We modified the original metric to take into account only the portion of evolutionary history that are associated with the region in which the species currently occupy, this value represent the diversification that occurred due to *in situ diversification process*
 
 ```{r diversification, echo=TRUE}
 akodon_diversification <- 
@@ -531,11 +518,9 @@ ggplot2::ggsave(plot = map_diversification_complete,
                 dpi = "retina")
 ```
 
-
 ```{r fig5_afilliation, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig5_diversification_akodon.png"))
 ```
-
 
 # Historical dispersal events
 
@@ -667,15 +652,13 @@ ggplot2::ggsave(plot = map_dispersion_from,
                 dpi = "retina")
 ```
 
-
 ```{r fig6_afilliation, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig5_map_dispersion_from_akodon.png"))
 ```
 
 ## Model based community phylogetic metrics
 
-We also can calculate common used metrics in Community Phylogenetics, but now considering the macroevolutionary dynamics in the calculation.
-These model-based community phylogenetic metrics allows to disentangle the effects of in situ diversification and dispersal 
+We also can calculate common used metrics in Community Phylogenetics, but now considering the macroevolutionary dynamics in the calculation. These model-based community phylogenetic metrics allows to disentangle the effects of in situ diversification and dispersal
 
 ```{r commPhylo, echo=TRUE, eval=FALSE}
 
@@ -688,7 +671,6 @@ div_based_metrics(W = akodon.pa.tree,
                   PE = TRUE)
 
 ```
-
 
 As the other metrics we can plot PDdb and PEdb in a map
 
@@ -766,39 +748,35 @@ ggplot2::ggsave(plot = map_PEdb,
                 dpi = "retina")
 ```
 
-
 ```{r fig6_PEdb, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig6_map_PEdb.png"))
 ```
 
-
 ## Tip-based metrics of trait evolution
 
-Here we will show how to implement the three tip-based metrics idealized by [Luza et al. (2021)] (https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476). Note that these tip-based metrics were estimated using the stochastic mappingof discrete/categorical traits (diet in the original publication, but can be extended to other traits as we will show here). The three tip-based metrics are *Transition rates*, *Stasis time*, and *Last transition time*, and are implemented in the function *tip.based.trait.evo*. 
-Transition rates indicate how many times the ancestral character has changed over time. Stasis time indicates the maximum branch length (time interval) over which the current tip-character was maintained across the whole phylogeny. Finally, last transition time is the sum of branch lengths from the tip to the prior/previous node with a reconstructed character equal to current tip-character.
-As in the original publication, we will use the stochastic character mapping on discrete trait data. This time, however, we will reconstruct the species foraging strata (Elton Traits' database, Wilman et al. 2014) rather than diet. We will reconstruct the foraging strata for 214 sigmodontine rodent species with trait and phylogenetic data (consensus phylogeny of Upham et al. 2019).  
+Here we will show how to implement the three tip-based metrics idealized by [Luza et al. (2021)] (https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476). Note that these tip-based metrics were estimated using the stochastic mapping of discrete/categorical traits (diet in the original publication, but can be extended to other traits as we will show here). The three tip-based metrics are *Transition rates*, *Stasis time*, and *Last transition time*, and are implemented in the function `tip_based_trait_evo`. Transition rates indicate how many times the ancestral character has changed over time. Stasis time indicates the maximum branch length (time interval) which the current tip-character was maintained across the whole phylogeny. Finally, last transition time is the sum of branch lengths from the tip to the prior/previous node with a reconstructed character equal to current tip-character. As in the [original publication](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476), we will use the stochastic character mapping on discrete trait data. This time, however, we will reconstruct the species foraging strata (Elton Traits' database, Wilman et al. 2014) rather than diet. We will reconstruct the foraging strata for 214 sigmodontine rodent species with trait and phylogenetic data (consensus phylogeny of Upham et al. 2019).
 
+First we will load trait and phylogenetic data we need to run the function `tip_based_trait_evo`.
 
-First we will load trait and phylogenetic data we need to run the function *tip.based.trait.evo*.
-```{r , echo=T, eval=TRUE}
+```{r loadTraitData, echo=T}
 
 require(here)
-rodent.phylo <- ape::read.nexus (here ("inst", "extdata","Sigmodontinae_285speciesTree.tre"))
+rodent.phylo <- ape::read.nexus(here("inst", "extdata","Sigmodontinae_285speciesTree.tre"))
   
 # traits
 traits <- read.table(here ("inst","extdata" , "MamFuncDat.txt"),
                      header = T, sep = "\t")
  # adjust sciName for matching
-traits$Scientific <- gsub (" ","_",traits$Scientific)
-traits<-traits[which(traits$Scientific %in% rodent.phylo$tip.label),] # subset
-traits<-traits[match(rodent.phylo$tip.label,traits$Scientific),] # match to have the same order
-traits<- traits[is.na(traits$Scientific) !=T,] #names not matching
-rownames(traits)<-traits$Scientific
+traits$Scientific <- gsub (" ", "_", traits$Scientific)
+traits <- traits[which(traits$Scientific %in% rodent.phylo$tip.label), ] # subset
+traits <- traits[match(rodent.phylo$tip.label,traits$Scientific), ] # match to have the same order
+traits <- traits[is.na(traits$Scientific) !=T,] #names not matching
+rownames(traits) <- traits$Scientific
 
 # match
 require(picante)
 
-match_data <-match.phylo.data(rodent.phylo,traits)
+match_data <- match.phylo.data(rodent.phylo,traits)
 
 # load function
 source (here ("R", "transition_rates_function.R"))
@@ -806,16 +784,19 @@ trait <- ((match_data$data$ForStrat.Value))
 names(trait) <- match_data$data$Scientific
 
 # run function
-trans_rates <- tip.based.trait.evo (tree=match_data$phy,
-                                    trait =trait , # need to be named to work
-                                    nsim =50,
-                                    method = c("transition_rates", "last_transition_time", "stasis_time"))
+trans_rates <- tip_based_trait_evo(tree=match_data$phy,
+                                   trait =trait , # need to be named to work
+                                   nsim = 50,
+                                   method = c("transition_rates", "last_transition_time", "stasis_time"))
 ```
 
+```{r loadResTransition, echo=FALSE}
+load(here::here("inst", "extdata", "transition_rate_res.RData"))
+```
 
-Now that we have in hand the estimates of the three tip-based metrics across the 214 rodent species, we can summarize the tip-based metrics at the ecological assemblage scale. First we will load assemblage & geographic data comprising 1770 grid cells spread into the Neotropics.
+Now that we have in hand the estimates of the three tip-based metrics for 214 rodent species, we can summarize the tip-based metrics at the ecological assemblage scale. First we will load assemblage & geographic data comprising 1770 grid cells spread into the Neotropics.
 
-```{r , echo=T, eval=TRUE}
+```{r loadCommData, echo=T}
 
 # load community data
 comm.data <- read.table(here ("inst","extdata" , "PresAbs_228sp_Neotropical_MainDataBase_Ordenado.txt"),
@@ -828,9 +809,9 @@ geo.data <- read.table(here ("inst","extdata" , "Lon-lat-Disparity.txt"),
 
 ```
 
-Now we then gather the values of tip-based metrics for all species present in a given ecological assemblage *i*.
+Now we calculate the values of tip-based metrics for all species for each assemblage.
 
-```{r , echo=T, eval=TRUE}
+```{r TransitionAssemblage, echo=T}
 
 # transition rates for each community
 mTR_community <- lapply (seq (1,nrow(comm.data)), function (i) # across assemblages 
@@ -862,7 +843,7 @@ averaged_rates <- lapply (mTR_community_DF, function (comm)
   apply (comm, 2,mean)
   
 )
-averaged_rates<-do.call(rbind, averaged_rates) # melt to have ncells x tip-based metrics
+averaged_rates <- do.call(rbind, averaged_rates) # melt to have ncells x tip-based metrics
 
 
 # prepare data to map
@@ -878,16 +859,14 @@ colnames(melt_data_to_map)[which(colnames(melt_data_to_map) == "value")] <- 'mTR
 
 ```
 
-We will do an additional step of loading a elevation raster to set in the background of the map, and then represent in space the variation in the tip-based metrics across rodent assemblages. 
-It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere  (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained during more time, in average, a given state of foraging strata than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico than elsewhere. These results are potentially reflecting i) the place of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages of sigmodontine rodents.  
+We will do an additional step of loading an elevation raster to set in the background of the map, and then represent in space the variation in the tip-based metrics across rodent assemblages. It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained during more time, in average, a given state of foraging strata than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico than elsewhere. These results are potentially reflecting i) the place of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages of sigmodontine rodents.
 
-
-```{r , echo=T, eval=TRUE, fig.height=7,fig.width=18,fig.align= "center",fig.margin=T}
+```{r , echo=T}
 
 require(raster)
 
-rel <- raster(here ("inst","extdata" , "DEM_Elev.tif"))
-rel<-projectRaster(rel, crs="+proj=longlat +datum=WGS84") # reproject raster to fit community data
+rel <- raster(here("inst", "extdata", "DEM_Elev.tif"))
+rel <- projectRaster(rel, crs="+proj=longlat +datum=WGS84") # reproject raster to fit community data
 rel_spdf <- as(rel, "SpatialPixelsDataFrame")
 rel <- as.data.frame(rel_spdf)
 
@@ -929,9 +908,29 @@ maps <- lapply (unique(melt_data_to_map$variable), function (i) { # one map per 
 })
 
 require(gridExtra)
-grid.arrange(maps[[1]]+ggtitle ("A) Transition Rates")+theme(plot.title = element_text(size=17)),
+mapTransition_rate <- 
+  grid.arrange(maps[[1]]+ggtitle ("A) Transition Rates")+theme(plot.title = element_text(size=17)),
              maps[[2]]+ggtitle ("B) Stasis Time")+theme(plot.title = element_text(size=17)),
              maps[[3]] +ggtitle ("C) Last Transition Time")+theme(plot.title = element_text(size=17)),
                                  ncol=3)
 
 ```
+```{r saveFig8, echo=FALSE}
+ggplot2::ggsave(plot = mapTransition_rate,  
+                filename = "Fig8_map_TransitionRate.png",
+                path = here::here("vignettes"),
+                dpi = "retina")
+```
+
+```{r TransitionRateFig}
+knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
+```
+
+
+# References
+
+1. Luza, A. L., Maestri, R., Debastiani, V. J., Patterson, B. D., Maria, S., & Leandro, H. (2021). Is evolution faster at ecotones? A test using rates and tempo of diet transitions in Neotropical Sigmodontinae ( Rodentia , Cricetidae ). Ecology and Evolution, December, 18676–18690. https://doi.org/10.1002/ece3.8476
+
+2. Maestri, R., & Duarte, L. D. S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions Renan Maestri. Methods in Ecology and Evolution, 2020(August), 1652–1662. https://doi.org/10.1111/2041-210X.13492
+
+3. Van Dijk, A., Nakamura, G., Rodrigues, A. V., Maestri, R., & Duarte, L. (2021b). Imprints of tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves: Passeriformes). Biological Journal of the Linnean Society, 134(1), 57–67. https://doi.org/10.1093/biolinnean/blab079
