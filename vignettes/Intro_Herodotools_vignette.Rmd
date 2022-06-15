@@ -772,5 +772,166 @@ knitr::include_graphics(here::here("vignettes", "Fig6_map_PEdb.png"))
 ```
 
 
+## Tip-based metrics of trait evolution
+
+Here we will show how to implement the three tip-based metrics idealized by [Luza et al. (2021)] (https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476). Note that these tip-based metrics were estimated using the stochastic mappingof discrete/categorical traits (diet in the original publication, but can be extended to other traits as we will show here). The three tip-based metrics are *Transition rates*, *Stasis time*, and *Last transition time*, and are implemented in the function *tip.based.trait.evo*. 
+Transition rates indicate how many times the ancestral character has changed over time. Stasis time indicates the maximum branch length (time interval) over which the current tip-character was maintained across the whole phylogeny. Finally, last transition time is the sum of branch lengths from the tip to the prior/previous node with a reconstructed character equal to current tip-character.
+As in the original publication, we will use the stochastic character mapping on discrete trait data. This time, however, we will reconstruct the species foraging strata (Elton Traits' database, Wilman et al. 2014) rather than diet. We will reconstruct the foraging strata for 214 sigmodontine rodent species with trait and phylogenetic data (consensus phylogeny of Upham et al. 2019).  
 
 
+First we will load trait and phylogenetic data we need to run the function *tip.based.trait.evo*.
+```{r , echo=T, eval=TRUE}
+
+require(here)
+rodent.phylo <- ape::read.nexus (here ("inst", "extdata","Sigmodontinae_285speciesTree.tre"))
+  
+# traits
+traits <- read.table(here ("inst","extdata" , "MamFuncDat.txt"),
+                     header = T, sep = "\t")
+ # adjust sciName for matching
+traits$Scientific <- gsub (" ","_",traits$Scientific)
+traits<-traits[which(traits$Scientific %in% rodent.phylo$tip.label),] # subset
+traits<-traits[match(rodent.phylo$tip.label,traits$Scientific),] # match to have the same order
+traits<- traits[is.na(traits$Scientific) !=T,] #names not matching
+rownames(traits)<-traits$Scientific
+
+# match
+require(picante)
+
+match_data <-match.phylo.data(rodent.phylo,traits)
+
+# load function
+source (here ("R", "transition_rates_function.R"))
+trait <- ((match_data$data$ForStrat.Value))
+names(trait) <- match_data$data$Scientific
+
+# run function
+trans_rates <- tip.based.trait.evo (tree=match_data$phy,
+                                    trait =trait , # need to be named to work
+                                    nsim =50,
+                                    method = c("transition_rates", "last_transition_time", "stasis_time"))
+```
+
+
+Now that we have in hand the estimates of the three tip-based metrics across the 214 rodent species, we can summarize the tip-based metrics at the ecological assemblage scale. First we will load assemblage & geographic data comprising 1770 grid cells spread into the Neotropics.
+
+```{r , echo=T, eval=TRUE}
+
+# load community data
+comm.data <- read.table(here ("inst","extdata" , "PresAbs_228sp_Neotropical_MainDataBase_Ordenado.txt"),
+                     header = T, sep = "\t")
+
+# load latlong of these communities
+
+geo.data <- read.table(here ("inst","extdata" , "Lon-lat-Disparity.txt"),
+                     header = T, sep = "\t")
+
+```
+
+Now we then gather the values of tip-based metrics for all species present in a given ecological assemblage *i*.
+
+```{r , echo=T, eval=TRUE}
+
+# transition rates for each community
+mTR_community <- lapply (seq (1,nrow(comm.data)), function (i) # across assemblages 
+  
+            lapply (trans_rates, function (sims) { # across simulations
+    
+          # species in the assemblages
+          gather_names <- names (comm.data[i,][which(comm.data[i,]>0)]) # get the names
+          # subset of rates
+          rates <- sims [which(rownames (sims) %in% gather_names),
+                         c("prop.transitions", 
+                           "stasis.time",
+                         "last.transition.time")]
+          mean_rates <- apply(rates, 2, mean) # and calculate the average
+          mean_rates
+}))
+
+# melt the list to have a dataframe 
+# each element in the list is one assemblage, and the rows within each element represent the number of simulations
+mTR_community_DF <- lapply (mTR_community, function (i)
+  
+  do.call (rbind, i) 
+  
+  )
+
+# average rates (across the simulations) per assemblage
+averaged_rates <- lapply (mTR_community_DF, function (comm) 
+  
+  apply (comm, 2,mean)
+  
+)
+averaged_rates<-do.call(rbind, averaged_rates) # melt to have ncells x tip-based metrics
+
+
+# prepare data to map
+# bind tip-based metrics to geographic data
+data_to_map <- data.frame(geo.data[,c("LONG", "LAT")],
+                          averaged_rates)
+
+
+# reshape to long format (suitable for ggplot)
+require(reshape)
+melt_data_to_map <- melt(data_to_map,id=c("LONG","LAT"))
+colnames(melt_data_to_map)[which(colnames(melt_data_to_map) == "value")] <- 'mTR'
+
+```
+
+We will do an additional step of loading a elevation raster to set in the background of the map, and then represent in space the variation in the tip-based metrics across rodent assemblages. 
+It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere  (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained during more time, in average, a given state of foraging strata than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico than elsewhere. These results are potentially reflecting i) the place of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages of sigmodontine rodents.  
+
+
+```{r , echo=T, eval=TRUE, fig.height=7,fig.width=18,fig.align= "center",fig.margin=T}
+
+require(raster)
+
+rel <- raster(here ("inst","extdata" , "DEM_Elev.tif"))
+rel<-projectRaster(rel, crs="+proj=longlat +datum=WGS84") # reproject raster to fit community data
+rel_spdf <- as(rel, "SpatialPixelsDataFrame")
+rel <- as.data.frame(rel_spdf)
+
+
+# map
+require(ggplot2); require(ggthemes)
+
+
+maps <- lapply (unique(melt_data_to_map$variable), function (i) { # one map per tip-based metric
+    
+  sel_data = melt_data_to_map[which(melt_data_to_map$variable == i),]
+  
+  map1 <- ggplot(sel_data, 
+                 aes(x = LONG, y = LAT)) +
+    geom_raster(data = rel, aes_string(x = "x", y = "y", 
+                                       alpha = "DEM_Elev"),
+                show.legend=F) +
+    geom_tile(aes(fill = mTR),alpha=0.65)+
+    #facet_wrap(~variable,scales = "fixed",ncol=3)+
+    scale_fill_gradient2(midpoint = mean(sel_data$mTR),
+                         limits=c(range(sel_data$mTR)[1],
+                                  range(sel_data$mTR)[2]),
+                         breaks=seq(range(sel_data$mTR)[1],
+                                    range(sel_data$mTR)[2],
+                                    diff(range(sel_data$mTR))/4),
+                          low="#F2EBE9",mid="#FAC213", high="#D61C4E") + 
+    theme_classic() + 
+    theme_map() +
+    xlab("Longitude") + ylab("Latitude")+
+    theme(legend.position="bottom",
+          legend.justification = "center",
+          legend.direction = "horizontal",
+          legend.text = element_text(size=10,angle=45,hjust = 1),
+          legend.title = element_blank(),
+          plot.background = element_rect(fill="white",colour="white"),
+          panel.spacing = unit(0, "lines"),
+          strip.text = element_text(size=10))
+
+})
+
+require(gridExtra)
+grid.arrange(maps[[1]]+ggtitle ("A) Transition Rates")+theme(plot.title = element_text(size=17)),
+             maps[[2]]+ggtitle ("B) Stasis Time")+theme(plot.title = element_text(size=17)),
+             maps[[3]] +ggtitle ("C) Last Transition Time")+theme(plot.title = element_text(size=17)),
+                                 ncol=3)
+
+```
