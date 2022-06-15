@@ -61,25 +61,38 @@
     <h2>Arguments</h2>
     <dl><dt>W</dt>
 <dd><p>Occurrence matrix, rows are assemblages and columns are species</p></dd>
+
+
 <dt>tree</dt>
 <dd><p>Phylogenetic tree in newick format</p></dd>
+
+
 <dt>ancestral.area</dt>
 <dd><p>One column data frame, nodes in row and one column containing the occurrence of the nodes</p></dd>
+
+
 <dt>biogeo</dt>
 <dd><p>One column data frame, assemblages in rows and one column containing the region in which the assemblage is located</p></dd>
+
+
 <dt>age.no.ancestor</dt>
 <dd><p>a character string "recent" (default) or "half.edge" indicating how to deal
 with cases in which the most recent aancestor of a tip node are not on the same region. "recent"
 attributes a small age (10e-5), while "half.edge" attributes the age as half the length of the branch
 linking the ancestor to the tip.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of length two.</p>
+    
+
+<p>A list of length two.</p>
 <dl><dt>age_arrival</dt>
 <dd><p>A matrix with the arrival age of each species in each assemblage</p></dd>
+
 <dt>mean_age_arrival</dt>
 <dd><p>mean age values for each assemblage</p></dd>
+
 </dl></div>
     <div id="author">
     <h2>Author</h2>
@@ -107,11 +120,11 @@ linking the ancestor to the tip.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Gabriel Nakamura, André Luza, Arthur Rodrigues, Vanderlei Debastiani, Leandro Duarte, Renan Maestri.</p>
+  <p></p><p>Developed by Gabriel Nakamura, Arthur Rodrigues, André Luza, Vanderlei Debastiani, Renan Maestri, Leandro Duarte.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

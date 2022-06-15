@@ -71,32 +71,51 @@ metrics using an ancestral community reconstruction</p>
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Community occurrence matrix. Rows are sites and columns are species</p></dd>
+
+
 <dt>phy</dt>
 <dd><p>Phylogenetic tree</p></dd>
+
+
 <dt>sp.bin</dt>
 <dd><p>Character indicating the methods to be used to compute the number of time slices in which metrics will be computed. Default is "Sturges"</p></dd>
+
+
 <dt>marginal</dt>
 <dd><p>Logical indicating</p></dd>
+
+
 <dt>lik.threshold</dt>
 <dd><p>Logical indicating if some threshold value will be used to select the likelihood values of ancestor species in a site. Default is TRUE</p></dd>
+
+
 <dt>threshold</dt>
 <dd><p>Scalar indicating the threshold value used to select the likelihood of a given species be present at a site</p></dd>
+
+
 <dt>compute.fields</dt>
 <dd><p>Logical, indicates if phylogenetic fields will be computed. Default is FALSE</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of size eight containing the following objects</p>
+    
+
+<p>A list of size eight containing the following objects</p>
 <dl><dt>Phylogeny</dt>
 <dd><p>Phylogenetic tree</p></dd>
-<dt>Root.Age</dt>
+ <dt>Root.Age</dt>
 <dd><p>Numeric containing root age of the tree used</p></dd>
+
 <dt>Per.node.ancestral.area</dt>
 <dd><p>Matrix containing the ancestors (nodes) for each species</p></dd>
+
 <dt>Diversity.Through.Time</dt>
 <dd><p>Age of each node in the phylogeny</p></dd>
+
 <dt>Cell.Metric</dt>
 <dd><p>Matrix containing the assemblage level metrics for richness and ancestral diversity</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -118,11 +137,11 @@ in a matrix using for this reconstruction <a href="https://rdrr.io/pkg/ape/man/a
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Gabriel Nakamura, André Luza, Arthur Rodrigues, Vanderlei Debastiani, Leandro Duarte, Renan Maestri.</p>
+  <p></p><p>Developed by Gabriel Nakamura, Arthur Rodrigues, André Luza, Vanderlei Debastiani, Renan Maestri, Leandro Duarte.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
