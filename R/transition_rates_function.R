@@ -11,7 +11,7 @@
 #' @importFrom stats setNames
 #' @examples 
 
-tip.based.trait.evo <- function(tree, trait, nsim = 1, method = c("transition_rates", "last_transition_time", "stasis_time")) {
+tip_based_trait_evo <- function(tree, trait, nsim = 1, method = c("transition_rates", "last_transition_time", "stasis_time")) {
  
   pkg_req <- c("daee")
   

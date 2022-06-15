@@ -144,6 +144,7 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 # open issues may 27
 
 - [ ] when possible, add the tests made with the toy_example to the testthat.R file. 
+
 - [ ] suggestion: change the vignette to article. create an article with `use_article()` and copy/paste the vignette to there. When the package is built, the article is not biult, but the vignette is. 
 
 

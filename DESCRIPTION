@@ -26,14 +26,12 @@ Authors@R: c(
            role = "aut",
            email = "vanderleidebastiani@yahoo.com.br",
             comment = c(ORCID = "0000-0003-0807-025X")
-                  )
                   ),
            person(given = "Renan",
            family = "Maestri",
            role = "aut",
            email = "renanmaestri@gmail.com",
            comment = c(ORCID = "0000-0001-9134-2943")
-                  )
            ),          
            person(given = "Leandro",
            family = "Duarte",
@@ -42,6 +40,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-1771-0407",
                       ResearcherID = "B-6552-2012")
                   )
+            )
 Description: Toolset to analyze patterns and processess associated with historical events.
 License: MIT + file LICENSE
 URL: https://gabrielnakamura.github.io/Herodotools/
