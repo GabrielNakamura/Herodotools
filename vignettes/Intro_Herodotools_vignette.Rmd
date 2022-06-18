@@ -33,8 +33,10 @@ First, let's read some libraries we will use to explore the data and produce the
 
 ```{r librariesRead}
 library(ape)
+library(picante)
 library(dplyr)
 library(tidyr)
+library(purrr)
 library(raster)
 library(terra)
 library(ggplot2)
@@ -55,7 +57,7 @@ devtools::install_github("GabrielNakamura/Herodotools", ref = "main")
 To read the files corresponding to the distribution of species, phylogenetic relationship and trait values (represented by body size) type:
 
 ```{r readData, echo=TRUE}
-devtools::load_all()
+library(Herodotools)
 akodon.sites <- read.table(system.file("extdata", "Table_Akodon_coords_pa.txt", package = "Herodotools"), 
                            header = TRUE)
 akodon.newick <- ape::read.tree(system.file("extdata", "akodon.new", package = "Herodotools"))
@@ -77,9 +79,7 @@ akodon.pa <- akodon.sites %>%
 Checking if species names between occurrence matrix and phylogenetic tree are matching
 
 ```{r match_data, echo=TRUE}
-
 spp.in.tree <- names(akodon.pa) %in% akodon.newick$tip.label
-
 akodon.pa.tree <- akodon.pa[, spp.in.tree]
 
 ```
@@ -101,7 +101,7 @@ map_rich_tree <-
 bind_cols(site.xy, rich.tree = rich.tree) %>% 
   ggplot() + 
   geom_raster(aes(x = LONG, y = LAT, fill = rich.tree)) + 
-  scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
+  scale_fill_carto_c(name = "Richness", type = "quantitative", palette = "SunsetDark") +
   geom_sf(data = coastline) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggtitle("Richness for Akodon Genus") +
@@ -121,16 +121,22 @@ knitr::include_graphics(here::here("vignettes", "Fig1_richmap_akodon.png"))
 
 # Obtaining evoregions {#evoregions}
 
-Here we will use the function `evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools. This method of classification allows offers an alternative to perform a biogeographical regionalization based on [phylogenetic fuzzy weighting method](https://doi.org/10.1111/2041-210X.12547). Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.
+Here we will use the function `evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools. This method of classification allows to perform a biogeographical regionalization based on [phylogenetic fuzzy weighting method](https://doi.org/10.1111/2041-210X.12547). Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.
 
-To calculate evoregions we need the occurrence matrix, a phylogenetic hypothesis and to define the maximum number of clusters allowed for the group being analyzed. If the user decided to not inform the maximum number of clusters evoregion function will perform an automatic procedure based on "elbow" method to set the maximum number of clusters. The elbow method is implemented in package [`phyloregion`](https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478).
+To calculate evoregions we need the occurrence matrix, a phylogenetic hypothesis and to define the maximum number of clusters allowed for the group being analyzed. If the user decided to not inform the maximum number of clusters, evoregion function will perform an automatic procedure based on "elbow" method to set the maximum number of clusters. The "elbow" method is implemented in package [`phyloregion`](https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478).
 
-```{r evoregion_calc, echo=TRUE}
+```{r evoregion_calc, echo=TRUE, eval=FALSE}
 regions <- evoregions(
   comm = akodon.pa.tree,
   phy = akodon.newick, 
   max.n.clust = 10)
 
+site.region <- regions$Cluster_Evoregions
+
+```
+```{r save_evoregion_calc, echo=FALSE}
+
+load(file = "../inst/extdata/regions_results.RData")
 site.region <- regions$Cluster_Evoregions
 
 ```
@@ -283,25 +289,32 @@ First, we have to define the membership of each species regarding the evoregions
 ```{r echo=TRUE}
 
 akodon.evoregion.data <- 
+  # bind compostion matrix and the site evoregion
   bind_cols(
     akodon.pa.tree,
     site.region =  site.region
   ) %>% 
+  # transform the matrix in a longer dataframe 
   pivot_longer(
     cols = 1:30, 
     names_to = "species",
     values_to = "presence"
   ) %>% 
+  # filter only the rows with the presence of a species
   filter(presence == 1) %>% 
+  # Count the number of sites in a region that a species is present
   group_by(species, site.region) %>% 
   summarise(n = n()) %>% 
   ungroup() %>% 
+  # Calculate the propotional area of a species in each region
   group_by(species) %>% 
   mutate(
     species.total = sum(n), 
     prec.occupation = n/species.total
   ) %>% 
   ungroup() %>% 
+  # Filter for each species the evoregions with more than 25% of area ocupied 
+  # by the species
   filter(
     prec.occupation >= .25
   ) %>% 
@@ -310,6 +323,7 @@ akodon.evoregion.data <-
   ) %>% 
   dplyr::select(species, area) %>% 
   mutate( value = 1) %>% 
+  # transform in a dataframe with species in rows and areas ocupied [0-1] in columns
   pivot_wider(
     id_cols = species,
     names_from = area, 
@@ -332,21 +346,34 @@ The object created in the last step allows us to enter in a auxiliary function p
 # save phyllip file
 tipranges_to_BioGeoBEARS(
   a.regions, 
+  # please set a new path to save the file
   filename = here("inst", "extdata", "geo_area_akodon.data"),
   areanames = NULL
   )
 
 ```
 
-Since it take some time to run BioGeoBears, and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. To read the file containing the results of this reconstruction type:
+Since it take some time to run BioGeoBears (something about 15 minutes), and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. However if you want to see the code we used to run the BioGeoBears models, here is the code `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`. 
 
-```{r echo=TRUE}
+Read the file containing the results of DEC model reconstruction: 
+
+
+```{r echo=TRUE, eval = FALSE}
 library(BioGeoBEARS)
-load(file = here::here("inst", "extdata", "resDEC_akodon.RData")) # ancestral reconstruction
+
+# ancestral reconstruction
+load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
 
 ```
 
-It is worth to note that the procedures decribed from here will work with any output model from BioGeoBear, but for sake of simplicity we decided to use just the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html).
+```{r loadDECmodel, echo=FALSE, eval=TRUE}
+library(BioGeoBEARS)
+
+# ancestral reconstruction
+load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
+
+```
+It is worth to note that the procedures decribed from here will work with any model of ancestral area reconstruction, but for sake of simplicity we decided to use just the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html). 
 
 # Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
 
@@ -523,7 +550,7 @@ knitr::include_graphics(here::here("vignettes", "Fig5_diversification_akodon.png
 
 # Historical dispersal events
 
-We can also calculate the importance of dispersal events related to each region. By using the function `dispersal_from` we can quantify the contribution of a given region to all other regions by calculating the percentage of dispersal events of a focal region to all other regions.
+We can also calculate the importance of dispersal events related to each ancestral range. By using the function `dispersal_from` we can quantify the contribution of a given ancestral range to historical dispersal of the species in an assemblage. This is done by calculating the proportion of species in an assemblage that dispersed from the focal ancestral range. This calculation is done accounting only for the species that have events of dispersal in its ancestral lineage. 
 
 ```{r dispersal, echo=TRUE}
 
@@ -536,7 +563,7 @@ dispersal_from(W = akodon.pa.tree,
 
 ```
 
-We also can map the contribution of dispersal for all regions
+We also can map the contribution of dispersal for all regions. Note that the area of ancestral range focused in each map have no values of dipersal from, since it is the source of dispersal to the other regions. 
 
 ```{r}
 
@@ -545,17 +572,19 @@ sites <- bind_cols(site.xy,
                    afi, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
-                   dispersal.A = akodon_dispersal[,1], 
-                   dispersal.C = akodon_dispersal[, 2],
-                   dispersal.B = akodon_dispersal[, 3],
-                   dispersal.AE = akodon_dispersal[, 4],
-                   dispersal.E = akodon_dispersal[, 5])
+                   dispersal.D = akodon_dispersal[,1], 
+                   dispersal.A = akodon_dispersal[, 2],
+                   dispersal.E = akodon_dispersal[, 3],
+                   dispersal.BD = akodon_dispersal[, 4],
+                   dispersal.B = akodon_dispersal[, 5])
 
-map_dispersal_A <- 
+map_dispersal_D <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.A)) + 
-   scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
+   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
+      scale_fill_carto_c(
+     type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
+     ) +
    geom_sf(data = coastline, size = 0.4) +
    geom_sf(
      data = sf.evoregion, 
@@ -563,10 +592,10 @@ map_dispersal_A <-
      fill = NA, 
      size = 0.5) +
    coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("From A") + 
+   ggtitle("From D") + 
    theme_bw() +
-   labs(fill = "") +
-   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+   labs(fill = "% of contribution") + 
+  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -576,16 +605,17 @@ map_dispersal_A <-
      legend.position = "bottom",
      axis.title = element_blank(),
      legend.text = element_text(size = 10), 
-     axis.text = element_text(size = 7),
-     plot.subtitle = element_text(hjust = 0.5, 
-                                  size = 10)
+     axis.text = element_text(size = 5),
+     plot.subtitle = element_text(hjust = 0.5)   
    )
 
-map_dispersal_E <- 
+map_dispersal_A <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.E)) + 
-   scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
+   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.A)) + 
+      scale_fill_carto_c(
+     type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
+     ) +
    geom_sf(data = coastline, size = 0.4) +
    geom_sf(
      data = sf.evoregion, 
@@ -593,10 +623,10 @@ map_dispersal_E <-
      fill = NA, 
      size = 0.5) +
    coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("From E") + 
+   ggtitle("From A") + 
    theme_bw() +
-   labs(fill = "") +
-   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+   labs(fill = "% of contribution") + 
+  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -605,15 +635,18 @@ map_dispersal_E <-
    theme(
      legend.position = "bottom",
      axis.title = element_blank(),
-     legend.text = element_text(size = 8), 
-     axis.text = element_text(size = 5)
+     legend.text = element_text(size = 10), 
+     axis.text = element_text(size = 5),
+     plot.subtitle = element_text(hjust = 0.5)   
    )
 
 map_dispersal_B <- 
    sites %>% 
    ggplot() + 
    geom_raster(aes(x = LONG, y = LAT, fill = dispersal.B)) +
-   scale_fill_carto_c(type = "quantitative", palette = "SunsetDark", na.value = "white") +
+   scale_fill_carto_c(
+     type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
+     ) +
    geom_sf(data = coastline, size = 0.4) +
    geom_sf(
      data = sf.evoregion, 
@@ -639,8 +672,11 @@ map_dispersal_B <-
    )
 
 
-map_dispersion_from <- map_evoregion / (map_dispersal_A | map_dispersal_B | map_dispersal_E) +
-  plot_layout(heights = c(1, .75))
+map_dispersion_from <- 
+  (map_evoregion + plot_layout(guides = "keep")) / 
+  (map_dispersal_A | map_dispersal_B | map_dispersal_D) +
+  plot_layout(heights = c(1, .75), guides = "collect") &
+  theme(legend.position = "bottom")
 
 ```
 
@@ -753,19 +789,22 @@ knitr::include_graphics(here::here("vignettes", "Fig6_map_PEdb.png"))
 
 ## Tip-based metrics of trait evolution
 
-Here we will show how to implement the three tip-based metrics idealized by [Luza et al. (2021)] (https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476). Note that these tip-based metrics were estimated using the stochastic mapping of discrete/categorical traits (diet in the original publication, but can be extended to other traits as we will show here). The three tip-based metrics are *Transition rates*, *Stasis time*, and *Last transition time*, and are implemented in the function `tip_based_trait_evo`. Transition rates indicate how many times the ancestral character has changed over time. Stasis time indicates the maximum branch length (time interval) which the current tip-character was maintained across the whole phylogeny. Finally, last transition time is the sum of branch lengths from the tip to the prior/previous node with a reconstructed character equal to current tip-character. As in the [original publication](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476), we will use the stochastic character mapping on discrete trait data. This time, however, we will reconstruct the species foraging strata (Elton Traits' database, Wilman et al. 2014) rather than diet. We will reconstruct the foraging strata for 214 sigmodontine rodent species with trait and phylogenetic data (consensus phylogeny of Upham et al. 2019).
+Here we will show how to implement the three tip-based metrics idealized by [Luza et al. (2021)](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476). Note that these tip-based metrics were estimated using the stochastic mapping of discrete/categorical traits (diet in the original publication, but can be extended to other traits as we will show here). The three tip-based metrics are *Transition rates*, *Stasis time*, and *Last transition time*, and are implemented in the function `tip_based_trait_evo`. Transition rates indicate how many times the ancestral character has changed over time. Stasis time indicates the maximum branch length (time interval) which the current tip-character was maintained across the whole phylogeny. Finally, last transition time is the sum of branch lengths from the tip to the prior/previous node with a reconstructed character equal to current tip-character. As in the [original publication](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476), we will use the stochastic character mapping on discrete trait data. This time, however, we will reconstruct the species foraging strata (Elton Traits' database, Wilman et al. 2014) rather than diet. We will reconstruct the foraging strata for 214 sigmodontine rodent species with trait and phylogenetic data (consensus phylogeny of Upham et al. 2019).
 
 First we will load trait and phylogenetic data we need to run the function `tip_based_trait_evo`.
 
 ```{r loadTraitData, echo=T}
-
-require(here)
-rodent.phylo <- ape::read.nexus(here("inst", "extdata","Sigmodontinae_285speciesTree.tre"))
+rodent.phylo <- ape::read.nexus(
+  system.file("extdata", "Sigmodontinae_285speciesTree.tre", package = "Herodotools")
+  )
   
 # traits
-traits <- read.table(here ("inst","extdata" , "MamFuncDat.txt"),
-                     header = T, sep = "\t")
- # adjust sciName for matching
+traits <- read.table(
+  system.file("extdata", "MamFuncDat.txt", package = "Herodotools"),
+  header = T, sep = "\t"
+  )
+
+# adjust sciName for matching
 traits$Scientific <- gsub (" ", "_", traits$Scientific)
 traits <- traits[which(traits$Scientific %in% rodent.phylo$tip.label), ] # subset
 traits <- traits[match(rodent.phylo$tip.label,traits$Scientific), ] # match to have the same order
@@ -773,13 +812,11 @@ traits <- traits[is.na(traits$Scientific) !=T,] #names not matching
 rownames(traits) <- traits$Scientific
 
 # match
-require(picante)
-
-match_data <- match.phylo.data(rodent.phylo,traits)
+match_data <- match.phylo.data(rodent.phylo, traits)
 
 # load function
-source (here ("R", "transition_rates_function.R"))
-trait <- ((match_data$data$ForStrat.Value))
+
+trait <- match_data$data$ForStrat.Value
 names(trait) <- match_data$data$Scientific
 
 # run function
@@ -790,7 +827,7 @@ trans_rates <- tip_based_trait_evo(tree=match_data$phy,
 ```
 
 ```{r loadResTransition, echo=FALSE}
-load(here::here("inst", "extdata", "transition_rate_res.RData"))
+load(system.file("extdata", "transition_rate_res.RData", package = "Herodotools"))
 ```
 
 Now that we have in hand the estimates of the three tip-based metrics for 214 rodent species, we can summarize the tip-based metrics at the ecological assemblage scale. First we will load assemblage & geographic data comprising 1770 grid cells spread into the Neotropics.
@@ -798,13 +835,17 @@ Now that we have in hand the estimates of the three tip-based metrics for 214 ro
 ```{r loadCommData, echo=T}
 
 # load community data
-comm.data <- read.table(here ("inst","extdata" , "PresAbs_228sp_Neotropical_MainDataBase_Ordenado.txt"),
-                     header = T, sep = "\t")
+comm.data <- read.table(
+   system.file("extdata", "PresAbs_228sp_Neotropical_MainDataBase_Ordenado.txt", 
+               package = "Herodotools"),
+   header = T, sep = "\t"
+   )
 
 # load latlong of these communities
-
-geo.data <- read.table(here ("inst","extdata" , "Lon-lat-Disparity.txt"),
-                     header = T, sep = "\t")
+geo.data <- read.table(
+  system.file("extdata", "Lon-lat-Disparity.txt", package = "Herodotools"),
+  header = T, sep = "\t"
+  )
 
 ```
 
@@ -813,105 +854,97 @@ Now we calculate the values of tip-based metrics for all species for each assemb
 ```{r TransitionAssemblage, echo=T}
 
 # transition rates for each community
-mTR_community <- lapply (seq (1,nrow(comm.data)), function (i) # across assemblages 
-  
-            lapply (trans_rates, function (sims) { # across simulations
+averaged_rates <- map_dfr(1:nrow(comm.data), function (i){
+  # across assemblages
+  map_dfr(trans_rates, function (sims) { # across simulations
     
-          # species in the assemblages
-          gather_names <- names (comm.data[i,][which(comm.data[i,]>0)]) # get the names
-          # subset of rates
-          rates <- sims [which(rownames (sims) %in% gather_names),
-                         c("prop.transitions", 
-                           "stasis.time",
-                         "last.transition.time")]
-          mean_rates <- apply(rates, 2, mean) # and calculate the average
-          mean_rates
-}))
-
-# melt the list to have a dataframe 
-# each element in the list is one assemblage, and the rows within each element represent the number of simulations
-mTR_community_DF <- lapply (mTR_community, function (i)
-  
-  do.call (rbind, i) 
-  
-  )
-
-# average rates (across the simulations) per assemblage
-averaged_rates <- lapply (mTR_community_DF, function (comm) 
-  
-  apply (comm, 2,mean)
-  
-)
-averaged_rates <- do.call(rbind, averaged_rates) # melt to have ncells x tip-based metrics
-
-
-# prepare data to map
-# bind tip-based metrics to geographic data
-data_to_map <- data.frame(geo.data[,c("LONG", "LAT")],
-                          averaged_rates)
-
-
-# reshape to long format (suitable for ggplot)
-require(reshape)
-melt_data_to_map <- melt(data_to_map,id=c("LONG","LAT"))
-colnames(melt_data_to_map)[which(colnames(melt_data_to_map) == "value")] <- 'mTR'
-
+    # species in the assemblages
+    gather_names <- names (comm.data[i,][which(comm.data[i,]>0)]) # get the names
+    # subset of rates
+    rates <- sims [which(rownames (sims) %in% gather_names),
+                   c("prop.transitions", 
+                     "stasis.time",
+                     "last.transition.time")]
+    mean_rates <- apply(rates, 2, mean) # and calculate the average
+    mean_rates
+  }) %>% 
+    map(mean)
+})
 ```
 
-We also added an elevation raster to plot in the same figure the elevation and the tip-based metrics across rodent assemblages. The spatial distribution of tip-based metrics showed that assemblages in the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one in northeastern Neotropics, and another in central Amazonia. The former also showed high Transition Rates. Together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained during more time, in average, a given state of foraging strata than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico than elsewhere. These results are potentially reflecting i) the place of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages of sigmodontine rodents.
+
+We will represent in space the variation in the tip-based metrics across rodent assemblages. It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained during more time, in average, a given state of foraging strata than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico than elsewhere. These results are potentially reflecting i) the place of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages of sigmodontine rodents.
+
 
 ```{r , echo=T}
 
-require(raster)
+# prepare data to map
+data_to_map_wide <- data.frame(geo.data[,c("LONG", "LAT")], averaged_rates)
 
-rel <- raster(here("inst", "extdata", "DEM_Elev.tif"))
-rel <- projectRaster(rel, crs="+proj=longlat +datum=WGS84") # reproject raster to fit community data
-rel_spdf <- as(rel, "SpatialPixelsDataFrame")
-rel <- as.data.frame(rel_spdf)
+data_to_map_long <- 
+  data_to_map_wide %>% 
+  pivot_longer(
+    cols = 3:5,
+    names_to = "variables",
+    values_to = "values"
+  )
 
-
-# map
-require(ggplot2); require(ggthemes)
-
-
-maps <- lapply (unique(melt_data_to_map$variable), function (i) { # one map per tip-based metric
-    
-  sel_data = melt_data_to_map[which(melt_data_to_map$variable == i),]
+# create a list with the maps
+list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metric){
   
-  map1 <- ggplot(sel_data, 
-                 aes(x = LONG, y = LAT)) +
-    geom_raster(data = rel, aes_string(x = "x", y = "y", 
-                                       alpha = "DEM_Elev"),
-                show.legend=F) +
-    geom_tile(aes(fill = mTR),alpha=0.65)+
-    #facet_wrap(~variable,scales = "fixed",ncol=3)+
-    scale_fill_gradient2(midpoint = mean(sel_data$mTR),
-                         limits=c(range(sel_data$mTR)[1],
-                                  range(sel_data$mTR)[2]),
-                         breaks=seq(range(sel_data$mTR)[1],
-                                    range(sel_data$mTR)[2],
-                                    diff(range(sel_data$mTR))/4),
-                          low="#F2EBE9",mid="#FAC213", high="#D61C4E") + 
-    theme_classic() + 
-    theme_map() +
-    xlab("Longitude") + ylab("Latitude")+
-    theme(legend.position="bottom",
-          legend.justification = "center",
-          legend.direction = "horizontal",
-          legend.text = element_text(size=10,angle=45,hjust = 1),
-          legend.title = element_blank(),
-          plot.background = element_rect(fill="white",colour="white"),
-          panel.spacing = unit(0, "lines"),
-          strip.text = element_text(size=10))
-
+  plot.title <- switch(
+    metric,
+    "prop.transitions" = "Transition Rates",
+    "stasis.time" = "Stasis Time",
+    "last.transition.time" = "Last Transition Time"
+  )
+  
+  sel_data <- 
+    data_to_map_long %>% 
+    filter(variables == metric)
+  
+  var_range <- range(sel_data$values) %>% round(2)
+  var_breaks <- seq(var_range[1], var_range[2], diff(var_range/4)) %>% round(2)
+  
+  sig_map_limits <- list(
+    x = range(sel_data$LONG), 
+    y = range(sel_data$LAT)
+  )
+  
+  ggplot() +
+    geom_raster(data = sel_data, 
+                aes(x = LONG, y = LAT, fill = values)) +
+    scale_fill_carto_c(
+      type = "quantitative", 
+      palette = "SunsetDark", 
+      na.value = "white", 
+      limits = var_range, 
+      breaks = var_breaks
+    )+ 
+    geom_sf(data = coastline, size = 0.4) +
+    coord_sf(xlim = sig_map_limits$x, ylim = sig_map_limits$y) +
+    theme_bw() +
+    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                                 direction = "horizontal",
+                                 ticks.colour = "grey20",
+                                 title.position = "top",
+                                 label.position = "bottom",
+                                 title.hjust = 0.5)) +
+    labs(title = plot.title) +
+    theme(
+      legend.position = "bottom",
+      axis.title = element_blank(),
+      legend.title = element_blank(),
+      legend.text = element_text(size = 10), 
+      axis.text = element_text(size = 5),
+      plot.subtitle = element_text(hjust = 0.5)   
+    )
+  
 })
 
-require(gridExtra)
-mapTransition_rate <- 
-  grid.arrange(maps[[1]]+ggtitle ("A) Transition Rates")+theme(plot.title = element_text(size=17)),
-             maps[[2]]+ggtitle ("B) Stasis Time")+theme(plot.title = element_text(size=17)),
-             maps[[3]] +ggtitle ("C) Last Transition Time")+theme(plot.title = element_text(size=17)),
-                                 ncol=3)
+# Create map
+mapTransition_rate <- wrap_plots(list_map_transitions) +
+  plot_annotation(tag_levels = "A")
 
 ```
 ```{r saveFig8, echo=FALSE}
@@ -921,7 +954,7 @@ ggplot2::ggsave(plot = mapTransition_rate,
                 dpi = "retina")
 ```
 
-```{r TransitionRateFig}
+```{r TransitionRateFig, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
 ```
 

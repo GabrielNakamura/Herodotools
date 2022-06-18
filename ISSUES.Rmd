@@ -127,9 +127,9 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 
 - [ ] from which package does the function `.node.desc` belong to? [line 82 of 'function_model_based_diversificationJetz.R']. it must be included in Imports/Suggests of the DESCRIPTION file or be refered as `pkg::.node.desc` - I have no idea where this function comes from 
 
-- [ ] Find a better way to represent the percentage of contribution of dispersal events in a map
+- [X] Find a better way to represent the percentage of contribution of dispersal events in a map
 
-- [ ] Describe dispersal_from function
+- [X] Describe dispersal_from function
 
 # Open issues May 26
 
@@ -147,7 +147,9 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 
 - [ ] suggestion: change the vignette to article. create an article with `use_article()` and copy/paste the vignette to there. When the package is built, the article is not biult, but the vignette is. 
 
+# open issues June 17
 
+- [ ] remove unused files in the inst/extdata directory
 
 
 
