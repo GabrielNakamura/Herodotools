@@ -342,7 +342,6 @@ Since it take some time to run BioGeoBears, and this is not the objective of thi
 
 ```{r echo=TRUE}
 library(BioGeoBEARS)
-source()
 load(file = here::here("inst", "extdata", "resDEC_akodon.RData")) # ancestral reconstruction
 
 ```
@@ -859,7 +858,7 @@ colnames(melt_data_to_map)[which(colnames(melt_data_to_map) == "value")] <- 'mTR
 
 ```
 
-We will do an additional step of loading an elevation raster to set in the background of the map, and then represent in space the variation in the tip-based metrics across rodent assemblages. It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained during more time, in average, a given state of foraging strata than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico than elsewhere. These results are potentially reflecting i) the place of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages of sigmodontine rodents.
+We also added an elevation raster to plot in the same figure the elevation and the tip-based metrics across rodent assemblages. The spatial distribution of tip-based metrics showed that assemblages in the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one in northeastern Neotropics, and another in central Amazonia. The former also showed high Transition Rates. Together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained during more time, in average, a given state of foraging strata than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico than elsewhere. These results are potentially reflecting i) the place of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages of sigmodontine rodents.
 
 ```{r , echo=T}
 
