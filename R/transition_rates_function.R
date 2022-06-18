@@ -9,7 +9,7 @@
 #' @author André Luza and Vanderlei Debastiani
 #' 
 #' @importFrom stats setNames
-#' @examples 
+#' @export
 
 tip_based_trait_evo <- function(tree, trait, nsim = 1, method = c("transition_rates", "last_transition_time", "stasis_time")) {
  

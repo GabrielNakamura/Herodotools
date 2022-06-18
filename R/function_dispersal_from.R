@@ -1,8 +1,8 @@
 #' Proportional contribution of an ancestral area to the species in other region
 #' 
-#' For the lineages that do not have the entire diversification in the region, 
-#' the function calculates theProportional contribution of an ancestral area
-#' from where the dispersal to the current region comes. 
+#' 
+#' For the species present in a site, the function calculates the proportional 
+#'  contribution of ancestral areas to dispersal of lineage in the site's region. 
 #'
 #' @param W Occurrence matrix, rows are assemblages and columns are species 
 #' @param tree Phylogenetic tree in newick format
@@ -48,11 +48,11 @@ dispersal_from <- function(W,
     table(pres)/sum(table(pres))
   })
   
-  
   areas <- unique(ancestral.area[ ,1])
   disp_from_frequency <- matrix(NA, nrow = nrow(W), ncol = length(areas))
   rownames(disp_from_frequency) <- row.names(W)
   colnames(disp_from_frequency) <- areas
+  
   for(i in 1:nrow(disp_from_frequency)){
     temp.freq<- l.freq.area[[i]]
     temp.col <- colnames(disp_from_frequency) %in% names(temp.freq)

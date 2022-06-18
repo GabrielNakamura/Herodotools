@@ -42,7 +42,7 @@
 #' # tip_5	010
 #'  }
 #'  
-#'  
+#' @export
 
 tipranges_to_BioGeoBEARS <- function (
     tip_range, 
