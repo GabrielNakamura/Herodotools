@@ -871,5 +871,7 @@ numstates_from_numareas(numareas=5,
     dplyr::arrange(AICc) %>% 
     mutate(delta_AICc =  AICc - min(AICc))
   
+  save(resDEC, file =  here("inst", "extdata", "resDEC_akodon.RData"))
+  
   cat("The best models are 'resDEC', 'resBAYAREALIKEj', and 'resBAYAREALIKE'")
   

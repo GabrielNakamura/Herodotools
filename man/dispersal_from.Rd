@@ -19,9 +19,8 @@ dispersal_from(W, tree, ancestral.area, biogeo)
 
 }
 \description{
-For the lineages that do not have the entire diversification in the region,
-the function calculates theProportional contribution of an ancestral area
-from where the dispersal to the current region comes.
+For the species present in a site, the function calculates the proportional
+contribution of ancestral areas to dispersal of lineage in the site's region.
 }
 \author{
 Arthur V Rodrigues \href{mailto:rodrigues.arthur.v@gmail.com}{rodrigues.arthur.v@gmail.com}
