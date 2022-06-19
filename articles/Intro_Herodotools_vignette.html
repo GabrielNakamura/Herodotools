@@ -70,7 +70,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to Herodotools</h1>
             
-            <h4 data-toc-skip class="date">2022-06-18</h4>
+            <h4 data-toc-skip class="date">2022-06-19</h4>
       
       
       <div class="hidden name"><code>Intro_Herodotools_vignette.Rmd</code></div>
@@ -162,8 +162,9 @@
 <div class="section level2">
 <h2 id="evoregions">Obtaining evoregions<a class="anchor" aria-label="anchor" href="#evoregions"></a>
 </h2>
-<p>Here we will use the function <code>evoregion</code>, originally described in <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492" class="external-link">Maestri and Duarte (2020)</a>, and implemented in Herodotools. This method of classification allows to perform a biogeographical regionalization based on <a href="https://doi.org/10.1111/2041-210X.12547" class="external-link">phylogenetic fuzzy weighting method</a>. Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.</p>
-<p>To calculate evoregions we need the occurrence matrix, a phylogenetic hypothesis and to define the maximum number of clusters allowed for the group being analyzed. If the user decided to not inform the maximum number of clusters, evoregion function will perform an automatic procedure based on “elbow” method to set the maximum number of clusters. The “elbow” method is implemented in package <a href="https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478" class="external-link"><code>phyloregion</code></a>.</p>
+<p>Here we will use the function <code>evoregion</code>, originally described in <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492" class="external-link">Maestri and Duarte (2020)</a>, and implemented in Herodotools package. This method of classification allows to perform a biogeographical regionalization based on a <a href="https://doi.org/10.1111/2041-210X.12547" class="external-link">phylogenetic fuzzy matrix</a> coupled with a <a href="https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94" class="external-link">Discriminant Analysis of Principal Components based on k-means non-hierarchical clustering</a>. Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.</p>
+<p>To calculate evoregions we need the occurrence matrix, a phylogenetic tree and to define the maximum number of clusters allowed for the group being analyzed. If the user decided to not inform the maximum number of clusters, evoregion function will perform an automatic procedure based on “elbow” method to set the maximum number of clusters. The “elbow” method is implemented in package <a href="https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478" class="external-link"><code>phyloregion</code></a>. It is worth note that the original proposition of evoregion method use a bootstrapt method to define the maximmun number of clusters to be used in the analysis. Here we opted to use the “elbow” method mainly due to computational speed, since this method is faster than the bootstrap-based method.</p>
+<p><strong>NOTE</strong>: The regions obtained from will present different names at each time that the analysis be performed, but the patterns will be the same. Consequently, if the user run the same code the evoregions will appear with different names.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evoregions.html">evoregions</a></span><span class="op">(</span>
   comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>,
@@ -195,6 +196,7 @@
 
 <span class="co"># Assigning the same projection to both spatial objects</span>
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">sf.evoregion</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">coastline</span><span class="op">)</span>
+
 
 <span class="co"># Colours to plot evoregions</span>
 <span class="va">col_five_hues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span>
@@ -231,7 +233,7 @@
     legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"Arial"</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
 <p><img src="Fig2_evoregion_akodon.png"><!-- --></p>
-<p><code>evoregion</code> produced five distinct regions, but not all cells have the same degree of affiliation in associated with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492" class="external-link">turnover areas</a></p>
+<p><code>evoregion</code> produced five distinct regions, but not all cells have the same degree of affiliation in associated with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492" class="external-link">turnover areas</a>, in other words, areas with multiple events of colonization by different lineages.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Selecting only axis with more than 5% of explained variance from evoregion output</span>
@@ -278,8 +280,8 @@
 <div class="section level2">
 <h2 id="mergeMacroAssemblage">Ancestral area reconstruction for Akodon species<a class="anchor" aria-label="anchor" href="#mergeMacroAssemblage"></a>
 </h2>
-<p>In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction perfomed using <a href="https://github.com/nmatzke/BioGeoBEARS" class="external-link">BioGeoBears</a>, a tool widely used in works of macroevolution</p>
-<p>First, we have to define the membership of each species regarding the evoregions.</p>
+<p>In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed using <a href="https://github.com/nmatzke/BioGeoBEARS" class="external-link">BioGeoBears</a>, a tool commonly used in macroevolution studies.</p>
+<p>First, we have to define the membership of each species regarding the evoregions. This will correspond to the current area of species.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">akodon.evoregion.data</span> <span class="op">&lt;-</span> 
@@ -331,7 +333,7 @@
 <span class="va">a.regions</span> <span class="op">&lt;-</span> <span class="va">akodon.evoregion.data</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">a.regions</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">species.names</span></code></pre></div>
-<p>The object created in the last step allows us to enter in a auxiliary function present in Herodotools to easily produce the <a href="http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html" class="external-link">Phyllip</a> file required to run the analysis of ancestral area reconstruction using BioGeoBears.</p>
+<p>The object created in the last step can be used in an auxiliary function present in Herodotools to easily produce the <a href="http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html" class="external-link">Phyllip</a> file required to run the analysis of ancestral area reconstruction using BioGeoBears.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># save phyllip file</span>
 <span class="fu"><a href="../reference/tipranges_to_BioGeoBEARS.html">tipranges_to_BioGeoBEARS</a></span><span class="op">(</span>
@@ -352,11 +354,11 @@
 <div class="section level2">
 <h2 id="modelBasedMetrics">Merging macroevolutionary models with assemblage level metrics<a class="anchor" aria-label="anchor" href="#modelBasedMetrics"></a>
 </h2>
-<p>The novelties associated with Herodotools starts from here. Since we have an occurrence data distribution, a biogeographical regionalization and the ancestral area reconstruction we can combine those three information to calculate metrics implemented in Herodotools.</p>
+<p>TheSince we have an occurrence data distribution, a biogeographical regionalization and the ancestral area reconstruction we can integrate those three information to calculate metrics that represents historical variables at any spatial scale.</p>
 <div class="section level3">
 <h3 id="age-of-assemblages">Age of assemblages<a class="anchor" aria-label="anchor" href="#age-of-assemblages"></a>
 </h3>
-<p>Let’s start by calculating the age of each cell considering the macroevolutionary dynamics of occupancy of regions during time.</p>
+<p>Let’s start by calculating the age of each cell considering the macroevolutionary dynamics of occupancy of regions during time. The age here corresponds to the mean arrival time of each species occupying a given assemblage. By arrival time we mean the most ancient ancestor from a lineage that arrived at the assemblage within a region in which the current species occur today. For the original description of this metric see <a href="https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962" class="external-link">Van Dijk et al. 2021</a></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># converting numbers to character</span>
