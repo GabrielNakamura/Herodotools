@@ -121,9 +121,11 @@ knitr::include_graphics(here::here("vignettes", "Fig1_richmap_akodon.png"))
 
 # Obtaining evoregions {#evoregions}
 
-Here we will use the function `evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools. This method of classification allows to perform a biogeographical regionalization based on [phylogenetic fuzzy weighting method](https://doi.org/10.1111/2041-210X.12547). Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.
+Here we will use the function `evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools package. This method of classification allows to perform a biogeographical regionalization based on a [phylogenetic fuzzy matrix](https://doi.org/10.1111/2041-210X.12547) coupled with a [Discriminant Analysis of Principal Components based on k-means non-hierarchical clustering](https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94). Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.
 
-To calculate evoregions we need the occurrence matrix, a phylogenetic hypothesis and to define the maximum number of clusters allowed for the group being analyzed. If the user decided to not inform the maximum number of clusters, evoregion function will perform an automatic procedure based on "elbow" method to set the maximum number of clusters. The "elbow" method is implemented in package [`phyloregion`](https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478).
+To calculate evoregions we need the occurrence matrix, a phylogenetic tree and to define the maximum number of clusters allowed for the group being analyzed. If the user decided to not inform the maximum number of clusters, evoregion function will perform an automatic procedure based on "elbow" method to set the maximum number of clusters. The "elbow" method is implemented in package [`phyloregion`](https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478). It is worth note that the original proposition of evoregion method use a bootstrapt method to define the maximmun number of clusters to be used in the analysis. Here we opted to use the "elbow" method mainly due to computational speed, since this method is faster than the bootstrap-based method.
+
+**NOTE**: The regions obtained from will present different names at each time that the analysis be performed, but the patterns will be the same. Consequently, if the user run the same code the evoregions will appear with different names.
 
 ```{r evoregion_calc, echo=TRUE, eval=FALSE}
 regions <- evoregions(
@@ -166,6 +168,7 @@ map.limits <- list(
 
 # Assigning the same projection to both spatial objects
 st_crs(sf.evoregion) <- st_crs(coastline)
+
 
 # Colours to plot evoregions
 col_five_hues <- c(
@@ -219,7 +222,7 @@ ggplot2::ggsave(plot = map_evoregion,  filename = "Fig2_evoregion_akodon.png", p
 knitr::include_graphics(here::here("vignettes", "Fig2_evoregion_akodon.png"))
 ```
 
-`evoregion` produced five distinct regions, but not all cells have the same degree of affiliation in associated with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to [turnover areas](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492)
+`evoregion` produced five distinct regions, but not all cells have the same degree of affiliation in associated with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to [turnover areas](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492), in other words, areas with multiple events of colonization by different lineages.
 
 ```{r affiliationCalc, echo=TRUE}
 
@@ -282,9 +285,9 @@ knitr::include_graphics(here::here("vignettes", "Fig3_afilliation_akodon.png"))
 
 # Ancestral area reconstruction for Akodon species {#mergeMacroAssemblage}
 
-In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction perfomed using [BioGeoBears](https://github.com/nmatzke/BioGeoBEARS), a tool widely used in works of macroevolution
+In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed using [BioGeoBears](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution studies.
 
-First, we have to define the membership of each species regarding the evoregions.
+First, we have to define the membership of each species regarding the evoregions. This will correspond to the current area of species.
 
 ```{r echo=TRUE}
 
@@ -340,7 +343,7 @@ rownames(a.regions) <- species.names
 
 ```
 
-The object created in the last step allows us to enter in a auxiliary function present in Herodotools to easily produce the [Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) file required to run the analysis of ancestral area reconstruction using BioGeoBears.
+The object created in the last step can be used in an auxiliary function present in Herodotools to easily produce the [Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) file required to run the analysis of ancestral area reconstruction using BioGeoBears.
 
 ```{r echo=TRUE}
 # save phyllip file
@@ -377,11 +380,11 @@ It is worth to note that the procedures decribed from here will work with any mo
 
 # Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
 
-The novelties associated with Herodotools starts from here. Since we have an occurrence data distribution, a biogeographical regionalization and the ancestral area reconstruction we can combine those three information to calculate metrics implemented in Herodotools.
+TheSince we have an occurrence data distribution, a biogeographical regionalization and the ancestral area reconstruction we can integrate those three information to calculate metrics that represents historical variables at any spatial scale.
 
 ## Age of assemblages
 
-Let's start by calculating the age of each cell considering the macroevolutionary dynamics of occupancy of regions during time.
+Let's start by calculating the age of each cell considering the macroevolutionary dynamics of occupancy of regions during time. The age here corresponds to the mean arrival time of each species occupying a given assemblage. By arrival time we mean the most ancient ancestor from a lineage that arrived at the assemblage within a region in which the current species occur today. For the original description of this metric see [Van Dijk et al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
 
 ```{r agecalc, echo=TRUE}
 
