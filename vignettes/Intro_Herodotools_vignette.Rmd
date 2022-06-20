@@ -187,14 +187,14 @@ Evoregions can now be mapped using the following code
 ```{r mapEvoregion, echo=TRUE}
 
 map_evoregion <- 
-evoregion.df %>% 
+  evoregion.df %>% 
   ggplot() + 
   geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
   scale_fill_manual(
     name = "", 
     labels = LETTERS[1:5],
     values = rev(col_five_hues)
-    ) +
+  ) +
   geom_sf(data = coastline) +
   geom_sf(
     data = sf.evoregion, 
@@ -202,11 +202,13 @@ evoregion.df %>%
     fill = NA, 
     size = 0.2) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("Evoregions") + 
+  ggtitle("A") + 
   theme_bw() +
   theme(
     legend.position = "bottom",
     axis.title = element_blank(),
+    axis.text = element_text(size = 5),
+    plot.subtitle = element_text(hjust = 0.5),
     legend.text = element_text(family = "Arial", color = "black", size = 8)
   )
 
@@ -408,7 +410,7 @@ age_comm <- age_arrival(W = akodon.pa.tree,
 
 ```
 
-The function `age_arrival` returns a object containing the mean age for each assemblage. The mean is calculated considering the arrival age of all species occurring in a assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is attribute a low value for those species, and another option is to attribute the age correspondig to half of the branch length connecting the ancestor to the present time.
+The function `age_arrival` returns a object containing the mean age for each assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is by represent it as a low arrival value for those species, and another option is to attribute the age corresponding to half of the branch length connecting the ancestor to the present time. Here we adopted the first option.
 
 With mean age for each assemblage we can map the ages for all assemblages
 
@@ -417,30 +419,38 @@ With mean age for each assemblage we can map the ages for all assemblages
 sites <- bind_cols(site.xy, site.region =  site.region, afi, age = age_comm$mean_age_per_assemblage)
 
 map_age <- 
-   sites %>% 
-   ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
-   scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
-     data = sf.evoregion, 
-     color = rev(col_five_hues),
-     fill = NA, 
-     size = 0.7) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("Age of assemblages for Akodon Genus") + 
-   theme_bw() +
-   labs(fill = "Mean arrival age") +
-   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+  sites %>% 
+  ggplot() + 
+  geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
+  scale_fill_carto_c(type = "quantitative", 
+                     palette = "SunsetDark",
+                     direction = 1, 
+                     limits = c(0, 3.5),  ## max percent overall
+                     breaks = seq(0, 3.5, by = .5),
+                     labels = glue::glue("{seq(0, 3.5, by = 0.5)}")) +
+  geom_sf(data = coastline, size = 0.4) +
+  geom_sf(
+    data = sf.evoregion, 
+    color = rev(col_five_hues),
+    fill = NA, 
+    size = 0.7) +
+  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggtitle("B") + 
+  theme_bw() +
+  labs(fill = "Mean age (Myr)") +
+  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-   theme(
-     legend.position = "bottom",
-     axis.title = element_blank()
-   )
+  theme(
+    legend.position = "bottom",
+    axis.title = element_blank(),
+    legend.text = element_text(size = 10), 
+    axis.text = element_text(size = 5),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
 ```
 
 ```{r saveFig4, echo=FALSE}
@@ -458,9 +468,9 @@ knitr::include_graphics(here::here("vignettes",
 
 ## Model-based diversification metrics {#phylomodelmetrics}
 
-We can also calculate measures of diversification considering the macroevolutionary dynamics. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by [Jetz et al](https://www.nature.com/articles/nature11631).
+We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestor area. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by [Reeding and Moers]() that consists in the inverse of equal-splits measure called Diversification Rate (DR).
 
-We modified the original metric to take into account only the portion of evolutionary history that are associated with the region in which the species currently occupy, this value represent the diversification that occurred due to *in situ diversification process*
+We modified the original metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy, this value represent the diversification that occurred due to *in situ diversification process*
 
 ```{r diversification, echo=TRUE}
 akodon_diversification <- 
@@ -510,30 +520,38 @@ map_diversification <-
    )
 
 map_diversification_model_based <- 
-   sites %>% 
-   ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
-   scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
-     data = sf.evoregion, 
-     color = rev(col_five_hues),
-     fill = NA, 
-     size = 0.7) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("In-situ Diversification") + 
-   theme_bw() +
-   labs(fill = "Harmonic mean in-situ diversification") +
-    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+  sites %>% 
+  ggplot() + 
+  geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
+  scale_fill_carto_c(type = "quantitative",
+                     palette = "SunsetDark", 
+                     direction = 1, 
+                     limits = c(0, 1),  ## max percent overall
+                     breaks = seq(0, 1, by = .25),
+                     labels = glue::glue("{seq(0, 1, by = 0.25)}")) +
+  geom_sf(data = coastline, size = 0.4) +
+  geom_sf(
+    data = sf.evoregion, 
+    color = rev(col_five_hues),
+    fill = NA, 
+    size = 0.7) +
+  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggtitle("C") + 
+  theme_bw() +
+  labs(fill = "In-situ diversification") +
+  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-   theme(
-     legend.position = "bottom",
-     axis.title = element_blank()
-   )
+  theme(
+    legend.position = "bottom",
+    axis.title = element_blank(),
+    legend.text = element_text(size = 10), 
+    axis.text = element_text(size = 5),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
 
 
 map_diversification_complete <- map_diversification + map_diversification_model_based
@@ -575,6 +593,7 @@ sites <- bind_cols(site.xy,
                    afi, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
+                   diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
                    dispersal.D = akodon_dispersal[,1], 
                    dispersal.A = akodon_dispersal[, 2],
                    dispersal.E = akodon_dispersal[, 3],
@@ -959,6 +978,150 @@ ggplot2::ggsave(plot = mapTransition_rate,
 
 ```{r TransitionRateFig, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
+```
+
+
+```{r figPaper, echo=FALSE, eval=FALSE}
+# This is the Figure 3 of the paper
+
+map_evoregion <- 
+  evoregion.df %>% 
+  ggplot() + 
+  geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
+  scale_fill_manual(
+    name = "", 
+    labels = LETTERS[1:5],
+    values = rev(col_five_hues)
+  ) +
+  geom_sf(data = coastline) +
+  geom_sf(
+    data = sf.evoregion, 
+    color = "#040400",
+    fill = NA, 
+    size = 0.2) +
+  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggtitle("A") + 
+  theme_bw() +
+  theme(
+    legend.position = "bottom",
+    axis.title = element_blank(),
+    axis.text = element_text(size = 5),
+    plot.subtitle = element_text(hjust = 0.5),
+    legend.text = element_text(family = "Arial", color = "black", size = 8)
+  )
+
+
+map_age <- 
+  sites %>% 
+  ggplot() + 
+  geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
+  scale_fill_carto_c(type = "quantitative", 
+                     palette = "SunsetDark",
+                     direction = 1, 
+                     limits = c(0, 3.5),  ## max percent overall
+                     breaks = seq(0, 3.5, by = .5),
+                     labels = glue::glue("{seq(0, 3.5, by = 0.5)}")) +
+  geom_sf(data = coastline, size = 0.4) +
+  geom_sf(
+    data = sf.evoregion, 
+    color = rev(col_five_hues),
+    fill = NA, 
+    size = 0.7) +
+  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggtitle("B") + 
+  theme_bw() +
+  labs(fill = "Mean age (Myr)") +
+  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                               direction = "horizontal",
+                               ticks.colour = "grey20",
+                               title.position = "top",
+                               label.position = "bottom",
+                               title.hjust = 0.5)) +
+  theme(
+    legend.position = "bottom",
+    axis.title = element_blank(),
+    legend.text = element_text(size = 10), 
+    axis.text = element_text(size = 5),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+
+
+map_diversification_model_based <- 
+  sites %>% 
+  ggplot() + 
+  geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
+  scale_fill_carto_c(type = "quantitative",
+                     palette = "SunsetDark", 
+                     direction = 1, 
+                     limits = c(0, 1),  ## max percent overall
+                     breaks = seq(0, 1, by = .25),
+                     labels = glue::glue("{seq(0, 1, by = 0.25)}")) +
+  geom_sf(data = coastline, size = 0.4) +
+  geom_sf(
+    data = sf.evoregion, 
+    color = rev(col_five_hues),
+    fill = NA, 
+    size = 0.7) +
+  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggtitle("C") + 
+  theme_bw() +
+  labs(fill = "In-situ diversification") +
+  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                               direction = "horizontal",
+                               ticks.colour = "grey20",
+                               title.position = "top",
+                               label.position = "bottom",
+                               title.hjust = 0.5)) +
+  theme(
+    legend.position = "bottom",
+    axis.title = element_blank(),
+    legend.text = element_text(size = 10), 
+    axis.text = element_text(size = 5),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+
+map_dispersal_D <- 
+  sites %>% 
+  ggplot() + 
+  geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
+  scale_fill_carto_c(
+    type = "quantitative", 
+    palette = "SunsetDark",
+    na.value = "white",
+    direction = 1, 
+    limits = c(0, 1),  ## max percent overall
+    breaks = seq(0, 1, by = .25),
+    labels = glue::glue("{seq(0, 1, by = 0.25)}")
+  ) +
+  geom_sf(data = coastline, size = 0.4) +
+  geom_sf(
+    data = sf.evoregion, 
+    color = rev(col_five_hues),
+    fill = NA, 
+    size = 0.5) +
+  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggtitle("D") + 
+  theme_bw() +
+  labs(fill = "Dispersal from D") + 
+  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                               direction = "horizontal",
+                               ticks.colour = "grey20",
+                               title.position = "top",
+                               label.position = "bottom",
+                               title.hjust = 0.5)) +
+  theme(
+    legend.position = "bottom",
+    axis.title = element_blank(),
+    legend.text = element_text(size = 10), 
+    axis.text = element_text(size = 5),
+    plot.subtitle = element_text(hjust = 0.5)   
+  )
+
+maps_complete <- map_evoregion + map_age + map_diversification_model_based + map_dispersal_D
+ggsave(filename = here::here("vignettes", "maps_historicalVar_Akodon.png"), plot = maps_complete,
+       width = 8, height = 8, 
+       dpi = 400)
+
 ```
 
 
