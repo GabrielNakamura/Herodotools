@@ -70,7 +70,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to Herodotools</h1>
             
-            <h4 data-toc-skip class="date">2022-06-19</h4>
+            <h4 data-toc-skip class="date">2022-06-20</h4>
       
       
       <div class="hidden name"><code>Intro_Herodotools_vignette.Rmd</code></div>
@@ -210,14 +210,14 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">map_evoregion</span> <span class="op">&lt;-</span> 
-<span class="va">evoregion.df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="va">evoregion.df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">site.region</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>
     name <span class="op">=</span> <span class="st">""</span>, 
     labels <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>,
     values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>
-    <span class="op">)</span> <span class="op">+</span>
+  <span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>
     data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
@@ -225,11 +225,13 @@
     fill <span class="op">=</span> <span class="cn">NA</span>, 
     size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Evoregions"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
     legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
     axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+    axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,
     legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"Arial"</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
 <p><img src="Fig2_evoregion_akodon.png"><!-- --></p>
@@ -378,44 +380,52 @@
                         tree <span class="op">=</span> <span class="va">akodon.newick</span>, 
                         ancestral.area <span class="op">=</span> <span class="va">node.area</span>, 
                         biogeo <span class="op">=</span> <span class="va">biogeo_area</span><span class="op">)</span> </code></pre></div>
-<p>The function <code>age_arrival</code> returns a object containing the mean age for each assemblage. The mean is calculated considering the arrival age of all species occurring in a assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is attribute a low value for those species, and another option is to attribute the age correspondig to half of the branch length connecting the ancestor to the present time.</p>
+<p>The function <code>age_arrival</code> returns a object containing the mean age for each assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is by represent it as a low arrival value for those species, and another option is to attribute the age corresponding to half of the branch length connecting the ancestor to the present time. Here we adopted the first option.</p>
 <p>With mean age for each assemblage we can map the ages for all assemblages</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site.xy</span>, site.region <span class="op">=</span>  <span class="va">site.region</span>, <span class="va">afi</span>, age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span><span class="op">)</span>
 
 <span class="va">map_age</span> <span class="op">&lt;-</span> 
-   <span class="va">sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">mean_age_arrival</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, palette <span class="op">=</span> <span class="st">"SunsetDark"</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>
-     data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
-     color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
-     fill <span class="op">=</span> <span class="cn">NA</span>, 
-     size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Age of assemblages for Akodon Genus"</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Mean arrival age"</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html" class="external-link">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
+  <span class="va">sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">mean_age_arrival</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, 
+                     palette <span class="op">=</span> <span class="st">"SunsetDark"</span>,
+                     direction <span class="op">=</span> <span class="fl">1</span>, 
+                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3.5</span><span class="op">)</span>,  <span class="co">## max percent overall</span>
+                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3.5</span>, by <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span>,
+                     labels <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"{seq(0, 3.5, by = 0.5)}"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
+    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
+    fill <span class="op">=</span> <span class="cn">NA</span>, 
+    size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"B"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Mean age (Myr)"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html" class="external-link">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
                                direction <span class="op">=</span> <span class="st">"horizontal"</span>,
                                ticks.colour <span class="op">=</span> <span class="st">"grey20"</span>,
                                title.position <span class="op">=</span> <span class="st">"top"</span>,
                                label.position <span class="op">=</span> <span class="st">"bottom"</span>,
                                title.hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
-     legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
-     axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>
-   <span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
+    legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
+    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+    legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>, 
+    axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+  <span class="op">)</span></code></pre></div>
 <p><img src="Fig4_age_akodon.png"><!-- --></p>
 </div>
 <div class="section level3">
 <h3 id="phylomodelmetrics">Model-based diversification metrics<a class="anchor" aria-label="anchor" href="#phylomodelmetrics"></a>
 </h3>
-<p>We can also calculate measures of diversification considering the macroevolutionary dynamics. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by <a href="https://www.nature.com/articles/nature11631" class="external-link">Jetz et al</a>.</p>
-<p>We modified the original metric to take into account only the portion of evolutionary history that are associated with the region in which the species currently occupy, this value represent the diversification that occurred due to <em>in situ diversification process</em></p>
+<p>We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestor area. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by <a href="">Reeding and Moers</a> that consists in the inverse of equal-splits measure called Diversification Rate (DR).</p>
+<p>We modified the original metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy, this value represent the diversification that occurred due to <em>in situ diversification process</em></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">akodon_diversification</span> <span class="op">&lt;-</span> 
 <span class="fu"><a href="../reference/db_diversification.html">db_diversification</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,
@@ -460,30 +470,38 @@
    <span class="op">)</span>
 
 <span class="va">map_diversification_model_based</span> <span class="op">&lt;-</span> 
-   <span class="va">sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">diversification_model_based</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, palette <span class="op">=</span> <span class="st">"SunsetDark"</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>
-     data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
-     color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
-     fill <span class="op">=</span> <span class="cn">NA</span>, 
-     size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"In-situ Diversification"</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Harmonic mean in-situ diversification"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html" class="external-link">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
+  <span class="va">sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">diversification_model_based</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>,
+                     palette <span class="op">=</span> <span class="st">"SunsetDark"</span>, 
+                     direction <span class="op">=</span> <span class="fl">1</span>, 
+                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,  <span class="co">## max percent overall</span>
+                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">.25</span><span class="op">)</span>,
+                     labels <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"{seq(0, 1, by = 0.25)}"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
+    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
+    fill <span class="op">=</span> <span class="cn">NA</span>, 
+    size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"In-situ diversification"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html" class="external-link">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
                                direction <span class="op">=</span> <span class="st">"horizontal"</span>,
                                ticks.colour <span class="op">=</span> <span class="st">"grey20"</span>,
                                title.position <span class="op">=</span> <span class="st">"top"</span>,
                                label.position <span class="op">=</span> <span class="st">"bottom"</span>,
                                title.hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
-     legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
-     axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>
-   <span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
+    legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
+    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+    legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>, 
+    axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+  <span class="op">)</span>
 
 
 <span class="va">map_diversification_complete</span> <span class="op">&lt;-</span> <span class="va">map_diversification</span> <span class="op">+</span> <span class="va">map_diversification_model_based</span></code></pre></div>
@@ -509,6 +527,7 @@
                    <span class="va">afi</span>, 
                    age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,
                    diversification <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">Jetz_harmonic_mean_site</span>,
+                   diversification_model_based <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">model_based_Jetz_harmonic_mean_site</span>,
                    dispersal.D <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, 
                    dispersal.A <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,
                    dispersal.E <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>,
