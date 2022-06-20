@@ -69,12 +69,12 @@
 
       
 
-      </header><script src="Intro_Herodotools_vignette_files/header-attrs-2.14.1/header-attrs.js"></script><div class="row">
+      </header><script src="Intro_Herodotools_vignette_files/header-attrs-2.14.3/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to Herodotools</h1>
             
-            <h4 class="date">2022-06-18</h4>
+            <h4 class="date">2022-06-20</h4>
       
       
       <div class="hidden name"><code>Intro_Herodotools_vignette.Rmd</code></div>
@@ -183,18 +183,29 @@ tree are matching</p>
 <a href="#evoregions" class="anchor"></a>Obtaining evoregions</h1>
 <p>Here we will use the function <code>evoregion</code>, originally
 described in <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492">Maestri
-and Duarte (2020)</a>, and implemented in Herodotools. This method of
-classification allows to perform a biogeographical regionalization based
-on <a href="https://doi.org/10.1111/2041-210X.12547">phylogenetic fuzzy
-weighting method</a>. Evoregions can be viewed as areas that correspond
-to centers of independent diversification of lineages, reflecting the
+and Duarte (2020)</a>, and implemented in Herodotools package. This
+method of classification allows to perform a biogeographical
+regionalization based on a <a href="https://doi.org/10.1111/2041-210X.12547">phylogenetic fuzzy
+matrix</a> coupled with a <a href="https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94">Discriminant
+Analysis of Principal Components based on k-means non-hierarchical
+clustering</a>. Evoregions can be viewed as areas that correspond to
+centers of independent diversification of lineages, reflecting the
 historical radiation of single clades.</p>
 <p>To calculate evoregions we need the occurrence matrix, a phylogenetic
-hypothesis and to define the maximum number of clusters allowed for the
-group being analyzed. If the user decided to not inform the maximum
-number of clusters, evoregion function will perform an automatic
-procedure based on “elbow” method to set the maximum number of clusters.
-The “elbow” method is implemented in package <a href="https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478"><code>phyloregion</code></a>.</p>
+tree and to define the maximum number of clusters allowed for the group
+being analyzed. If the user decided to not inform the maximum number of
+clusters, evoregion function will perform an automatic procedure based
+on “elbow” method to set the maximum number of clusters. The “elbow”
+method is implemented in package <a href="https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478"><code>phyloregion</code></a>.
+It is worth note that the original proposition of evoregion method use a
+bootstrapt method to define the maximmun number of clusters to be used
+in the analysis. Here we opted to use the “elbow” method mainly due to
+computational speed, since this method is faster than the
+bootstrap-based method.</p>
+<p><strong>NOTE</strong>: The regions obtained from will present
+different names at each time that the analysis be performed, but the
+patterns will be the same. Consequently, if the user run the same code
+the evoregions will appear with different names.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evoregions.html">evoregions</a></span><span class="op">(</span>
   comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>,
@@ -229,6 +240,7 @@ code:</p>
 <span class="co"># Assigning the same projection to both spatial objects</span>
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">sf.evoregion</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">coastline</span><span class="op">)</span>
 
+
 <span class="co"># Colours to plot evoregions</span>
 <span class="va">col_five_hues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html">c</a></span><span class="op">(</span>
   <span class="st">"#3d291a"</span>,
@@ -241,14 +253,14 @@ code:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">map_evoregion</span> <span class="op">&lt;-</span> 
-<span class="va">evoregion.df</span> <span class="op">%&gt;%</span> 
+  <span class="va">evoregion.df</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">site.region</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span>
     name <span class="op">=</span> <span class="st">""</span>, 
     labels <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>,
     values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>
-    <span class="op">)</span> <span class="op">+</span>
+  <span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>
     data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
@@ -256,11 +268,13 @@ code:</p>
     fill <span class="op">=</span> <span class="cn">NA</span>, 
     size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Evoregions"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>
     legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
     axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+    axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,
     legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"Arial"</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
 <p><img src="Fig2_evoregion_akodon.png" width="747"></p>
@@ -270,7 +284,8 @@ in which it was classified. Cells with high affiliation indicates
 assemblages that are more similar to all the other cells presented in
 the region, on the other hand assemblages with low values of affiliation
 correspond to <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492">turnover
-areas</a></p>
+areas</a>, in other words, areas with multiple events of colonization by
+different lineages.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Selecting only axis with more than 5% of explained variance from evoregion output</span>
@@ -325,10 +340,10 @@ high phylogenetic turnover.</p>
 comes from macroevolutionary analysis, particularly analysis of
 ancestral state reconstruction, to understand the role of
 diversification and historical dispersal at assemblage level. For this
-we will use an ancestral area reconstruction perfomed using <a href="https://github.com/nmatzke/BioGeoBEARS">BioGeoBears</a>, a tool
-widely used in works of macroevolution</p>
+we will use an ancestral area reconstruction performed using <a href="https://github.com/nmatzke/BioGeoBEARS">BioGeoBears</a>, a tool
+commonly used in macroevolution studies.</p>
 <p>First, we have to define the membership of each species regarding the
-evoregions.</p>
+evoregions. This will correspond to the current area of species.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">akodon.evoregion.data</span> <span class="op">&lt;-</span> 
@@ -380,7 +395,7 @@ evoregions.</p>
 <span class="va">a.regions</span> <span class="op">&lt;-</span> <span class="va">akodon.evoregion.data</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">a.regions</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">species.names</span></code></pre></div>
-<p>The object created in the last step allows us to enter in a auxiliary
+<p>The object created in the last step can be used in an auxiliary
 function present in Herodotools to easily produce the <a href="http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html">Phyllip</a>
 file required to run the analysis of ancestral area reconstruction using
 BioGeoBears.</p>
@@ -413,15 +428,21 @@ model</a>.</p>
 <div id="modelBasedMetrics" class="section level1">
 <h1 class="hasAnchor">
 <a href="#modelBasedMetrics" class="anchor"></a>Merging macroevolutionary models with assemblage level metrics</h1>
-<p>The novelties associated with Herodotools starts from here. Since we
-have an occurrence data distribution, a biogeographical regionalization
-and the ancestral area reconstruction we can combine those three
-information to calculate metrics implemented in Herodotools.</p>
+<p>TheSince we have an occurrence data distribution, a biogeographical
+regionalization and the ancestral area reconstruction we can integrate
+those three information to calculate metrics that represents historical
+variables at any spatial scale.</p>
 <div id="age-of-assemblages" class="section level2">
 <h2 class="hasAnchor">
 <a href="#age-of-assemblages" class="anchor"></a>Age of assemblages</h2>
 <p>Let’s start by calculating the age of each cell considering the
-macroevolutionary dynamics of occupancy of regions during time.</p>
+macroevolutionary dynamics of occupancy of regions during time. The age
+here corresponds to the mean arrival time of each species occupying a
+given assemblage. By arrival time we mean the most ancient ancestor from
+a lineage that arrived at the assemblage within a region in which the
+current species occur today. For the original description of this metric
+see <a href="https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962">Van
+Dijk et al. 2021</a></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># converting numbers to character</span>
@@ -442,13 +463,12 @@ macroevolutionary dynamics of occupancy of regions during time.</p>
                         ancestral.area <span class="op">=</span> <span class="va">node.area</span>, 
                         biogeo <span class="op">=</span> <span class="va">biogeo_area</span><span class="op">)</span> </code></pre></div>
 <p>The function <code>age_arrival</code> returns a object containing the
-mean age for each assemblage. The mean is calculated considering the
-arrival age of all species occurring in a assemblage. Species in which
-the transition to the current region occurred between the last ancestor
-and the present can be dealt in two ways: the default is attribute a low
-value for those species, and another option is to attribute the age
-correspondig to half of the branch length connecting the ancestor to the
-present time.</p>
+mean age for each assemblage. Species in which the transition to the
+current region occurred between the last ancestor and the present can be
+dealt in two ways: the default is by represent it as a low arrival value
+for those species, and another option is to attribute the age
+corresponding to half of the branch length connecting the ancestor to
+the present time. Here we adopted the first option.</p>
 <p>With mean age for each assemblage we can map the ages for all
 assemblages</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -456,42 +476,52 @@ assemblages</p>
 <span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_cols</a></span><span class="op">(</span><span class="va">site.xy</span>, site.region <span class="op">=</span>  <span class="va">site.region</span>, <span class="va">afi</span>, age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span><span class="op">)</span>
 
 <span class="va">map_age</span> <span class="op">&lt;-</span> 
-   <span class="va">sites</span> <span class="op">%&gt;%</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">mean_age_arrival</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, palette <span class="op">=</span> <span class="st">"SunsetDark"</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>
-     data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
-     color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
-     fill <span class="op">=</span> <span class="cn">NA</span>, 
-     size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Age of assemblages for Akodon Genus"</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Mean arrival age"</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
+  <span class="va">sites</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">mean_age_arrival</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, 
+                     palette <span class="op">=</span> <span class="st">"SunsetDark"</span>,
+                     direction <span class="op">=</span> <span class="fl">1</span>, 
+                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3.5</span><span class="op">)</span>,  <span class="co">## max percent overall</span>
+                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3.5</span>, by <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span>,
+                     labels <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"{seq(0, 3.5, by = 0.5)}"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
+    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
+    fill <span class="op">=</span> <span class="cn">NA</span>, 
+    size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"B"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Mean age (Myr)"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
                                direction <span class="op">=</span> <span class="st">"horizontal"</span>,
                                ticks.colour <span class="op">=</span> <span class="st">"grey20"</span>,
                                title.position <span class="op">=</span> <span class="st">"top"</span>,
                                label.position <span class="op">=</span> <span class="st">"bottom"</span>,
                                title.hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>
-     legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
-     axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>
-   <span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>
+    legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
+    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+    legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>, 
+    axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+  <span class="op">)</span></code></pre></div>
 <p><img src="Fig4_age_akodon.png" width="747"></p>
 </div>
 <div id="phylomodelmetrics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#phylomodelmetrics" class="anchor"></a>Model-based diversification metrics</h2>
 <p>We can also calculate measures of diversification considering the
-macroevolutionary dynamics. The new measures allows to decompose the
-effects of two macroevolutionary process: in situ diversification and
-historical dispersal. Here we will illustrate this by calculating a
-common tip-based diversification measure propposed by <a href="https://www.nature.com/articles/nature11631">Jetz et al</a>.</p>
+macroevolutionary dynamics of ancestor area. The new measures allows to
+decompose the effects of two macroevolutionary process: in situ
+diversification and historical dispersal. Here we will illustrate this
+by calculating a common tip-based diversification measure propposed by
+<a href="">Reeding and Moers</a> that consists in the inverse of
+equal-splits measure called Diversification Rate (DR).</p>
 <p>We modified the original metric to take into account only the portion
-of evolutionary history that are associated with the region in which the
+of evolutionary history that is associated with the region in which the
 species currently occupy, this value represent the diversification that
 occurred due to <em>in situ diversification process</em></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -543,30 +573,38 @@ diversification in Akodon assemblages.</p>
    <span class="op">)</span>
 
 <span class="va">map_diversification_model_based</span> <span class="op">&lt;-</span> 
-   <span class="va">sites</span> <span class="op">%&gt;%</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">diversification_model_based</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, palette <span class="op">=</span> <span class="st">"SunsetDark"</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>
-     data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
-     color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
-     fill <span class="op">=</span> <span class="cn">NA</span>, 
-     size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"In-situ Diversification"</span><span class="op">)</span> <span class="op">+</span> 
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Harmonic mean in-situ diversification"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
+  <span class="va">sites</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">diversification_model_based</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>,
+                     palette <span class="op">=</span> <span class="st">"SunsetDark"</span>, 
+                     direction <span class="op">=</span> <span class="fl">1</span>, 
+                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,  <span class="co">## max percent overall</span>
+                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">.25</span><span class="op">)</span>,
+                     labels <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"{seq(0, 1, by = 0.25)}"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">sf.evoregion</span>, 
+    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/flip.html">rev</a></span><span class="op">(</span><span class="va">col_five_hues</span><span class="op">)</span>,
+    fill <span class="op">=</span> <span class="cn">NA</span>, 
+    size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map.limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"In-situ diversification"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  
                                direction <span class="op">=</span> <span class="st">"horizontal"</span>,
                                ticks.colour <span class="op">=</span> <span class="st">"grey20"</span>,
                                title.position <span class="op">=</span> <span class="st">"top"</span>,
                                label.position <span class="op">=</span> <span class="st">"bottom"</span>,
                                title.hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>
-     legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
-     axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>
-   <span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>
+    legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
+    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+    legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>, 
+    axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+  <span class="op">)</span>
 
 
 <span class="va">map_diversification_complete</span> <span class="op">&lt;-</span> <span class="va">map_diversification</span> <span class="op">+</span> <span class="va">map_diversification_model_based</span></code></pre></div>
@@ -602,6 +640,7 @@ regions.</p>
                    <span class="va">afi</span>, 
                    age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,
                    diversification <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">Jetz_harmonic_mean_site</span>,
+                   diversification_model_based <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">model_based_Jetz_harmonic_mean_site</span>,
                    dispersal.D <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, 
                    dispersal.A <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,
                    dispersal.E <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>,
@@ -794,26 +833,27 @@ the effects of in situ diversification and dispersal</p>
 <div id="tip-based-metrics-of-trait-evolution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#tip-based-metrics-of-trait-evolution" class="anchor"></a>Tip-based metrics of trait evolution</h2>
-<p>Here we will show how to implement the three tip-based metrics
-idealized by <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476">Luza
+<p>Here we will show how to implement three tip-based metrics proposed
+by <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476">Luza
 et al. (2021)</a>. Note that these tip-based metrics were estimated
 using the stochastic mapping of discrete/categorical traits (diet in the
-original publication, but can be extended to other traits as we will
-show here). The three tip-based metrics are <em>Transition rates</em>,
+original publication), but can be extended to other traits as we will
+show here. The three tip-based metrics are <em>Transition rates</em>,
 <em>Stasis time</em>, and <em>Last transition time</em>, and are
-implemented in the function <code>tip_based_trait_evo</code>. Transition
-rates indicate how many times the ancestral character has changed over
-time. Stasis time indicates the maximum branch length (time interval)
-which the current tip-character was maintained across the whole
-phylogeny. Finally, last transition time is the sum of branch lengths
-from the tip to the prior/previous node with a reconstructed character
-equal to current tip-character. As in the <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476">original
+implemented in the function <code>tip_based_trait_evo</code>.
+<em>Transition rates</em> indicate how many times the ancestral
+character has changed over time. <em>Stasis time</em> indicates the
+maximum branch length (time interval) which the current tip-character
+was maintained across the whole phylogeny. Finally, <em>last transition
+time</em> is the sum of branch lengths from the tip to the
+prior/previous node with a reconstructed character equal to current
+tip-character. As in the <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476">original
 publication</a>, we will use the stochastic character mapping on
 discrete trait data. This time, however, we will reconstruct the species
-foraging strata (Elton Traits’ database, Wilman et al. 2014) rather than
-diet. We will reconstruct the foraging strata for 214 sigmodontine
-rodent species with trait and phylogenetic data (consensus phylogeny of
-Upham et al. 2019).</p>
+foraging strata (Elton Traits’ database, Wilman et al. 2014). We will
+reconstruct the foraging strata for 214 sigmodontine rodent species with
+trait and phylogenetic data (consensus phylogeny of <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000494">Upham
+et al. 2019</a>).</p>
 <p>First we will load trait and phylogenetic data we need to run the
 function <code>tip_based_trait_evo</code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -847,10 +887,10 @@ function <code>tip_based_trait_evo</code>.</p>
                                    trait <span class="op">=</span><span class="va">trait</span> , <span class="co"># need to be named to work</span>
                                    nsim <span class="op">=</span> <span class="fl">50</span>,
                                    method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html">c</a></span><span class="op">(</span><span class="st">"transition_rates"</span>, <span class="st">"last_transition_time"</span>, <span class="st">"stasis_time"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Now that we have in hand the estimates of the three tip-based metrics
-for 214 rodent species, we can summarize the tip-based metrics at the
+<p>Now we have in hand the estimates of the three tip-based metrics for
+214 rodent species. We can summarize the tip-based metrics at the
 ecological assemblage scale. First we will load assemblage &amp;
-geographic data comprising 1770 grid cells spread into the
+geographic data comprising 1770 grid cells located at the
 Neotropics.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -887,8 +927,8 @@ each assemblage.</p>
   <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">mean</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span></code></pre></div>
-<p>We will represent in space the variation in the tip-based metrics
-across rodent assemblages. It seems that, in general, assemblages of the
+<p>We will represent in space the variation in the tip-based metrics for
+rodent assemblages. It seems that, in general, assemblages of the
 southern, western and northeastern Neotropics have species with higher
 Transition Rates in foraging strata than communities from elsewhere
 (i.e., they have many species that often changed their foraging strata
@@ -897,14 +937,13 @@ assemblages: one from northeastern Neotropics, and another in central
 Amazonia. The first group in particular also showed high Transition
 Rates. Taken together, these results indicate that, despite the frequent
 changes in foraging strata, the species of northeastern assemblages
-retained during more time, in average, a given state of foraging strata
-than the species found elsewhere. Finally, the Last Transition Time
-metric shows that the transitions leading to the present species
-foraging strata were older in the i) north of the Amazonia and ii)
-central Mexico than elsewhere. These results are potentially reflecting
-i) the place of arrival of ancestral sigmodontine rodents in south
-America, and ii) the occurrence of several species closely related to
-basal lineages of sigmodontine rodents.</p>
+retained their phenotipic state during more time than the species found
+elsewhere. Finally, the Last Transition Time metric shows that the
+transitions leading to the present species foraging strata were older in
+the i) north of the Amazonia and ii) central Mexico. These results are
+potentially reflecting i) the location of arrival of ancestral
+sigmodontine rodents in south America, and ii) the occurrence of several
+species closely related to basal lineages.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># prepare data to map</span>

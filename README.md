@@ -6,7 +6,6 @@
 # Herodotools
 
 <!-- [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/FishPhyloMaker)](https://cran.r-project.org/package=FishPhyloMaker) -->
-
 <!-- [![DOI](https://zenodo.org/badge/336899540.svg)](https://zenodo.org/badge/latestdoi/336899540) -->
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://choosealicense.com/licenses/mit/)
