@@ -809,7 +809,7 @@ ggplot2::ggsave(plot = map_PEdb,
 knitr::include_graphics(here::here("vignettes", "Fig6_map_PEdb.png"))
 ```
 
-## Tip-based metrics of trait evolution
+# Tip-based metrics of trait evolution
 
 Here we will show how to implement three tip-based metrics proposed by [Luza et al. (2021)](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476). Note that these tip-based metrics were estimated using the stochastic mapping of discrete/categorical traits (diet in the original publication), but can be extended to other traits as we will show here. The three tip-based metrics are *Transition rates*, *Stasis time*, and *Last transition time*, and are implemented in the function `tip_based_trait_evo`. *Transition rates* indicate how many times the ancestral character has changed over time. *Stasis time* indicates the maximum branch length (time interval) which the current tip-character was maintained across the whole phylogeny. Finally, *last transition time* is the sum of branch lengths from the tip to the prior/previous node with a reconstructed character equal to current tip-character. As in the [original publication](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476), we will use the stochastic character mapping on discrete trait data. This time, however, we will reconstruct the species foraging strata (Elton Traits' database, Wilman et al. 2014). We will reconstruct the foraging strata for 214 sigmodontine rodent species with trait and phylogenetic data (consensus phylogeny of [Upham et al. 2019](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000494)).
 
