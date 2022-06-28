@@ -416,7 +416,7 @@ With mean age for each assemblage we can map the ages for all assemblages
 
 ```{r ageMap, echo=TRUE}
 
-sites <- bind_cols(site.xy, site.region =  site.region, afi, age = age_comm$mean_age_per_assemblage)
+sites <- bind_cols(site.xy, site.region =  site.region, age = age_comm$mean_age_per_assemblage)
 
 map_age <- 
   sites %>% 
@@ -487,8 +487,7 @@ The result of `db_diversification` function is composed by a data-frame containi
 
 ```{r mapdiversification, echo=TRUE}
 sites <- bind_cols(site.xy,
-                   site.region =  site.region, 
-                   afi, 
+                   site.region =  site.region,
                    age = age_comm$mean_age_per_assemblage,
                    diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site)
@@ -590,7 +589,6 @@ We also can map the contribution of dispersal for all regions. Note that the are
 
 sites <- bind_cols(site.xy,
                    site.region =  site.region, 
-                   afi, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
                    diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
@@ -734,7 +732,6 @@ As the other metrics we can plot PDdb and PEdb in a map
 ```{r map_community_metrics, echo=TRUE}
 sites <- bind_cols(site.xy,
                    site.region =  site.region, 
-                   afi, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
                    PE = akodon_db_metrics$PE, 
@@ -984,6 +981,17 @@ knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
 ```{r figPaper, echo=FALSE, eval=FALSE}
 # This is the Figure 3 of the paper
 
+sites <- bind_cols(site.xy,
+                   site.region =  site.region, 
+                   age = age_comm$mean_age_per_assemblage,
+                   diversification = akodon_diversification$Jetz_harmonic_mean_site,
+                   diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
+                   PE = akodon_db_metrics$PE, 
+                   PEdb = akodon_db_metrics$Db_PE,
+                   PD = akodon_db_metrics$PD,
+                   PDdb = akodon_db_metrics$PDlocal, 
+                   dispersal.D = akodon_dispersal[,1])
+
 map_evoregion <- 
   evoregion.df %>% 
   ggplot() + 
@@ -1000,7 +1008,7 @@ map_evoregion <-
     fill = NA, 
     size = 0.2) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("A") + 
+  ggtitle("(a)") + 
   theme_bw() +
   theme(
     legend.position = "bottom",
@@ -1028,7 +1036,7 @@ map_age <-
     fill = NA, 
     size = 0.7) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("B") + 
+  ggtitle("(b)") + 
   theme_bw() +
   labs(fill = "Mean age (Myr)") +
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
@@ -1063,7 +1071,7 @@ map_diversification_model_based <-
     fill = NA, 
     size = 0.7) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("C") + 
+  ggtitle("(c)") + 
   theme_bw() +
   labs(fill = "In-situ diversification") +
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
@@ -1100,7 +1108,7 @@ map_dispersal_D <-
     fill = NA, 
     size = 0.5) +
   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("D") + 
+  ggtitle("(d)") + 
   theme_bw() +
   labs(fill = "Dispersal from D") + 
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
