@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-<img src="man/figures/logo_herodotools.png" alt="package logo with a map and a phylogeny inside" width="300px" align="right"/>
+<img src="man/figures/logo_herodotools.png" alt="package logo with a map and a phylogeny inside" width="250px" align="right"/>
 
 # Herodotools
 

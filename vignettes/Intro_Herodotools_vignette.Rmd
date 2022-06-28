@@ -973,10 +973,6 @@ ggplot2::ggsave(plot = mapTransition_rate,
                 dpi = "retina")
 ```
 
-```{r TransitionRateFig, echo=FALSE, eval=TRUE}
-knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
-```
-
 
 ```{r figPaper, echo=FALSE, eval=FALSE}
 # This is the Figure 3 of the paper
@@ -1128,10 +1124,12 @@ map_dispersal_D <-
 maps_complete <- map_evoregion + map_age + map_diversification_model_based + map_dispersal_D
 ggsave(filename = here::here("vignettes", "maps_historicalVar_Akodon.png"), plot = maps_complete,
        width = 8, height = 8, 
-       dpi = 400)
+       dpi = 300)
 
 ```
-
+```{r TransitionRateFig, echo=FALSE, eval=TRUE}
+knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
+```
 
 # References
 
