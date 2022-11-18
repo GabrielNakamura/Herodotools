@@ -1,16 +1,36 @@
-#' Affiliation values for assemblages according to phylogenetic turnover 
+#' Affiliation of assemblages based on phylogenetic turnover 
 #'
+#' @details The function calculates the degree of affiliation of each community to the region (or evoregion), in which
+#'     that community was classified. If used coupled with a analysis of Principal Coordinates of Phylogenetic Structure (PCPS)
+#'     to represent the phylogenetic distances the analysis output of the analysis will represent the degree of membership
+#'     of assemblages to each evoregion, as described in Maestri and Duarte 2020.
+#' 
 #' @param phylo.comp.dist A distance matrix indicating the phylogenetic (or taxonomic/functional) distance composition
 #'     among assemblages
-#' @param groups A character vector indicating the group of each assemblage
+#' @param groups A character vector indicating the group of each assemblage. This object can be obtained with 
+#'     \code{\link{evoregions}} 
 #'
 #' @return A list with two matrix, one containing affiliation values and the group in which each cell 
 #'     is classified and the other containing cell coordinates
+#'
+#' @references Maestri, R and Duarte L.d.S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions.
+#'     Methods in Ecology and Evolution, 11, 1652-1662.
 #'
 #' @export
 #' 
 #' @examples 
 #' 
+#' # First run the classification
+#' data(akodon.pa.tree) # occurrence data 
+#' data(akodon.newick) # phylogenetic tree
+#' regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
+#' site.region <- regions$Cluster_Evoregions # classification of each community in regions
+#' 
+#' # Now use the phylogenetic composition (PCPS) and classification obtained from evoregion to calculate the membership
+#' axis_sel <- which(regions$PCPS$prop_explainded >= regions$PCPS$tresh_dist) # selecting only significant PCPS axis
+#' PCPS_thresh <- regions$PCPS$vectors[, axis_sel] # only significant axis
+#' dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean") # distance matrix based on phylogenetic structure
+#' affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,groups = regions$Cluster_Evoregions) # affiliation
 #' 
 affiliation_evoreg <- function(phylo.comp.dist, groups){
   

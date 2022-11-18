@@ -49,6 +49,7 @@
 #' data(akodon.pa.tree) # occurrence data 
 #' data(akodon.newick) # phylogenetic tree
 #' regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
+#' site.region <- regions$Cluster_Evoregions # classification of each community in regions
 #' 
 #' @export
 #'

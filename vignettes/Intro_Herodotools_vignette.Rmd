@@ -130,8 +130,8 @@ To calculate evoregions we need the occurrence matrix, a phylogenetic tree and t
 ```{r evoregion_calc, echo=TRUE, eval=FALSE}
 regions <- evoregions(
   comm = akodon.pa.tree,
-  phy = akodon.newick, 
-  max.n.clust = 10)
+  phy = akodon.newick
+  )
 
 site.region <- regions$Cluster_Evoregions
 
