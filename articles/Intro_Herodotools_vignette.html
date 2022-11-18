@@ -168,8 +168,8 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evoregions.html">evoregions</a></span><span class="op">(</span></span>
 <span>  comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
-<span>  phy <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
-<span>  max.n.clust <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span>  phy <span class="op">=</span> <span class="va">akodon.newick</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">site.region</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">$</span><span class="va">Cluster_Evoregions</span></span></code></pre></div>
 <p>We have to transform the evoregion results to spatial object in order to visualize in a map the regions. This can be done using the following code:</p>
