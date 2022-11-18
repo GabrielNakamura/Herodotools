@@ -1,5 +1,8 @@
 #' Get node ranges from BioGeoBEARS biome reconstruction model
 #'
+#' @description This is an auxiliary function that can be with a ancestral area reconstruction
+#'    from BioGeoBEARS to obtain a data frame containing the ancestral area of occurrence (biome range)
+#'    for all ancestors (nodes) 
 #' @param BioGeoBEARS.data An object containing the result of BioGeoBEARS reconstruction
 #' @param phyllip.file Phylip file, the same used in BioGeoBEARS package
 #' @param tree A phylogenetic tree
@@ -10,6 +13,9 @@
 #' @export
 #'
 #' @examples
+#' data(resDEC) # ancestral area reconstruction from biogeobears
+#' phyllip <- here::here("inst", "extdata", "geo_area_akodon.data") # phyllip file 
+#' node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = phyllip, akodon.newick,  max.range.size = 4) # obtaining area for each node
 #' 
 get_node_range_BioGeoBEARS <-
   function(BioGeoBEARS.data,

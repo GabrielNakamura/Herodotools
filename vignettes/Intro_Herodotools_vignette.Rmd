@@ -358,7 +358,7 @@ tipranges_to_BioGeoBEARS(
 
 ```
 
-Since it take some time to run BioGeoBears (something about 15 minutes), and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. However if you want to see the code we used to run the BioGeoBears models, here is the code `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`. 
+Since it take some time to run BioGeoBears (about 15 minutes in a 4GB processor machine), and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. However if you want to see the code we used to run the BioGeoBears models, here is the code `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`. 
 
 Read the file containing the results of DEC model reconstruction: 
 
@@ -378,11 +378,11 @@ library(BioGeoBEARS)
 load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
 
 ```
-It is worth to note that the procedures decribed from here will work with any model of ancestral area reconstruction, but for sake of simplicity we decided to use just the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html). 
+It is worth to note that the procedures decribed from here will work with any model of ancestral area reconstruction, but for sake of simplicity we decided to use only the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html). 
 
 # Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
 
-TheSince we have an occurrence data distribution, a biogeographical regionalization and the ancestral area reconstruction we can integrate those three information to calculate metrics that represents historical variables at any spatial scale.
+Once we have an occurrence data distribution, a biogeographical regionalization (obtained with `evoregions` function) and the ancestral area reconstruction we can integrate those three information to calculate metrics that represents historical variables at any spatial scale.
 
 ## Age of assemblages
 

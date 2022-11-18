@@ -8,7 +8,7 @@
 #'   Please provide the tip names as `row.names`. See example. 
 #' @param filename filename to store the data. By default it is 
 #'   `"lagrange_area_data_file.data"`. 
-#' @param areanames the names of the areas. By defaut the areanames are generated
+#' @param areanames the names of the areas. By defaut the area names are generated
 #'  as sequencial upper case letters. 
 #'  
 #' @importFrom utils write.table

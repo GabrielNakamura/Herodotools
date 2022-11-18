@@ -1,5 +1,9 @@
 #' Tip-based metrics of trait evolution
 #' 
+#' @details This function calculates three metrics that express the macroevolutionary dynamic of traits. They are 
+#'     Transition rates, last transition time and stasis time. These functions represents, respectively, the transition rate
+#'     
+#' 
 #' @param tree A phylogenetic tree as an object of class "phylo"
 #' @param trait A named vector containing the tip states for a discretely valued character. The names must match the tip labels of the tree.
 #' @param nsim Number of simulations to stochastic character mapping.
@@ -9,9 +13,17 @@
 #' @author André Luza and Vanderlei Debastiani
 #' 
 #' @importFrom stats setNames
+#' 
+#' @example 
+#' 
 #' @export
+#' 
 
-tip_based_trait_evo <- function(tree, trait, nsim = 1, method = c("transition_rates", "last_transition_time", "stasis_time")) {
+tip_based_trait_evo <- function(tree,
+                                trait, 
+                                nsim = 1,
+                                method = c("transition_rates", "last_transition_time", "stasis_time")
+                                ) {
  
   pkg_req <- c("daee")
   
