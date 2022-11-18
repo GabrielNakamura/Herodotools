@@ -136,6 +136,7 @@ regions <- evoregions(
 site.region <- regions$Cluster_Evoregions
 
 ```
+
 ```{r save_evoregion_calc, echo=FALSE}
 
 load(file = "../inst/extdata/regions_results.RData")
