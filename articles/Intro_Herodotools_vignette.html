@@ -344,19 +344,19 @@
 <span>  filename <span class="op">=</span> <span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,</span>
 <span>  areanames <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p>Since it take some time to run BioGeoBears (something about 15 minutes), and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. However if you want to see the code we used to run the BioGeoBears models, here is the code <code>file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))</code>.</p>
+<p>Since it take some time to run BioGeoBears (about 15 minutes in a 4GB processor machine), and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. However if you want to see the code we used to run the BioGeoBears models, here is the code <code>file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))</code>.</p>
 <p>Read the file containing the results of DEC model reconstruction:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://phylo.wikidot.com/biogeobears" class="external-link">BioGeoBEARS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ancestral reconstruction</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"resDEC_akodon.RData"</span>, package <span class="op">=</span> <span class="st">"Herodotools"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<p>It is worth to note that the procedures decribed from here will work with any model of ancestral area reconstruction, but for sake of simplicity we decided to use just the <a href="https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html" class="external-link">DEC model</a>.</p>
+<p>It is worth to note that the procedures decribed from here will work with any model of ancestral area reconstruction, but for sake of simplicity we decided to use only the <a href="https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html" class="external-link">DEC model</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="modelBasedMetrics">Merging macroevolutionary models with assemblage level metrics<a class="anchor" aria-label="anchor" href="#modelBasedMetrics"></a>
 </h2>
-<p>TheSince we have an occurrence data distribution, a biogeographical regionalization and the ancestral area reconstruction we can integrate those three information to calculate metrics that represents historical variables at any spatial scale.</p>
+<p>Once we have an occurrence data distribution, a biogeographical regionalization (obtained with <code>evoregions</code> function) and the ancestral area reconstruction we can integrate those three information to calculate metrics that represents historical variables at any spatial scale.</p>
 <div class="section level3">
 <h3 id="age-of-assemblages">Age of assemblages<a class="anchor" aria-label="anchor" href="#age-of-assemblages"></a>
 </h3>
