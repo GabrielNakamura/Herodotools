@@ -44,6 +44,12 @@
 #'   used
 #' @importFrom stats cophenetic
 #' 
+#' @example 
+#' 
+#' data(akodon.pa.tree) # occurrence data 
+#' data(akodon.newick) # phylogenetic tree
+#' regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
+#' 
 #' @export
 #'
 evoregions <- function(comm, 
