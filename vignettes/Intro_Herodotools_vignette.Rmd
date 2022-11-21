@@ -90,7 +90,7 @@ akodon.pa.tree <- akodon.pa[, spp.in.tree]
 Here we can observe the richness pattern for Akodon genus
 
 ```{r richpattern, echo=TRUE}
-coastline <- ne_coastline(returnclass = "sf")
+coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
 map.limits <- list(
   x = c(-95, -30),
   y = c(-55, 12)
@@ -99,14 +99,14 @@ map.limits <- list(
 rich.tree <- rowSums(akodon.pa.tree)
 
 map_rich_tree <- 
-bind_cols(site.xy, rich.tree = rich.tree) %>% 
-  ggplot() + 
-  geom_raster(aes(x = LONG, y = LAT, fill = rich.tree)) + 
-  scale_fill_carto_c(name = "Richness", type = "quantitative", palette = "SunsetDark") +
-  geom_sf(data = coastline) +
-  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("Richness for Akodon Genus") +
-  theme_bw()
+dplyr::bind_cols(site.xy, rich.tree = rich.tree) %>% 
+  ggplot2::ggplot() + 
+  ggplot2::ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = rich.tree)) + 
+  rcartocolor::scale_fill_carto_c(name = "Richness", type = "quantitative", palette = "SunsetDark") +
+  ggplot2::ggplot2::geom_sf(data = coastline) +
+  ggplot2::ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggplot2::ggtitle("Richness for Akodon Genus") +
+  ggplot2::ggplot2::ggplot2::theme_bw()
 
 ```
 
@@ -129,7 +129,8 @@ To calculate evoregions we need the occurrence matrix, a phylogenetic tree and t
 **NOTE**: The regions obtained from will present different names at each time that the analysis be performed, but the patterns will be the same. Consequently, if the user run the same code the evoregions will appear with different names.
 
 ```{r evoregion_calc, echo=TRUE, eval=FALSE}
-regions <- evoregions(
+regions <- 
+  Herodotools::evoregions(
   comm = akodon.pa.tree,
   phy = akodon.newick
   )
@@ -154,22 +155,22 @@ evoregion.df <- data.frame(
   site.region
 )
 
-r.evoregion <- rast(evoregion.df)
+r.evoregion <- terra::rast(evoregion.df)
 
 # Converting evoregion to a spatial polygon data frame, so it can be plotted
-sf.evoregion <- as.polygons(r.evoregion) %>% 
-  st_as_sf()
+sf.evoregion <- terra::as.polygons(r.evoregion) %>% 
+  sf::st_as_sf()
 
 
 # Downloading coastline continents and croping to keep only South America
-coastline <- ne_coastline(returnclass = "sf")
+coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
 map.limits <- list(
   x = c(-95, -30),
   y = c(-55, 12)
 )
 
 # Assigning the same projection to both spatial objects
-st_crs(sf.evoregion) <- st_crs(coastline)
+sf::st_crs(sf.evoregion) <- st_crs(coastline)
 
 
 # Colours to plot evoregions
@@ -190,23 +191,23 @@ Evoregions can now be mapped using the following code
 
 map_evoregion <- 
   evoregion.df %>% 
-  ggplot() + 
-  geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
-  scale_fill_manual(
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
+  ggplot2::scale_fill_manual(
     name = "", 
     labels = LETTERS[1:5],
     values = rev(col_five_hues)
   ) +
-  geom_sf(data = coastline) +
-  geom_sf(
+  ggplot2::geom_sf(data = coastline) +
+  ggplot2::geom_sf(
     data = sf.evoregion, 
     color = "#040400",
     fill = NA, 
     size = 0.2) +
-  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("A") + 
-  theme_bw() +
-  theme(
+  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggtitle("A") + 
+  ggplot2::ggplot2::theme_bw() +
+  ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
     axis.text = element_text(size = 5),
@@ -252,24 +253,24 @@ Now we can map both evoregions and the affiliation of each cell. The degree of a
 map_joint_evoregion_afilliation <- 
    evoregion.df %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = site.region), 
+   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = site.region), 
                alpha = sites[, "afilliation"]) + 
-   scale_fill_manual(
+   ggplot2::scale_fill_manual(
      name = "", 
      labels = LETTERS[1:5],
      values = rev(col_five_hues)
    ) +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::geom_sf(
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("Evoregion and afilliation for Akodon Genus") + 
+   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::ggtitle("Evoregion and afilliation for Akodon Genus") + 
    guides(guide_legend(direction = "vertical")) +
-   theme_bw() +
-   theme(
+   ggplot2::ggplot2::theme_bw() +
+   ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank()
    )
@@ -289,7 +290,7 @@ knitr::include_graphics(here::here("vignettes", "Fig3_afilliation_akodon.png"))
 
 # Ancestral area reconstruction for Akodon species {#mergeMacroAssemblage}
 
-In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed using [BioGeoBears](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution studies.
+In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed using [BioGeoBEARS](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution studies.
 
 First, we have to define the membership of each species regarding the evoregions. This will correspond to the current area of species.
 
@@ -347,7 +348,7 @@ rownames(a.regions) <- species.names
 
 ```
 
-The object created in the last step can be used in an auxiliary function present in Herodotools to easily produce the [Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) file required to run the analysis of ancestral area reconstruction using BioGeoBears.
+The object created in the last step can be used in an auxiliary function present in Herodotools to easily produce the [Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) file required to run the analysis of ancestral area reconstruction using BioGeoBEARS.
 
 ```{r echo=TRUE}
 # save phyllip file
@@ -360,7 +361,7 @@ tipranges_to_BioGeoBEARS(
 
 ```
 
-Since it take some time to run BioGeoBears (about 15 minutes in a 4GB processor machine), and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBears we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. However if you want to see the code we used to run the BioGeoBears models, here is the code `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`. 
+Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB processor machine), and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBEARS we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. However if you want to see the code we used to run the BioGeoBEARS models, here is the code `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`. 
 
 Read the file containing the results of DEC model reconstruction: 
 
@@ -423,22 +424,22 @@ sites <- bind_cols(site.xy, site.region =  site.region, age = age_comm$mean_age_
 map_age <- 
   sites %>% 
   ggplot() + 
-  geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
   scale_fill_carto_c(type = "quantitative", 
                      palette = "SunsetDark",
                      direction = 1, 
                      limits = c(0, 3.5),  ## max percent overall
                      breaks = seq(0, 3.5, by = .5),
                      labels = glue::glue("{seq(0, 3.5, by = 0.5)}")) +
-  geom_sf(data = coastline, size = 0.4) +
-  geom_sf(
+  ggplot2::geom_sf(data = coastline, size = 0.4) +
+  ggplot2::geom_sf(
     data = sf.evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
-  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("B") + 
-  theme_bw() +
+  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggtitle("B") + 
+  ggplot2::ggplot2::theme_bw() +
   labs(fill = "Mean age (Myr)") +
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -446,7 +447,7 @@ map_age <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-  theme(
+  ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 10), 
@@ -497,17 +498,17 @@ sites <- bind_cols(site.xy,
 map_diversification <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = diversification)) + 
+   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::geom_sf(
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("Diversification *sensu* Jetz") + 
-   theme_bw() +
+   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::ggtitle("Diversification *sensu* Jetz") + 
+   ggplot2::ggplot2::theme_bw() +
    labs(fill = "Harmonic mean diversification") +
     guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -515,7 +516,7 @@ map_diversification <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-   theme(
+   ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank()
    )
@@ -523,22 +524,22 @@ map_diversification <-
 map_diversification_model_based <- 
   sites %>% 
   ggplot() + 
-  geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
   scale_fill_carto_c(type = "quantitative",
                      palette = "SunsetDark", 
                      direction = 1, 
                      limits = c(0, 1),  ## max percent overall
                      breaks = seq(0, 1, by = .25),
                      labels = glue::glue("{seq(0, 1, by = 0.25)}")) +
-  geom_sf(data = coastline, size = 0.4) +
-  geom_sf(
+  ggplot2::geom_sf(data = coastline, size = 0.4) +
+  ggplot2::geom_sf(
     data = sf.evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
-  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("C") + 
-  theme_bw() +
+  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggtitle("C") + 
+  ggplot2::ggplot2::theme_bw() +
   labs(fill = "In-situ diversification") +
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -546,7 +547,7 @@ map_diversification_model_based <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-  theme(
+  ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 10), 
@@ -603,19 +604,19 @@ sites <- bind_cols(site.xy,
 map_dispersal_D <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
+   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
       scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
      ) +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::geom_sf(
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("From D") + 
-   theme_bw() +
+   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::ggtitle("From D") + 
+   ggplot2::ggplot2::theme_bw() +
    labs(fill = "% of contribution") + 
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -623,7 +624,7 @@ map_dispersal_D <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-   theme(
+   ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank(),
      legend.text = element_text(size = 10), 
@@ -634,19 +635,19 @@ map_dispersal_D <-
 map_dispersal_A <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.A)) + 
+   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.A)) + 
       scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
      ) +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::geom_sf(
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("From A") + 
-   theme_bw() +
+   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::ggtitle("From A") + 
+   ggplot2::ggplot2::theme_bw() +
    labs(fill = "% of contribution") + 
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -654,7 +655,7 @@ map_dispersal_A <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-   theme(
+   ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank(),
      legend.text = element_text(size = 10), 
@@ -665,19 +666,19 @@ map_dispersal_A <-
 map_dispersal_B <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = dispersal.B)) +
+   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.B)) +
    scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
      ) +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::geom_sf(
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("From B") + 
-   theme_bw() +
+   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::ggtitle("From B") + 
+   ggplot2::ggplot2::theme_bw() +
    labs(fill = "% of contribution") +
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -685,7 +686,7 @@ map_dispersal_B <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-   theme(
+   ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank(),
      legend.text = element_text(size = 10), 
@@ -698,7 +699,7 @@ map_dispersion_from <-
   (map_evoregion + plot_layout(guides = "keep")) / 
   (map_dispersal_A | map_dispersal_B | map_dispersal_D) +
   plot_layout(heights = c(1, .75), guides = "collect") &
-  theme(legend.position = "bottom")
+  ggplot2::theme(legend.position = "bottom")
 
 ```
 
@@ -744,17 +745,17 @@ sites <- bind_cols(site.xy,
 map_PE <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = PE)) + 
+   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = PE)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::geom_sf(
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("PE for Akodon Genus") + 
-   theme_bw() +
+   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::ggtitle("PE for Akodon Genus") + 
+   ggplot2::ggplot2::theme_bw() +
    labs(fill = "PE value") +
     guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -762,7 +763,7 @@ map_PE <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-   theme(
+   ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank()
    )
@@ -770,17 +771,17 @@ map_PE <-
 map_PEdb <- 
    sites %>% 
    ggplot() + 
-   geom_raster(aes(x = LONG, y = LAT, fill = PEdb)) + 
+   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = PEdb)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
-   geom_sf(data = coastline, size = 0.4) +
-   geom_sf(
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::geom_sf(
      data = sf.evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
-   coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-   ggtitle("PEdb for Akodon Genus") + 
-   theme_bw() +
+   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::ggtitle("PEdb for Akodon Genus") + 
+   ggplot2::ggplot2::theme_bw() +
    labs(fill = "PEdb value") +
     guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -788,7 +789,7 @@ map_PEdb <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-   theme(
+   ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank()
    )
@@ -931,7 +932,7 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
   )
   
   ggplot() +
-    geom_raster(data = sel_data, 
+    ggplot2::geom_raster(data = sel_data, 
                 aes(x = LONG, y = LAT, fill = values)) +
     scale_fill_carto_c(
       type = "quantitative", 
@@ -940,9 +941,9 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
       limits = var_range, 
       breaks = var_breaks
     )+ 
-    geom_sf(data = coastline, size = 0.4) +
-    coord_sf(xlim = sig_map_limits$x, ylim = sig_map_limits$y) +
-    theme_bw() +
+    ggplot2::geom_sf(data = coastline, size = 0.4) +
+    ggplot2::coord_sf(xlim = sig_map_limits$x, ylim = sig_map_limits$y) +
+    ggplot2::ggplot2::theme_bw() +
     guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                  direction = "horizontal",
                                  ticks.colour = "grey20",
@@ -950,7 +951,7 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
                                  label.position = "bottom",
                                  title.hjust = 0.5)) +
     labs(title = plot.title) +
-    theme(
+    ggplot2::theme(
       legend.position = "bottom",
       axis.title = element_blank(),
       legend.title = element_blank(),
@@ -991,22 +992,22 @@ sites <- bind_cols(site.xy,
 map_evoregion <- 
   evoregion.df %>% 
   ggplot() + 
-  geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
-  scale_fill_manual(
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
+  ggplot2::scale_fill_manual(
     name = "", 
     labels = LETTERS[1:5],
     values = rev(col_five_hues)
   ) +
-  geom_sf(data = coastline) +
-  geom_sf(
+  ggplot2::geom_sf(data = coastline) +
+  ggplot2::geom_sf(
     data = sf.evoregion, 
     color = "#040400",
     fill = NA, 
     size = 0.2) +
-  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("(a)") + 
-  theme_bw() +
-  theme(
+  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggtitle("(a)") + 
+  ggplot2::ggplot2::theme_bw() +
+  ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
     axis.text = element_text(size = 5),
@@ -1018,22 +1019,22 @@ map_evoregion <-
 map_age <- 
   sites %>% 
   ggplot() + 
-  geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
   scale_fill_carto_c(type = "quantitative", 
                      palette = "SunsetDark",
                      direction = 1, 
                      limits = c(0, 3.5),  ## max percent overall
                      breaks = seq(0, 3.5, by = .5),
                      labels = glue::glue("{seq(0, 3.5, by = 0.5)}")) +
-  geom_sf(data = coastline, size = 0.4) +
-  geom_sf(
+  ggplot2::geom_sf(data = coastline, size = 0.4) +
+  ggplot2::geom_sf(
     data = sf.evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
-  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("(b)") + 
-  theme_bw() +
+  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggtitle("(b)") + 
+  ggplot2::ggplot2::theme_bw() +
   labs(fill = "Mean age (Myr)") +
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -1041,7 +1042,7 @@ map_age <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-  theme(
+  ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 10), 
@@ -1053,22 +1054,22 @@ map_age <-
 map_diversification_model_based <- 
   sites %>% 
   ggplot() + 
-  geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
   scale_fill_carto_c(type = "quantitative",
                      palette = "SunsetDark", 
                      direction = 1, 
                      limits = c(0, 1),  ## max percent overall
                      breaks = seq(0, 1, by = .25),
                      labels = glue::glue("{seq(0, 1, by = 0.25)}")) +
-  geom_sf(data = coastline, size = 0.4) +
-  geom_sf(
+  ggplot2::geom_sf(data = coastline, size = 0.4) +
+  ggplot2::geom_sf(
     data = sf.evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
-  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("(c)") + 
-  theme_bw() +
+  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggtitle("(c)") + 
+  ggplot2::ggplot2::theme_bw() +
   labs(fill = "In-situ diversification") +
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -1076,7 +1077,7 @@ map_diversification_model_based <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-  theme(
+  ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 10), 
@@ -1087,7 +1088,7 @@ map_diversification_model_based <-
 map_dispersal_D <- 
   sites %>% 
   ggplot() + 
-  geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
   scale_fill_carto_c(
     type = "quantitative", 
     palette = "SunsetDark",
@@ -1097,15 +1098,15 @@ map_dispersal_D <-
     breaks = seq(0, 1, by = .25),
     labels = glue::glue("{seq(0, 1, by = 0.25)}")
   ) +
-  geom_sf(data = coastline, size = 0.4) +
-  geom_sf(
+  ggplot2::geom_sf(data = coastline, size = 0.4) +
+  ggplot2::geom_sf(
     data = sf.evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.5) +
-  coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggtitle("(d)") + 
-  theme_bw() +
+  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggtitle("(d)") + 
+  ggplot2::ggplot2::theme_bw() +
   labs(fill = "Dispersal from D") + 
   guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -1113,7 +1114,7 @@ map_dispersal_D <-
                                title.position = "top",
                                label.position = "bottom",
                                title.hjust = 0.5)) +
-  theme(
+  ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 10), 
