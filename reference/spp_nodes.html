@@ -74,7 +74,170 @@
 <p>A matrix with species in lines and nodes in columns. 1 indicates that the node corresponds to the ancestor of that species and zero indicates that species
 does not share the ancestor node</p>
     </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>This is an auxiliary function that, by taking a phylogenetic tree, allows to represent in a matrix format
+the relationship between present-day species (tips) and their ancestors (nodes). The function provides an
+easy way to obtain certain objects that can be used in other functions, like <code><a href="ancestral_state.html">ancestral_state</a></code></p>
+    </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon.newick</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">spp_nodes</span><span class="op">(</span>tree <span class="op">=</span> <span class="va">akodon.newick</span>, node.prefix <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A_mimus A_lindberghi A_subfuscus A_lutescens A_sylvanus A_boliviensis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N31       1            1           1           1          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N32       0            1           1           1          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N33       0            1           1           1          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N34       0            0           1           1          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N35       0            0           1           1          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N36       0            0           1           1          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N37       0            0           1           1          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N38       0            0           1           1          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N39       0            0           0           0          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N40       0            0           0           0          0             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N41       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N42       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N43       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N44       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N45       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N46       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N47       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N48       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N49       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N50       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N51       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N52       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N53       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N54       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N55       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N56       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N57       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N58       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N59       0            0           0           0          0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A_spegazzinii A_azarae A_fumeus A_kofordi A_juninensis A_cursor A_montensis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N31             1        1        1         1            1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N32             1        1        1         1            1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N33             1        1        1         1            1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N34             1        1        1         1            1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N35             1        1        1         1            1        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N36             1        1        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N37             1        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N38             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N39             1        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N40             1        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N41             0        0        1         1            1        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N42             0        0        1         1            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N43             0        0        0         0            0        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N44             0        0        0         0            0        0           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N45             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N46             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N47             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N48             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N49             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N50             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N51             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N52             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N53             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N54             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N55             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N56             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N57             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N58             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N59             0        0        0         0            0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A_reigi A_paranaensis A_mystax A_aerosus A_affinis A_mollis A_orophilus</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N31       1             1        1         1         1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N32       1             1        1         1         1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N33       1             1        1         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N34       1             1        1         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N35       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N36       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N37       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N38       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N39       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N40       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N41       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N42       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N43       1             1        1         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N44       1             1        1         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N45       1             1        1         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N46       0             1        1         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N47       0             0        0         1         1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N48       0             0        0         1         1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N49       0             0        0         1         1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N50       0             0        0         1         1        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N51       0             0        0         1         1        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N52       0             0        0         0         0        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N53       0             0        0         0         0        1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N54       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N55       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N56       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N57       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N58       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N59       0             0        0         0         0        0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A_torques A_budini A_siberiae A_simulator A_varius A_albiventer A_iniscatus</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N31         1        1          1           1        1            1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N32         1        1          1           1        1            1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N33         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N34         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N35         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N36         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N37         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N38         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N39         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N40         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N41         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N42         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N43         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N44         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N45         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N46         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N47         1        1          1           1        1            1           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N48         1        1          1           1        1            1           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N49         1        1          1           1        1            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N50         1        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N51         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N52         1        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N53         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N54         0        1          1           1        1            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N55         0        1          1           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N56         0        0          0           1        1            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N57         0        0          0           0        0            0           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N58         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N59         0        0          0           0        0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A_dayi A_toba A_dolores</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N31      1      1         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N32      1      1         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N33      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N34      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N35      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N36      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N37      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N38      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N39      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N40      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N41      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N42      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N43      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N44      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N45      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N46      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N47      1      1         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N48      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N49      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N50      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N51      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N52      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N53      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N54      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N55      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N56      0      0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N57      1      1         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N58      1      1         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N59      0      1         1</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

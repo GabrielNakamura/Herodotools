@@ -114,6 +114,19 @@ $$Jetz_total \times (ED_div/ED_total)$$</p>
     <p>Gabriel Nakamura <a href="mailto:gabriel.nakamura.souza@gmail.com">gabriel.nakamura.souza@gmail.com</a> and Arthur V Rodrigues</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon.pa.tree</span><span class="op">)</span> <span class="co"># Occurrence matrix</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon.newick</span><span class="op">)</span> <span class="co"># phylogenetic tree</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">resDEC</span><span class="op">)</span> <span class="co"># output from ancestral area reconstruction performed with BioGeoBEARS</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">regions</span><span class="op">)</span> <span class="co"># ecoregion/evoregion for each assemblage</span></span></span>
+<span class="r-in"><span><span class="va">node.area</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_node_range_BioGeoBEARS.html">get_node_range_BioGeoBEARS</a></span><span class="op">(</span><span class="va">resDEC</span>,phyllip.file <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,<span class="va">akodon.newick</span>,max.range.size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">db_diversification</span><span class="op">(</span>W<span class="op">=</span><span class="va">akodon.pa.tree</span>, tree<span class="op">=</span><span class="va">akodon.newick</span>,ancestral.area<span class="op">=</span><span class="va">node.area</span>,biogeo<span class="op">=</span><span class="va">regions</span><span class="op">)</span> <span class="co"># model based diversification analysis with default options</span></span></span>
+<span class="r-in"><span><span class="op">}</span> </span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

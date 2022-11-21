@@ -94,6 +94,21 @@ linking the ancestor to the tip.</p></dd>
 <dd><p>mean age values for each assemblage</p></dd>
 
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>This function computes the mean arrival age of species in an assemblage based in an ancestral
+area reconstruction. For each assemblage we calculate the arrival and establishment of each ancestor of
+present-day species as showed in Van Dijk et al (2021). We consider an arrival event as being the arrival of
+an ancestor and the establishment of this ancestor until the present day. Arrival events that occurred between the
+last speciation event of that lineage and the present time can be assigned a small value or the age corresponding to
+the half of the lenght of the branch linking the ancestor and the present day species</p>
+    </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Van Dijk, A.; Nakamura G,; Rodrigues, A.V.; Maestri, R. and Duarte, L.d.S. (2021). Imprints of
+tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves:Passeriformes).
+Biol. Journ. Linnean Soc., 134, 57-67.</p>
+    </div>
     <div id="author">
     <h2>Author</h2>
     <p>Gabriel Nakamura <a href="mailto:gabriel.nakamura.souza@gmail.com">gabriel.nakamura.souza@gmail.com</a> and Arthur Rodrigues</p>
@@ -101,14 +116,16 @@ linking the ancestor to the tip.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="va">W_toy</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> nrow<span class="op">=</span> <span class="fl">3</span>,</span></span>
-<span class="r-in"><span> ncol<span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span> dimnames<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Comm 1"</span>, <span class="st">"Comm 2"</span>, <span class="st">"Comm 3"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"s"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="co"># hypothetical occurrence matrix with species in columns and assemblages in lines</span></span></span>
+<span class="r-in"><span> <span class="va">W_toy</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,nrow<span class="op">=</span> <span class="fl">3</span>,ncol<span class="op">=</span> <span class="fl">5</span>,dimnames<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Comm 1"</span>, <span class="st">"Comm 2"</span>, <span class="st">"Comm 3"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"s"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span> </span></span>
+<span class="r-in"><span> <span class="co"># hypothetical data indicating the ecoregions of each assemblage</span></span></span>
 <span class="r-in"><span> <span class="va">biogeo_toy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Ecoregion<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> </span></span>
+<span class="r-in"><span> <span class="co"># hypothetical data indicating the ancestral range of each node</span></span></span>
 <span class="r-in"><span> <span class="va">ancestral_area_toy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>state<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ABC"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"ABC"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> </span></span>
+<span class="r-in"><span> <span class="co"># caculating age of each assemblage</span></span></span>
 <span class="r-in"><span> <span class="va">age_assemblages</span> <span class="op">&lt;-</span> <span class="fu">age_arrival</span><span class="op">(</span><span class="va">W_toy</span>, <span class="va">toy_treeEx</span>, <span class="va">ancestral_area_toy</span>, <span class="va">biogeo_toy</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
