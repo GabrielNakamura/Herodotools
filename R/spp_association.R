@@ -9,6 +9,13 @@
 #' @export
 #'
 #' @examples
+#' \donotrun{
+#' data(akodon.pa.tree) # occurrence data 
+#' data(akodon.newick) # phylogenetic tree
+#' regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick) # compute evoregions
+#' spp_association_evoreg(comm = akodon.pa.tree, evo.vectors = regions, spp.association = 0.7) # calculate species association
+#' }
+#' 
 spp_association_evoreg <- function(comm, evo.vectors, spp.association = 0.7){
   groups.vec.bray <- evo.vectors[[2]]$grp
   n.groups <- length(evo.vectors[[2]]$size)

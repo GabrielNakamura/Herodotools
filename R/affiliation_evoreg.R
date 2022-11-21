@@ -19,7 +19,7 @@
 #' @export
 #' 
 #' @examples 
-#' 
+#' \donotrun{
 #' # First run the classification
 #' data(akodon.pa.tree) # occurrence data 
 #' data(akodon.newick) # phylogenetic tree
@@ -31,6 +31,7 @@
 #' PCPS_thresh <- regions$PCPS$vectors[, axis_sel] # only significant axis
 #' dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean") # distance matrix based on phylogenetic structure
 #' affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,groups = regions$Cluster_Evoregions) # affiliation
+#' }
 #' 
 affiliation_evoreg <- function(phylo.comp.dist, groups){
   

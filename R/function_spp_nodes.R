@@ -1,5 +1,9 @@
 #' Species and their respective ancestral nodes
 #'
+#' @details This is an auxiliary function that, by taking a phylogenetic tree, allows to represent in a matrix format 
+#'     the relationship between present-day species (tips) and their ancestors (nodes). The function provides an
+#'     easy way to obtain certain objects that can be used in other functions, like \code{\link{ancestral_state}}
+#'
 #' @description This function computes a matrix containing species and their respective ancestral nodes
 #'
 #' @param tree Phylogenetic tree
@@ -11,6 +15,9 @@
 #' @export
 #' 
 #' @examples
+#' data(akodon.newick)
+#' spp_nodes(tree = akodon.newick, node.prefix = "N")
+#' 
 spp_nodes <- function(tree, node.prefix = "N"){
   tree_base <- phylobase::phylo4(tree)
   n.nodes <- tree$Nnode

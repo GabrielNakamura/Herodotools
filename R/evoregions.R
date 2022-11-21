@@ -40,16 +40,18 @@
 #'      assemblage was classified
 #' }
 #' 
-#' @seealso [find_max_nclust()] to decide the maximum number of clusters to be 
+#' @seealso \code{\link{find_max_nclust}} to decide the maximum number of clusters to be 
 #'   used
+#'   
 #' @importFrom stats cophenetic
 #' 
 #' @example 
-#' 
+#' \dontrun{
 #' data(akodon.pa.tree) # occurrence data 
 #' data(akodon.newick) # phylogenetic tree
 #' regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
 #' site.region <- regions$Cluster_Evoregions # classification of each community in regions
+#' }
 #' 
 #' @export
 #'
