@@ -1,6 +1,6 @@
 #' Estimate the maximum number of groups in DAPC analysis
 #'
-#' @param x A data.frame or matrix object containing eigenvectors by sites data.
+#' @param x A data.frame or matrix object containing eigenvectors by sites.
 #' @param threshold Scalar. The number of eigenvectors used to perform classification.
 #' @param nperm Scalar. Number of times classification will be performed.
 #' @param method c("kmeans","ward"). See \code{\link{find.clusters}} of adegenet package.

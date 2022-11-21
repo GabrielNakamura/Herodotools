@@ -469,7 +469,7 @@ knitr::include_graphics(here::here("vignettes",
 
 ## Model-based diversification metrics {#phylomodelmetrics}
 
-We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestor area. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by [Reeding and Moers]() that consists in the inverse of equal-splits measure called Diversification Rate (DR).
+We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestor area. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by [Jetz 2012](https://doi.org/10.1038/nature11631) that consists in the inverse of equal-splits measure called Diversification Rate (DR).
 
 We modified the original metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy, this value represent the diversification that occurred due to *in situ diversification process*
 
@@ -832,9 +832,7 @@ traits <- traits[is.na(traits$Scientific) !=T,] #names not matching
 rownames(traits) <- traits$Scientific
 
 # match
-match_data <- match.phylo.data(rodent.phylo, traits)
-
-# load function
+match_data <- picante::match.phylo.data(rodent.phylo, traits)
 
 trait <- match_data$data$ForStrat.Value
 names(trait) <- match_data$data$Scientific

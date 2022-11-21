@@ -1,9 +1,12 @@
 #' Tip-based metrics of trait evolution
 #' 
-#' @details This function calculates three metrics that express the macroevolutionary dynamic of traits. They are 
-#'     Transition rates, last transition time and stasis time. These functions represents, respectively, the transition rate
+#' @details This function calculates three metrics that represent the macroevolutionary dynamic of traits for each species in a phylogenetic tree. They are 
+#'     Transition rates, last transition time and stasis time, all originally proposed in Luza et al (2021). *Transition rates* indicate how many
+#'     times the ancestral character has changed over time. *Stasis time* indicates the maximum branch length (time interval)
+#'     which the current tip-character was maintained across the whole phylogeny. Finally, *last transition time* is the sum of branch lengths
+#'     from the tip to the previous node with a reconstructed character equal to the current tip-character. Originally the function
+#'     uses a stochastic character mapping on discrete trait data, but other types of trait reconstruction can be used.
 #'     
-#' 
 #' @param tree A phylogenetic tree as an object of class "phylo"
 #' @param trait A named vector containing the tip states for a discretely valued character. The names must match the tip labels of the tree.
 #' @param nsim Number of simulations to stochastic character mapping.
@@ -15,10 +18,14 @@
 #' @importFrom stats setNames
 #' 
 #' @example 
+#' \dontrun{
+#' data(rodent.phylo) # phylogenetic tree
+#' data(trait) # categorical traits on species diet
+#' trans_rates <- tip_based_trait_evo(tree=match_data$phy,trait =trait , # need to be named to worknsim = 50,method = c("transition_rates", "last_transition_time", "stasis_time"))
+#' }
 #' 
 #' @export
 #' 
-
 tip_based_trait_evo <- function(tree,
                                 trait, 
                                 nsim = 1,
