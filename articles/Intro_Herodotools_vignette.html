@@ -424,7 +424,7 @@
 <div class="section level3">
 <h3 id="phylomodelmetrics">Model-based diversification metrics<a class="anchor" aria-label="anchor" href="#phylomodelmetrics"></a>
 </h3>
-<p>We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestor area. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by <a href="">Reeding and Moers</a> that consists in the inverse of equal-splits measure called Diversification Rate (DR).</p>
+<p>We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestor area. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and historical dispersal. Here we will illustrate this by calculating a common tip-based diversification measure propposed by <a href="https://doi.org/10.1038/nature11631" class="external-link">Jetz 2012</a> that consists in the inverse of equal-splits measure called Diversification Rate (DR).</p>
 <p>We modified the original metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy, this value represent the diversification that occurred due to <em>in situ diversification process</em></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">akodon_diversification</span> <span class="op">&lt;-</span> </span>
@@ -736,9 +736,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">traits</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">traits</span><span class="op">$</span><span class="va">Scientific</span></span>
 <span></span>
 <span><span class="co"># match</span></span>
-<span><span class="va">match_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/picante/man/data.checking.html" class="external-link">match.phylo.data</a></span><span class="op">(</span><span class="va">rodent.phylo</span>, <span class="va">traits</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># load function</span></span>
+<span><span class="va">match_data</span> <span class="op">&lt;-</span> <span class="fu">picante</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/picante/man/data.checking.html" class="external-link">match.phylo.data</a></span><span class="op">(</span><span class="va">rodent.phylo</span>, <span class="va">traits</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">trait</span> <span class="op">&lt;-</span> <span class="va">match_data</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">ForStrat.Value</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">trait</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">match_data</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">Scientific</span></span>
