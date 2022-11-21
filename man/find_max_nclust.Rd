@@ -17,7 +17,7 @@ find_max_nclust(
 )
 }
 \arguments{
-\item{x}{A data.frame or matrix object containing eigenvectors by sites data.}
+\item{x}{A data.frame or matrix object containing eigenvectors by sites.}
 
 \item{threshold}{Scalar. The number of eigenvectors used to perform classification.}
 

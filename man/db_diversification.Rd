@@ -47,6 +47,17 @@ model-based measure of diversification is calculated as the proportion of total 
 metric corresponded only to the branches of a given species that diversified in the current area of occurrence of that species
 \deqn{Jetz_total \times (ED_div/ED_total)}
 }
+\examples{
+\dontrun{
+data(akodon.pa.tree) # Occurrence matrix
+data(akodon.newick) # phylogenetic tree
+data(resDEC) # output from ancestral area reconstruction performed with BioGeoBEARS
+data(regions) # ecoregion/evoregion for each assemblage
+node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),akodon.newick,max.range.size = 4)
+db_diversification(W=akodon.pa.tree, tree=akodon.newick,ancestral.area=node.area,biogeo=regions) # model based diversification analysis with default options
+} 
+
+}
 \author{
 Gabriel Nakamura \href{mailto:gabriel.nakamura.souza@gmail.com}{gabriel.nakamura.souza@gmail.com} and Arthur V Rodrigues
 }

@@ -64,6 +64,6 @@ evolutionary history, e.g tree imbalance, that is not accounted by other
 metrics of phylogenetic turnover.
 }
 \seealso{
-\code{\link[=find_max_nclust]{find_max_nclust()}} to decide the maximum number of clusters to be
+\code{\link{find_max_nclust}} to decide the maximum number of clusters to be
 used
 }

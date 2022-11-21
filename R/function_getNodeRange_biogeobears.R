@@ -14,8 +14,10 @@
 #'
 #' @examples
 #' data(resDEC) # ancestral area reconstruction from biogeobears
-#' phyllip <- here::here("inst", "extdata", "geo_area_akodon.data") # phyllip file 
-#' node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = phyllip, akodon.newick,  max.range.size = 4) # obtaining area for each node
+#' data(akodon.newick)
+#' extdata_dir = system.file("extdata", package="Herodotools")
+#' fn = paste(extdata_dir, "/geo_area_akodon.data", sep="")
+#' node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = fn, akodon.newick,  max.range.size = 4) # obtaining area for each node
 #' 
 get_node_range_BioGeoBEARS <-
   function(BioGeoBEARS.data,

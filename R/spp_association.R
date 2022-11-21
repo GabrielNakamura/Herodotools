@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-#' \donotrun{
+#' \dontrun{
 #' data(akodon.pa.tree) # occurrence data 
 #' data(akodon.newick) # phylogenetic tree
 #' regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick) # compute evoregions

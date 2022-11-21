@@ -22,6 +22,21 @@ dispersal_from(W, tree, ancestral.area, biogeo)
 For the species present in a site, the function calculates the proportional
 contribution of ancestral areas to dispersal of lineage in the site's region.
 }
+\examples{
+
+\dontrun{
+data(akodon.sites) # occurrence matrix
+data(akodon.pa.tree) # phylogenetic tree
+data(regions) # biogeographic region
+data(resDEC) # output from ancestral area reconstruction
+node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),akodon.newick,max.range.size = 4) # data frame indicating the ancestral area occurrence
+dispersal_from(W=akodon.sites,tree=akodon.pa.tree,ancestral.area=node.area,biogeo=regions) # historical dispersal analysis
+}
+
+}
+\seealso{
+\code{\link{get_node_range_BioGeoBEARS}}
+}
 \author{
 Arthur V Rodrigues \href{mailto:rodrigues.arthur.v@gmail.com}{rodrigues.arthur.v@gmail.com}
 }

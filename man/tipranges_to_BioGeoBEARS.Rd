@@ -17,7 +17,7 @@ Please provide the tip names as \code{row.names}. See example.}
 \item{filename}{filename to store the data. By default it is
 \code{"lagrange_area_data_file.data"}.}
 
-\item{areanames}{the names of the areas. By defaut the areanames are generated
+\item{areanames}{the names of the areas. By defaut the area names are generated
 as sequencial upper case letters.}
 }
 \description{

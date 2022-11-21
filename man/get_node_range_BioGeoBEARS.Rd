@@ -24,8 +24,15 @@ get_node_range_BioGeoBEARS(
 Data frame with two columns, one indicating the node and other the ancestral biome range
 }
 \description{
-Get node ranges from BioGeoBEARS biome reconstruction model
+This is an auxiliary function that can be with a ancestral area reconstruction
+from BioGeoBEARS to obtain a data frame containing the ancestral area of occurrence (biome range)
+for all ancestors (nodes)
 }
 \examples{
+data(resDEC) # ancestral area reconstruction from biogeobears
+data(akodon.newick)
+extdata_dir = system.file("extdata", package="Herodotools")
+fn = paste(extdata_dir, "/geo_area_akodon.data", sep="")
+node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = fn, akodon.newick,  max.range.size = 4) # obtaining area for each node
 
 }

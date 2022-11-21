@@ -26,6 +26,14 @@ A list (length equal to nsim) with tip-based metrics estimated per species.
 \description{
 Tip-based metrics of trait evolution
 }
+\details{
+This function calculates three metrics that represent the macroevolutionary dynamic of traits for each species in a phylogenetic tree. They are
+Transition rates, last transition time and stasis time, all originally proposed in Luza et al (2021). \emph{Transition rates} indicate how many
+times the ancestral character has changed over time. \emph{Stasis time} indicates the maximum branch length (time interval)
+which the current tip-character was maintained across the whole phylogeny. Finally, \emph{last transition time} is the sum of branch lengths
+from the tip to the previous node with a reconstructed character equal to the current tip-character. Originally the function
+uses a stochastic character mapping on discrete trait data, but other types of trait reconstruction can be used.
+}
 \author{
 André Luza and Vanderlei Debastiani
 }

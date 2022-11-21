@@ -26,6 +26,13 @@ based version
 \description{
 Diversification-based PD and PE
 }
+\details{
+This function computes two modified versions of Phylogenetic Diversity (PD) and Phylogenetic
+endemism by considering in the calculation the in-situ diversification. the Db-PD and Db-PE are calculated
+by coupling in the calculation an ancetral area reconstruction that divide the phylogenetic tree in two parts,
+one that correspond to dispersion events and another that correspond to in-situ diversification events.
+We use the in-situ diversification part to calculate both Db-PD and Db-PE
+}
 \examples{
 \dontrun{
 W_toy<- matrix(c(0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0),

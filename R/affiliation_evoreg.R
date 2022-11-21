@@ -19,7 +19,7 @@
 #' @export
 #' 
 #' @examples 
-#' \donotrun{
+#' \dontrun{
 #' # First run the classification
 #' data(akodon.pa.tree) # occurrence data 
 #' data(akodon.newick) # phylogenetic tree
