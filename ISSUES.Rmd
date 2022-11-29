@@ -94,7 +94,7 @@ Add dependency on R >= 3.5.0 because serialized objects in
 
 - [x] ggplot2, sf and rcartocolor were removed from @import in the`plot_ada()`. They are suggested packages in DECRIPTION file. 
 
-- [x] function `GridFilter()` is based on `rgeos` [Please note that rgeos will be retired by the end of 2023, plan transition to sf functions using GEOS at your earliest convenience]. I suggest to remove the function if it has no clear utility. If the function will keeped in the package run the following code in the console: 
+- [x] function `GridFilter()` is based on `rgeos` [Please note that rgeos will be retired by the end of 2023, plan transition to sf functions using GEOS at your earliest convenience]. I suggest to remove the function if it has no clear utility. If the function will kept in the package run the following code in the console: 
 ```
 use_this::use_package("sp", "suggest")
 use_this::use_package("rgeos", "suggest")
@@ -102,7 +102,7 @@ use_this::use_package("terra", "suggest")
 
 ```
 
-In addition, put the folowing code in line 17 of the 'function_gridfilter.R' file:
+In addition, put the following code in line 17 of the 'function_gridfilter.R' file:
 
 ```
   pkg_req <- c("rgeos", "sp", "raster", "terra")
@@ -139,7 +139,7 @@ In addition, put the folowing code in line 17 of the 'function_gridfilter.R' fil
 
 - [x] fix website (working just locally but not on the server) -> Ive fixed it by changing the folder used to build the site
 
-- [ ] add examples to the functions -> working in progress 
+- [x] add examples to the functions -> working in progress 
 
 # open issues may 27
 

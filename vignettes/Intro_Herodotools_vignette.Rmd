@@ -292,47 +292,47 @@ knitr::include_graphics(here::here("vignettes", "Fig3_afilliation_akodon.png"))
 
 In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed using [BioGeoBEARS](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution studies.
 
-First, we have to define the membership of each species regarding the evoregions. This will correspond to the current area of species.
+First, we have to define the occurrence of each species regarding the evoregions. This will correspond to the current area of species.
 
 ```{r echo=TRUE}
 
 akodon.evoregion.data <- 
   # bind compostion matrix and the site evoregion
-  bind_cols(
+  dplyr::bind_cols(
     akodon.pa.tree,
     site.region =  site.region
   ) %>% 
   # transform the matrix in a longer dataframe 
-  pivot_longer(
+  tidyr::pivot_longer(
     cols = 1:30, 
     names_to = "species",
     values_to = "presence"
   ) %>% 
   # filter only the rows with the presence of a species
-  filter(presence == 1) %>% 
+  dplyr::filter(presence == 1) %>% 
   # Count the number of sites in a region that a species is present
-  group_by(species, site.region) %>% 
-  summarise(n = n()) %>% 
-  ungroup() %>% 
+  dplyr::group_by(species, site.region) %>% 
+  dplyr::summarise(n = n()) %>% 
+  dplyr::ungroup() %>% 
   # Calculate the propotional area of a species in each region
-  group_by(species) %>% 
-  mutate(
+  dplyr::group_by(species) %>% 
+  dplyr::mutate(
     species.total = sum(n), 
     prec.occupation = n/species.total
   ) %>% 
-  ungroup() %>% 
+  dplyr::ungroup() %>% 
   # Filter for each species the evoregions with more than 25% of area ocupied 
   # by the species
-  filter(
+  dplyr::filter(
     prec.occupation >= .25
   ) %>% 
-  mutate(
+  dplyr::mutate(
     area = LETTERS[site.region]
   ) %>% 
   dplyr::select(species, area) %>% 
-  mutate( value = 1) %>% 
+  dplyr::mutate( value = 1) %>% 
   # transform in a dataframe with species in rows and areas ocupied [0-1] in columns
-  pivot_wider(
+  tidyr::pivot_wider(
     id_cols = species,
     names_from = area, 
     names_sort = T,
@@ -352,7 +352,7 @@ The object created in the last step can be used in an auxiliary function present
 
 ```{r echo=TRUE}
 # save phyllip file
-tipranges_to_BioGeoBEARS(
+Herodotools::tipranges_to_BioGeoBEARS(
   a.regions, 
   # please set a new path to save the file
   filename = here("inst", "extdata", "geo_area_akodon.data"),
@@ -367,7 +367,6 @@ Read the file containing the results of DEC model reconstruction:
 
 
 ```{r echo=TRUE, eval = FALSE}
-library(BioGeoBEARS)
 
 # ancestral reconstruction
 load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
@@ -375,7 +374,6 @@ load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools
 ```
 
 ```{r loadDECmodel, echo=FALSE, eval=TRUE}
-library(BioGeoBEARS)
 
 # ancestral reconstruction
 load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
@@ -398,7 +396,7 @@ biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion.df$site.re
 
 # getting the ancestral range area for each node 
 node.area <- 
-  get_node_range_BioGeoBEARS(
+  Herodotools::get_node_range_BioGeoBEARS(
     resDEC,
     phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),
     akodon.newick,
@@ -406,7 +404,7 @@ node.area <-
   )
 
 # calculating age arrival 
-age_comm <- age_arrival(W = akodon.pa.tree, 
+age_comm <- Herodotools::age_arrival(W = akodon.pa.tree, 
                         tree = akodon.newick, 
                         ancestral.area = node.area, 
                         biogeo = biogeo_area) 
@@ -419,7 +417,7 @@ With mean age for each assemblage we can map the ages for all assemblages
 
 ```{r ageMap, echo=TRUE}
 
-sites <- bind_cols(site.xy, site.region =  site.region, age = age_comm$mean_age_per_assemblage)
+sites <- dplyr::bind_cols(site.xy, site.region =  site.region, age = age_comm$mean_age_per_assemblage)
 
 map_age <- 
   sites %>% 
@@ -440,8 +438,8 @@ map_age <-
   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggplot2::ggtitle("B") + 
   ggplot2::ggplot2::theme_bw() +
-  labs(fill = "Mean age (Myr)") +
-  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+  ggplot2::labs(fill = "Mean age (Myr)") +
+  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -477,7 +475,7 @@ We modified the original metric to take into account only the portion of evoluti
 
 ```{r diversification, echo=TRUE}
 akodon_diversification <- 
-db_diversification(W = akodon.pa.tree,
+Herodotools::db_diversification(W = akodon.pa.tree,
                    tree = akodon.newick, 
                    ancestral.area = node.area, 
                    biogeo = biogeo_area, 
@@ -489,7 +487,7 @@ db_diversification(W = akodon.pa.tree,
 The result of `db_diversification` function is composed by a data-frame containing the value of in-situ diversification for each species in each assemblage and a vector with the harmonic mean in-situ diversification for each assemblage. As with age, we can plot the model based diversification metric to look at the spatial patterns of in-situ diversification in Akodon assemblages.
 
 ```{r mapdiversification, echo=TRUE}
-sites <- bind_cols(site.xy,
+sites <- dplyr::bind_cols(site.xy,
                    site.region =  site.region,
                    age = age_comm$mean_age_per_assemblage,
                    diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
@@ -497,7 +495,7 @@ sites <- bind_cols(site.xy,
 
 map_diversification <- 
    sites %>% 
-   ggplot() + 
+   ggplot2::ggplot() + 
    ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
@@ -509,8 +507,8 @@ map_diversification <-
    ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggplot2::ggtitle("Diversification *sensu* Jetz") + 
    ggplot2::ggplot2::theme_bw() +
-   labs(fill = "Harmonic mean diversification") +
-    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+   ggplot2::labs(fill = "Harmonic mean diversification") +
+    ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -523,7 +521,7 @@ map_diversification <-
 
 map_diversification_model_based <- 
   sites %>% 
-  ggplot() + 
+  ggplot2::ggplot() + 
   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
   scale_fill_carto_c(type = "quantitative",
                      palette = "SunsetDark", 
@@ -540,8 +538,8 @@ map_diversification_model_based <-
   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggplot2::ggtitle("C") + 
   ggplot2::ggplot2::theme_bw() +
-  labs(fill = "In-situ diversification") +
-  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+  ggplot2::labs(fill = "In-situ diversification") +
+  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -578,7 +576,7 @@ We can also calculate the importance of dispersal events related to each ancestr
 ```{r dispersal, echo=TRUE}
 
 akodon_dispersal <- 
-dispersal_from(W = akodon.pa.tree,
+Herodotools::dispersal_from(W = akodon.pa.tree,
                tree = akodon.newick, 
                ancestral.area = node.area, 
                biogeo = biogeo_area)
@@ -590,7 +588,7 @@ We also can map the contribution of dispersal for all regions. Note that the are
 
 ```{r}
 
-sites <- bind_cols(site.xy,
+sites <- dplyr::bind_cols(site.xy,
                    site.region =  site.region, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
@@ -603,7 +601,7 @@ sites <- bind_cols(site.xy,
 
 map_dispersal_D <- 
    sites %>% 
-   ggplot() + 
+   ggplot2::ggplot() + 
    ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
       scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
@@ -617,8 +615,8 @@ map_dispersal_D <-
    ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggplot2::ggtitle("From D") + 
    ggplot2::ggplot2::theme_bw() +
-   labs(fill = "% of contribution") + 
-  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+   ggplot2::labs(fill = "% of contribution") + 
+  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -634,7 +632,7 @@ map_dispersal_D <-
 
 map_dispersal_A <- 
    sites %>% 
-   ggplot() + 
+   ggplot2::ggplot() + 
    ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.A)) + 
       scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
@@ -648,8 +646,8 @@ map_dispersal_A <-
    ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggplot2::ggtitle("From A") + 
    ggplot2::ggplot2::theme_bw() +
-   labs(fill = "% of contribution") + 
-  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+   ggplot2::labs(fill = "% of contribution") + 
+  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -665,7 +663,7 @@ map_dispersal_A <-
 
 map_dispersal_B <- 
    sites %>% 
-   ggplot() + 
+   ggplot2::ggplot() + 
    ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.B)) +
    scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
@@ -679,8 +677,8 @@ map_dispersal_B <-
    ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggplot2::ggtitle("From B") + 
    ggplot2::ggplot2::theme_bw() +
-   labs(fill = "% of contribution") +
-  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+   ggplot2::labs(fill = "% of contribution") +
+  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -721,7 +719,7 @@ We also can calculate common used metrics in Community Phylogenetics, but now co
 ```{r commPhylo, echo=TRUE, eval=FALSE}
 
 akodon_db_metrics <- 
-div_based_metrics(W = akodon.pa.tree,
+Herodotools::div_based_metrics(W = akodon.pa.tree,
                   tree = akodon.newick, 
                   ancestral.area = node.area, 
                   biogeo = biogeo_area, 
@@ -733,7 +731,7 @@ div_based_metrics(W = akodon.pa.tree,
 As the other metrics we can plot PDdb and PEdb in a map
 
 ```{r map_community_metrics, echo=TRUE}
-sites <- bind_cols(site.xy,
+sites <- dplyr::bind_cols(site.xy,
                    site.region =  site.region, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
@@ -744,7 +742,7 @@ sites <- bind_cols(site.xy,
 
 map_PE <- 
    sites %>% 
-   ggplot() + 
+   ggplot2::ggplot() + 
    ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = PE)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
@@ -756,8 +754,8 @@ map_PE <-
    ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggplot2::ggtitle("PE for Akodon Genus") + 
    ggplot2::ggplot2::theme_bw() +
-   labs(fill = "PE value") +
-    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+   ggplot2::labs(fill = "PE value") +
+    ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -770,7 +768,7 @@ map_PE <-
 
 map_PEdb <- 
    sites %>% 
-   ggplot() + 
+   ggplot2::ggplot() + 
    ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = PEdb)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
@@ -782,8 +780,8 @@ map_PEdb <-
    ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggplot2::ggtitle("PEdb for Akodon Genus") + 
    ggplot2::ggplot2::theme_bw() +
-   labs(fill = "PEdb value") +
-    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+   ggplot2::labs(fill = "PEdb value") +
+    ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -874,21 +872,21 @@ Now we calculate the values of tip-based metrics for all species for each assemb
 ```{r TransitionAssemblage, echo=T}
 
 # transition rates for each community
-averaged_rates <- map_dfr(1:nrow(comm.data), function (i){
+averaged_rates <- purrr::map_dfr(1:nrow(comm.data), function (i){
   # across assemblages
-  map_dfr(trans_rates, function (sims) { # across simulations
+  purrr::map_dfr(trans_rates, function (sims) { # across simulations
     
     # species in the assemblages
-    gather_names <- names (comm.data[i,][which(comm.data[i,]>0)]) # get the names
+    gather_names <- names(comm.data[i,][which(comm.data[i,]>0)]) # get the names
     # subset of rates
-    rates <- sims [which(rownames (sims) %in% gather_names),
+    rates <- sims[which(rownames (sims) %in% gather_names),
                    c("prop.transitions", 
                      "stasis.time",
                      "last.transition.time")]
     mean_rates <- apply(rates, 2, mean) # and calculate the average
     mean_rates
   }) %>% 
-    map(mean)
+    purrr::map(mean)
 })
 ```
 
@@ -903,7 +901,7 @@ data_to_map_wide <- data.frame(geo.data[,c("LONG", "LAT")], averaged_rates)
 
 data_to_map_long <- 
   data_to_map_wide %>% 
-  pivot_longer(
+  tidyr::pivot_longer(
     cols = 3:5,
     names_to = "variables",
     values_to = "values"
@@ -921,7 +919,7 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
   
   sel_data <- 
     data_to_map_long %>% 
-    filter(variables == metric)
+    dplyr::filter(variables == metric)
   
   var_range <- range(sel_data$values) %>% round(2)
   var_breaks <- seq(var_range[1], var_range[2], diff(var_range/4)) %>% round(2)
@@ -934,7 +932,7 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
   ggplot() +
     ggplot2::geom_raster(data = sel_data, 
                 aes(x = LONG, y = LAT, fill = values)) +
-    scale_fill_carto_c(
+    rcartocolor::scale_fill_carto_c(
       type = "quantitative", 
       palette = "SunsetDark", 
       na.value = "white", 
@@ -944,13 +942,13 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
     ggplot2::geom_sf(data = coastline, size = 0.4) +
     ggplot2::coord_sf(xlim = sig_map_limits$x, ylim = sig_map_limits$y) +
     ggplot2::ggplot2::theme_bw() +
-    guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+    ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                  direction = "horizontal",
                                  ticks.colour = "grey20",
                                  title.position = "top",
                                  label.position = "bottom",
                                  title.hjust = 0.5)) +
-    labs(title = plot.title) +
+    ggplot2::labs(title = plot.title) +
     ggplot2::theme(
       legend.position = "bottom",
       axis.title = element_blank(),
@@ -963,8 +961,8 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
 })
 
 # Create map
-mapTransition_rate <- wrap_plots(list_map_transitions) +
-  plot_annotation(tag_levels = "A")
+mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
+  patchwork::plot_annotation(tag_levels = "A")
 
 ```
 ```{r saveFig8, echo=FALSE}
@@ -978,7 +976,7 @@ ggplot2::ggsave(plot = mapTransition_rate,
 ```{r figPaper, echo=FALSE, eval=FALSE}
 # This is the Figure 3 of the paper
 
-sites <- bind_cols(site.xy,
+sites <- dplyr::bind_cols(site.xy,
                    site.region =  site.region, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
@@ -1018,7 +1016,7 @@ map_evoregion <-
 
 map_age <- 
   sites %>% 
-  ggplot() + 
+  ggplot2::ggplot() + 
   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
   scale_fill_carto_c(type = "quantitative", 
                      palette = "SunsetDark",
@@ -1035,8 +1033,8 @@ map_age <-
   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggplot2::ggtitle("(b)") + 
   ggplot2::ggplot2::theme_bw() +
-  labs(fill = "Mean age (Myr)") +
-  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+  ggplot2::labs(fill = "Mean age (Myr)") +
+  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -1053,7 +1051,7 @@ map_age <-
 
 map_diversification_model_based <- 
   sites %>% 
-  ggplot() + 
+  ggplot2::ggplot() + 
   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
   scale_fill_carto_c(type = "quantitative",
                      palette = "SunsetDark", 
@@ -1070,8 +1068,8 @@ map_diversification_model_based <-
   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggplot2::ggtitle("(c)") + 
   ggplot2::ggplot2::theme_bw() +
-  labs(fill = "In-situ diversification") +
-  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+  ggplot2::labs(fill = "In-situ diversification") +
+  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -1087,7 +1085,7 @@ map_diversification_model_based <-
 
 map_dispersal_D <- 
   sites %>% 
-  ggplot() + 
+  ggplot2::ggplot() + 
   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
   scale_fill_carto_c(
     type = "quantitative", 
@@ -1107,8 +1105,8 @@ map_dispersal_D <-
   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggplot2::ggtitle("(d)") + 
   ggplot2::ggplot2::theme_bw() +
-  labs(fill = "Dispersal from D") + 
-  guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+  ggplot2::labs(fill = "Dispersal from D") + 
+  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
                                title.position = "top",
@@ -1139,3 +1137,5 @@ knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
 2. Maestri, R., & Duarte, L. D. S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions Renan Maestri. Methods in Ecology and Evolution, 2020(August), 1652–1662. https://doi.org/10.1111/2041-210X.13492
 
 3. Van Dijk, A., Nakamura, G., Rodrigues, A. V., Maestri, R., & Duarte, L. (2021b). Imprints of tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves: Passeriformes). Biological Journal of the Linnean Society, 134(1), 57–67. https://doi.org/10.1093/biolinnean/blab079
+
+4. 
