@@ -70,7 +70,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to Herodotools</h1>
             
-            <h4 data-toc-skip class="date">2022-11-21</h4>
+            <h4 data-toc-skip class="date">2022-11-29</h4>
       
       
       <div class="hidden name"><code>Intro_Herodotools_vignette.Rmd</code></div>
@@ -283,46 +283,46 @@
 <h2 id="mergeMacroAssemblage">Ancestral area reconstruction for Akodon species<a class="anchor" aria-label="anchor" href="#mergeMacroAssemblage"></a>
 </h2>
 <p>In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed using <a href="https://github.com/nmatzke/BioGeoBEARS" class="external-link">BioGeoBEARS</a>, a tool commonly used in macroevolution studies.</p>
-<p>First, we have to define the membership of each species regarding the evoregions. This will correspond to the current area of species.</p>
+<p>First, we have to define the occurrence of each species regarding the evoregions. This will correspond to the current area of species.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">akodon.evoregion.data</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="co"># bind compostion matrix and the site evoregion</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span></span>
 <span>    <span class="va">akodon.pa.tree</span>,</span>
 <span>    site.region <span class="op">=</span>  <span class="va">site.region</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="co"># transform the matrix in a longer dataframe </span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
 <span>    cols <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, </span>
 <span>    names_to <span class="op">=</span> <span class="st">"species"</span>,</span>
 <span>    values_to <span class="op">=</span> <span class="st">"presence"</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="co"># filter only the rows with the presence of a species</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">presence</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">presence</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="co"># Count the number of sites in a region that a species is present</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">site.region</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">site.region</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="co"># Calculate the propotional area of a species in each region</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    species.total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>, </span>
 <span>    prec.occupation <span class="op">=</span> <span class="va">n</span><span class="op">/</span><span class="va">species.total</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="co"># Filter for each species the evoregions with more than 25% of area ocupied </span></span>
 <span>  <span class="co"># by the species</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">prec.occupation</span> <span class="op">&gt;=</span> <span class="fl">.25</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    area <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="va">site.region</span><span class="op">]</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">area</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span> value <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span> value <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="co"># transform in a dataframe with species in rows and areas ocupied [0-1] in columns</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span></span>
 <span>    id_cols <span class="op">=</span> <span class="va">species</span>,</span>
 <span>    names_from <span class="op">=</span> <span class="va">area</span>, </span>
 <span>    names_sort <span class="op">=</span> <span class="cn">T</span>,</span>
@@ -338,7 +338,7 @@
 <p>The object created in the last step can be used in an auxiliary function present in Herodotools to easily produce the <a href="http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html" class="external-link">Phyllip</a> file required to run the analysis of ancestral area reconstruction using BioGeoBEARS.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save phyllip file</span></span>
-<span><span class="fu"><a href="../reference/tipranges_to_BioGeoBEARS.html">tipranges_to_BioGeoBEARS</a></span><span class="op">(</span></span>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/tipranges_to_BioGeoBEARS.html">tipranges_to_BioGeoBEARS</a></span><span class="op">(</span></span>
 <span>  <span class="va">a.regions</span>, </span>
 <span>  <span class="co"># please set a new path to save the file</span></span>
 <span>  filename <span class="op">=</span> <span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,</span>
@@ -347,8 +347,7 @@
 <p>Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB processor machine), and this is not the objective of this tutorial to show how to run a reconstruction using BioGeoBEARS we can just read a reconstruction model perfomed using DEC model to reconstruct the evoregions. However if you want to see the code we used to run the BioGeoBEARS models, here is the code <code>file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))</code>.</p>
 <p>Read the file containing the results of DEC model reconstruction:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://phylo.wikidot.com/biogeobears" class="external-link">BioGeoBEARS</a></span><span class="op">)</span></span>
-<span></span>
+<code class="sourceCode R"><span></span>
 <span><span class="co"># ancestral reconstruction</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"resDEC_akodon.RData"</span>, package <span class="op">=</span> <span class="st">"Herodotools"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
 <p>It is worth to note that the procedures decribed from here will work with any model of ancestral area reconstruction, but for sake of simplicity we decided to use only the <a href="https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html" class="external-link">DEC model</a>.</p>
@@ -368,7 +367,7 @@
 <span></span>
 <span><span class="co"># getting the ancestral range area for each node </span></span>
 <span><span class="va">node.area</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu"><a href="../reference/get_node_range_BioGeoBEARS.html">get_node_range_BioGeoBEARS</a></span><span class="op">(</span></span>
+<span>  <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/get_node_range_BioGeoBEARS.html">get_node_range_BioGeoBEARS</a></span><span class="op">(</span></span>
 <span>    <span class="va">resDEC</span>,</span>
 <span>    phyllip.file <span class="op">=</span> <span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,</span>
 <span>    <span class="va">akodon.newick</span>,</span>
@@ -376,14 +375,14 @@
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># calculating age arrival </span></span>
-<span><span class="va">age_comm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/age_arrival.html">age_arrival</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>, </span>
+<span><span class="va">age_comm</span> <span class="op">&lt;-</span> <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/age_arrival.html">age_arrival</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>, </span>
 <span>                        tree <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
 <span>                        ancestral.area <span class="op">=</span> <span class="va">node.area</span>, </span>
 <span>                        biogeo <span class="op">=</span> <span class="va">biogeo_area</span><span class="op">)</span> </span></code></pre></div>
 <p>The function <code>age_arrival</code> returns a object containing the mean age for each assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is by represent it as a low arrival value for those species, and another option is to attribute the age corresponding to half of the branch length connecting the ancestor to the present time. Here we adopted the first option.</p>
 <p>With mean age for each assemblage we can map the ages for all assemblages</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a></span>
-<span id="cb16-2"><a href="#cb16-2"></a>sites &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(site.xy, <span class="dt">site.region =</span>  site.region, <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site.xy, <span class="dt">site.region =</span>  site.region, <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage)</span>
 <span id="cb16-3"><a href="#cb16-3"></a></span>
 <span id="cb16-4"><a href="#cb16-4"></a>map_age &lt;-<span class="st"> </span></span>
 <span id="cb16-5"><a href="#cb16-5"></a><span class="st">  </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -404,8 +403,8 @@
 <span id="cb16-20"><a href="#cb16-20"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> map.limits<span class="op">$</span>x, <span class="dt">ylim =</span> map.limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb16-21"><a href="#cb16-21"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"B"</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb16-22"><a href="#cb16-22"></a><span class="st">  </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb16-23"><a href="#cb16-23"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"Mean age (Myr)"</span>) <span class="op">+</span></span>
-<span id="cb16-24"><a href="#cb16-24"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb16-23"><a href="#cb16-23"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"Mean age (Myr)"</span>) <span class="op">+</span></span>
+<span id="cb16-24"><a href="#cb16-24"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb16-25"><a href="#cb16-25"></a>                               <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb16-26"><a href="#cb16-26"></a>                               <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb16-27"><a href="#cb16-27"></a>                               <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
@@ -427,14 +426,14 @@
 <p>We modified the original metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy, this value represent the diversification that occurred due to <em>in situ diversification process</em></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">akodon_diversification</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu"><a href="../reference/db_diversification.html">db_diversification</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/db_diversification.html">db_diversification</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
 <span>                   tree <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
 <span>                   ancestral.area <span class="op">=</span> <span class="va">node.area</span>, </span>
 <span>                   biogeo <span class="op">=</span> <span class="va">biogeo_area</span>, </span>
 <span>                   diversification <span class="op">=</span> <span class="st">"jetz"</span>,</span>
 <span>                   type <span class="op">=</span> <span class="st">"equal.splits"</span><span class="op">)</span></span></code></pre></div>
 <p>The result of <code>db_diversification</code> function is composed by a data-frame containing the value of in-situ diversification for each species in each assemblage and a vector with the harmonic mean in-situ diversification for each assemblage. As with age, we can plot the model based diversification metric to look at the spatial patterns of in-situ diversification in Akodon assemblages.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>sites &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(site.xy,</span>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site.xy,</span>
 <span id="cb18-2"><a href="#cb18-2"></a>                   <span class="dt">site.region =</span>  site.region,</span>
 <span id="cb18-3"><a href="#cb18-3"></a>                   <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage,</span>
 <span id="cb18-4"><a href="#cb18-4"></a>                   <span class="dt">diversification_model_based =</span> akodon_diversification<span class="op">$</span>model_based_Jetz_harmonic_mean_site,</span>
@@ -442,7 +441,7 @@
 <span id="cb18-6"><a href="#cb18-6"></a></span>
 <span id="cb18-7"><a href="#cb18-7"></a>map_diversification &lt;-<span class="st"> </span></span>
 <span id="cb18-8"><a href="#cb18-8"></a><span class="st">   </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb18-9"><a href="#cb18-9"></a><span class="st">   </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb18-10"><a href="#cb18-10"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">x =</span> LONG, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> diversification)) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb18-11"><a href="#cb18-11"></a><span class="st">   </span><span class="kw">scale_fill_carto_c</span>(<span class="dt">type =</span> <span class="st">"quantitative"</span>, <span class="dt">palette =</span> <span class="st">"SunsetDark"</span>) <span class="op">+</span></span>
 <span id="cb18-12"><a href="#cb18-12"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_sf</span>(<span class="dt">data =</span> coastline, <span class="dt">size =</span> <span class="fl">0.4</span>) <span class="op">+</span></span>
@@ -454,8 +453,8 @@
 <span id="cb18-18"><a href="#cb18-18"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> map.limits<span class="op">$</span>x, <span class="dt">ylim =</span> map.limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb18-19"><a href="#cb18-19"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"Diversification *sensu* Jetz"</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb18-20"><a href="#cb18-20"></a><span class="st">   </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb18-21"><a href="#cb18-21"></a><span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"Harmonic mean diversification"</span>) <span class="op">+</span></span>
-<span id="cb18-22"><a href="#cb18-22"></a><span class="st">    </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb18-21"><a href="#cb18-21"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"Harmonic mean diversification"</span>) <span class="op">+</span></span>
+<span id="cb18-22"><a href="#cb18-22"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb18-23"><a href="#cb18-23"></a>                               <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb18-24"><a href="#cb18-24"></a>                               <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb18-25"><a href="#cb18-25"></a>                               <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
@@ -468,7 +467,7 @@
 <span id="cb18-32"><a href="#cb18-32"></a></span>
 <span id="cb18-33"><a href="#cb18-33"></a>map_diversification_model_based &lt;-<span class="st"> </span></span>
 <span id="cb18-34"><a href="#cb18-34"></a><span class="st">  </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb18-35"><a href="#cb18-35"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb18-35"><a href="#cb18-35"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb18-36"><a href="#cb18-36"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">x =</span> LONG, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> diversification_model_based)) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb18-37"><a href="#cb18-37"></a><span class="st">  </span><span class="kw">scale_fill_carto_c</span>(<span class="dt">type =</span> <span class="st">"quantitative"</span>,</span>
 <span id="cb18-38"><a href="#cb18-38"></a>                     <span class="dt">palette =</span> <span class="st">"SunsetDark"</span>, </span>
@@ -485,8 +484,8 @@
 <span id="cb18-49"><a href="#cb18-49"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> map.limits<span class="op">$</span>x, <span class="dt">ylim =</span> map.limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb18-50"><a href="#cb18-50"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"C"</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb18-51"><a href="#cb18-51"></a><span class="st">  </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb18-52"><a href="#cb18-52"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"In-situ diversification"</span>) <span class="op">+</span></span>
-<span id="cb18-53"><a href="#cb18-53"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb18-52"><a href="#cb18-52"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"In-situ diversification"</span>) <span class="op">+</span></span>
+<span id="cb18-53"><a href="#cb18-53"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb18-54"><a href="#cb18-54"></a>                               <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb18-55"><a href="#cb18-55"></a>                               <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb18-56"><a href="#cb18-56"></a>                               <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
@@ -512,13 +511,13 @@
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">akodon_dispersal</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu"><a href="../reference/dispersal_from.html">dispersal_from</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/dispersal_from.html">dispersal_from</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
 <span>               tree <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
 <span>               ancestral.area <span class="op">=</span> <span class="va">node.area</span>, </span>
 <span>               biogeo <span class="op">=</span> <span class="va">biogeo_area</span><span class="op">)</span></span></code></pre></div>
 <p>We also can map the contribution of dispersal for all regions. Note that the area of ancestral range focused in each map have no values of dipersal from, since it is the source of dispersal to the other regions.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a></span>
-<span id="cb20-2"><a href="#cb20-2"></a>sites &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(site.xy,</span>
+<span id="cb20-2"><a href="#cb20-2"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site.xy,</span>
 <span id="cb20-3"><a href="#cb20-3"></a>                   <span class="dt">site.region =</span>  site.region, </span>
 <span id="cb20-4"><a href="#cb20-4"></a>                   <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage,</span>
 <span id="cb20-5"><a href="#cb20-5"></a>                   <span class="dt">diversification =</span> akodon_diversification<span class="op">$</span>Jetz_harmonic_mean_site,</span>
@@ -531,7 +530,7 @@
 <span id="cb20-12"><a href="#cb20-12"></a></span>
 <span id="cb20-13"><a href="#cb20-13"></a>map_dispersal_D &lt;-<span class="st"> </span></span>
 <span id="cb20-14"><a href="#cb20-14"></a><span class="st">   </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb20-15"><a href="#cb20-15"></a><span class="st">   </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb20-15"><a href="#cb20-15"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb20-16"><a href="#cb20-16"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">x =</span> LONG, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> dispersal.D)) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb20-17"><a href="#cb20-17"></a><span class="st">      </span><span class="kw">scale_fill_carto_c</span>(</span>
 <span id="cb20-18"><a href="#cb20-18"></a>     <span class="dt">type =</span> <span class="st">"quantitative"</span>, <span class="dt">palette =</span> <span class="st">"SunsetDark"</span>, <span class="dt">na.value =</span> <span class="st">"white"</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
@@ -545,8 +544,8 @@
 <span id="cb20-26"><a href="#cb20-26"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> map.limits<span class="op">$</span>x, <span class="dt">ylim =</span> map.limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb20-27"><a href="#cb20-27"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"From D"</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb20-28"><a href="#cb20-28"></a><span class="st">   </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb20-29"><a href="#cb20-29"></a><span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"% of contribution"</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb20-30"><a href="#cb20-30"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb20-29"><a href="#cb20-29"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"% of contribution"</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb20-30"><a href="#cb20-30"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb20-31"><a href="#cb20-31"></a>                               <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb20-32"><a href="#cb20-32"></a>                               <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb20-33"><a href="#cb20-33"></a>                               <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
@@ -562,7 +561,7 @@
 <span id="cb20-43"><a href="#cb20-43"></a></span>
 <span id="cb20-44"><a href="#cb20-44"></a>map_dispersal_A &lt;-<span class="st"> </span></span>
 <span id="cb20-45"><a href="#cb20-45"></a><span class="st">   </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb20-46"><a href="#cb20-46"></a><span class="st">   </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb20-46"><a href="#cb20-46"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb20-47"><a href="#cb20-47"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">x =</span> LONG, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> dispersal.A)) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb20-48"><a href="#cb20-48"></a><span class="st">      </span><span class="kw">scale_fill_carto_c</span>(</span>
 <span id="cb20-49"><a href="#cb20-49"></a>     <span class="dt">type =</span> <span class="st">"quantitative"</span>, <span class="dt">palette =</span> <span class="st">"SunsetDark"</span>, <span class="dt">na.value =</span> <span class="st">"white"</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
@@ -576,8 +575,8 @@
 <span id="cb20-57"><a href="#cb20-57"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> map.limits<span class="op">$</span>x, <span class="dt">ylim =</span> map.limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb20-58"><a href="#cb20-58"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"From A"</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb20-59"><a href="#cb20-59"></a><span class="st">   </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb20-60"><a href="#cb20-60"></a><span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"% of contribution"</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb20-61"><a href="#cb20-61"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb20-60"><a href="#cb20-60"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"% of contribution"</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb20-61"><a href="#cb20-61"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb20-62"><a href="#cb20-62"></a>                               <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb20-63"><a href="#cb20-63"></a>                               <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb20-64"><a href="#cb20-64"></a>                               <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
@@ -593,7 +592,7 @@
 <span id="cb20-74"><a href="#cb20-74"></a></span>
 <span id="cb20-75"><a href="#cb20-75"></a>map_dispersal_B &lt;-<span class="st"> </span></span>
 <span id="cb20-76"><a href="#cb20-76"></a><span class="st">   </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb20-77"><a href="#cb20-77"></a><span class="st">   </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb20-77"><a href="#cb20-77"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb20-78"><a href="#cb20-78"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">x =</span> LONG, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> dispersal.B)) <span class="op">+</span></span>
 <span id="cb20-79"><a href="#cb20-79"></a><span class="st">   </span><span class="kw">scale_fill_carto_c</span>(</span>
 <span id="cb20-80"><a href="#cb20-80"></a>     <span class="dt">type =</span> <span class="st">"quantitative"</span>, <span class="dt">palette =</span> <span class="st">"SunsetDark"</span>, <span class="dt">na.value =</span> <span class="st">"white"</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
@@ -607,8 +606,8 @@
 <span id="cb20-88"><a href="#cb20-88"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> map.limits<span class="op">$</span>x, <span class="dt">ylim =</span> map.limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb20-89"><a href="#cb20-89"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"From B"</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb20-90"><a href="#cb20-90"></a><span class="st">   </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb20-91"><a href="#cb20-91"></a><span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"% of contribution"</span>) <span class="op">+</span></span>
-<span id="cb20-92"><a href="#cb20-92"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb20-91"><a href="#cb20-91"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"% of contribution"</span>) <span class="op">+</span></span>
+<span id="cb20-92"><a href="#cb20-92"></a><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb20-93"><a href="#cb20-93"></a>                               <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb20-94"><a href="#cb20-94"></a>                               <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb20-95"><a href="#cb20-95"></a>                               <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
@@ -636,14 +635,14 @@
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">akodon_db_metrics</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu"><a href="../reference/div_based_metrics.html">div_based_metrics</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/div_based_metrics.html">div_based_metrics</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
 <span>                  tree <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
 <span>                  ancestral.area <span class="op">=</span> <span class="va">node.area</span>, </span>
 <span>                  biogeo <span class="op">=</span> <span class="va">biogeo_area</span>, </span>
 <span>                  PD <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                  PE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>As the other metrics we can plot PDdb and PEdb in a map</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>sites &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(site.xy,</span>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site.xy,</span>
 <span id="cb22-2"><a href="#cb22-2"></a>                   <span class="dt">site.region =</span>  site.region, </span>
 <span id="cb22-3"><a href="#cb22-3"></a>                   <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage,</span>
 <span id="cb22-4"><a href="#cb22-4"></a>                   <span class="dt">diversification =</span> akodon_diversification<span class="op">$</span>Jetz_harmonic_mean_site,</span>
@@ -654,7 +653,7 @@
 <span id="cb22-9"><a href="#cb22-9"></a></span>
 <span id="cb22-10"><a href="#cb22-10"></a>map_PE &lt;-<span class="st"> </span></span>
 <span id="cb22-11"><a href="#cb22-11"></a><span class="st">   </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb22-12"><a href="#cb22-12"></a><span class="st">   </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb22-12"><a href="#cb22-12"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb22-13"><a href="#cb22-13"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">x =</span> LONG, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> PE)) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb22-14"><a href="#cb22-14"></a><span class="st">   </span><span class="kw">scale_fill_carto_c</span>(<span class="dt">type =</span> <span class="st">"quantitative"</span>, <span class="dt">palette =</span> <span class="st">"SunsetDark"</span>) <span class="op">+</span></span>
 <span id="cb22-15"><a href="#cb22-15"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_sf</span>(<span class="dt">data =</span> coastline, <span class="dt">size =</span> <span class="fl">0.4</span>) <span class="op">+</span></span>
@@ -666,8 +665,8 @@
 <span id="cb22-21"><a href="#cb22-21"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> map.limits<span class="op">$</span>x, <span class="dt">ylim =</span> map.limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb22-22"><a href="#cb22-22"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"PE for Akodon Genus"</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb22-23"><a href="#cb22-23"></a><span class="st">   </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb22-24"><a href="#cb22-24"></a><span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"PE value"</span>) <span class="op">+</span></span>
-<span id="cb22-25"><a href="#cb22-25"></a><span class="st">    </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb22-24"><a href="#cb22-24"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"PE value"</span>) <span class="op">+</span></span>
+<span id="cb22-25"><a href="#cb22-25"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb22-26"><a href="#cb22-26"></a>                               <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb22-27"><a href="#cb22-27"></a>                               <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb22-28"><a href="#cb22-28"></a>                               <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
@@ -680,7 +679,7 @@
 <span id="cb22-35"><a href="#cb22-35"></a></span>
 <span id="cb22-36"><a href="#cb22-36"></a>map_PEdb &lt;-<span class="st"> </span></span>
 <span id="cb22-37"><a href="#cb22-37"></a><span class="st">   </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb22-38"><a href="#cb22-38"></a><span class="st">   </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb22-38"><a href="#cb22-38"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb22-39"><a href="#cb22-39"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">x =</span> LONG, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> PEdb)) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb22-40"><a href="#cb22-40"></a><span class="st">   </span><span class="kw">scale_fill_carto_c</span>(<span class="dt">type =</span> <span class="st">"quantitative"</span>, <span class="dt">palette =</span> <span class="st">"SunsetDark"</span>) <span class="op">+</span></span>
 <span id="cb22-41"><a href="#cb22-41"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">geom_sf</span>(<span class="dt">data =</span> coastline, <span class="dt">size =</span> <span class="fl">0.4</span>) <span class="op">+</span></span>
@@ -692,8 +691,8 @@
 <span id="cb22-47"><a href="#cb22-47"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> map.limits<span class="op">$</span>x, <span class="dt">ylim =</span> map.limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb22-48"><a href="#cb22-48"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">ggtitle</span>(<span class="st">"PEdb for Akodon Genus"</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb22-49"><a href="#cb22-49"></a><span class="st">   </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb22-50"><a href="#cb22-50"></a><span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"PEdb value"</span>) <span class="op">+</span></span>
-<span id="cb22-51"><a href="#cb22-51"></a><span class="st">    </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb22-50"><a href="#cb22-50"></a><span class="st">   </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">"PEdb value"</span>) <span class="op">+</span></span>
+<span id="cb22-51"><a href="#cb22-51"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb22-52"><a href="#cb22-52"></a>                               <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb22-53"><a href="#cb22-53"></a>                               <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb22-54"><a href="#cb22-54"></a>                               <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
@@ -761,21 +760,21 @@
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># transition rates for each community</span></span>
-<span><span class="va">averaged_rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dfr</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">comm.data</span><span class="op">)</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">averaged_rates</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dfr</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">comm.data</span><span class="op">)</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="co"># across assemblages</span></span>
-<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dfr</a></span><span class="op">(</span><span class="va">trans_rates</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">sims</span><span class="op">)</span> <span class="op">{</span> <span class="co"># across simulations</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dfr</a></span><span class="op">(</span><span class="va">trans_rates</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">sims</span><span class="op">)</span> <span class="op">{</span> <span class="co"># across simulations</span></span>
 <span>    </span>
 <span>    <span class="co"># species in the assemblages</span></span>
-<span>    <span class="va">gather_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span> <span class="op">(</span><span class="va">comm.data</span><span class="op">[</span><span class="va">i</span>,<span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">comm.data</span><span class="op">[</span><span class="va">i</span>,<span class="op">]</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co"># get the names</span></span>
+<span>    <span class="va">gather_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">comm.data</span><span class="op">[</span><span class="va">i</span>,<span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">comm.data</span><span class="op">[</span><span class="va">i</span>,<span class="op">]</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co"># get the names</span></span>
 <span>    <span class="co"># subset of rates</span></span>
-<span>    <span class="va">rates</span> <span class="op">&lt;-</span> <span class="va">sims</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span> <span class="op">(</span><span class="va">sims</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">gather_names</span><span class="op">)</span>,</span>
+<span>    <span class="va">rates</span> <span class="op">&lt;-</span> <span class="va">sims</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span> <span class="op">(</span><span class="va">sims</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">gather_names</span><span class="op">)</span>,</span>
 <span>                   <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prop.transitions"</span>, </span>
 <span>                     <span class="st">"stasis.time"</span>,</span>
 <span>                     <span class="st">"last.transition.time"</span><span class="op">)</span><span class="op">]</span></span>
 <span>    <span class="va">mean_rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">rates</span>, <span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span> <span class="co"># and calculate the average</span></span>
 <span>    <span class="va">mean_rates</span></span>
 <span>  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>    <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">mean</span><span class="op">)</span></span>
+<span>    <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">mean</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>We will represent in space the variation in the tip-based metrics for rodent assemblages. It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained their phenotipic state during more time than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico. These results are potentially reflecting i) the location of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a></span>
@@ -784,7 +783,7 @@
 <span id="cb26-4"><a href="#cb26-4"></a></span>
 <span id="cb26-5"><a href="#cb26-5"></a>data_to_map_long &lt;-<span class="st"> </span></span>
 <span id="cb26-6"><a href="#cb26-6"></a><span class="st">  </span>data_to_map_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb26-7"><a href="#cb26-7"></a><span class="st">  </span><span class="kw">pivot_longer</span>(</span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</span>
 <span id="cb26-8"><a href="#cb26-8"></a>    <span class="dt">cols =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>,</span>
 <span id="cb26-9"><a href="#cb26-9"></a>    <span class="dt">names_to =</span> <span class="st">"variables"</span>,</span>
 <span id="cb26-10"><a href="#cb26-10"></a>    <span class="dt">values_to =</span> <span class="st">"values"</span></span>
@@ -802,7 +801,7 @@
 <span id="cb26-22"><a href="#cb26-22"></a>  </span>
 <span id="cb26-23"><a href="#cb26-23"></a>  sel_data &lt;-<span class="st"> </span></span>
 <span id="cb26-24"><a href="#cb26-24"></a><span class="st">    </span>data_to_map_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb26-25"><a href="#cb26-25"></a><span class="st">    </span><span class="kw">filter</span>(variables <span class="op">==</span><span class="st"> </span>metric)</span>
+<span id="cb26-25"><a href="#cb26-25"></a><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">filter</span>(variables <span class="op">==</span><span class="st"> </span>metric)</span>
 <span id="cb26-26"><a href="#cb26-26"></a>  </span>
 <span id="cb26-27"><a href="#cb26-27"></a>  var_range &lt;-<span class="st"> </span><span class="kw">range</span>(sel_data<span class="op">$</span>values) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>)</span>
 <span id="cb26-28"><a href="#cb26-28"></a>  var_breaks &lt;-<span class="st"> </span><span class="kw">seq</span>(var_range[<span class="dv">1</span>], var_range[<span class="dv">2</span>], <span class="kw">diff</span>(var_range<span class="op">/</span><span class="dv">4</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>)</span>
@@ -815,7 +814,7 @@
 <span id="cb26-35"><a href="#cb26-35"></a>  <span class="kw">ggplot</span>() <span class="op">+</span></span>
 <span id="cb26-36"><a href="#cb26-36"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">geom_raster</span>(<span class="dt">data =</span> sel_data, </span>
 <span id="cb26-37"><a href="#cb26-37"></a>                <span class="kw">aes</span>(<span class="dt">x =</span> LONG, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> values)) <span class="op">+</span></span>
-<span id="cb26-38"><a href="#cb26-38"></a><span class="st">    </span><span class="kw">scale_fill_carto_c</span>(</span>
+<span id="cb26-38"><a href="#cb26-38"></a><span class="st">    </span>rcartocolor<span class="op">::</span><span class="kw">scale_fill_carto_c</span>(</span>
 <span id="cb26-39"><a href="#cb26-39"></a>      <span class="dt">type =</span> <span class="st">"quantitative"</span>, </span>
 <span id="cb26-40"><a href="#cb26-40"></a>      <span class="dt">palette =</span> <span class="st">"SunsetDark"</span>, </span>
 <span id="cb26-41"><a href="#cb26-41"></a>      <span class="dt">na.value =</span> <span class="st">"white"</span>, </span>
@@ -825,13 +824,13 @@
 <span id="cb26-45"><a href="#cb26-45"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">geom_sf</span>(<span class="dt">data =</span> coastline, <span class="dt">size =</span> <span class="fl">0.4</span>) <span class="op">+</span></span>
 <span id="cb26-46"><a href="#cb26-46"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> sig_map_limits<span class="op">$</span>x, <span class="dt">ylim =</span> sig_map_limits<span class="op">$</span>y) <span class="op">+</span></span>
 <span id="cb26-47"><a href="#cb26-47"></a><span class="st">    </span>ggplot2<span class="op">::</span>ggplot2<span class="op">::</span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb26-48"><a href="#cb26-48"></a><span class="st">    </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
+<span id="cb26-48"><a href="#cb26-48"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(<span class="dt">barheight =</span> <span class="kw">unit</span>(<span class="fl">2.3</span>, <span class="dt">units =</span> <span class="st">"mm"</span>),  </span>
 <span id="cb26-49"><a href="#cb26-49"></a>                                 <span class="dt">direction =</span> <span class="st">"horizontal"</span>,</span>
 <span id="cb26-50"><a href="#cb26-50"></a>                                 <span class="dt">ticks.colour =</span> <span class="st">"grey20"</span>,</span>
 <span id="cb26-51"><a href="#cb26-51"></a>                                 <span class="dt">title.position =</span> <span class="st">"top"</span>,</span>
 <span id="cb26-52"><a href="#cb26-52"></a>                                 <span class="dt">label.position =</span> <span class="st">"bottom"</span>,</span>
 <span id="cb26-53"><a href="#cb26-53"></a>                                 <span class="dt">title.hjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span></span>
-<span id="cb26-54"><a href="#cb26-54"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> plot.title) <span class="op">+</span></span>
+<span id="cb26-54"><a href="#cb26-54"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">labs</span>(<span class="dt">title =</span> plot.title) <span class="op">+</span></span>
 <span id="cb26-55"><a href="#cb26-55"></a><span class="st">    </span>ggplot2<span class="op">::</span><span class="kw">theme</span>(</span>
 <span id="cb26-56"><a href="#cb26-56"></a>      <span class="dt">legend.position =</span> <span class="st">"bottom"</span>,</span>
 <span id="cb26-57"><a href="#cb26-57"></a>      <span class="dt">axis.title =</span> <span class="kw">element_blank</span>(),</span>
@@ -844,8 +843,8 @@
 <span id="cb26-64"><a href="#cb26-64"></a>})</span>
 <span id="cb26-65"><a href="#cb26-65"></a></span>
 <span id="cb26-66"><a href="#cb26-66"></a><span class="co"># Create map</span></span>
-<span id="cb26-67"><a href="#cb26-67"></a>mapTransition_rate &lt;-<span class="st"> </span><span class="kw">wrap_plots</span>(list_map_transitions) <span class="op">+</span></span>
-<span id="cb26-68"><a href="#cb26-68"></a><span class="st">  </span><span class="kw">plot_annotation</span>(<span class="dt">tag_levels =</span> <span class="st">"A"</span>)</span></code></pre></div>
+<span id="cb26-67"><a href="#cb26-67"></a>mapTransition_rate &lt;-<span class="st"> </span>patchwork<span class="op">::</span><span class="kw">wrap_plots</span>(list_map_transitions) <span class="op">+</span></span>
+<span id="cb26-68"><a href="#cb26-68"></a><span class="st">  </span>patchwork<span class="op">::</span><span class="kw">plot_annotation</span>(<span class="dt">tag_levels =</span> <span class="st">"A"</span>)</span></code></pre></div>
 <p><img src="Fig8_map_TransitionRate.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -855,6 +854,7 @@
 <li><p>Luza, A. L., Maestri, R., Debastiani, V. J., Patterson, B. D., Maria, S., &amp; Leandro, H. (2021). Is evolution faster at ecotones? A test using rates and tempo of diet transitions in Neotropical Sigmodontinae ( Rodentia , Cricetidae ). Ecology and Evolution, December, 18676–18690. <a href="https://doi.org/10.1002/ece3.8476" class="external-link uri">https://doi.org/10.1002/ece3.8476</a></p></li>
 <li><p>Maestri, R., &amp; Duarte, L. D. S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions Renan Maestri. Methods in Ecology and Evolution, 2020(August), 1652–1662. <a href="https://doi.org/10.1111/2041-210X.13492" class="external-link uri">https://doi.org/10.1111/2041-210X.13492</a></p></li>
 <li><p>Van Dijk, A., Nakamura, G., Rodrigues, A. V., Maestri, R., &amp; Duarte, L. (2021b). Imprints of tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves: Passeriformes). Biological Journal of the Linnean Society, 134(1), 57–67. <a href="https://doi.org/10.1093/biolinnean/blab079" class="external-link uri">https://doi.org/10.1093/biolinnean/blab079</a></p></li>
+<li>
 </ol>
 </div>
   </div>
