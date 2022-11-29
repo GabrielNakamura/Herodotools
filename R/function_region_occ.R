@@ -36,7 +36,7 @@ region_occ <- function(comm, site.region){
     dplyr::filter(presence == 1) %>% 
     # Count the number of sites in a region that a species is present
     dplyr::group_by(species, site.region) %>% 
-    dplyr::summarise(n = n()) %>% 
+    dplyr::summarise(n = dplyr::n()) %>% 
     dplyr::ungroup() %>% 
     # Calculate the propotional area of a species in each region
     dplyr::group_by(species) %>% 
@@ -54,7 +54,7 @@ region_occ <- function(comm, site.region){
       area = LETTERS[site.region]
     ) %>% 
     dplyr::select(species, area) %>% 
-    dplyr::mutate( value = 1) %>% 
+    dplyr::mutate(value = 1) %>% 
     # transform in a dataframe with species in rows and areas ocupied [0-1] in columns
     tidyr::pivot_wider(
       id_cols = species,

@@ -31,6 +31,9 @@
 #'  # hypothetical occurrence matrix with species in columns and assemblages in lines
 #'  W_toy<- matrix(c(0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0),nrow= 3,ncol= 5,dimnames=list(c("Comm 1", "Comm 2", "Comm 3"),c(paste("s", 1:5, sep=""))))
 #'  
+#'  #toy tree
+#'  data(toy_tree)
+#'  
 #'  # hypothetical data indicating the ecoregions of each assemblage
 #'  biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
 #'  

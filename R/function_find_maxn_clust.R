@@ -6,7 +6,7 @@
 #' @param method c("kmeans","ward"). See \code{\link{find.clusters}} of adegenet package.
 #' @param stat c("BIC", "AIC", or "WSS"). See \code{\link{find.clusters}} of adegenet package.
 #' @param criterion c("diffNgroup", "min","goesup", "smoothNgoesup", or "goodfit"). See \code{\link{find.clusters}} of adegenet package.
-#' @param max.nclust Value of set of values defining the maximum number of groups to be evaluated.
+#' @param max.nclust Scalar indicating the maximum number of groups to be evaluated.
 #' @param subset number of cells used in the analysis. It is particularly important whenever the total number of cells is large (> 1000).
 #' @param confidence.level threshold confidence level used to estimate congruence in the classification pattern.
 #'
@@ -17,8 +17,11 @@
 #' @export
 #'
 #' @examples
-#' 
-
+#' \dontrun{
+#' data(regions)
+#' evovectors <- regions$PCPS$vectors # eigenvectors by site
+#' find_max_nclust(x=evovectors, threshold=3,max.nclust=10)
+#' }
 find_max_nclust <- function(x, 
                             threshold, 
                             max.nclust,

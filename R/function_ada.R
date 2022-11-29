@@ -25,9 +25,6 @@
 #' @importFrom stats cophenetic density
 #' 
 #' @export
-#'
-#' @examples
-#' 
 ada <- function(x,
                 phy, 
                 sp.bin = "Sturges", 

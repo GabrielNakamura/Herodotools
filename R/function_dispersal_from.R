@@ -15,7 +15,6 @@
 #' @export
 #'
 #' @examples
-#' 
 #' \dontrun{
 #' data(akodon.sites) # occurrence matrix
 #' data(akodon.pa.tree) # phylogenetic tree
