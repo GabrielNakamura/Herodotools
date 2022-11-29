@@ -101,12 +101,12 @@ rich.tree <- rowSums(akodon.pa.tree)
 map_rich_tree <- 
 dplyr::bind_cols(site.xy, rich.tree = rich.tree) %>% 
   ggplot2::ggplot() + 
-  ggplot2::ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = rich.tree)) + 
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = rich.tree)) + 
   rcartocolor::scale_fill_carto_c(name = "Richness", type = "quantitative", palette = "SunsetDark") +
-  ggplot2::ggplot2::geom_sf(data = coastline) +
-  ggplot2::ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
-  ggplot2::ggplot2::ggtitle("Richness for Akodon Genus") +
-  ggplot2::ggplot2::ggplot2::theme_bw()
+  ggplot2::geom_sf(data = coastline) +
+  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::ggtitle("Richness for Akodon Genus") +
+  ggplot2::theme_bw()
 
 ```
 
@@ -206,7 +206,7 @@ map_evoregion <-
     size = 0.2) +
   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
   ggplot2::ggtitle("A") + 
-  ggplot2::ggplot2::theme_bw() +
+  ggplot2::theme_bw() +
   ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
@@ -269,7 +269,7 @@ map_joint_evoregion_afilliation <-
    ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
    ggplot2::ggtitle("Evoregion and afilliation for Akodon Genus") + 
    guides(guide_legend(direction = "vertical")) +
-   ggplot2::ggplot2::theme_bw() +
+   ggplot2::theme_bw() +
    ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank()
@@ -296,55 +296,7 @@ First, we have to define the occurrence of each species regarding the evoregions
 
 ```{r echo=TRUE}
 
-akodon.evoregion.data <- 
-  # bind compostion matrix and the site evoregion
-  dplyr::bind_cols(
-    akodon.pa.tree,
-    site.region =  site.region
-  ) %>% 
-  # transform the matrix in a longer dataframe 
-  tidyr::pivot_longer(
-    cols = 1:30, 
-    names_to = "species",
-    values_to = "presence"
-  ) %>% 
-  # filter only the rows with the presence of a species
-  dplyr::filter(presence == 1) %>% 
-  # Count the number of sites in a region that a species is present
-  dplyr::group_by(species, site.region) %>% 
-  dplyr::summarise(n = n()) %>% 
-  dplyr::ungroup() %>% 
-  # Calculate the propotional area of a species in each region
-  dplyr::group_by(species) %>% 
-  dplyr::mutate(
-    species.total = sum(n), 
-    prec.occupation = n/species.total
-  ) %>% 
-  dplyr::ungroup() %>% 
-  # Filter for each species the evoregions with more than 25% of area ocupied 
-  # by the species
-  dplyr::filter(
-    prec.occupation >= .25
-  ) %>% 
-  dplyr::mutate(
-    area = LETTERS[site.region]
-  ) %>% 
-  dplyr::select(species, area) %>% 
-  dplyr::mutate( value = 1) %>% 
-  # transform in a dataframe with species in rows and areas ocupied [0-1] in columns
-  tidyr::pivot_wider(
-    id_cols = species,
-    names_from = area, 
-    names_sort = T,
-    values_from = value,
-    values_fill = 0
-  ) %>% 
-  as.data.frame()
-  
-species.names <- akodon.evoregion.data[,1]
-a.regions <- akodon.evoregion.data[,-1]
-
-rownames(a.regions) <- species.names
+Herodotools::a_region <- region_occ(comm = akodon.pa.tree, site.region = site.region)
 
 ```
 
@@ -353,7 +305,7 @@ The object created in the last step can be used in an auxiliary function present
 ```{r echo=TRUE}
 # save phyllip file
 Herodotools::tipranges_to_BioGeoBEARS(
-  a.regions, 
+  a_region, 
   # please set a new path to save the file
   filename = here("inst", "extdata", "geo_area_akodon.data"),
   areanames = NULL
@@ -1136,6 +1088,8 @@ knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
 
 2. Maestri, R., & Duarte, L. D. S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions Renan Maestri. Methods in Ecology and Evolution, 2020(August), 1652–1662. https://doi.org/10.1111/2041-210X.13492
 
+3. Pigot, A. and Etienne, R. (2015). A new dynamic null model for phylogenetic community structure. Ecology Letters, 18(2), 153-163.  https://doi.org/10.1111/ele.12395
+
 3. Van Dijk, A., Nakamura, G., Rodrigues, A. V., Maestri, R., & Duarte, L. (2021b). Imprints of tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves: Passeriformes). Biological Journal of the Linnean Society, 134(1), 57–67. https://doi.org/10.1093/biolinnean/blab079
 
-4. 
+
