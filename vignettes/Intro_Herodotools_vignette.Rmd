@@ -97,20 +97,20 @@ Here we can observe the richness pattern for Akodon genus
 
 ```{r richpattern, echo=TRUE}
 coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
-map.limits <- list(
+map_limits <- list(
   x = c(-95, -30),
   y = c(-55, 12)
 )
 
-rich.tree <- rowSums(akodon.pa.tree)
+richness <- rowSums(akodon.pa.tree)
 
-map_rich_tree <- 
-dplyr::bind_cols(site.xy, rich.tree = rich.tree) %>% 
+map_richness <- 
+dplyr::bind_cols(site.xy, richness = richness) %>% 
   ggplot2::ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = rich.tree)) + 
+  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = richness)) + 
   rcartocolor::scale_fill_carto_c(name = "Richness", type = "quantitative", palette = "SunsetDark") +
   ggplot2::geom_sf(data = coastline) +
-  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("Richness for Akodon Genus") +
   ggplot2::theme_bw()
 
@@ -118,7 +118,7 @@ dplyr::bind_cols(site.xy, rich.tree = rich.tree) %>%
 
 ```{r saveFig1, echo=FALSE}
 
-ggplot2::ggsave(plot = map_rich_tree,  filename = "Fig1_richmap_akodon.png", path = here::here("vignettes"), dpi = "retina")
+ggplot2::ggsave(plot = map_richness,  filename = "Fig1_richmap_akodon.png", path = here::here("vignettes"), dpi = "retina")
 
 ```
 
@@ -170,7 +170,7 @@ sf.evoregion <- terra::as.polygons(r.evoregion) %>%
 
 # Downloading coastline continents and croping to keep only South America
 coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
-map.limits <- list(
+map_limits <- list(
   x = c(-95, -30),
   y = c(-55, 12)
 )
@@ -210,7 +210,7 @@ map_evoregion <-
     color = "#040400",
     fill = NA, 
     size = 0.2) +
-  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("A") + 
   ggplot2::theme_bw() +
   ggplot2::theme(
@@ -272,7 +272,7 @@ map_joint_evoregion_afilliation <-
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
-   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("Evoregion and afilliation for Akodon Genus") + 
    guides(guide_legend(direction = "vertical")) +
    ggplot2::theme_bw() +
@@ -393,7 +393,7 @@ map_age <-
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
-  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("B") + 
   ggplot2::ggplot2::theme_bw() +
   ggplot2::labs(fill = "Mean age (Myr)") +
@@ -462,7 +462,7 @@ map_diversification <-
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
-   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("Diversification *sensu* Jetz") + 
    ggplot2::ggplot2::theme_bw() +
    ggplot2::labs(fill = "Harmonic mean diversification") +
@@ -493,7 +493,7 @@ map_diversification_model_based <-
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
-  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("C") + 
   ggplot2::ggplot2::theme_bw() +
   ggplot2::labs(fill = "In-situ diversification") +
@@ -570,7 +570,7 @@ map_dispersal_D <-
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
-   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("From D") + 
    ggplot2::ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") + 
@@ -601,7 +601,7 @@ map_dispersal_A <-
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
-   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("From A") + 
    ggplot2::ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") + 
@@ -632,7 +632,7 @@ map_dispersal_B <-
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
-   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("From B") + 
    ggplot2::ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") +
@@ -709,7 +709,7 @@ map_PE <-
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
-   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("PE for Akodon Genus") + 
    ggplot2::ggplot2::theme_bw() +
    ggplot2::labs(fill = "PE value") +
@@ -735,7 +735,7 @@ map_PEdb <-
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
-   ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("PEdb for Akodon Genus") + 
    ggplot2::ggplot2::theme_bw() +
    ggplot2::labs(fill = "PEdb value") +
@@ -960,7 +960,7 @@ map_evoregion <-
     color = "#040400",
     fill = NA, 
     size = 0.2) +
-  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("(a)") + 
   ggplot2::ggplot2::theme_bw() +
   ggplot2::theme(
@@ -988,7 +988,7 @@ map_age <-
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
-  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("(b)") + 
   ggplot2::ggplot2::theme_bw() +
   ggplot2::labs(fill = "Mean age (Myr)") +
@@ -1023,7 +1023,7 @@ map_diversification_model_based <-
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
-  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("(c)") + 
   ggplot2::ggplot2::theme_bw() +
   ggplot2::labs(fill = "In-situ diversification") +
@@ -1060,7 +1060,7 @@ map_dispersal_D <-
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.5) +
-  ggplot2::coord_sf(xlim = map.limits$x, ylim = map.limits$y) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("(d)") + 
   ggplot2::ggplot2::theme_bw() +
   ggplot2::labs(fill = "Dispersal from D") + 

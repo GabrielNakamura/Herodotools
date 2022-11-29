@@ -9,4 +9,5 @@ home:
   links:
   - text: Browse source code
     href: https://github.com/GabrielNakamura/Herodotools
-  
+sidebar:
+  structure: [links, license, community, citation, authors, dev]
