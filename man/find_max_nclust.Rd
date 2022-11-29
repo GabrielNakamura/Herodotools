@@ -21,7 +21,7 @@ find_max_nclust(
 
 \item{threshold}{Scalar. The number of eigenvectors used to perform classification.}
 
-\item{max.nclust}{Value of set of values defining the maximum number of groups to be evaluated.}
+\item{max.nclust}{Scalar indicating the maximum number of groups to be evaluated.}
 
 \item{nperm}{Scalar. Number of times classification will be performed.}
 
@@ -42,5 +42,9 @@ Matrix containing congruence values ranging between 0-1 for each max.nclust valu
 Estimate the maximum number of groups in DAPC analysis
 }
 \examples{
-
+\dontrun{
+data(regions)
+evovectors <- regions$PCPS$vectors # eigenvectors by site
+find_max_nclust(x=evovectors, threshold=3,max.nclust=10)
+}
 }

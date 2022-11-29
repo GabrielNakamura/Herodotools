@@ -44,6 +44,3 @@ metrics using an ancestral community reconstruction
 ada function calculates an ancestral assemblage reconstruction for each assemblage
 in a matrix using for this reconstruction \link[ape]{ace} function from ape package
 }
-\examples{
-
-}

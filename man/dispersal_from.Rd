@@ -23,7 +23,6 @@ For the species present in a site, the function calculates the proportional
 contribution of ancestral areas to dispersal of lineage in the site's region.
 }
 \examples{
-
 \dontrun{
 data(akodon.sites) # occurrence matrix
 data(akodon.pa.tree) # phylogenetic tree

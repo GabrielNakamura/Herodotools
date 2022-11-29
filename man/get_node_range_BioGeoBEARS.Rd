@@ -33,6 +33,6 @@ data(resDEC) # ancestral area reconstruction from biogeobears
 data(akodon.newick)
 extdata_dir = system.file("extdata", package="Herodotools")
 fn = paste(extdata_dir, "/geo_area_akodon.data", sep="")
-node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = fn, akodon.newick,  max.range.size = 4) # obtaining area for each node
+node_area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = fn, akodon.newick,  max.range.size = 4) # obtaining area for each node
 
 }
