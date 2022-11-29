@@ -838,8 +838,8 @@ trait <- match_data$data$ForStrat.Value
 names(trait) <- match_data$data$Scientific
 
 # run function
-trans_rates <- tip_based_trait_evo(tree=match_data$phy,
-                                   trait =trait , # need to be named to work
+trans_rates <- tip_based_trait_evo(tree = match_data$phy,
+                                   trait = trait , # need to be named to work
                                    nsim = 50,
                                    method = c("transition_rates", "last_transition_time", "stasis_time"))
 ```
