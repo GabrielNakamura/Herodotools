@@ -286,7 +286,7 @@
 <p>First, we have to define the occurrence of each species regarding the evoregions. This will correspond to the current area of species.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="va">a_region</span> <span class="op">&lt;-</span> <span class="fu">region_occ</span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>, site.region <span class="op">=</span> <span class="va">site.region</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="va">a_region</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/region_occ.html">region_occ</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>, site.region <span class="op">=</span> <span class="va">site.region</span><span class="op">)</span></span></code></pre></div>
 <p>The object created in the last step can be used in an auxiliary function present in Herodotools to easily produce the <a href="http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html" class="external-link">Phyllip</a> file required to run the analysis of ancestral area reconstruction using BioGeoBEARS.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save phyllip file</span></span>
