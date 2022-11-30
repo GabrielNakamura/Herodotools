@@ -25,22 +25,34 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/ada.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/affiliation_evoreg.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon.newick.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/age_arrival.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon.pa.tree.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/ancestral_state.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon.sites.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/db_diversification.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_affiliation_evoreg.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/dispersal_from.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_age_arrival.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/div_based_metrics.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_dispersal_from.html</loc>
+  </url>
+  <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_div_based_metrics.html</loc>
+  </url>
+  <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_model_based_diversification.html</loc>
+  </url>
+  <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_tip_based_trait_evo.html</loc>
+  </url>
+  <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/compute_ancestral_state.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/evoregions.html</loc>
@@ -52,10 +64,10 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/get_node_range_BioGeoBEARS.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/index.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/get_nodes_info_core.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/nodes_info_core.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/index.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/pipe.html</loc>
@@ -67,18 +79,27 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/region_occ.html</loc>
   </url>
   <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/regions.html</loc>
+  </url>
+  <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/resDEC.html</loc>
+  </url>
+  <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/rodent.phylo.html</loc>
+  </url>
+  <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/spp_association_evoreg.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/spp_nodes.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/tip_based_trait_evo.html</loc>
-  </url>
-  <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/tipranges_to_BioGeoBEARS.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/toy_treeEx.html</loc>
+  </url>
+  <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/trait.html</loc>
   </url>
 </urlset>

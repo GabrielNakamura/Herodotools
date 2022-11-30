@@ -72,7 +72,7 @@
 
 
 <dt>max.nclust</dt>
-<dd><p>Value of set of values defining the maximum number of groups to be evaluated.</p></dd>
+<dd><p>Scalar indicating the maximum number of groups to be evaluated.</p></dd>
 
 
 <dt>nperm</dt>
@@ -108,8 +108,11 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">regions</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">evovectors</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">$</span><span class="va">PCPS</span><span class="op">$</span><span class="va">vectors</span> <span class="co"># eigenvectors by site</span></span></span>
+<span class="r-in"><span><span class="fu">find_max_nclust</span><span class="op">(</span>x<span class="op">=</span><span class="va">evovectors</span>, threshold<span class="op">=</span><span class="fl">3</span>,max.nclust<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

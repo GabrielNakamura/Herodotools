@@ -106,6 +106,14 @@ computed for each model. Can be "BIC" (default), "AIC" or "WSS".</p></dd>
 function of adegenet package to indicate the number of iterations to be
 used in each run of K-means algorithm</p></dd>
 
+
+<dt>criterion.clust</dt>
+<dd><p>Character string matching "diffNgroup" (default),
+"min", "goesup", "smoothNgoesup", or "goodfit", indicating the criterion
+for automatic selection of the optimal number of clusters.
+See <code>criterion</code> argument in <code><a href="https://rdrr.io/pkg/adegenet/man/find.clusters.html" class="external-link">find.clusters</a></code> for an explanation
+of these procedures.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -129,6 +137,17 @@ metrics of phylogenetic turnover.</p>
 used</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon.pa.tree</span><span class="op">)</span> <span class="co"># occurrence data </span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon.newick</span><span class="op">)</span> <span class="co"># phylogenetic tree</span></span></span>
+<span class="r-in"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu">evoregions</span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>, phy <span class="op">=</span> <span class="va">akodon.newick</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">site.region</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">$</span><span class="va">Cluster_Evoregions</span> <span class="co"># classification of each community in regions</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

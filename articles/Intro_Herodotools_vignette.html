@@ -62,7 +62,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Introduction to Herodotools</h1>
             
-            <h4 data-toc-skip class="date">2022-11-29</h4>
+            <h4 data-toc-skip class="date">2022-11-30</h4>
       
       
       <div class="d-none name"><code>Intro_Herodotools_vignette.Rmd</code></div>
@@ -96,6 +96,7 @@
 <p>First, let’s read some libraries we will use to explore the data and produce the figures</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">daee</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">picante</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
@@ -124,7 +125,7 @@
 </h2>
 <p>Here we will perform a few data processing in order to get spatial and occurrence information</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">site.xy</span> <span class="op">&lt;-</span> <span class="va">akodon.sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">site_xy</span> <span class="op">&lt;-</span> <span class="va">akodon.sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">LONG</span>, <span class="va">LAT</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">akodon.pa</span> <span class="op">&lt;-</span> <span class="va">akodon.sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -148,7 +149,7 @@
 <span><span class="va">richness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/rowSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">akodon.pa.tree</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">map_richness</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site.xy</span>, richness <span class="op">=</span> <span class="va">richness</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, richness <span class="op">=</span> <span class="va">richness</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">richness</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">rcartocolor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Richness"</span>, type <span class="op">=</span> <span class="st">"quantitative"</span>, palette <span class="op">=</span> <span class="st">"SunsetDark"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -175,15 +176,15 @@
 <p>We have to transform the evoregion results to spatial object in order to visualize in a map the regions. This can be done using the following code:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">evoregion.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  <span class="va">site.xy</span>, </span>
+<span><span class="va">evoregion_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  <span class="va">site_xy</span>, </span>
 <span>  <span class="va">site.region</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">r.evoregion</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">evoregion.df</span><span class="op">)</span></span>
+<span><span class="va">r_evoregion</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">evoregion_df</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Converting evoregion to a spatial polygon data frame, so it can be plotted</span></span>
-<span><span class="va">sf.evoregion</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r.evoregion</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">sf.evoregion</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r_evoregion</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span></span>
@@ -210,7 +211,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">map_evoregion</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="va">evoregion.df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="va">evoregion_df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">site.region</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span></span>
@@ -246,15 +247,15 @@
 <span><span class="va">dist_phylo_PCPS</span> <span class="op">&lt;-</span> <span class="fu">vegan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/vegan/man/vegdist.html" class="external-link">vegdist</a></span><span class="op">(</span><span class="va">PCPS_thresh</span>, method <span class="op">=</span> <span class="st">"euclidean"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># calculating affiliation values for each assemblage </span></span>
-<span><span class="va">afi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/affiliation_evoreg.html">affiliation_evoreg</a></span><span class="op">(</span>phylo.comp.dist <span class="op">=</span> <span class="va">dist_phylo_PCPS</span>,</span>
+<span><span class="va">afi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_affiliation_evoreg.html">calc_affiliation_evoreg</a></span><span class="op">(</span>phylo.comp.dist <span class="op">=</span> <span class="va">dist_phylo_PCPS</span>,</span>
 <span>                          groups <span class="op">=</span> <span class="va">regions</span><span class="op">$</span><span class="va">Cluster_Evoregions</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># binding the information in a data frame</span></span>
-<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site.xy</span>, site.region <span class="op">=</span>  <span class="va">site.region</span>, <span class="va">afi</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site.region <span class="op">=</span>  <span class="va">site.region</span>, <span class="va">afi</span><span class="op">)</span></span></code></pre></div>
 <p>Now we can map both evoregions and the affiliation of each cell. The degree of affiliation of cells are showed as the degree of fade for each color. As fade the color of the cell, lesser the affiliation of that cell to its evoregion. Those cell can be interpreted as being zones of high phylogenetic turnover.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">map_joint_evoregion_afilliation</span> <span class="op">&lt;-</span> </span>
-<span>   <span class="va">evoregion.df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>   <span class="va">evoregion_df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">site.region</span><span class="op">)</span>, </span>
 <span>               alpha <span class="op">=</span> <span class="va">sites</span><span class="op">[</span>, <span class="st">"afilliation"</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -286,7 +287,7 @@
 <p>First, we have to define the occurrence of each species regarding the evoregions. This will correspond to the current area of species.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="va">a_region</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/region_occ.html">region_occ</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>, site.region <span class="op">=</span> <span class="va">site.region</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">a_region</span> <span class="op">&lt;-</span> <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/region_occ.html">region_occ</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>, site.region <span class="op">=</span> <span class="va">site.region</span><span class="op">)</span></span></code></pre></div>
 <p>The object created in the last step can be used in an auxiliary function present in Herodotools to easily produce the <a href="http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html" class="external-link">Phyllip</a> file required to run the analysis of ancestral area reconstruction using BioGeoBEARS.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save phyllip file</span></span>
@@ -315,26 +316,26 @@
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># converting numbers to character</span></span>
-<span><span class="va">biogeo_area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>biogeo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">chartr</a></span><span class="op">(</span><span class="st">"12345"</span>, <span class="st">"ABCDE"</span>, <span class="va">evoregion.df</span><span class="op">$</span><span class="va">site.region</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">biogeo_area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>biogeo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">chartr</a></span><span class="op">(</span><span class="st">"12345"</span>, <span class="st">"ABCDE"</span>, <span class="va">evoregion_df</span><span class="op">$</span><span class="va">site.region</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># getting the ancestral range area for each node </span></span>
-<span><span class="va">node.area</span> <span class="op">&lt;-</span> </span>
+<span><span class="va">node_area</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/get_node_range_BioGeoBEARS.html">get_node_range_BioGeoBEARS</a></span><span class="op">(</span></span>
 <span>    <span class="va">resDEC</span>,</span>
-<span>    phyllip.file <span class="op">=</span> <span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,</span>
+<span>    phyllip.file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,</span>
 <span>    <span class="va">akodon.newick</span>,</span>
 <span>    max.range.size <span class="op">=</span> <span class="fl">4</span> </span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># calculating age arrival </span></span>
-<span><span class="va">age_comm</span> <span class="op">&lt;-</span> <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/age_arrival.html">age_arrival</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>, </span>
+<span><span class="va">age_comm</span> <span class="op">&lt;-</span> <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/calc_age_arrival.html">calc_age_arrival</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>, </span>
 <span>                        tree <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
-<span>                        ancestral.area <span class="op">=</span> <span class="va">node.area</span>, </span>
+<span>                        ancestral.area <span class="op">=</span> <span class="va">node_area</span>, </span>
 <span>                        biogeo <span class="op">=</span> <span class="va">biogeo_area</span><span class="op">)</span> </span></code></pre></div>
-<p>The function <code>age_arrival</code> returns a object containing the mean age for each assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is by represent it as a low arrival value for those species, and another option is to attribute the age corresponding to half of the branch length connecting the ancestor to the present time. Here we adopted the first option.</p>
+<p>The function <code>calc_age_arrival</code> returns a object containing the mean age for each assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is by represent it as a low arrival value for those species, and another option is to attribute the age corresponding to half of the branch length connecting the ancestor to the present time. Here we adopted the first option.</p>
 <p>With mean age for each assemblage we can map the ages for all assemblages</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a></span>
-<span id="cb16-2"><a href="#cb16-2"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site.xy, <span class="dt">site.region =</span>  site.region, <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site_xy, <span class="dt">site.region =</span>  site.region, <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage)</span>
 <span id="cb16-3"><a href="#cb16-3"></a></span>
 <span id="cb16-4"><a href="#cb16-4"></a>map_age &lt;-<span class="st"> </span></span>
 <span id="cb16-5"><a href="#cb16-5"></a><span class="st">  </span>sites <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -378,14 +379,14 @@
 <p>We modified the original metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy, this value represent the diversification that occurred due to <em>in situ diversification process</em></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">akodon_diversification</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/db_diversification.html">db_diversification</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/calc_model_based_diversification.html">calc_model_based_diversification</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
 <span>                   tree <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
-<span>                   ancestral.area <span class="op">=</span> <span class="va">node.area</span>, </span>
+<span>                   ancestral.area <span class="op">=</span> <span class="va">node_area</span>, </span>
 <span>                   biogeo <span class="op">=</span> <span class="va">biogeo_area</span>, </span>
 <span>                   diversification <span class="op">=</span> <span class="st">"jetz"</span>,</span>
 <span>                   type <span class="op">=</span> <span class="st">"equal.splits"</span><span class="op">)</span></span></code></pre></div>
-<p>The result of <code>db_diversification</code> function is composed by a data-frame containing the value of in-situ diversification for each species in each assemblage and a vector with the harmonic mean in-situ diversification for each assemblage. As with age, we can plot the model based diversification metric to look at the spatial patterns of in-situ diversification in Akodon assemblages.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site.xy,</span>
+<p>The result of <code>calc_model_based_diversification</code> function is composed by a data-frame containing the value of in-situ diversification for each species in each assemblage and a vector with the harmonic mean in-situ diversification for each assemblage. As with age, we can plot the model based diversification metric to look at the spatial patterns of in-situ diversification in Akodon assemblages.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site_xy,</span>
 <span id="cb18-2"><a href="#cb18-2"></a>                   <span class="dt">site.region =</span>  site.region,</span>
 <span id="cb18-3"><a href="#cb18-3"></a>                   <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage,</span>
 <span id="cb18-4"><a href="#cb18-4"></a>                   <span class="dt">diversification_model_based =</span> akodon_diversification<span class="op">$</span>model_based_Jetz_harmonic_mean_site,</span>
@@ -459,17 +460,17 @@
 <div class="section level2">
 <h2 id="historical-dispersal-events">Historical dispersal events<a class="anchor" aria-label="anchor" href="#historical-dispersal-events"></a>
 </h2>
-<p>We can also calculate the importance of dispersal events related to each ancestral range. By using the function <code>dispersal_from</code> we can quantify the contribution of a given ancestral range to historical dispersal of the species in an assemblage. This is done by calculating the proportion of species in an assemblage that dispersed from the focal ancestral range. This calculation is done accounting only for the species that have events of dispersal in its ancestral lineage.</p>
+<p>We can also calculate the importance of dispersal events related to each ancestral range. By using the function <code>calc_dispersal_from</code> we can quantify the contribution of a given ancestral range to historical dispersal of the species in an assemblage. This is done by calculating the proportion of species in an assemblage that dispersed from the focal ancestral range. This calculation is done accounting only for the species that have events of dispersal in its ancestral lineage.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">akodon_dispersal</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/dispersal_from.html">dispersal_from</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/calc_dispersal_from.html">calc_dispersal_from</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
 <span>               tree <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
-<span>               ancestral.area <span class="op">=</span> <span class="va">node.area</span>, </span>
+<span>               ancestral.area <span class="op">=</span> <span class="va">node_area</span>, </span>
 <span>               biogeo <span class="op">=</span> <span class="va">biogeo_area</span><span class="op">)</span></span></code></pre></div>
 <p>We also can map the contribution of dispersal for all regions. Note that the area of ancestral range focused in each map have no values of dipersal from, since it is the source of dispersal to the other regions.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a></span>
-<span id="cb20-2"><a href="#cb20-2"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site.xy,</span>
+<span id="cb20-2"><a href="#cb20-2"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site_xy,</span>
 <span id="cb20-3"><a href="#cb20-3"></a>                   <span class="dt">site.region =</span>  site.region, </span>
 <span id="cb20-4"><a href="#cb20-4"></a>                   <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage,</span>
 <span id="cb20-5"><a href="#cb20-5"></a>                   <span class="dt">diversification =</span> akodon_diversification<span class="op">$</span>Jetz_harmonic_mean_site,</span>
@@ -587,14 +588,14 @@
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">akodon_db_metrics</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/div_based_metrics.html">div_based_metrics</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/calc_div_based_metrics.html">calc_div_based_metrics</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon.pa.tree</span>,</span>
 <span>                  tree <span class="op">=</span> <span class="va">akodon.newick</span>, </span>
-<span>                  ancestral.area <span class="op">=</span> <span class="va">node.area</span>, </span>
+<span>                  ancestral.area <span class="op">=</span> <span class="va">node_area</span>, </span>
 <span>                  biogeo <span class="op">=</span> <span class="va">biogeo_area</span>, </span>
 <span>                  PD <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                  PE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>As the other metrics we can plot PDdb and PEdb in a map</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site.xy,</span>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>sites &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_cols</span>(site_xy,</span>
 <span id="cb22-2"><a href="#cb22-2"></a>                   <span class="dt">site.region =</span>  site.region, </span>
 <span id="cb22-3"><a href="#cb22-3"></a>                   <span class="dt">age =</span> age_comm<span class="op">$</span>mean_age_per_assemblage,</span>
 <span id="cb22-4"><a href="#cb22-4"></a>                   <span class="dt">diversification =</span> akodon_diversification<span class="op">$</span>Jetz_harmonic_mean_site,</span>
@@ -662,8 +663,8 @@
 <div class="section level2">
 <h2 id="traitdynamics">Tip-based metrics of trait evolution<a class="anchor" aria-label="anchor" href="#traitdynamics"></a>
 </h2>
-<p>Here we will show how to implement three tip-based metrics proposed by <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476" class="external-link">Luza et al. (2021)</a>. Note that these tip-based metrics were estimated using the stochastic mapping of discrete/categorical traits (diet in the original publication), but can be extended to other traits as we will show here. The three tip-based metrics are <em>Transition rates</em>, <em>Stasis time</em>, and <em>Last transition time</em>, and are implemented in the function <code>tip_based_trait_evo</code>. <em>Transition rates</em> indicate how many times the ancestral character has changed over time. <em>Stasis time</em> indicates the maximum branch length (time interval) which the current tip-character was maintained across the whole phylogeny. Finally, <em>last transition time</em> is the sum of branch lengths from the tip to the prior/previous node with a reconstructed character equal to current tip-character. As in the <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476" class="external-link">original publication</a>, we will use the stochastic character mapping on discrete trait data. This time, however, we will reconstruct the species foraging strata (Elton Traits’ database, Wilman et al. 2014). We will reconstruct the foraging strata for 214 sigmodontine rodent species with trait and phylogenetic data (consensus phylogeny of <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000494" class="external-link">Upham et al. 2019</a>).</p>
-<p>First we will load trait and phylogenetic data we need to run the function <code>tip_based_trait_evo</code>.</p>
+<p>Here we will show how to implement three tip-based metrics proposed by <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476" class="external-link">Luza et al. (2021)</a>. Note that these tip-based metrics were estimated using the stochastic mapping of discrete/categorical traits (diet in the original publication), but can be extended to other traits as we will show here. The three tip-based metrics are <em>Transition rates</em>, <em>Stasis time</em>, and <em>Last transition time</em>, and are implemented in the function <code>calc_tip_based_trait_evo</code>. <em>Transition rates</em> indicate how many times the ancestral character has changed over time. <em>Stasis time</em> indicates the maximum branch length (time interval) which the current tip-character was maintained across the whole phylogeny. Finally, <em>last transition time</em> is the sum of branch lengths from the tip to the prior/previous node with a reconstructed character equal to current tip-character. As in the <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476" class="external-link">original publication</a>, we will use the stochastic character mapping on discrete trait data. This time, however, we will reconstruct the species foraging strata (Elton Traits’ database, Wilman et al. 2014). We will reconstruct the foraging strata for 214 sigmodontine rodent species with trait and phylogenetic data (consensus phylogeny of <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000494" class="external-link">Upham et al. 2019</a>).</p>
+<p>First we will load trait and phylogenetic data we need to run the function <code>calc_tip_based_trait_evo</code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rodent.phylo</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.nexus.html" class="external-link">read.nexus</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Sigmodontinae_285speciesTree.tre"</span>, package <span class="op">=</span> <span class="st">"Herodotools"</span><span class="op">)</span></span>
@@ -689,7 +690,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">trait</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">match_data</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">Scientific</span></span>
 <span></span>
 <span><span class="co"># run function</span></span>
-<span><span class="va">trans_rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tip_based_trait_evo.html">tip_based_trait_evo</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="va">match_data</span><span class="op">$</span><span class="va">phy</span>,</span>
+<span><span class="va">trans_rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_tip_based_trait_evo.html">calc_tip_based_trait_evo</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="va">match_data</span><span class="op">$</span><span class="va">phy</span>,</span>
 <span>                                   trait <span class="op">=</span> <span class="va">trait</span> , <span class="co"># need to be named to work</span></span>
 <span>                                   nsim <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>                                   method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"transition_rates"</span>, <span class="st">"last_transition_time"</span>, <span class="st">"stasis_time"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
