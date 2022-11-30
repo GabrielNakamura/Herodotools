@@ -30,10 +30,10 @@
 #' axis_sel <- which(regions$PCPS$prop_explainded >= regions$PCPS$tresh_dist) # selecting only significant PCPS axis
 #' PCPS_thresh <- regions$PCPS$vectors[, axis_sel] # only significant axis
 #' dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean") # distance matrix based on phylogenetic structure
-#' affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,groups = regions$Cluster_Evoregions) # affiliation
+#' calc_affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,groups = regions$Cluster_Evoregions) # affiliation
 #' }
 #' 
-affiliation_evoreg <- function(phylo.comp.dist, groups){
+calc_affiliation_evoreg <- function(phylo.comp.dist, groups){
   
   if(class(phylo.comp.dist) != "dist"){
     stop("phylo.comp.dist might be from class dist")

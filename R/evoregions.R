@@ -11,6 +11,8 @@
 #'   columns
 #' @param phy phylogenetic tree of class `phylo` containing the species in 
 #'   `comm`.
+#' @param max.n.clust Integer value to be used in \code{\link[adegenet]{find.clusters}}. 
+#'   Indicates the maximum number of clusters to be tried. 
 #' @param method.dist Character. The method to be used to compute phyogenetic 
 #'   distances among assemblages. Dissimilarity index, as accepted by 
 #'   \code{\link[vegan]{vegdist}} (Default "bray").
@@ -25,13 +27,11 @@
 #' @param n.iter.clust Integer to be used in \code{\link[adegenet]{find.clusters}} 
 #'   function of adegenet package to indicate the number of iterations to be
 #'   used in each run of K-means algorithm
-#' @param criterion.clust a character string matching "diffNgroup" (default),
+#' @param criterion.clust Character string matching "diffNgroup" (default),
 #'   "min", "goesup", "smoothNgoesup", or "goodfit", indicating the criterion 
 #'   for automatic selection of the optimal number of clusters. 
-#'   See `criterion` argument in \code{\link[adegenet]{find.clusters} for an explanation
+#'   See `criterion` argument in \code{\link[adegenet]{find.clusters}} for an explanation
 #'   of these procedures.
-#' @param max.n.clust Integer value to be used in \code{\link[adegenet]{find.clusters}}. 
-#'   Indicates the maximum number of clusters to be tried. 
 #'
 #' @return A list of length four containing:
 #' \itemize{
@@ -45,7 +45,7 @@
 #'   
 #' @importFrom stats cophenetic
 #' 
-#' @example 
+#' @examples 
 #' \dontrun{
 #' data(akodon.pa.tree) # occurrence data 
 #' data(akodon.newick) # phylogenetic tree

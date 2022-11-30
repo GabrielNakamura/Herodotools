@@ -17,16 +17,16 @@
 #' 
 #' @importFrom stats setNames
 #' 
-#' @example 
+#' @examples  
 #' \dontrun{
 #' data(rodent.phylo) # phylogenetic tree
 #' data(trait) # categorical traits on species diet
-#' trans_rates <- tip_based_trait_evo(tree=match_data$phy,trait =trait , # need to be named to worknsim = 50,method = c("transition_rates", "last_transition_time", "stasis_time"))
+#' trans_rates <- calc_tip_based_trait_evo(tree=match_data$phy,trait =trait , # need to be named to worknsim = 50,method = c("transition_rates", "last_transition_time", "stasis_time"))
 #' }
 #' 
 #' @export
 #' 
-tip_based_trait_evo <- function(tree,
+calc_tip_based_trait_evo <- function(tree,
                                 trait, 
                                 nsim = 1,
                                 method = c("transition_rates", "last_transition_time", "stasis_time")

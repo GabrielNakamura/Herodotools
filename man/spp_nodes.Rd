@@ -21,7 +21,7 @@ This function computes a matrix containing species and their respective ancestra
 \details{
 This is an auxiliary function that, by taking a phylogenetic tree, allows to represent in a matrix format
 the relationship between present-day species (tips) and their ancestors (nodes). The function provides an
-easy way to obtain certain objects that can be used in other functions, like \code{\link{ancestral_state}}
+easy way to obtain certain objects that can be used in other functions, like \code{\link{compute_ancestral_state}}
 }
 \examples{
 data(akodon.newick)

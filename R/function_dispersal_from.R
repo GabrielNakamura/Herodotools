@@ -11,7 +11,9 @@
 #'
 #' @author Arthur V Rodrigues <rodrigues.arthur.v@@gmail.com>
 #'
-#' @return
+#' @return A data frame with assemblages in the rows and regions in the columns. The values indicates
+#'     the percentage of contribution of each region to each assemblage. NA represents no contribution
+#'     
 #' @export
 #'
 #' @examples
@@ -21,18 +23,18 @@
 #' data(regions) # biogeographic region
 #' data(resDEC) # output from ancestral area reconstruction
 #' node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),akodon.newick,max.range.size = 4) # data frame indicating the ancestral area occurrence
-#' dispersal_from(W=akodon.sites,tree=akodon.pa.tree,ancestral.area=node.area,biogeo=regions) # historical dispersal analysis
+#' calc_dispersal_from(W=akodon.sites,tree=akodon.pa.tree,ancestral.area=node.area,biogeo=regions) # historical dispersal analysis
 #' }
 #' 
 #' @seealso \code{\link{get_node_range_BioGeoBEARS}}
 #' 
-dispersal_from <- function(W,
+calc_dispersal_from <- function(W,
                            tree,
                            ancestral.area, 
                            biogeo){
   
-  nodes.list <- nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
-  AS <- ancestral_state(tree = tree, ancestral.area = ancestral.area, prefix = "N")
+  nodes.list <- get_nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
+  AS <- compute_ancestral_state(tree = tree, ancestral.area = ancestral.area, prefix = "N")
   names_spComm <- colnames(W)
   
   #matrix to receive the area from which dispersal ocurred

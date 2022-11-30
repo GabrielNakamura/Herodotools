@@ -6,7 +6,7 @@
 #'
 #' @param comm Occurrence data frame with species in colums and rows corresponding to assemblages
 #' @param site.region a character vector indicating the membership of each assemblage to regions
-#'
+#' @importFrom rlang .data
 #' @return An occurrence data frame with species as rownames and regions as columns
 #' @export
 #' 
@@ -33,34 +33,34 @@ region_occ <- function(comm, site.region){
       values_to = "presence"
     ) %>% 
     # filter only the rows with the presence of a species
-    dplyr::filter(presence == 1) %>% 
+    dplyr::filter(.data$presence == 1) %>% 
     # Count the number of sites in a region that a species is present
-    dplyr::group_by(species, site.region) %>% 
+    dplyr::group_by(.data$species, site.region) %>% 
     dplyr::summarise(n = dplyr::n()) %>% 
     dplyr::ungroup() %>% 
     # Calculate the propotional area of a species in each region
     dplyr::group_by(species) %>% 
     dplyr::mutate(
-      species.total = sum(n), 
-      prec.occupation = n/species.total
+      species.total = sum(.data$n), 
+      prec.occupation = .data$n/.data$species.total
     ) %>% 
     dplyr::ungroup() %>% 
     # Filter for each species the evoregions with more than 25% of area ocupied 
     # by the species
     dplyr::filter(
-      prec.occupation >= .25
+      .data$prec.occupation >= .25
     ) %>% 
     dplyr::mutate(
       area = LETTERS[site.region]
     ) %>% 
-    dplyr::select(species, area) %>% 
+    dplyr::select(.data$species, .data$area) %>% 
     dplyr::mutate(value = 1) %>% 
     # transform in a dataframe with species in rows and areas ocupied [0-1] in columns
     tidyr::pivot_wider(
-      id_cols = species,
-      names_from = area, 
+      id_cols = .data$species,
+      names_from = .data$area, 
       names_sort = T,
-      values_from = value,
+      values_from = .data$value,
       values_fill = 0
     ) %>% 
     as.data.frame()

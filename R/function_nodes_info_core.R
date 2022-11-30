@@ -6,7 +6,7 @@
 #' @param ancestral.area Single column data frame with nodes in rows and ancestral area/Ecoregion of occurrence in columns. If the reconstruction
 #'     comes from BioGeoBears this data frame can be obtained with (\code{\link{get_node_range_BioGeoBEARS}})
 #'
-#' @return
+#' @return A list with auxiliary information on nodes and species
 #' @export
 #'
 #' @examples
@@ -26,16 +26,16 @@
 #'  # hypothetical data indicating the ancestral range of each node
 #'  ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
 #'  
-#' nodes_info_core(W=W_toy,tree=toy_treeEx,ancestral.area=ancestral_area_toy,biogeo=biogeo_toy)
+#' get_nodes_info_core(W=W_toy,tree=toy_treeEx,ancestral.area=ancestral_area_toy,biogeo=biogeo_toy)
 #' }
 #' 
-nodes_info_core <- function(W,
+get_nodes_info_core <- function(W,
                             tree,
                             ancestral.area, 
                             biogeo){
   
   names_spComm <- colnames(W)
-  AS <- ancestral_state(tree = tree, ancestral.area = ancestral.area)
+  AS <- compute_ancestral_state(tree = tree, ancestral.area = ancestral.area)
   nodes.list <- lapply(1:nrow(W), function(i){
     pres <- which(W[i, ] == 1)
     pres <- names_spComm[pres]

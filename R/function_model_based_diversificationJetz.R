@@ -34,12 +34,12 @@
 #' data(resDEC) # output from ancestral area reconstruction performed with BioGeoBEARS
 #' data(regions) # ecoregion/evoregion for each assemblage
 #' node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),akodon.newick,max.range.size = 4)
-#' db_diversification(W=akodon.pa.tree, tree=akodon.newick,ancestral.area=node.area,biogeo=regions) # model based diversification analysis with default options
+#' calc_model_based_diversification(W=akodon.pa.tree, tree=akodon.newick,ancestral.area=node.area,biogeo=regions) # model based diversification analysis with default options
 #' } 
 #' 
 #' @export
 #'
-db_diversification <- 
+calc_model_based_diversification <- 
   function(W,
            tree,
            ancestral.area, 
@@ -65,7 +65,7 @@ db_diversification <-
                            dimnames = list(rownames(W), colnames(W)))
     
     
-    nodes.list <- nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo) # calculating basic info for db-diversification metrics
+    nodes.list <- get_nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo) # calculating basic info for db-diversification metrics
     
     if(any(diversification == "jetz")){
       
@@ -90,7 +90,7 @@ db_diversification <-
                                                                                             length(internal.brlen_div))^c(1:length(internal.brlen_div))),
                                                               fair.proportion = {
                                                                 for (j in 1:length(nodes_div)) {
-                                                                  sons <- .node.desc(tree, nodes_div[j])
+                                                                  sons <- picante::.node.desc(tree, nodes_div[j])
                                                                   n.descendents <- length(sons$tips)
                                                                   if (j == 1) portion <- n.descendents else portion <- c(n.descendents,
                                                                                                                          portion)
@@ -104,7 +104,7 @@ db_diversification <-
             JetzLocal <- 0.00001
           }else{
             ED_div <- sum(internal.brlen_div,
-                          tree$edge.length[ape::which.edge(tree, sp)]) #Local ED - modifyed ED considering only the edges of ancestors inside the biogeo of local i for species j
+                          tree$edge.length[ape::which.edge(tree, sp)]) #Local ED - modified ED considering only the edges of ancestors inside the biogeo of local i for species j
             
             EDtotal_spp <- EDtotal$w[which(EDtotal$Species == sp)]
             Jetz_total_spp <- Jetz_total[sp] # Diversification calculated according to Jetz for species j

@@ -44,6 +44,12 @@ computed for each model. Can be "BIC" (default), "AIC" or "WSS".}
 \item{n.iter.clust}{Integer to be used in \code{\link[adegenet]{find.clusters}}
 function of adegenet package to indicate the number of iterations to be
 used in each run of K-means algorithm}
+
+\item{criterion.clust}{Character string matching "diffNgroup" (default),
+"min", "goesup", "smoothNgoesup", or "goodfit", indicating the criterion
+for automatic selection of the optimal number of clusters.
+See \code{criterion} argument in \code{\link[adegenet]{find.clusters}} for an explanation
+of these procedures.}
 }
 \value{
 A list of length four containing:
@@ -62,6 +68,15 @@ differently from other methods, evoregion uses a phylogenetic turnover
 metric based on fuzzy sets, therefore accounting for characteristics of
 evolutionary history, e.g tree imbalance, that is not accounted by other
 metrics of phylogenetic turnover.
+}
+\examples{
+\dontrun{
+data(akodon.pa.tree) # occurrence data 
+data(akodon.newick) # phylogenetic tree
+regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
+site.region <- regions$Cluster_Evoregions # classification of each community in regions
+}
+
 }
 \seealso{
 \code{\link{find_max_nclust}} to decide the maximum number of clusters to be

@@ -3,7 +3,7 @@
 \docType{data}
 \name{toy_treeEx}
 \alias{toy_treeEx}
-\title{Hypothetical phylogenetic tree containing five species}
+\title{Hypothetical phylogenetic tree}
 \format{
 A newick phylogenetic tree with 5 species
 }

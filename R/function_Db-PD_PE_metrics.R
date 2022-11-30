@@ -30,10 +30,10 @@
 #'  
 #'  biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
 #'  ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
-#'  assemblage_phylo_metrics <- div_based_metrics(W_toy, toy_treeEx, ancestral_area_toy, biogeo_toy)
+#'  assemblage_phylo_metrics <- calc_div_based_metrics(W_toy, toy_treeEx, ancestral_area_toy, biogeo_toy)
 #' 
 #' }
-div_based_metrics <- function(W,
+calc_div_based_metrics <- function(W,
                               tree,
                               ancestral.area, 
                               biogeo,
@@ -53,7 +53,7 @@ div_based_metrics <- function(W,
   PEt <- phyloregion::phylo_endemism(x = W , phy = tree, weighted = TRUE) #Phylogenetic endemism sensu Rosauer
   
   # basic information from nodes and ancestral reconstruction ---------------
-  nodes.list <- nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
+  nodes.list <- get_nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
   
   names_spp_noNull<- lapply(
     lapply(

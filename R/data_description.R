@@ -20,14 +20,14 @@
 #' 
 #' @format data frame with 732 rows and 30 columns organized in the same sequence as the species in the 
 #'     Akodon phylogenetic tree
-akodon.pa.tree
+'akodon.pa.tree'
 
 #' Occurrence data for Akodon species
 #' 
 #' This is a occurrence data for species from Akodon genus
 #' 
 #' @format data frame containing 732 rows and 40 columns 
-akodon.sites
+'akodon.sites'
 
 #' Output from `evoregion` function with classification of 732 assemblages
 #' 
@@ -36,23 +36,21 @@ akodon.sites
 #'     \item{$PCPS}{A list containing eigenvectors from PCPS analysis}
 #'     \item{$Cluster_Evoregions}{A vector containing the groups of each assemblage}
 #'     }
-regions
+'regions'
 
 #' Output from BioGeoBEARS
 #' 
 #' Object from a ancestral reconstruction model with BioGeoBEARS
 #' 
 #' @format A list obtained from BioGeoBEARS with Akodon species
-#' 
-resDEC
+'resDEC'
 
 #' Phylogenetic tree with 285 species
 #' 
 #' Dated (my) phylogenetic tree in newick format containing 285 of sigmodontine species
 #' 
 #' @format Newick phylogenetic tree
-#' 
-rodent.phylo
+'rodent.phylo'
 
 #' Trait on foraging strata for small rodent
 #' 
@@ -60,8 +58,8 @@ rodent.phylo
 #' 
 #' @format character vector with three categories:
 #'     \describe{
-#'         \item{Ar}{Describe here}
-#'         \item{G}{Describe trait here}
-#'         \item{S}{Describe trait here}
+#'         \item{Ar}{Arboreal}
+#'         \item{G}{Ground level}
+#'         \item{S}{Scansorial}
 #'      }   
-trait
+'trait'

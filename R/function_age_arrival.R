@@ -32,7 +32,7 @@
 #'  W_toy<- matrix(c(0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0),nrow= 3,ncol= 5,dimnames=list(c("Comm 1", "Comm 2", "Comm 3"),c(paste("s", 1:5, sep=""))))
 #'  
 #'  #toy tree
-#'  data(toy_tree)
+#'  data(toy_treeEx)
 #'  
 #'  # hypothetical data indicating the ecoregions of each assemblage
 #'  biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
@@ -41,9 +41,9 @@
 #'  ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
 #'  
 #'  # caculating age of each assemblage
-#'  age_assemblages <- age_arrival(W_toy, toy_treeEx, ancestral_area_toy, biogeo_toy)
+#'  age_assemblages <- calc_age_arrival(W_toy, toy_treeEx, ancestral_area_toy, biogeo_toy)
 
-age_arrival <- function(W, 
+calc_age_arrival <- function(W, 
                         tree, 
                         ancestral.area, 
                         biogeo,
@@ -60,7 +60,7 @@ age_arrival <- function(W,
                         ncol = ncol(W),
                         dimnames = list(rownames(W), colnames(W)))
   names_spComm <- colnames(W)
-  nodes.list <- nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
+  nodes.list <- get_nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
   # site; species; first node (root in the ecoregion)
   
   ## NA means the time of arrival is unknown
