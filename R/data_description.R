@@ -45,3 +45,23 @@ regions
 #' @format A list obtained from BioGeoBEARS with Akodon species
 #' 
 resDEC
+
+#' Phylogenetic tree with 285 species
+#' 
+#' Dated (my) phylogenetic tree in newick format containing 285 of sigmodontine species
+#' 
+#' @format Newick phylogenetic tree
+#' 
+rodent.phylo
+
+#' Trait on foraging strata for small rodent
+#' 
+#' Character vector indicating the foraging strata for 214 species of small rodents
+#' 
+#' @format character vector with three categories:
+#'     \describe{
+#'         \item{Ar}{Describe here}
+#'         \item{G}{Describe trait here}
+#'         \item{S}{Describe trait here}
+#'      }   
+trait
