@@ -120,7 +120,7 @@ of these procedures.</p></dd>
     
 
 <p>A list of length four containing:</p><ul><li><p><code>PCPS_vectors</code> A matrix with PCPS vectors</p></li>
-<li><p><code>Cluster_Evoregion</code> A vector indicating the region in which each
+<li><p><code>cluster_evoregion</code> A vector indicating the region in which each
 assemblage was classified</p></li>
 </ul></div>
     <div class="section level2">
@@ -143,7 +143,7 @@ used</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon.pa.tree</span><span class="op">)</span> <span class="co"># occurrence data </span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon.newick</span><span class="op">)</span> <span class="co"># phylogenetic tree</span></span></span>
 <span class="r-in"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu">evoregions</span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon.pa.tree</span>, phy <span class="op">=</span> <span class="va">akodon.newick</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">site.region</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">$</span><span class="va">Cluster_Evoregions</span> <span class="co"># classification of each community in regions</span></span></span>
+<span class="r-in"><span><span class="va">site.region</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">$</span><span class="va">cluster_evoregions</span> <span class="co"># classification of each community in regions</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
