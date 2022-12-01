@@ -36,26 +36,28 @@ For this aim we will perform the following steps:
 
 # Reading data and libraries
 
-First, let's read some libraries we will use to explore the data and produce the figures
+First, let's read some libraries we will use to explore the data and produce the figures. If 
+you do not have the packages already installed they will be installed.
 
 ```{r librariesRead}
-library(ape)
-library(daee)
-library(picante)
-library(dplyr)
-library(tidyr)
-library(purrr)
-library(raster)
-library(terra)
-library(ggplot2)
-library(stringr)
-library(here)
-library(sf)
-library(rnaturalearth)
-library(rcartocolor)
-library(patchwork)
+libs <- c("ape", "picante", "dplyr", "tidyr", "purrr",
+          "raster", "terra", "ggplot2", "stringr",
+          "here", "sf", "rnaturalearth", "rcartocolor", "patchwork")
+if (!requireNamespace(libs, quietly = TRUE)){
+    install.packages(libs)
+  }
 ```
 
+There are two non CRAN packages, daee and BioGeoBEARS, required to run the analysis in this vignette. We suggest to install these packages from github using the following code:
+
+```{r nonCRAN, echo=TRUE}
+if (!requireNamespace(c("daee","BioGeoBEARS"), quietly = TRUE)){
+  devtools::install_github("vanderleidebastiani/daee")
+  devtools::install_github("nmatzke/BioGeoBEARS")
+}
+
+```
+    
 If you do not have Herodotools installed use the following code to install the package from github repository:
 
 ```{r install_pkg, echo=TRUE, eval=FALSE}
@@ -66,9 +68,9 @@ To read the files corresponding to the distribution of species, phylogenetic rel
 
 ```{r readData, echo=TRUE}
 library(Herodotools)
-akodon.sites <- read.table(system.file("extdata", "Table_Akodon_coords_pa.txt", package = "Herodotools"), 
+akodon_sites <- read.table(system.file("extdata", "Table_Akodon_coords_pa.txt", package = "Herodotools"), 
                            header = TRUE)
-akodon.newick <- ape::read.tree(system.file("extdata", "akodon.new", package = "Herodotools"))
+akodon_newick <- ape::read.tree(system.file("extdata", "akodon.new", package = "Herodotools"))
 ```
 
 # Data processing {#processing}
@@ -76,10 +78,10 @@ akodon.newick <- ape::read.tree(system.file("extdata", "akodon.new", package = "
 Here we will perform a few data processing in order to get spatial and occurrence information
 
 ```{r dataproc, echo=TRUE}
-site_xy <- akodon.sites %>% 
+site_xy <- akodon_sites %>% 
   dplyr::select(LONG, LAT)
 
-akodon.pa <- akodon.sites %>% 
+akodon_pa <- akodon_sites %>% 
   dplyr::select(-LONG, -LAT)
 
 ```
@@ -87,8 +89,8 @@ akodon.pa <- akodon.sites %>%
 Checking if species names between occurrence matrix and phylogenetic tree are matching
 
 ```{r match_data, echo=TRUE}
-spp.in.tree <- names(akodon.pa) %in% akodon.newick$tip.label
-akodon.pa.tree <- akodon.pa[, spp.in.tree]
+spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
 
 ```
 
@@ -103,12 +105,12 @@ map_limits <- list(
   y = c(-55, 12)
 )
 
-richness <- rowSums(akodon.pa.tree)
+richness <- rowSums(akodon_pa_tree)
 
 map_richness <- 
 dplyr::bind_cols(site_xy, richness = richness) %>% 
   ggplot2::ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = richness)) + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = richness)) + 
   rcartocolor::scale_fill_carto_c(name = "Richness", type = "quantitative", palette = "SunsetDark") +
   ggplot2::geom_sf(data = coastline) +
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
@@ -117,14 +119,8 @@ dplyr::bind_cols(site_xy, richness = richness) %>%
 
 ```
 
-```{r saveFig1, echo=FALSE}
-
-ggplot2::ggsave(plot = map_richness,  filename = "Fig1_richmap_akodon.png", path = here::here("vignettes"), dpi = "retina")
-
-```
-
-```{r fig1_rich, echo=FALSE, eval=TRUE}
-knitr::include_graphics(here::here("vignettes", "Fig1_richmap_akodon.png"))
+```{r outFig1, echo=FALSE, eval=FALSE, out.width="70%"}
+map_richness
 ```
 
 # Obtaining evoregions {#evoregions}
@@ -138,18 +134,18 @@ To calculate evoregions we need the occurrence matrix, a phylogenetic tree and t
 ```{r evoregion_calc, echo=TRUE, eval=FALSE}
 regions <- 
   Herodotools::evoregions(
-  comm = akodon.pa.tree,
-  phy = akodon.newick
+  comm = akodon_pa_tree,
+  phy = akodon_newick
   )
 
-site.region <- regions$Cluster_Evoregions
+site_region <- regions$cluster_evoregions
 
 ```
 
-```{r save_evoregion_calc, echo=FALSE}
+```{r save_evoregion_calc, echo=FALSE, eval=TRUE}
 
 load(file = "../inst/extdata/regions_results.RData")
-site.region <- regions$Cluster_Evoregions
+site_region <- regions$Cluster_Evoregions
 
 ```
 
@@ -159,13 +155,13 @@ We have to transform the evoregion results to spatial object in order to visuali
 
 evoregion_df <- data.frame(
   site_xy, 
-  site.region
+  site_region
 )
 
 r_evoregion <- terra::rast(evoregion_df)
 
 # Converting evoregion to a spatial polygon data frame, so it can be plotted
-sf.evoregion <- terra::as.polygons(r_evoregion) %>% 
+sf_evoregion <- terra::as.polygons(r_evoregion) %>% 
   sf::st_as_sf()
 
 
@@ -177,7 +173,7 @@ map_limits <- list(
 )
 
 # Assigning the same projection to both spatial objects
-sf::st_crs(sf.evoregion) <- st_crs(coastline)
+sf::st_crs(sf_evoregion) <- st_crs(coastline)
 
 
 # Colours to plot evoregions
@@ -199,7 +195,7 @@ Evoregions can now be mapped using the following code
 map_evoregion <- 
   evoregion_df %>% 
   ggplot2::ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = site_region)) + 
   ggplot2::scale_fill_manual(
     name = "", 
     labels = LETTERS[1:5],
@@ -207,7 +203,7 @@ map_evoregion <-
   ) +
   ggplot2::geom_sf(data = coastline) +
   ggplot2::geom_sf(
-    data = sf.evoregion, 
+    data = sf_evoregion, 
     color = "#040400",
     fill = NA, 
     size = 0.2) +
@@ -224,15 +220,10 @@ map_evoregion <-
 
 ```
 
-```{r saveFig2, echo=FALSE}
-
-ggplot2::ggsave(plot = map_evoregion,  filename = "Fig2_evoregion_akodon.png", path = here::here("vignettes"), dpi = "retina")
-
+```{r outFig2, echo=FALSE,eval=FALSE,out.width="70%"}
+map_evoregion
 ```
 
-```{r fig2_evoregions, echo=FALSE, eval=TRUE}
-knitr::include_graphics(here::here("vignettes", "Fig2_evoregion_akodon.png"))
-```
 
 `evoregion` produced five distinct regions, but not all cells have the same degree of affiliation in associated with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to [turnover areas](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492), in other words, areas with multiple events of colonization by different lineages.
 
@@ -247,10 +238,10 @@ dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean")
 
 # calculating affiliation values for each assemblage 
 afi <- calc_affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,
-                          groups = regions$Cluster_Evoregions) 
+                          groups = regions$cluster_evoregions) 
 
 # binding the information in a data frame
-sites <- bind_cols(site_xy, site.region =  site.region, afi)
+sites <- bind_cols(site_xy, site_region =  site_region, afi)
 
 ```
 
@@ -260,7 +251,7 @@ Now we can map both evoregions and the affiliation of each cell. The degree of a
 map_joint_evoregion_afilliation <- 
    evoregion_df %>% 
    ggplot() + 
-   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = site.region), 
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = site_region), 
                alpha = sites[, "afilliation"]) + 
    ggplot2::scale_fill_manual(
      name = "", 
@@ -269,7 +260,7 @@ map_joint_evoregion_afilliation <-
    ) +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
-     data = sf.evoregion, 
+     data = sf_evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
@@ -284,26 +275,19 @@ map_joint_evoregion_afilliation <-
 
 ```
 
-```{r saveFig3, echo=FALSE}
-ggplot2::ggsave(plot = map_joint_evoregion_afilliation,  
-                filename = "Fig3_afilliation_akodon.png",
-                path = here::here("vignettes"),
-                dpi = "retina")
-```
-
-```{r fig3_afilliation, echo=FALSE, eval=TRUE}
-knitr::include_graphics(here::here("vignettes", "Fig3_afilliation_akodon.png"))
+```{r outFig3, echo=FALSE,eval=FALSE,out.width="70%"}
+map_joint_evoregion_afilliation
 ```
 
 # Ancestral area reconstruction for Akodon species {#mergeMacroAssemblage}
 
 In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed using [BioGeoBEARS](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution studies.
 
-First, we have to define the occurrence of each species regarding the evoregions. This will correspond to the current area of species.
+First, we have to define the occurrence of each species in the evoregions. To do this we can use the function `region_occ` to obtain a data frame of species in the lines and evoregions in the columns.
 
 ```{r echo=TRUE}
 
-a_region <- Herodotools::region_occ(comm = akodon.pa.tree, site.region = site.region)
+a_region <- Herodotools::region_occ(comm = akodon_pa_tree, site.region = site_region)
 
 ```
 
@@ -314,7 +298,7 @@ The object created in the last step can be used in an auxiliary function present
 Herodotools::tipranges_to_BioGeoBEARS(
   a_region, 
   # please set a new path to save the file
-  filename = here("inst", "extdata", "geo_area_akodon.data"),
+  filename = here::here("inst", "extdata", "geo_area_akodon.data"),
   areanames = NULL
   )
 
@@ -324,20 +308,13 @@ Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB processor 
 
 Read the file containing the results of DEC model reconstruction: 
 
-
-```{r echo=TRUE, eval = FALSE}
-
-# ancestral reconstruction
-load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
-
-```
-
-```{r loadDECmodel, echo=FALSE, eval=TRUE}
+```{r loadDECmodel, echo=TRUE, eval=TRUE}
 
 # ancestral reconstruction
 load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
 
 ```
+
 It is worth to note that the procedures decribed from here will work with any model of ancestral area reconstruction, but for sake of simplicity we decided to use only the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html). 
 
 # Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
@@ -351,20 +328,20 @@ Let's start by calculating the age of each cell considering the macroevolutionar
 ```{r agecalc, echo=TRUE}
 
 # converting numbers to character
-biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion_df$site.region)) 
+biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion_df$site_region)) 
 
 # getting the ancestral range area for each node 
 node_area <- 
   Herodotools::get_node_range_BioGeoBEARS(
     resDEC,
     phyllip.file = here::here("inst", "extdata", "geo_area_akodon.data"),
-    akodon.newick,
+    akodon_newick,
     max.range.size = 4 
   )
 
 # calculating age arrival 
-age_comm <- Herodotools::calc_age_arrival(W = akodon.pa.tree, 
-                        tree = akodon.newick, 
+age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree, 
+                        tree = akodon_newick, 
                         ancestral.area = node_area, 
                         biogeo = biogeo_area) 
 
@@ -376,12 +353,12 @@ With mean age for each assemblage we can map the ages for all assemblages
 
 ```{r ageMap, echo=TRUE}
 
-sites <- dplyr::bind_cols(site_xy, site.region =  site.region, age = age_comm$mean_age_per_assemblage)
+sites <- dplyr::bind_cols(site_xy, site_region =  site_region, age = age_comm$mean_age_per_assemblage)
 
 map_age <- 
   sites %>% 
   ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
   scale_fill_carto_c(type = "quantitative", 
                      palette = "SunsetDark",
                      direction = 1, 
@@ -390,13 +367,13 @@ map_age <-
                      labels = glue::glue("{seq(0, 3.5, by = 0.5)}")) +
   ggplot2::geom_sf(data = coastline, size = 0.4) +
   ggplot2::geom_sf(
-    data = sf.evoregion, 
+    data = sf_evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("B") + 
-  ggplot2::ggplot2::theme_bw() +
+  ggplot2::theme_bw() +
   ggplot2::labs(fill = "Mean age (Myr)") +
   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -434,8 +411,8 @@ We modified the original metric to take into account only the portion of evoluti
 
 ```{r diversification, echo=TRUE}
 akodon_diversification <- 
-Herodotools::calc_model_based_diversification(W = akodon.pa.tree,
-                   tree = akodon.newick, 
+Herodotools::calc_model_based_diversification(W = akodon_pa_tree,
+                   tree = akodon_newick, 
                    ancestral.area = node_area, 
                    biogeo = biogeo_area, 
                    diversification = "jetz",
@@ -447,7 +424,7 @@ The result of `calc_model_based_diversification` function is composed by a data-
 
 ```{r mapdiversification, echo=TRUE}
 sites <- dplyr::bind_cols(site_xy,
-                   site.region =  site.region,
+                   site_region =  site_region,
                    age = age_comm$mean_age_per_assemblage,
                    diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site)
@@ -455,17 +432,17 @@ sites <- dplyr::bind_cols(site_xy,
 map_diversification <- 
    sites %>% 
    ggplot2::ggplot() + 
-   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification)) + 
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = diversification)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
-     data = sf.evoregion, 
+     data = sf_evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
-   ggplot2::ggtitle("Diversification *sensu* Jetz") + 
-   ggplot2::ggplot2::theme_bw() +
+   ggplot2::ggtitle("Diversification original Jetz") + 
+   ggplot2::theme_bw() +
    ggplot2::labs(fill = "Harmonic mean diversification") +
     ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -481,7 +458,7 @@ map_diversification <-
 map_diversification_model_based <- 
   sites %>% 
   ggplot2::ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
   scale_fill_carto_c(type = "quantitative",
                      palette = "SunsetDark", 
                      direction = 1, 
@@ -490,13 +467,13 @@ map_diversification_model_based <-
                      labels = glue::glue("{seq(0, 1, by = 0.25)}")) +
   ggplot2::geom_sf(data = coastline, size = 0.4) +
   ggplot2::geom_sf(
-    data = sf.evoregion, 
+    data = sf_evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
-  ggplot2::ggtitle("C") + 
-  ggplot2::ggplot2::theme_bw() +
+  ggplot2::ggtitle("In situ diversification") + 
+  ggplot2::theme_bw() +
   ggplot2::labs(fill = "In-situ diversification") +
   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -535,8 +512,8 @@ We can also calculate the importance of dispersal events related to each ancestr
 ```{r dispersal, echo=TRUE}
 
 akodon_dispersal <- 
-Herodotools::calc_dispersal_from(W = akodon.pa.tree,
-               tree = akodon.newick, 
+Herodotools::calc_dispersal_from(W = akodon_pa_tree,
+               tree = akodon_newick, 
                ancestral.area = node_area, 
                biogeo = biogeo_area)
 
@@ -548,7 +525,7 @@ We also can map the contribution of dispersal for all regions. Note that the are
 ```{r}
 
 sites <- dplyr::bind_cols(site_xy,
-                   site.region =  site.region, 
+                   site_region =  site_region, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
                    diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
@@ -561,19 +538,19 @@ sites <- dplyr::bind_cols(site_xy,
 map_dispersal_D <- 
    sites %>% 
    ggplot2::ggplot() + 
-   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = dispersal.D)) + 
       scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
      ) +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
-     data = sf.evoregion, 
+     data = sf_evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("From D") + 
-   ggplot2::ggplot2::theme_bw() +
+   ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") + 
   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -592,19 +569,19 @@ map_dispersal_D <-
 map_dispersal_A <- 
    sites %>% 
    ggplot2::ggplot() + 
-   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.A)) + 
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = dispersal.A)) + 
       scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
      ) +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
-     data = sf.evoregion, 
+     data = sf_evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("From A") + 
-   ggplot2::ggplot2::theme_bw() +
+   ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") + 
   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -623,19 +600,19 @@ map_dispersal_A <-
 map_dispersal_B <- 
    sites %>% 
    ggplot2::ggplot() + 
-   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.B)) +
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = dispersal.B)) +
    scale_fill_carto_c(
      type = "quantitative", palette = "SunsetDark", na.value = "white", limits = c(0,1)
      ) +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
-     data = sf.evoregion, 
+     data = sf_evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.5) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("From B") + 
-   ggplot2::ggplot2::theme_bw() +
+   ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") +
   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -659,17 +636,21 @@ map_dispersion_from <-
   ggplot2::theme(legend.position = "bottom")
 
 ```
-
-```{r saveFig6, echo=FALSE}
-ggplot2::ggsave(plot = map_dispersion_from,  
-                filename = "Fig5_map_dispersion_from_akodon.png",
-                path = here::here("vignettes"),
-                dpi = "retina")
+```{r outFig6, echo=FALSE,eval=FALSE,out.width="70"}
+map_dispersion_from
 ```
 
-```{r fig6_afilliation, echo=FALSE, eval=TRUE}
-knitr::include_graphics(here::here("vignettes", "Fig5_map_dispersion_from_akodon.png"))
-```
+
+#```{r saveFig6, echo=FALSE}
+#ggplot2::ggsave(plot = map_dispersion_from,  
+#                filename = "Fig5_map_dispersion_from_akodon.png",
+#                path = here::here("vignettes"),
+#                dpi = "retina")
+#```
+#
+#```{r fig6_afilliation, echo=FALSE, eval=TRUE}
+#knitr::include_graphics(here::here("vignettes", "Fig5_map_dispersion_from_akodon.png"))
+#```
 
 ## Model based community phylogetic metrics {#phylomodelmetricscomm}
 
@@ -677,9 +658,9 @@ We also can calculate common used metrics in Community Phylogenetics, but now co
 
 ```{r commPhylo, echo=TRUE, eval=FALSE}
 
-akodon_db_metrics <- 
-Herodotools::calc_div_based_metrics(W = akodon.pa.tree,
-                  tree = akodon.newick, 
+akodon_PD_PE_insitu <- 
+Herodotools::calc_div_based_metrics(W = akodon_pa_tree,
+                  tree = akodon_newick, 
                   ancestral.area = node_area, 
                   biogeo = biogeo_area, 
                   PD = TRUE, 
@@ -691,28 +672,28 @@ As the other metrics we can plot PDdb and PEdb in a map
 
 ```{r map_community_metrics, echo=TRUE}
 sites <- dplyr::bind_cols(site_xy,
-                   site.region =  site.region, 
+                   site_region =  site_region, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
-                   PE = akodon_db_metrics$PE, 
-                   PEdb = akodon_db_metrics$Db_PE,
-                   PD = akodon_db_metrics$PD,
-                   PDdb = akodon_db_metrics$PDlocal)
+                   PE = akodon_PD_PE_insitu$PE, 
+                   PEdb = akodon_PD_PE_insitu$Db_PE,
+                   PD = akodon_PD_PE_insitu$PD,
+                   PDdb = akodon_PD_PE_insitu$PDlocal)
 
 map_PE <- 
    sites %>% 
    ggplot2::ggplot() + 
-   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = PE)) + 
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = PE)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
-     data = sf.evoregion, 
+     data = sf_evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("PE for Akodon Genus") + 
-   ggplot2::ggplot2::theme_bw() +
+   ggplot2::theme_bw() +
    ggplot2::labs(fill = "PE value") +
     ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -728,17 +709,17 @@ map_PE <-
 map_PEdb <- 
    sites %>% 
    ggplot2::ggplot() + 
-   ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = PEdb)) + 
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = PEdb)) + 
    scale_fill_carto_c(type = "quantitative", palette = "SunsetDark") +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
-     data = sf.evoregion, 
+     data = sf_evoregion, 
      color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
-   ggplot2::ggtitle("PEdb for Akodon Genus") + 
-   ggplot2::ggplot2::theme_bw() +
+   ggplot2::ggtitle("In situ PE for Akodon Genus") + 
+   ggplot2::theme_bw() +
    ggplot2::labs(fill = "PEdb value") +
     ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -773,7 +754,7 @@ Here we will show how to implement three tip-based metrics proposed by [Luza et 
 First we will load trait and phylogenetic data we need to run the function `calc_tip_based_trait_evo`.
 
 ```{r loadTraitData, echo=T}
-rodent.phylo <- ape::read.nexus(
+rodent_phylo <- ape::read.nexus(
   system.file("extdata", "Sigmodontinae_285speciesTree.tre", package = "Herodotools")
   )
   
@@ -785,22 +766,30 @@ traits <- read.table(
 
 # adjust sciName for matching
 traits$Scientific <- gsub (" ", "_", traits$Scientific)
-traits <- traits[which(traits$Scientific %in% rodent.phylo$tip.label), ] # subset
-traits <- traits[match(rodent.phylo$tip.label,traits$Scientific), ] # match to have the same order
+traits <- traits[which(traits$Scientific %in% rodent_phylo$tip.label), ] # subset
+traits <- traits[match(rodent_phylo$tip.label,traits$Scientific), ] # match to have the same order
 traits <- traits[is.na(traits$Scientific) !=T,] #names not matching
 rownames(traits) <- traits$Scientific
 
 # match
-match_data <- picante::match.phylo.data(rodent.phylo, traits)
+match_data <- picante::match.phylo.data(rodent_phylo, traits)
 
 trait <- match_data$data$ForStrat.Value
 names(trait) <- match_data$data$Scientific
 
-# run function
-trans_rates <- calc_tip_based_trait_evo(tree = match_data$phy,
+```
+Now calculate the metrics.
+
+```{r tipbasedtrait, echo=TRUE,eval=FALSE}
+# run `calc_tip_based_trait_evo` function 
+trans_rates <- Herodotools::calc_tip_based_trait_evo(tree = match_data$phy,
                                    trait = trait , # need to be named to work
                                    nsim = 50,
-                                   method = c("transition_rates", "last_transition_time", "stasis_time"))
+                                   method = c("transition_rates",
+                                              "last_transition_time",
+                                              "stasis_time")
+                                   )
+  
 ```
 
 ```{r loadResTransition, echo=FALSE}
@@ -890,7 +879,7 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
   
   ggplot() +
     ggplot2::geom_raster(data = sel_data, 
-                aes(x = LONG, y = LAT, fill = values)) +
+                ggplot2::aes(x = LONG, y = LAT, fill = values)) +
     rcartocolor::scale_fill_carto_c(
       type = "quantitative", 
       palette = "SunsetDark", 
@@ -936,20 +925,20 @@ ggplot2::ggsave(plot = mapTransition_rate,
 # This is the Figure 3 of the paper
 
 sites <- dplyr::bind_cols(site_xy,
-                   site.region =  site.region, 
+                   site_region =  site_region, 
                    age = age_comm$mean_age_per_assemblage,
                    diversification = akodon_diversification$Jetz_harmonic_mean_site,
                    diversification_model_based = akodon_diversification$model_based_Jetz_harmonic_mean_site,
-                   PE = akodon_db_metrics$PE, 
-                   PEdb = akodon_db_metrics$Db_PE,
-                   PD = akodon_db_metrics$PD,
-                   PDdb = akodon_db_metrics$PDlocal, 
+                   PE = akodon_PD_PE_insitu$PE, 
+                   PEdb = akodon_PD_PE_insitu$Db_PE,
+                   PD = akodon_PD_PE_insitu$PD,
+                   PDdb = akodon_PD_PE_insitu$PDlocal, 
                    dispersal.D = akodon_dispersal[,1])
 
 map_evoregion <- 
   evoregion.df %>% 
   ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = site.region)) + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = site_region)) + 
   ggplot2::scale_fill_manual(
     name = "", 
     labels = LETTERS[1:5],
@@ -957,7 +946,7 @@ map_evoregion <-
   ) +
   ggplot2::geom_sf(data = coastline) +
   ggplot2::geom_sf(
-    data = sf.evoregion, 
+    data = sf_evoregion, 
     color = "#040400",
     fill = NA, 
     size = 0.2) +
@@ -976,7 +965,7 @@ map_evoregion <-
 map_age <- 
   sites %>% 
   ggplot2::ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
   scale_fill_carto_c(type = "quantitative", 
                      palette = "SunsetDark",
                      direction = 1, 
@@ -985,7 +974,7 @@ map_age <-
                      labels = glue::glue("{seq(0, 3.5, by = 0.5)}")) +
   ggplot2::geom_sf(data = coastline, size = 0.4) +
   ggplot2::geom_sf(
-    data = sf.evoregion, 
+    data = sf_evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
@@ -1011,7 +1000,7 @@ map_age <-
 map_diversification_model_based <- 
   sites %>% 
   ggplot2::ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
   scale_fill_carto_c(type = "quantitative",
                      palette = "SunsetDark", 
                      direction = 1, 
@@ -1020,7 +1009,7 @@ map_diversification_model_based <-
                      labels = glue::glue("{seq(0, 1, by = 0.25)}")) +
   ggplot2::geom_sf(data = coastline, size = 0.4) +
   ggplot2::geom_sf(
-    data = sf.evoregion, 
+    data = sf_evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.7) +
@@ -1045,7 +1034,7 @@ map_diversification_model_based <-
 map_dispersal_D <- 
   sites %>% 
   ggplot2::ggplot() + 
-  ggplot2::geom_raster(aes(x = LONG, y = LAT, fill = dispersal.D)) + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = dispersal.D)) + 
   scale_fill_carto_c(
     type = "quantitative", 
     palette = "SunsetDark",
@@ -1057,7 +1046,7 @@ map_dispersal_D <-
   ) +
   ggplot2::geom_sf(data = coastline, size = 0.4) +
   ggplot2::geom_sf(
-    data = sf.evoregion, 
+    data = sf_evoregion, 
     color = rev(col_five_hues),
     fill = NA, 
     size = 0.5) +
@@ -1085,6 +1074,7 @@ ggsave(filename = here::here("vignettes", "maps_historicalVar_Akodon.png"), plot
        dpi = 300)
 
 ```
+
 ```{r TransitionRateFig, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
 ```

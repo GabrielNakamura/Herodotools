@@ -39,7 +39,9 @@ uses a stochastic character mapping on discrete trait data, but other types of t
 \dontrun{
 data(rodent.phylo) # phylogenetic tree
 data(trait) # categorical traits on species diet
-trans_rates <- calc_tip_based_trait_evo(tree=match_data$phy,trait =trait , # need to be named to worknsim = 50,method = c("transition_rates", "last_transition_time", "stasis_time"))
+trans_rates <- calc_tip_based_trait_evo(tree=match_data$phy,trait =trait ,
+    nsim = 50,method = c("transition_rates", "last_transition_time", "stasis_time")
+    )
 }
 
 }

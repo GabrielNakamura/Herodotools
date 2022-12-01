@@ -55,7 +55,7 @@ of these procedures.}
 A list of length four containing:
 \itemize{
 \item \code{PCPS_vectors} A matrix with PCPS vectors
-\item \code{Cluster_Evoregion} A vector indicating the region in which each
+\item \code{cluster_evoregion} A vector indicating the region in which each
 assemblage was classified
 }
 }
@@ -74,7 +74,7 @@ metrics of phylogenetic turnover.
 data(akodon.pa.tree) # occurrence data 
 data(akodon.newick) # phylogenetic tree
 regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
-site.region <- regions$Cluster_Evoregions # classification of each community in regions
+site.region <- regions$cluster_evoregions # classification of each community in regions
 }
 
 }

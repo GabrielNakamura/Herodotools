@@ -36,7 +36,7 @@
 #' @return A list of length four containing:
 #' \itemize{
 #'    \item `PCPS_vectors` A matrix with PCPS vectors
-#'    \item `Cluster_Evoregion` A vector indicating the region in which each 
+#'    \item `cluster_evoregion` A vector indicating the region in which each 
 #'      assemblage was classified
 #' }
 #' 
@@ -50,7 +50,7 @@
 #' data(akodon.pa.tree) # occurrence data 
 #' data(akodon.newick) # phylogenetic tree
 #' regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
-#' site.region <- regions$Cluster_Evoregions # classification of each community in regions
+#' site.region <- regions$cluster_evoregions # classification of each community in regions
 #' }
 #' 
 #' @export
@@ -129,7 +129,7 @@ evoregions <- function(comm,
   
   
   names(list_res) <- c("PCPS", 
-                       "Cluster_Evoregions")
+                       "cluster_evoregions")
   
   class(list_res) <- "evoregion"
   return(list_res)

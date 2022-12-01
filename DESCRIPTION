@@ -49,6 +49,7 @@ Depends:
 Imports:
     adegenet,
     ape,
+    dplyr,
     gtools,
     here,
     magrittr,

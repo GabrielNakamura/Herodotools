@@ -39,7 +39,7 @@ region_occ <- function(comm, site.region){
     dplyr::summarise(n = dplyr::n()) %>% 
     dplyr::ungroup() %>% 
     # Calculate the propotional area of a species in each region
-    dplyr::group_by(species) %>% 
+    dplyr::group_by(.data$species) %>% 
     dplyr::mutate(
       species.total = sum(.data$n), 
       prec.occupation = .data$n/.data$species.total

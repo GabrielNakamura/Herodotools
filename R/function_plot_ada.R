@@ -18,9 +18,6 @@
 #' 
 #' 
 #' @export
-#'
-#' @examples
-#' 
 plot_ada <- 
   function(ada.res,
            grid,

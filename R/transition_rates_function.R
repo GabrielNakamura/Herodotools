@@ -11,6 +11,7 @@
 #' @param trait A named vector containing the tip states for a discretely valued character. The names must match the tip labels of the tree.
 #' @param nsim Number of simulations to stochastic character mapping.
 #' @param method Tip-based metric, partial match to "transition_rates", "last_transition_time" and "stasis_time".
+#' 
 #' @return A list (length equal to nsim) with tip-based metrics estimated per species.
 #' 
 #' @author André Luza and Vanderlei Debastiani
@@ -21,11 +22,12 @@
 #' \dontrun{
 #' data(rodent.phylo) # phylogenetic tree
 #' data(trait) # categorical traits on species diet
-#' trans_rates <- calc_tip_based_trait_evo(tree=match_data$phy,trait =trait , # need to be named to worknsim = 50,method = c("transition_rates", "last_transition_time", "stasis_time"))
+#' trans_rates <- calc_tip_based_trait_evo(tree=match_data$phy,trait =trait ,
+#'     nsim = 50,method = c("transition_rates", "last_transition_time", "stasis_time")
+#'     )
 #' }
 #' 
 #' @export
-#' 
 calc_tip_based_trait_evo <- function(tree,
                                 trait, 
                                 nsim = 1,
