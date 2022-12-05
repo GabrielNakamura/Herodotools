@@ -37,7 +37,11 @@ the half of the lenght of the branch linking the ancestor and the present day sp
 }
 \examples{
  # hypothetical occurrence matrix with species in columns and assemblages in lines
- W_toy<- matrix(c(0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0),nrow= 3,ncol= 5,dimnames=list(c("Comm 1", "Comm 2", "Comm 3"),c(paste("s", 1:5, sep=""))))
+ W_toy<- matrix(c(0, 1, 1, 0, 1,
+                  1, 0, 1, 0, 1, 
+                  0, 0, 1, 0, 0),nrow= 3,
+                  ncol= 5,dimnames=list(c("Comm 1", "Comm 2", "Comm 3"),
+                  c(paste("s", 1:5, sep=""))))
  
  #toy tree
  data(toy_treeEx)

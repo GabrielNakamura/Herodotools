@@ -37,8 +37,9 @@ site.region <- regions$Cluster_Evoregions # classification of each community in 
 axis_sel <- which(regions$PCPS$prop_explainded >= 
     regions$PCPS$tresh_dist) # significant PCPS axis
 PCPS_thresh <- regions$PCPS$vectors[, axis_sel] # only significant axis
-dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean") # distance matrix based on phylogenetic structure
-calc_affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,groups = regions$Cluster_Evoregions) # affiliation
+dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean") # distance matrix 
+calc_affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,
+    groups = regions$Cluster_Evoregions) # affiliation
 }
 
 }
