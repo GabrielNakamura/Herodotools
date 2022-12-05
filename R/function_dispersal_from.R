@@ -22,8 +22,12 @@
 #' data(akodon.pa.tree) # phylogenetic tree
 #' data(regions) # biogeographic region
 #' data(resDEC) # output from ancestral area reconstruction
-#' node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),akodon.newick,max.range.size = 4) # data frame indicating the ancestral area occurrence
-#' calc_dispersal_from(W=akodon.sites,tree=akodon.pa.tree,ancestral.area=node.area,biogeo=regions) # historical dispersal analysis
+#' node.area <- get_node_range_BioGeoBEARS(resDEC,
+#'                                         phyllip.file = here("inst", "extdata", "geo_area_akodon.data")
+#'                                         ,akodon.newick,max.range.size = 4) # data frame indicating the ancestral area
+#' calc_dispersal_from(W=akodon.sites,
+#'                     tree=akodon.pa.tree,
+#'                     ancestral.area=node.area,biogeo=regions) # historical dispersal analysis
 #' }
 #' 
 #' @seealso \code{\link{get_node_range_BioGeoBEARS}}

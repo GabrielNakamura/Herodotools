@@ -66,7 +66,7 @@ devtools::install_github("GabrielNakamura/Herodotools")
 
 To read the files corresponding to the distribution of species, phylogenetic relationship and trait values (represented by body size) type:
 
-```{r readData, echo=TRUE}
+```{r readData, echo=TRUE, eval=TRUE}
 library(Herodotools)
 akodon_sites <- read.table(system.file("extdata", "Table_Akodon_coords_pa.txt", package = "Herodotools"), 
                            header = TRUE)
@@ -77,7 +77,7 @@ akodon_newick <- ape::read.tree(system.file("extdata", "akodon.new", package = "
 
 Here we will perform a few data processing in order to get spatial and occurrence information
 
-```{r dataproc, echo=TRUE}
+```{r dataproc, echo=TRUE, eval=TRUE}
 site_xy <- akodon_sites %>% 
   dplyr::select(LONG, LAT)
 
@@ -88,7 +88,7 @@ akodon_pa <- akodon_sites %>%
 
 Checking if species names between occurrence matrix and phylogenetic tree are matching
 
-```{r match_data, echo=TRUE}
+```{r match_data, echo=TRUE, eval=TRUE}
 spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
 akodon_pa_tree <- akodon_pa[, spp_in_tree]
 
@@ -98,7 +98,7 @@ akodon_pa_tree <- akodon_pa[, spp_in_tree]
 
 Here we can observe the richness pattern for Akodon genus
 
-```{r richpattern, echo=TRUE}
+```{r richpattern, echo=TRUE, eval=TRUE}
 coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
 map_limits <- list(
   x = c(-95, -30),
@@ -119,7 +119,7 @@ dplyr::bind_cols(site_xy, richness = richness) %>%
 
 ```
 
-```{r outFig1, echo=FALSE, eval=FALSE, out.width="70%"}
+```{r outFig1, echo=FALSE, eval=TRUE, out.width="70%", fig.cap="Species richness for Akodon genus in South America"}
 map_richness
 ```
 
@@ -131,7 +131,7 @@ To calculate evoregions we need the occurrence matrix, a phylogenetic tree and t
 
 **NOTE**: The regions obtained from will present different names at each time that the analysis be performed, but the patterns will be the same. Consequently, if the user run the same code the evoregions will appear with different names.
 
-```{r evoregion_calc, echo=TRUE, eval=FALSE}
+```{r evoregion_calc, echo=TRUE, eval=TRUE}
 regions <- 
   Herodotools::evoregions(
   comm = akodon_pa_tree,
@@ -145,13 +145,13 @@ site_region <- regions$cluster_evoregions
 ```{r save_evoregion_calc, echo=FALSE, eval=TRUE}
 
 load(file = "../inst/extdata/regions_results.RData")
-site_region <- regions$Cluster_Evoregions
+site_region <- regions$cluster_evoregions
 
 ```
 
 We have to transform the evoregion results to spatial object in order to visualize in a map the regions. This can be done using the following code:
 
-```{r spatProcessEvoregion, echo=TRUE}
+```{r spatProcessEvoregion, echo=TRUE,eval=TRUE}
 
 evoregion_df <- data.frame(
   site_xy, 
@@ -190,7 +190,7 @@ col_five_hues <- c(
 
 Evoregions can now be mapped using the following code
 
-```{r mapEvoregion, echo=TRUE}
+```{r mapEvoregion, echo=TRUE, eval=TRUE}
 
 map_evoregion <- 
   evoregion_df %>% 
@@ -208,7 +208,7 @@ map_evoregion <-
     fill = NA, 
     size = 0.2) +
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
-  ggplot2::ggtitle("A") + 
+  ggplot2::ggtitle("") + 
   ggplot2::theme_bw() +
   ggplot2::theme(
     legend.position = "bottom",
@@ -220,14 +220,14 @@ map_evoregion <-
 
 ```
 
-```{r outFig2, echo=FALSE,eval=FALSE,out.width="70%"}
+```{r outFig2, echo=FALSE,eval=TRUE,out.width="70%",fig.cap="Evoregions for Akodon species communities"}
 map_evoregion
 ```
 
 
 `evoregion` produced five distinct regions, but not all cells have the same degree of affiliation in associated with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to [turnover areas](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492), in other words, areas with multiple events of colonization by different lineages.
 
-```{r affiliationCalc, echo=TRUE}
+```{r affiliationCalc, echo=TRUE,eval=TRUE}
 
 # Selecting only axis with more than 5% of explained variance from evoregion output
 axis_sel <- which(regions$PCPS$prop_explainded >= regions$PCPS$tresh_dist)
@@ -241,13 +241,13 @@ afi <- calc_affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,
                           groups = regions$cluster_evoregions) 
 
 # binding the information in a data frame
-sites <- bind_cols(site_xy, site_region =  site_region, afi)
+sites <- dplyr::bind_cols(site_xy, site_region =  site_region, afi)
 
 ```
 
 Now we can map both evoregions and the affiliation of each cell. The degree of affiliation of cells are showed as the degree of fade for each color. As fade the color of the cell, lesser the affiliation of that cell to its evoregion. Those cell can be interpreted as being zones of high phylogenetic turnover.
 
-```{r mapAffiliation, echo=TRUE}
+```{r mapAffiliation, echo=TRUE, eval=TRUE}
 map_joint_evoregion_afilliation <- 
    evoregion_df %>% 
    ggplot() + 
@@ -265,7 +265,7 @@ map_joint_evoregion_afilliation <-
      fill = NA, 
      size = 0.7) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
-   ggplot2::ggtitle("Evoregion and afilliation for Akodon Genus") + 
+   ggplot2::ggtitle("") + 
    guides(guide_legend(direction = "vertical")) +
    ggplot2::theme_bw() +
    ggplot2::theme(
@@ -275,7 +275,7 @@ map_joint_evoregion_afilliation <-
 
 ```
 
-```{r outFig3, echo=FALSE,eval=FALSE,out.width="70%"}
+```{r outFig3, echo=FALSE,eval=TRUE,out.width="70%",fig.cap="Evoregion and afilliation for communities of Akodon Genus"}
 map_joint_evoregion_afilliation
 ```
 
