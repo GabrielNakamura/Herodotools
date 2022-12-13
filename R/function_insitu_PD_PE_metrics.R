@@ -33,12 +33,12 @@
 #'  assemblage_phylo_metrics <- calc_div_based_metrics(W_toy, toy_treeEx, ancestral_area_toy, biogeo_toy)
 #' 
 #' }
-calc_div_based_metrics <- function(W,
-                              tree,
-                              ancestral.area, 
-                              biogeo,
-                              PD = TRUE,
-                              PE = TRUE){
+calc_insitu_metrics <- function(W,
+                                   tree,
+                                   ancestral.area, 
+                                   biogeo,
+                                   PD = TRUE,
+                                   PE = TRUE){
   
   # total phylogenetic diversity and endemism -------------------------------
   if(!is.matrix(W) == TRUE){
@@ -76,7 +76,7 @@ calc_div_based_metrics <- function(W,
   nodes_species_noNull_org <- nodes_species_noNull
   list_matrix_nodes <- vector(mode = "list", length = length(nodes_species_noNull_org))
   for(i in 1:length(nodes_species_noNull)){
-    #i= 488
+    
     if(length(nodes_species_noNull[[i]]) == 0){
       list_matrix_nodes[[i]] <- NA
     } else{
@@ -132,13 +132,13 @@ calc_div_based_metrics <- function(W,
   
   if(PD == TRUE){
     
-    PDlocal <- unlist(lapply(list_brLength_divLocal,
-                             function(x){
-                               sum(x)
-                             }
+    PDinsitu <- unlist(lapply(list_brLength_divLocal,
+                              function(x){
+                                sum(x)
+                              }
     )
     )
-    names(PDlocal)<- rownames(W) #PDlocal
+    names(PDinsitu) <- rownames(W) #PDinsitu
   }
   
   
@@ -149,17 +149,17 @@ calc_div_based_metrics <- function(W,
     names(list_matrix_edges) <- paste("site", 1:nrow(W), sep= "_")
     all_comb <- gtools::permutations(length(list_matrix_edges), 2,
                                      names(list_matrix_edges))
-    list_occurence<- vector(mode= "list", length= length(list_matrix_edges))
+    list_occurence <- vector(mode= "list", length= length(list_matrix_edges))
     
     #calculating the number of branches co-occurence
     list_matrix_edges_allTips <- vector(mode = "list", length = length(list_matrix_edges))
-    names(list_matrix_edges_allTips)<- names(list_matrix_edges)
+    names(list_matrix_edges_allTips) <- names(list_matrix_edges)
     for(i in 1:length(list_matrix_edges)){
-      #i= 42
-      tip_edges<- do.call(rbind, lapply(ape::nodepath(tree)[which(W[i,] == 1)], function(x){
+      # i = 718
+      tip_edges <- do.call(rbind, lapply(ape::nodepath(tree)[which(W[i,] == 1)], function(x){
         x[(length(x) - 1):length(x)]
       }))
-      if(is.na(list_matrix_edges[[i]])){
+      if(all(is.na(list_matrix_edges[[i]]))){
         list_matrix_edges_allTips[[i]]<- unique(tip_edges) # only tip edges
       } else{
         list_matrix_edges_allTips[[i]]<- unique(rbind(list_matrix_edges[[i]], tip_edges)) # tip and internal branches
@@ -167,13 +167,13 @@ calc_div_based_metrics <- function(W,
     }
     
     for(i in 1:length(list_matrix_edges_allTips)){
-      posit<- which(all_comb[, 1] == names(list_matrix_edges_allTips)[i])
-      comb_occ<- matrix(NA, nrow = nrow(list_matrix_edges_allTips[[i]]), ncol = length(list_matrix_edges_allTips)-1)
+      posit <- which(all_comb[, 1] == names(list_matrix_edges_allTips)[i])
+      comb_occ <- matrix(NA, nrow = nrow(list_matrix_edges_allTips[[i]]), ncol = length(list_matrix_edges_allTips)-1)
       for(j in 1:length(posit)){
         if (any(is.na(list_matrix_edges_allTips[[all_comb[posit[j], 2]]])) == TRUE){
-          comb_occ[, j]<- FALSE
+          comb_occ[, j] <- FALSE
         } else {
-          comb_occ[,j]<- list_matrix_edges_allTips[[all_comb[posit[j], 1]]][, 1] %in% list_matrix_edges_allTips[[all_comb[posit[j], 2]]][, 1] &
+          comb_occ[,j] <- list_matrix_edges_allTips[[all_comb[posit[j], 1]]][, 1] %in% list_matrix_edges_allTips[[all_comb[posit[j], 2]]][, 1] &
             list_matrix_edges_allTips[[all_comb[posit[j], 1]]][, 2] %in% list_matrix_edges_allTips[[all_comb[posit[j], 2]]][, 2]
         }
       }
@@ -230,12 +230,12 @@ calc_div_based_metrics <- function(W,
       if(any(is.null(dim(list_matrix_edges_AS[[i]]))) == TRUE){
         list_matrix_edges_AS[[i]]<- NA
       } else{
-        list_matrix_edges_AS[[i]][, c(3,4)]<- ancestral_comm_temp[[i]]
+        list_matrix_edges_AS[[i]][, c(3,4)] <- ancestral_comm_temp[[i]]
       }
     }
     
     # adding ancestral occurrence and branch length
-    list_all_DbInfo<- vector(mode = "list", length= length(list_brLength_divLocal))
+    list_all_DbInfo <- vector(mode = "list", length= length(list_brLength_divLocal))
     for(i in 1:length(list_matrix_edges_AS)){
       if(any(is.na(list_brLength_divLocal[[i]])) == TRUE){
         list_edge_brLen_insitu[[i]][, 1] <- tree$edge.length[tree$edge[, 1] %in%  list_matrix_edges_allTips[[i]][, 1] &
@@ -263,8 +263,8 @@ calc_div_based_metrics <- function(W,
       list_all_DbInfo[[i]] <- cbind(list_edge_brLen_insitu[[i]][,1], ((denom_tmp2) + 1)) # binding denominator and branch length for each edge
     }
     
-    #### Calculating Db_PE
-    Db_PE_res <- lapply(
+    #### Calculating PEinsitu
+    PEinsitu_res <- lapply(
       lapply(list_all_DbInfo,
              function(x){
                if(any(is.null(dim(x))) == TRUE){
@@ -283,23 +283,22 @@ calc_div_based_metrics <- function(W,
              }
       ),
       sum)
-    res_Db_PE <- matrix(unlist(Db_PE_res), nrow= length(list_matrix_edges_AS), ncol= 1,
-                        dimnames = list(names(list_matrix_edges_AS), "Db_PE"))
+    res_insitu_PE <- matrix(unlist(PEinsitu_res), nrow= length(list_matrix_edges_AS), ncol= 1,
+                            dimnames = list(names(list_matrix_edges_AS), "PEinsitu"))
   }
   
   # Output for community metrics ---------------------------------------
   
   if(PD == TRUE & PE == TRUE){
-    Db_comm_metrics <- data.frame(PE = PEt, Db_PE = res_Db_PE, PD = PDt, PDlocal= PDlocal)
+    insitu_comm_metrics <- data.frame(PE = PEt, PEinsitu = res_insitu_PE, PD = PDt, PDinsitu = PDinsitu)
   }
   if(PD == TRUE & PE == FALSE){
-    Db_comm_metrics <- data.frame(PD = PDt, PDlocal = PDlocal)
+    insitu_comm_metrics <- data.frame(PD = PDt, PDinsitu = PDinsitu)
   }
   if(PE == TRUE & PD == FALSE){
-    Db_comm_metrics <- data.frame(PE= PEt, Db_PE = res_Db_PE)
+    insitu_comm_metrics <- data.frame(PE= PEt, PEinsitu = res_insitu_PE)
   }
   
-  return(Db_comm_metrics)
+  return(insitu_comm_metrics)
   
 }
-

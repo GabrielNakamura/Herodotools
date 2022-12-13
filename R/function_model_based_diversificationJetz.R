@@ -29,17 +29,22 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' data(akodon.pa.tree) # Occurrence matrix
-#' data(akodon.newick) # phylogenetic tree
-#' data(resDEC) # output from ancestral area reconstruction performed with BioGeoBEARS
-#' data(regions) # ecoregion/evoregion for each assemblage
-#' node.area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = here("inst", "extdata", "geo_area_akodon.data"),akodon.newick,max.range.size = 4)
-#' calc_model_based_diversification(W=akodon.pa.tree, tree=akodon.newick,ancestral.area=node.area,biogeo=regions) # model based diversification analysis with default options
+#' W_toy <- matrix(c(0, 1, 1, 0, 1, 
+#'     1, 0, 1, 0, 1, 
+#'     0, 0, 1, 0, 0),nrow= 3,
+#'     ncol= 5,dimnames=list(c("Comm 1", "Comm 2", "Comm 3"),
+#'                           c(paste("s", 1:5, sep=""))))
+#' data("toy_treeEx")
+#' toy_treeEx                   
+#' biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
+#' ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
+#' plot(toy_treeEx, show.node.label = TRUE)
+#' calc_insitu_diversification(W = W_toy,tree = toy_treeEx, ancestral.area = ancestral_area_toy, biogeo = biogeo_toy)
 #' } 
 #' 
 #' @export
 #'
-calc_model_based_diversification <- 
+calc_insitu_diversification <- 
   function(W,
            tree,
            ancestral.area, 
