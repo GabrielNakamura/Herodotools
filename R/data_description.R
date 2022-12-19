@@ -12,22 +12,14 @@
 #' This is a phylogenetic tree containing 30 species from genus Akodon
 #' 
 #' @format newick phylogenetic tree
-"akodon.newick"
-
-#' Occurrence data for Akodon species 
-#' 
-#' This is a filtered and ordered data frame containing the occurrence of 30 species from Akodon genus in 732 assemblages
-#' 
-#' @format data frame with 732 rows and 30 columns organized in the same sequence as the species in the 
-#'     Akodon phylogenetic tree
-'akodon.pa.tree'
+"akodon_newick"
 
 #' Occurrence data for Akodon species
 #' 
 #' This is a occurrence data for species from Akodon genus
 #' 
 #' @format data frame containing 732 rows and 40 columns 
-'akodon.sites'
+'akodon_sites'
 
 #' Output from `evoregion` function with classification of 732 assemblages
 #' 
@@ -50,7 +42,7 @@
 #' Dated (my) phylogenetic tree in newick format containing 285 of sigmodontine species
 #' 
 #' @format Newick phylogenetic tree
-'rodent.phylo'
+'rodent_phylo'
 
 #' Trait on foraging strata for small rodent
 #' 
