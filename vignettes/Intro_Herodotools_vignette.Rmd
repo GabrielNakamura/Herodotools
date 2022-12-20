@@ -226,7 +226,7 @@ map_evoregion <-
     axis.title = element_text(size = 10),
     axis.text = element_text(size = 5),
     plot.subtitle = element_text(hjust = 0.5),
-    legend.text = element_text(family = "Arial", color = "black", size = 8)
+    legend.text = element_text(color = "black", size = 8)
   )
 
 ```
@@ -592,7 +592,7 @@ map_dispersal_B <-
 
 ```
 
-```{r outFig6, echo=FALSE,eval=TRUE,fig.cap="Figure 6 - Maps showing regionalization based on phylogenetic turnover (evoregion - top figure), and the contribution of regions A, B and D to other regions regarding historical dispersal of lineages",out.width="70"}
+```{r outFig6, echo=FALSE,eval=TRUE,fig.cap="Figure 6 - Maps showing regionalization based on phylogenetic turnover (evoregion - top figure), and the contribution of regions A, B and D to other regions regarding historical dispersal of lineages",out.width="70%"}
 leg <- cowplot::get_legend(map_dispersal_B)
 plot1 <- cowplot::plot_grid(map_dispersal_A + theme(legend.position = "none"), 
                    map_dispersal_B + theme(legend.position = "none"), 
@@ -845,7 +845,7 @@ mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
 
 ```
 ```{r fig8, echo=FALSE,eval=TRUE,fig.alt="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
-
+suppressWarnings(mapTransition_rate) 
 ```
 
 
@@ -886,7 +886,7 @@ map_evoregion <-
     axis.title = element_blank(),
     axis.text = element_text(size = 5),
     plot.subtitle = element_text(hjust = 0.5),
-    legend.text = element_text(family = "Arial", color = "black", size = 8)
+    legend.text = element_text(color = "black", size = 8)
   )
 
 
@@ -1003,9 +1003,6 @@ ggsave(filename = here::here("vignettes", "maps_historicalVar_Akodon.png"), plot
 
 ```
 
-```{r TransitionRateFig, echo=FALSE, eval=TRUE}
-knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
-```
 
 # References
 
