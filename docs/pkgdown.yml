@@ -1,10 +1,10 @@
 pandoc: '2.18'
-pkgdown: 1.6.1
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   Intro_Herodotools_vignette: Intro_Herodotools_vignette.html
-last_built: 2022-11-29T18:54Z
+last_built: 2022-12-20T14:07Z
 urls:
-  reference: https://gabrielnakamura.github.io/Herodotools//reference
-  article: https://gabrielnakamura.github.io/Herodotools//articles
+  reference: https://gabrielnakamura.github.io/Herodotools/reference
+  article: https://gabrielnakamura.github.io/Herodotools/articles
 

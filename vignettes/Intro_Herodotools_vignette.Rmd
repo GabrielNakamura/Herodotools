@@ -118,10 +118,11 @@ dplyr::bind_cols(site_xy, richness = richness) %>%
   ggplot2::xlab("Longitude") +
   ggplot2::ylab("Latitude") +
   ggplot2::labs(fill = "Richness") +
+  ggplot2::theme_bw() +
   ggplot2::theme(
         plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
-        legend.text = element_text(size = 8), 
-        axis.text = element_text(size = 8),
+        legend.text = element_text(size = 6), 
+        axis.text = element_text(size = 5),
         axis.title.x = element_text(size = 9),
         axis.title.y = element_text(size = 9)
         )
@@ -223,7 +224,7 @@ map_evoregion <-
   ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_text(size = 10),
-    axis.text = element_text(size = 8),
+    axis.text = element_text(size = 5),
     plot.subtitle = element_text(hjust = 0.5),
     legend.text = element_text(family = "Arial", color = "black", size = 8)
   )
@@ -392,7 +393,7 @@ map_age <-
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 10), 
-    axis.text = element_text(size = 8),
+    axis.text = element_text(size = 5),
     plot.subtitle = element_text(hjust = 0.5)
   )
 ```
@@ -446,7 +447,7 @@ map_diversification <-
    ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank(),
-     axis.text = element_text(size = 8)
+     axis.text = element_text(size = 5)
    )
 
 map_diversification_insitu <- 
@@ -473,8 +474,8 @@ map_diversification_insitu <-
   ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
-    legend.text = element_text(size = 8), 
-    axis.text = element_text(size = 8),
+    legend.text = element_text(size = 6), 
+    axis.text = element_text(size = 5),
     plot.subtitle = element_text(hjust = 0.5)
   )
 
@@ -538,7 +539,7 @@ map_dispersal_D <-
    ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
-    legend.text = element_text(size = 8), 
+    legend.text = element_text(size = 6), 
     axis.text = element_text(size = 7),
     plot.subtitle = element_text(hjust = 0.5)
   )
@@ -564,7 +565,7 @@ map_dispersal_A <-
    ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
-    legend.text = element_text(size = 8), 
+    legend.text = element_text(size = 6), 
     axis.text = element_text(size = 7),
     plot.subtitle = element_text(hjust = 0.5)
   )
@@ -584,7 +585,7 @@ map_dispersal_B <-
    ggplot2::theme(
      legend.position = "right",
      axis.title = element_blank(),
-     legend.text = element_text(size = 8), 
+     legend.text = element_text(size = 6), 
      axis.text = element_text(size = 7),
      plot.subtitle = element_text(hjust = 0.5)   
    )
