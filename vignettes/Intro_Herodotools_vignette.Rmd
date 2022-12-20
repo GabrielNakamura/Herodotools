@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, echo=FALSE,eval=TRUE}
-library(Herodotools)
+library(magrittr)
 `%>%` <- magrittr::`%>%`
 ```
 
@@ -67,8 +67,9 @@ Now we need to read the files corresponding to the distribution of species and p
     will be used in downstream analysis with Herodotools
 
 ```{r readData, echo=TRUE, eval=TRUE}
-data(akodon_sites)
-data(akodon_newick)
+library(Herodotools)
+data("akodon_sites")
+data("akodon_newick")
 ```
 
 # Data processing {#processing}
@@ -1001,7 +1002,7 @@ ggsave(filename = here::here("vignettes", "maps_historicalVar_Akodon.png"), plot
 
 ```
 
-```{r TransitionRateFig, echo=FALSE, eval=FALSE}
+```{r TransitionRateFig, echo=FALSE, eval=TRUE}
 knitr::include_graphics(here::here("vignettes", "Fig8_map_TransitionRate.png"))
 ```
 
