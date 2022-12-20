@@ -1,13 +1,4 @@
+url: ~
 template:
   bootstrap: 5
-url: https://gabrielnakamura.github.io/Herodotools/
-navbar:
-  structure:
-    left:  [intro, reference, articles]
-    right: [search, github]
-home:
-  links:
-  - text: Browse source code
-    href: https://github.com/GabrielNakamura/Herodotools
-sidebar:
-  structure: [links, license, community, citation, authors, dev]
+
