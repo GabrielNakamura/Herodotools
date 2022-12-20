@@ -55,3 +55,8 @@
 #'         \item{S}{Scansorial}
 #'      }   
 'trait'
+
+#' Averaged rates of life mode for Sigmodontinae assemblages
+#' 
+#' Data frame with three columns with averaged values of tip based metrics of trait evolution
+'averaged_rates'

@@ -24,7 +24,7 @@ the relationship between present-day species (tips) and their ancestors (nodes).
 easy way to obtain certain objects that can be used in other functions, like \code{\link{compute_ancestral_state}}
 }
 \examples{
-data(akodon.newick)
-spp_nodes(tree = akodon.newick, node.prefix = "N")
+data(akodon_newick)
+spp_nodes(tree = akodon_newick, node.prefix = "N")
 
 }

@@ -29,10 +29,14 @@ of assemblages to each evoregion, as described in Maestri and Duarte 2020.
 \examples{
 \dontrun{
 # First run the classification
-data(akodon.pa.tree) # occurrence data 
-data(akodon.newick) # phylogenetic tree
-regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
-site.region <- regions$Cluster_Evoregions # classification of each community in regions
+#' data(akodon_newick) # phylogenetic tree
+data(akodon_sites) # occurrence data 
+akodon_pa <- akodon_sites \%>\% 
+    dplyr::select(-LONG, -LAT)
+spp_in_tree <- names(akodon_pa) \%in\% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
+regions <- evoregions(comm = akodon_pa, phy = akodon_newick)
+site_region <- regions$Cluster_Evoregions # classification of each community in regions
 
 axis_sel <- which(regions$PCPS$prop_explainded >= 
     regions$PCPS$tresh_dist) # significant PCPS axis

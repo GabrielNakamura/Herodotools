@@ -22,10 +22,13 @@ Quantifying species association with evoregions
 }
 \examples{
 \dontrun{
-data(akodon.pa.tree) # occurrence data 
-data(akodon.newick) # phylogenetic tree
-regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick) # compute evoregions
-spp_association_evoreg(comm = akodon.pa.tree, evo.vectors = regions, spp.association = 0.7) # calculate species association
+data(akodon_sites) # occurrence data 
+akodon_pa <- akodon_sites \%>\% dplyr::select(-LONG, -LAT)
+data(akodon_newick) # phylogenetic tree
+spp_in_tree <- names(akodon_pa) \%in\% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
+regions <- evoregions(comm = akodon_pa, phy = akodon_newick) # compute evoregions
+spp_association_evoreg(comm = akodon_pa_tree, evo.vectors = regions, spp.association = 0.7) # calculate species association
 }
 
 }

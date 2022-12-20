@@ -25,15 +25,18 @@ contribution of ancestral areas to dispersal of lineage in the site's region.
 }
 \examples{
 \dontrun{
-data(akodon.sites) # occurrence matrix
-data(akodon.pa.tree) # phylogenetic tree
+data(akodon_sites) # occurrence matrix
+akodon_pa <- akodon_sites \%>\% dplyr::select(-LONG, -LAT)
+data(akodon_newick) # phylogenetic tree
+spp_in_tree <- names(akodon_pa) \%in\% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
 data(regions) # biogeographic region
 data(resDEC) # output from ancestral area reconstruction
 node.area <- get_node_range_BioGeoBEARS(resDEC,
                                         phyllip.file = here("inst", "extdata", "geo_area_akodon.data")
-                                        ,akodon.newick,max.range.size = 4) # data frame indicating the ancestral area
-calc_dispersal_from(W=akodon.sites,
-                    tree=akodon.pa.tree,
+                                        ,akodon_newick,max.range.size = 4) # data frame indicating the ancestral area
+calc_dispersal_from(W=akodon_pa_tree,
+                    tree=akodon_newick,
                     ancestral.area=node.area,biogeo=regions) # historical dispersal analysis
 }
 

@@ -71,10 +71,15 @@ metrics of phylogenetic turnover.
 }
 \examples{
 \dontrun{
-data(akodon.pa.tree) # occurrence data 
-data(akodon.newick) # phylogenetic tree
-regions <- evoregions(comm = akodon.pa.tree, phy = akodon.newick)
-site.region <- regions$cluster_evoregions # classification of each community in regions
+data(akodon_sites) # occurrence data 
+akodon_pa <- akodon_sites \%>\% 
+    dplyr::select(-LONG, -LAT)
+data(akodon_newick)
+spp_in_tree <- names(akodon_pa) \%in\% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
+data(akodon_newick) # phylogenetic tree
+regions <- evoregions(comm = akodon_pa_tree, phy = akodon_newick)
+site_region <- regions$cluster_evoregions # classification of each community in regions
 }
 
 }

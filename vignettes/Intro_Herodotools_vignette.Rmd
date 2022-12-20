@@ -197,7 +197,7 @@ col_five_hues <- c(
 
 Evoregions can now be mapped using the following code
 
-```{r mapEvoregion, echo=TRUE, eval=FALSE}
+```{r mapEvoregion, echo=TRUE, eval=TRUE}
 
 map_evoregion <- 
   evoregion_df %>% 
@@ -477,10 +477,11 @@ map_diversification_insitu <-
     plot.subtitle = element_text(hjust = 0.5)
   )
 
-
+library(patchwork) # using patchwork to put the maps together
 map_diversification_complete <- map_diversification + map_diversification_insitu
 
 ```
+
 ```{r outFig5, echo=FALSE,eval=TRUE,out.width="70%",fig.cap="Figure 5 - Diversification rates (DR - A) and in situ diversification rate (DRinsitu - B) for Akodon assemblages"}
 map_diversification_complete
 ```
@@ -604,7 +605,7 @@ cowplot::plot_grid(map_evoregion + theme(legend.position = "right"), plot1, ncol
 
 We also can calculate common metrics of community phylogenetics considering the macroevolutionary dynamics in the calculation. These model-based community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ. For this we use the function `calc_insitu_metrics`
 
-```{r commPhylo, echo=TRUE, eval=FALSE}
+```{r commPhylo, echo=TRUE, eval=TRUE}
 
 akodon_PD_PE_insitu <- 
 Herodotools::calc_insitu_metrics(W = akodon_pa_tree,
@@ -618,7 +619,7 @@ Herodotools::calc_insitu_metrics(W = akodon_pa_tree,
 
 As the other metrics we can plot PDinsitu and PEinsitu in a map
 
-```{r map_community_metrics, echo=TRUE}
+```{r map_community_metrics, echo=TRUE,eval=TRUE}
 sites <- dplyr::bind_cols(site_xy,
                    site_region =  site_region, 
                    age = age_comm$mean_age_per_assemblage,
@@ -720,17 +721,17 @@ load(system.file("extdata", "transition_rate_res.RData", package = "Herodotools"
 
 Now we have in hand the estimates of the three tip-based metrics for 214 rodent species. We can summarize the tip-based metrics at the ecological assemblage scale. First we will load assemblage & geographic data comprising 1770 grid cells located at the Neotropics.
 
-```{r loadCommData, echo=T}
+```{r loadCommData, echo=TRUE,eval=TRUE}
 
 # load community data
-comm.data <- read.table(
+comm_data <- read.table(
    system.file("extdata", "PresAbs_228sp_Neotropical_MainDataBase_Ordenado.txt", 
                package = "Herodotools"),
    header = T, sep = "\t"
    )
 
 # load latlong of these communities
-geo.data <- read.table(
+geo_data <- read.table(
   system.file("extdata", "Lon-lat-Disparity.txt", package = "Herodotools"),
   header = T, sep = "\t"
   )
@@ -742,12 +743,12 @@ Now we calculate the values of tip-based metrics for all species for each assemb
 ```{r TransitionAssemblage, echo=T,eval=FALSE}
 
 # transition rates for each community
-averaged_rates <- purrr::map_dfr(1:nrow(comm.data), function (i){
+averaged_rates <- purrr::map_dfr(1:nrow(comm_data), function (i){
   # across assemblages
   purrr::map_dfr(trans_rates, function (sims) { # across simulations
     
     # species in the assemblages
-    gather_names <- names(comm.data[i,][which(comm.data[i,]>0)]) # get the names
+    gather_names <- names(comm_data[i,][which(comm_data[i,]>0)]) # get the names
     # subset of rates
     rates <- sims[which(rownames (sims) %in% gather_names),
                    c("prop.transitions", 
@@ -773,7 +774,7 @@ We will represent in space the variation in the tip-based metrics for rodent ass
 ```{r , echo=T,eval=TRUE}
 
 # prepare data to map
-data_to_map_wide <- data.frame(geo.data[,c("LONG", "LAT")], averaged_rates)
+data_to_map_wide <- data.frame(geo_data[,c("LONG", "LAT")], averaged_rates)
 
 data_to_map_long <- 
   data_to_map_wide %>% 

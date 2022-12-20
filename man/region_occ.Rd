@@ -20,10 +20,14 @@ with \code{\link{tipranges_to_BioGeoBEARS}} function to produce a phyllip file n
 ancestral area reconstruction
 }
 \examples{
-data(akodon.pa.tree)
+data(akodon_sites)
+data(akodon_newick)
+akodon_pa <- akodon_sites \%>\% dplyr::select(-LONG, -LAT)
+spp_in_tree <- names(akodon_pa) \%in\% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
 data(regions)
 site_evoregion <- regions$Cluster_Evoregions
-region_occ(comm=akodon.pa.tree,site.region=site_evoregion)
+region_occ(comm=akodon_pa_tree,site.region=site_evoregion)
 }
 \seealso{
 \code{\link{tipranges_to_BioGeoBEARS}}
