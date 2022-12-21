@@ -22,11 +22,6 @@ library(magrittr)
 `%>%` <- magrittr::`%>%`
 ```
 
-# History matters - some context on package name and aims
-
-Historical events affect our daily lives in many ways. Who has never asked what would happen if we had done something different in the past? Like in the classic movie by Frank Capra [It's a Wonderful Life](https://en.wikipedia.org/wiki/It%27s_a_Wonderful_Life), that latter inspired the book name by the great [SJ Gould](https://en.wikipedia.org/wiki/Wonderful_Life_(book)), changes in past events shape our present life dramatically. The same is true in the natural world, history matters a lot, and species distribution in ecological communities results from present and past events. 
-
-Like the ancient Greek historian and geographer [Herodotus](https://en.wikipedia.org/wiki/Herodotus), our package aims to put together tools that allow us to investigate the role of history systematically. However, instead of narrating stories about kings and famous battles, we hope to help ecologists tell their stories of nature, and the nature of histories in shaping our biodiversity.
 
 This article will show the main functions of `Herodotools`. To do so, we will evaluate the effects of deep past processes, represented by diversification and historical dispersal, on the structure and phenotype of species assemblages from the genus *Akodon*.
 
@@ -864,7 +859,7 @@ sites <- dplyr::bind_cols(site_xy,
                    dispersal.D = akodon_dispersal[,1])
 
 map_evoregion <- 
-  evoregion.df %>% 
+  evoregion_df %>% 
   ggplot() + 
   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = site_region)) + 
   ggplot2::scale_fill_manual(
@@ -880,7 +875,7 @@ map_evoregion <-
     size = 0.2) +
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("(a)") + 
-  ggplot2::ggplot2::theme_bw() +
+  ggplot2::theme_bw() +
   ggplot2::theme(
     legend.position = "bottom",
     axis.title = element_blank(),
@@ -894,21 +889,16 @@ map_age <-
   sites %>% 
   ggplot2::ggplot() + 
   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = mean_age_arrival)) + 
-  scale_fill_carto_c(type = "quantitative", 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
                      palette = "SunsetDark",
                      direction = 1, 
                      limits = c(0, 3.5),  ## max percent overall
                      breaks = seq(0, 3.5, by = .5),
                      labels = glue::glue("{seq(0, 3.5, by = 0.5)}")) +
   ggplot2::geom_sf(data = coastline, size = 0.4) +
-  ggplot2::geom_sf(
-    data = sf_evoregion, 
-    color = rev(col_five_hues),
-    fill = NA, 
-    size = 0.7) +
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("(b)") + 
-  ggplot2::ggplot2::theme_bw() +
+  ggplot2::theme_bw() +
   ggplot2::labs(fill = "Mean age (Myr)") +
   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -928,22 +918,17 @@ map_age <-
 map_diversification_insitu <- 
   sites %>% 
   ggplot2::ggplot() + 
-  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = diversification_model_based)) + 
-  scale_fill_carto_c(type = "quantitative",
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = diversification_model_based)) +
+  rcartocolor::scale_fill_carto_c(type = "quantitative",
                      palette = "SunsetDark", 
                      direction = 1, 
                      limits = c(0, 1),  ## max percent overall
                      breaks = seq(0, 1, by = .25),
                      labels = glue::glue("{seq(0, 1, by = 0.25)}")) +
   ggplot2::geom_sf(data = coastline, size = 0.4) +
-  ggplot2::geom_sf(
-    data = sf_evoregion, 
-    color = rev(col_five_hues),
-    fill = NA, 
-    size = 0.7) +
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("(c)") + 
-  ggplot2::ggplot2::theme_bw() +
+  ggplot2::theme_bw() +
   ggplot2::labs(fill = "In-situ diversification") +
   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
@@ -963,7 +948,7 @@ map_dispersal_D <-
   sites %>% 
   ggplot2::ggplot() + 
   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = dispersal.D)) + 
-  scale_fill_carto_c(
+  rcartocolor::scale_fill_carto_c(
     type = "quantitative", 
     palette = "SunsetDark",
     na.value = "white",
@@ -973,14 +958,9 @@ map_dispersal_D <-
     labels = glue::glue("{seq(0, 1, by = 0.25)}")
   ) +
   ggplot2::geom_sf(data = coastline, size = 0.4) +
-  ggplot2::geom_sf(
-    data = sf_evoregion, 
-    color = rev(col_five_hues),
-    fill = NA, 
-    size = 0.5) +
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("(d)") + 
-  ggplot2::ggplot2::theme_bw() +
+  ggplot2::theme_bw() +
   ggplot2::labs(fill = "Dispersal from D") + 
   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
                                direction = "horizontal",
