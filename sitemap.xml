@@ -25,13 +25,13 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/ada.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon.newick.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon_newick.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon.pa.tree.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon_sites.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon.sites.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/averaged_rates.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_affiliation_evoreg.html</loc>
@@ -43,10 +43,10 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_dispersal_from.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_div_based_metrics.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_insitu_diversification.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_model_based_diversification.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_insitu_metrics.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_tip_based_trait_evo.html</loc>
@@ -85,7 +85,7 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/resDEC.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/rodent.phylo.html</loc>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/rodent_phylo.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/spp_association_evoreg.html</loc>
