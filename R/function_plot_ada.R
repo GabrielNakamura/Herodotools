@@ -15,9 +15,6 @@
 #'      Default is "+proj=robin"
 #'   
 #' @return A list containing spatial plots for the metrics calculated in ada.res
-#' 
-#' 
-#' @export
 plot_ada <- 
   function(ada.res,
            grid,

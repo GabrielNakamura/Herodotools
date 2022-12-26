@@ -21,24 +21,24 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' W_toy<- matrix(c(0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0),
 #' nrow= 3,
 #' ncol= 5,
 #' dimnames=list(c("Comm 1", "Comm 2", "Comm 3"),
 #' c(paste("s", 1:5, sep=""))))
-#'  
+#'  data("toy_treeEx")
 #'  biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
 #'  ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
-#'  assemblage_phylo_metrics <- calc_div_based_metrics(W_toy, toy_treeEx, ancestral_area_toy, biogeo_toy)
-#' 
-#' }
+#'  assemblage_phylo_metrics <- calc_insitu_metrics(W_toy,
+#'       toy_treeEx,
+#'       ancestral_area_toy, 
+#'       biogeo_toy)
 calc_insitu_metrics <- function(W,
-                                   tree,
-                                   ancestral.area, 
-                                   biogeo,
-                                   PD = TRUE,
-                                   PE = TRUE){
+                                tree,
+                                ancestral.area, 
+                                biogeo,
+                                PD = TRUE,
+                                PE = TRUE){
   
   # total phylogenetic diversity and endemism -------------------------------
   if(!is.matrix(W) == TRUE){
@@ -193,7 +193,8 @@ calc_insitu_metrics <- function(W,
     # binding occurrence and branch length
     list_edge_brLen_insitu <- vector(mode = "list", length = length(list_occurence))
     for(i in 1:length(list_occurence)){
-      list_edge_brLen_insitu[[i]]<- cbind(list_brLength_divLocal[[i]], list_occurence[[i]])
+      # i = 30
+      list_edge_brLen_insitu[[i]]<- suppressWarnings(cbind(list_brLength_divLocal[[i]], list_occurence[[i]]))
     }
     
     ####correcting denominator of PE for ancestral state occurrence

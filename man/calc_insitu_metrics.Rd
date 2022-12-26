@@ -34,18 +34,18 @@ one that correspond to dispersion events and another that correspond to in-situ 
 We use the in-situ diversification part to calculate both Db-PD and Db-PE
 }
 \examples{
-\dontrun{
 W_toy<- matrix(c(0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0),
 nrow= 3,
 ncol= 5,
 dimnames=list(c("Comm 1", "Comm 2", "Comm 3"),
 c(paste("s", 1:5, sep=""))))
- 
+ data("toy_treeEx")
  biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
  ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
- assemblage_phylo_metrics <- calc_div_based_metrics(W_toy, toy_treeEx, ancestral_area_toy, biogeo_toy)
-
-}
+ assemblage_phylo_metrics <- calc_insitu_metrics(W_toy,
+      toy_treeEx,
+      ancestral_area_toy, 
+      biogeo_toy)
 }
 \author{
 Gabriel Nakamura \href{mailto:gabriel.nakamura.souza@gmail.com}{gabriel.nakamura.souza@gmail.com}

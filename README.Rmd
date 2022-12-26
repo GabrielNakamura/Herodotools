@@ -29,14 +29,14 @@ knitr::opts_chunk$set(
 
 Historical events affect our daily lives in many ways. Who has never asked what would happen if we had done something different in the past? Like in the classic movie by Frank Capra [It's a Wonderful Life](https://en.wikipedia.org/wiki/It%27s_a_Wonderful_Life), that latter inspired the book name by the great [SJ Gould](https://en.wikipedia.org/wiki/Wonderful_Life_(book)), changes in past events shape our present life dramatically. The same is true in the natural world, history matters a lot, and species distribution in ecological communities results from present and past events. 
 
-Like the ancient Greek historian and geographer [Herodotus](https://en.wikipedia.org/wiki/Herodotus), our package aims to put together tools that allow us to investigate the role of history systematically. However, instead of narrating stories about kings and famous battles, we hope to help ecologists tell their stories of nature and the nature of history in shaping our biodiversity.
+Like the ancient Greek historian and geographer [Herodotus](https://en.wikipedia.org/wiki/Herodotus), our package aims to put together tools that allow us to investigate the role of history systematically. However, instead of narrating stories about kings and famous battles, we hope to help ecologists to tell their stories of nature and the nature of history in shaping our biodiversity.
 
 **Disclosure**: The package logo is inspired by a pen and ink drawing by the Uruguayan artist
     [Joaquín Torres Garcia](https://en.wikipedia.org/wiki/Joaqu%C3%ADn_Torres-Garc%C3%ADa) called [*America Invertida*](https://en.wikipedia.org/wiki/Am%C3%A9rica_Invertida). The image is closely related to Garcia's manifesto "The School of the South," that he defines as:
     
 > "The School of the South' because, in reality, our north is the south. There must not be north for us, except in the opposition of the south. Therefore we now turn the map upside down, and then we have the true idea of our position, and not as the rest of the world wishes. The point of America, from now on, forever, insistently points to the south, our north."
     
-We choose this painting to represent an effort of south american scientists trying to figure out the north in Biogeography studies.
+We choose this painting to represent an effort of South American scientists trying to figure out the north in Biogeography studies.
 
 ## The package
 

@@ -27,8 +27,8 @@ Like the ancient Greek historian and geographer
 [Herodotus](https://en.wikipedia.org/wiki/Herodotus), our package aims
 to put together tools that allow us to investigate the role of history
 systematically. However, instead of narrating stories about kings and
-famous battles, we hope to help ecologists tell their stories of nature
-and the nature of history in shaping our biodiversity.
+famous battles, we hope to help ecologists to tell their stories of
+nature and the nature of history in shaping our biodiversity.
 
 **Disclosure**: The package logo is inspired by a pen and ink drawing by
 the Uruguayan artist [Joaquín Torres
@@ -45,7 +45,7 @@ South,” that he defines as:
 > point of America, from now on, forever, insistently points to the
 > south, our north.”
 
-We choose this painting to represent an effort of south american
+We choose this painting to represent an effort of South American
 scientists trying to figure out the north in Biogeography studies.
 
 ## The package

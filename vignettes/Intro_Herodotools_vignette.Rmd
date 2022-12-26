@@ -535,7 +535,7 @@ map_dispersal_D <-
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
-    axis.text = element_text(size = 7),
+    axis.text = element_text(size = 5),
     plot.subtitle = element_text(hjust = 0.5)
   )
 
@@ -561,7 +561,7 @@ map_dispersal_A <-
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
-    axis.text = element_text(size = 7),
+    axis.text = element_text(size = 5),
     plot.subtitle = element_text(hjust = 0.5)
   )
 
@@ -581,7 +581,7 @@ map_dispersal_B <-
      legend.position = "right",
      axis.title = element_blank(),
      legend.text = element_text(size = 6), 
-     axis.text = element_text(size = 7),
+     axis.text = element_text(size = 5),
      plot.subtitle = element_text(hjust = 0.5)   
    )
 
@@ -604,8 +604,7 @@ We also can calculate common metrics of community phylogenetics considering the 
 
 ```{r commPhylo, echo=TRUE, eval=TRUE}
 
-akodon_PD_PE_insitu <- 
-Herodotools::calc_insitu_metrics(W = akodon_pa_tree,
+akodon_PD_PE_insitu <- calc_insitu_metrics(W = akodon_pa_tree,
                   tree = akodon_newick, 
                   ancestral.area = node_area, 
                   biogeo = biogeo_area, 
@@ -839,8 +838,9 @@ mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
   patchwork::plot_annotation(tag_levels = "A")
 
 ```
+
 ```{r fig8, echo=FALSE,eval=TRUE,fig.alt="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
-suppressWarnings(mapTransition_rate) 
+mapTransition_rate
 ```
 
 
@@ -986,12 +986,16 @@ ggsave(filename = here::here("vignettes", "maps_historicalVar_Akodon.png"), plot
 
 # References
 
-1. Luza, A. L., Maestri, R., Debastiani, V. J., Patterson, B. D., Maria, S., & Leandro, H. (2021). Is evolution faster at ecotones? A test using rates and tempo of diet transitions in Neotropical Sigmodontinae ( Rodentia , Cricetidae ). Ecology and Evolution, December, 18676–18690. https://doi.org/10.1002/ece3.8476
+1. Duarte, L. D. S., Debastiani, V. J., Freitas, A. V. L., &  Pillar, V. D. P. (2016). Dissecting phylogenetic fuzzy weighting: theory and application in metacommunity phylogenetics. Methods in Ecology and Evolution, February, 937-946. doi.org/10.1111/2041-210X.12547
 
-2. Maestri, R., & Duarte, L. D. S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions Renan Maestri. Methods in Ecology and Evolution, 2020(August), 1652–1662. https://doi.org/10.1111/2041-210X.13492
+2. Jombart, T., Devillar S., & Ballox, F. (2010). Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genomic Data.
 
-3. Pigot, A. and Etienne, R. (2015). A new dynamic null model for phylogenetic community structure. Ecology Letters, 18(2), 153-163.  https://doi.org/10.1111/ele.12395
+3. Luza, A. L., Maestri, R., Debastiani, V. J., Patterson, B. D., Maria, S., & Leandro, H. (2021). Is evolution faster at ecotones? A test using rates and tempo of diet transitions in Neotropical Sigmodontinae ( Rodentia , Cricetidae ). Ecology and Evolution, December, 18676–18690. https://doi.org/10.1002/ece3.8476
 
-3. Van Dijk, A., Nakamura, G., Rodrigues, A. V., Maestri, R., & Duarte, L. (2021b). Imprints of tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves: Passeriformes). Biological Journal of the Linnean Society, 134(1), 57–67. https://doi.org/10.1093/biolinnean/blab079
+4. Maestri, R., & Duarte, L. D. S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions Renan Maestri. Methods in Ecology and Evolution, 2020(August), 1652–1662. https://doi.org/10.1111/2041-210X.13492
+
+5. Pigot, A. and Etienne, R. (2015). A new dynamic null model for phylogenetic community structure. Ecology Letters, 18(2), 153-163.  https://doi.org/10.1111/ele.12395
+
+6. Van Dijk, A., Nakamura, G., Rodrigues, A. V., Maestri, R., & Duarte, L. (2021b). Imprints of tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves: Passeriformes). Biological Journal of the Linnean Society, 134(1), 57–67. https://doi.org/10.1093/biolinnean/blab079
 
 
