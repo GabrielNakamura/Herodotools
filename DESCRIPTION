@@ -23,19 +23,19 @@ Authors@R: c(
                   ),
            person(given = "Vanderlei",
            family = "Debastiani",
-           role = "aut",
+           role = "ctb",
            email = "vanderleidebastiani@yahoo.com.br",
             comment = c(ORCID = "0000-0003-0807-025X")
                   ),
            person(given = "Renan",
            family = "Maestri",
-           role = "aut",
+           role = "ctb",
            email = "renanmaestri@gmail.com",
            comment = c(ORCID = "0000-0001-9134-2943")
            ),          
            person(given = "Leandro",
            family = "Duarte",
-           role = "aut",
+           role = "ctb",
            email = "duarte.ldas@gmail.com",
            comment = c(ORCID = "0000-0003-1771-0407",
                       ResearcherID = "B-6552-2012")
