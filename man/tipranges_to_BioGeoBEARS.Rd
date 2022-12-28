@@ -26,7 +26,6 @@ scripts. It was based on \code{save_tipranges_to_LagrangePHYLIP} function of
 \code{BioGEOBEARS} package.
 }
 \examples{
-
 \dontrun{
 set.seed(082622)
 geo.areas <- data.frame(

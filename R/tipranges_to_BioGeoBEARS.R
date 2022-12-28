@@ -14,7 +14,6 @@
 #' @importFrom utils write.table
 #'  
 #' @examples
-#' 
 #' \dontrun{
 #' set.seed(082622)
 #' geo.areas <- data.frame(
@@ -22,17 +21,14 @@
 #'   b = rbinom(5, 1, 0.5),
 #'   c = rbinom(5, 1, 0.5)
 #' )
-#' 
 #' # set the row names
 #' row.names(geo.areas) <- paste0("tip_", 1:nrow(geo.areas))
-#' 
 #' # it saves the data at 'filename' path.
 #' tipranges_to_BioGeoBEARS(
 #'   geo.areas, 
 #'   filename = "lagrange_area_data_file.data", 
 #'   areanames = NULL)
 #' )
-#' 
 #' # file content must be like this:
 #' # 5	3	(A B C)
 #' # tip_1	111
@@ -40,10 +36,9 @@
 #' # tip_3	010
 #' # tip_4	101
 #' # tip_5	010
-#'  }
+#' }
 #'  
 #' @export
-
 tipranges_to_BioGeoBEARS <- function (
     tip_range, 
     filename = "lagrange_area_data_file.data", 

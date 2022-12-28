@@ -59,7 +59,10 @@ toy_treeEx
 biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
 ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
 plot(toy_treeEx, show.node.label = TRUE)
-calc_insitu_diversification(W = W_toy,tree = toy_treeEx, ancestral.area = ancestral_area_toy, biogeo = biogeo_toy)
+calc_insitu_diversification(W = W_toy,
+                            tree = toy_treeEx, 
+                            ancestral.area = ancestral_area_toy,
+                             biogeo = biogeo_toy)
 } 
 
 }

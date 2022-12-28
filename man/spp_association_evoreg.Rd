@@ -28,7 +28,9 @@ data(akodon_newick) # phylogenetic tree
 spp_in_tree <- names(akodon_pa) \%in\% akodon_newick$tip.label
 akodon_pa_tree <- akodon_pa[, spp_in_tree]
 regions <- evoregions(comm = akodon_pa, phy = akodon_newick) # compute evoregions
-spp_association_evoreg(comm = akodon_pa_tree, evo.vectors = regions, spp.association = 0.7) # calculate species association
+spp_association_evoreg(comm = akodon_pa_tree, 
+                       evo.vectors = regions, 
+                       spp.association = 0.7) # calculate species association
 }
 
 }

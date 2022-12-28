@@ -34,7 +34,7 @@ data(regions) # biogeographic region
 data(resDEC) # output from ancestral area reconstruction
 node.area <- get_node_range_BioGeoBEARS(resDEC,
                                         phyllip.file = here("inst", "extdata", "geo_area_akodon.data")
-                                        ,akodon_newick,max.range.size = 4) # data frame indicating the ancestral area
+                                        ,akodon_newick,max.range.size = 4) 
 calc_dispersal_from(W=akodon_pa_tree,
                     tree=akodon_newick,
                     ancestral.area=node.area,biogeo=regions) # historical dispersal analysis

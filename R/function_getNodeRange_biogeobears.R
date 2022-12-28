@@ -17,7 +17,8 @@
 #' data(akodon_newick)
 #' extdata_dir = system.file("extdata", package="Herodotools")
 #' fn = paste(extdata_dir, "/geo_area_akodon.data", sep="")
-#' node_area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = fn, akodon_newick,  max.range.size = 4) # obtaining area for each node
+#' node_area <- get_node_range_BioGeoBEARS(resDEC,phyllip.file = fn, akodon_newick,
+#'                                         max.range.size = 4) # obtaining area for each node
 #' 
 get_node_range_BioGeoBEARS <-
   function(BioGeoBEARS.data,
