@@ -75,8 +75,10 @@ Macroecology, Macroevolution and Community Phylogenetics.
 To install the development version of this package the user must type:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("GabrielNakamura/Herodotools", ref = "main")
+if (!requireNamespace("devtools", quietly = TRUE)){
+    install.packages("devtools")
+  }
+devtools::install_github("GabrielNakamura/Herodotools")
 ```
 
 # Examples

@@ -23,6 +23,7 @@
 #' 
 #' @importFrom graphics hist
 #' @importFrom stats cophenetic density
+#' @keywords internal
 ada <- function(x,
                 phy, 
                 sp.bin = "Sturges", 

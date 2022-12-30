@@ -41,3 +41,4 @@ A list containing spatial plots for the metrics calculated in ada.res
 \description{
 Plotting ancestral area character in space
 }
+\keyword{internal}

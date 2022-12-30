@@ -16,12 +16,13 @@
 #' spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
 #' akodon_pa_tree <- akodon_pa[, spp_in_tree]
 #' regions <- evoregions(comm = akodon_pa, phy = akodon_newick) # compute evoregions
-#' spp_association_evoreg(comm = akodon_pa_tree, 
+#' calc_spp_association_evoreg(comm = akodon_pa_tree, 
 #'                        evo.vectors = regions, 
 #'                        spp.association = 0.7) # calculate species association
 #' }
 #' 
-spp_association_evoreg <- function(comm, evo.vectors, spp.association = 0.7){
+calc_spp_association_evoreg <- 
+  function(comm, evo.vectors, spp.association = 0.7){
   groups.vec.bray <- evo.vectors[[2]]$grp
   n.groups <- length(evo.vectors[[2]]$size)
   dummy.groups.vec.bray <- matrix(NA, nrow = nrow(groups.vec.bray), ncol = n.groups)

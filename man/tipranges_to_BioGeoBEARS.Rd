@@ -33,17 +33,14 @@ geo.areas <- data.frame(
   b = rbinom(5, 1, 0.5),
   c = rbinom(5, 1, 0.5)
 )
-
 # set the row names
 row.names(geo.areas) <- paste0("tip_", 1:nrow(geo.areas))
-
 # it saves the data at 'filename' path.
 tipranges_to_BioGeoBEARS(
   geo.areas, 
   filename = "lagrange_area_data_file.data", 
   areanames = NULL)
 )
-
 # file content must be like this:
 # 5	3	(A B C)
 # tip_1	111
@@ -51,6 +48,6 @@ tipranges_to_BioGeoBEARS(
 # tip_3	010
 # tip_4	101
 # tip_5	010
- }
+}
  
 }
