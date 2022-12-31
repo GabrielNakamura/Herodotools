@@ -58,7 +58,7 @@
 
 
 <dt>evo.vectors</dt>
-<dd><p>A list returned from evoregions function</p></dd>
+<dd><p>A list returned from <code>calc_evoregions</code> function</p></dd>
 
 
 <dt>spp.association</dt>
@@ -81,7 +81,7 @@ Default is 0.7</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon_newick</span><span class="op">)</span> <span class="co"># phylogenetic tree</span></span></span>
 <span class="r-in"><span><span class="va">spp_in_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">akodon_pa</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">akodon_newick</span><span class="op">$</span><span class="va">tip.label</span></span></span>
 <span class="r-in"><span><span class="va">akodon_pa_tree</span> <span class="op">&lt;-</span> <span class="va">akodon_pa</span><span class="op">[</span>, <span class="va">spp_in_tree</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="evoregions.html">evoregions</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa</span>, phy <span class="op">=</span> <span class="va">akodon_newick</span><span class="op">)</span> <span class="co"># compute evoregions</span></span></span>
+<span class="r-in"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="calc_evoregions.html">calc_evoregions</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa</span>, phy <span class="op">=</span> <span class="va">akodon_newick</span><span class="op">)</span> <span class="co"># compute evoregions</span></span></span>
 <span class="r-in"><span><span class="fu">calc_spp_association_evoreg</span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa_tree</span>, </span></span>
 <span class="r-in"><span>                       evo.vectors <span class="op">=</span> <span class="va">regions</span>, </span></span>
 <span class="r-in"><span>                       spp.association <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="co"># calculate species association</span></span></span>

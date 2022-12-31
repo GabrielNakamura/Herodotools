@@ -40,7 +40,13 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_age_arrival.html</loc>
   </url>
   <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_ancestral_state.html</loc>
+  </url>
+  <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_dispersal_from.html</loc>
+  </url>
+  <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_evoregions.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_insitu_diversification.html</loc>
@@ -55,12 +61,6 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/calc_tip_based_trait_evo.html</loc>
   </url>
   <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/compute_ancestral_state.html</loc>
-  </url>
-  <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/evoregions.html</loc>
-  </url>
-  <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/find_max_nclust.html</loc>
   </url>
   <url>
@@ -70,6 +70,9 @@
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/get_nodes_info_core.html</loc>
   </url>
   <url>
+    <loc>https://gabrielnakamura.github.io/Herodotools/reference/get_region_occ.html</loc>
+  </url>
+  <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/index.html</loc>
   </url>
   <url>
@@ -77,9 +80,6 @@
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/plot_ada.html</loc>
-  </url>
-  <url>
-    <loc>https://gabrielnakamura.github.io/Herodotools/reference/region_occ.html</loc>
   </url>
   <url>
     <loc>https://gabrielnakamura.github.io/Herodotools/reference/regions.html</loc>

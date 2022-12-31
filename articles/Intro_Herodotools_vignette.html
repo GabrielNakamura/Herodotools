@@ -186,7 +186,7 @@ Fig.1: Species richness for Akodon genus in South America
 <div class="section level2">
 <h2 id="evoregions">Obtaining evoregions<a class="anchor" aria-label="anchor" href="#evoregions"></a>
 </h2>
-<p>Here we will use the function <code>evoregion</code>, originally
+<p>Here we will use the function <code>calc_evoregion</code>, originally
 described in <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492" class="external-link">Maestri
 and Duarte (2020)</a>, and implemented in Herodotools package. This
 method of classification allows to perform a biogeographical
@@ -214,7 +214,7 @@ the evoregions will appear with different names, even when specifying an
 initial seed for this analysis.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">regions</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/evoregions.html">evoregions</a></span><span class="op">(</span></span>
+<span>  <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/calc_evoregions.html">calc_evoregions</a></span><span class="op">(</span></span>
 <span>  comm <span class="op">=</span> <span class="va">akodon_pa_tree</span>,</span>
 <span>  phy <span class="op">=</span> <span class="va">akodon_newick</span></span>
 <span>  <span class="op">)</span></span>
@@ -360,12 +360,12 @@ diversification and historical dispersal at assemblage level. For this
 we will use an ancestral area reconstruction performed with <a href="https://github.com/nmatzke/BioGeoBEARS" class="external-link">BioGeoBEARS</a>, a tool
 commonly used in macroevolution.</p>
 <p>First, we have to define the occurrence of each species in the
-evoregions. To do this we can use the function <code>region_occ</code>
-and obtain a data frame of species in the lines and evoregions in the
-columns.</p>
+evoregions. To do this we can use the function
+<code>get_region_occ</code> and obtain a data frame of species in the
+lines and evoregions in the columns.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">a_region</span> <span class="op">&lt;-</span> <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/region_occ.html">region_occ</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa_tree</span>, site.region <span class="op">=</span> <span class="va">site_region</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">a_region</span> <span class="op">&lt;-</span> <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/get_region_occ.html">get_region_occ</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa_tree</span>, site.region <span class="op">=</span> <span class="va">site_region</span><span class="op">)</span></span></code></pre></div>
 <p>The object created in the last step can be used in an auxiliary
 function in Herodotools to easily produce the <a href="http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html" class="external-link">Phyllip</a>
 file required to run the analysis of ancestral area reconstruction using

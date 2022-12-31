@@ -60,7 +60,7 @@ among assemblages</p></dd>
 
 <dt>groups</dt>
 <dd><p>A character vector indicating the group of each assemblage. This object can be obtained with
-<code><a href="evoregions.html">evoregions</a></code></p></dd>
+<code><a href="calc_evoregions.html">calc_evoregions</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -93,7 +93,7 @@ Methods in Ecology and Evolution, 11, 1652-1662.</p>
 <span class="r-in"><span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">LONG</span>, <span class="op">-</span><span class="va">LAT</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">spp_in_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">akodon_pa</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">akodon_newick</span><span class="op">$</span><span class="va">tip.label</span></span></span>
 <span class="r-in"><span><span class="va">akodon_pa_tree</span> <span class="op">&lt;-</span> <span class="va">akodon_pa</span><span class="op">[</span>, <span class="va">spp_in_tree</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="evoregions.html">evoregions</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa</span>, phy <span class="op">=</span> <span class="va">akodon_newick</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="calc_evoregions.html">calc_evoregions</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa</span>, phy <span class="op">=</span> <span class="va">akodon_newick</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">site_region</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">$</span><span class="va">Cluster_Evoregions</span> <span class="co"># classification of each community in regions</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">axis_sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">regions</span><span class="op">$</span><span class="va">PCPS</span><span class="op">$</span><span class="va">prop_explainded</span> <span class="op">&gt;=</span> </span></span>
