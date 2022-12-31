@@ -130,7 +130,7 @@ map_richness
 
 # Obtaining evoregions {#evoregions}
 
-Here we will use the function `evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools package. This method of classification allows to perform a biogeographical regionalization based on a [phylogenetic fuzzy matrix](https://doi.org/10.1111/2041-210X.12547) coupled with a [Discriminant Analysis of Principal Components based on k-means non-hierarchical clustering](https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94). Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.
+Here we will use the function `calc_evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools package. This method of classification allows to perform a biogeographical regionalization based on a [phylogenetic fuzzy matrix](https://doi.org/10.1111/2041-210X.12547) coupled with a [Discriminant Analysis of Principal Components based on k-means non-hierarchical clustering](https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94). Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.
 
 To calculate evoregions we need the occurrence matrix, a phylogenetic tree and to define the maximum number of clusters allowed. If the user decided to not inform the maximum number of clusters, evoregion function will perform an automatic procedure based on "elbow" method to set the maximum number of clusters. The "elbow" method is implemented in package [`phyloregion`](https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478). It is worth note that the original proposition of evoregion method use a bootstrap method to define the maximum number of clusters to be used in the analysis. Here we opted to use the "elbow" method mainly due to computational speed, since this method is faster than the bootstrap-based method.
 
@@ -138,7 +138,7 @@ To calculate evoregions we need the occurrence matrix, a phylogenetic tree and t
 
 ```{r evoregion_calc, echo=TRUE, eval=FALSE}
 regions <- 
-  Herodotools::evoregions(
+  Herodotools::calc_evoregions(
   comm = akodon_pa_tree,
   phy = akodon_newick
   )
@@ -291,11 +291,11 @@ map_joint_evoregion_afilliation
 
 In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed with [BioGeoBEARS](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution.
 
-First, we have to define the occurrence of each species in the evoregions. To do this we can use the function `region_occ` and obtain a data frame of species in the lines and evoregions in the columns.
+First, we have to define the occurrence of each species in the evoregions. To do this we can use the function `get_region_occ` and obtain a data frame of species in the lines and evoregions in the columns.
 
 ```{r echo=TRUE, eval=TRUE}
 
-a_region <- Herodotools::region_occ(comm = akodon_pa_tree, site.region = site_region)
+a_region <- Herodotools::get_region_occ(comm = akodon_pa_tree, site.region = site_region)
 
 ```
 

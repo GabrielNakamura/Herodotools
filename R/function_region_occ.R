@@ -22,8 +22,9 @@
 #' akodon_pa_tree <- akodon_pa[, spp_in_tree]
 #' data(regions)
 #' site_evoregion <- regions$Cluster_Evoregions
-#' region_occ(comm=akodon_pa_tree,site.region=site_evoregion)
-region_occ <- function(comm, site.region){
+#' get_region_occ(comm=akodon_pa_tree,site.region=site_evoregion)
+get_region_occ <- 
+  function(comm, site.region){
   evoregion.data <- 
     # bind compostion matrix and the site evoregion
     dplyr::bind_cols(

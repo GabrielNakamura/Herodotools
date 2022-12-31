@@ -54,21 +54,22 @@
 #' spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
 #' akodon_pa_tree <- akodon_pa[, spp_in_tree]
 #' data(akodon_newick) # phylogenetic tree
-#' regions <- evoregions(comm = akodon_pa_tree, phy = akodon_newick)
+#' regions <- calc_evoregions(comm = akodon_pa_tree, phy = akodon_newick)
 #' site_region <- regions$cluster_evoregions # classification of each community in regions
 #' }
 #' 
 #' @export
 #'
-evoregions <- function(comm, 
-                       phy, 
-                       max.n.clust = NULL,
-                       method.dist = "bray",
-                       tresh.dist = 0.05, 
-                       method.clust = "kmeans",
-                       stat.clust = "BIC", 
-                       n.iter.clust = 1e7, 
-                       criterion.clust = "diffNgroup"
+calc_evoregions <-
+  function(comm, 
+           phy,
+           max.n.clust = NULL,
+           method.dist = "bray",
+           tresh.dist = 0.05, 
+           method.clust = "kmeans",
+           stat.clust = "BIC", 
+           n.iter.clust = 1e7, 
+           criterion.clust = "diffNgroup"
 )
 {
   

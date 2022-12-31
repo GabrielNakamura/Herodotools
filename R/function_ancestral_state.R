@@ -16,8 +16,8 @@
 #' @examples
 #' biogeo_toy <- data.frame(Ecoregion= c("A", "B", "C"))
 #' ancestral_area_toy <- data.frame(state= c("ABC", "B", "C", "ABC"))
-#' compute_ancestral_state(toy_treeEx, ancestral_area_toy)
-compute_ancestral_state <- function(tree, 
+#' calc_ancestral_state(toy_treeEx, ancestral_area_toy)
+calc_ancestral_state <- function(tree, 
                             ancestral.area, 
                             prefix = "N")
   {

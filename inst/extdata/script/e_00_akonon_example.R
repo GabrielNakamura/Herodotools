@@ -90,7 +90,7 @@ bind_cols(site.xy, rich =  rich, rich.tree = rich.tree) %>%
 # evoregions --------------------------------------------------------------
 
 set.seed(12)
-regions <- evoregions(
+regions <- calc_evoregions(
   comm = akodon.pa.tree,
   phy = akodon.newick, 
   max.n.clust = 10)

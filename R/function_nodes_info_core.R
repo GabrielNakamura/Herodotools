@@ -35,7 +35,7 @@ get_nodes_info_core <- function(W,
                             biogeo){
   
   names_spComm <- colnames(W)
-  AS <- compute_ancestral_state(tree = tree, ancestral.area = ancestral.area)
+  AS <- calc_ancestral_state(tree = tree, ancestral.area = ancestral.area)
   nodes.list <- lapply(1:nrow(W), function(i){
     pres <- which(W[i, ] == 1)
     pres <- names_spComm[pres]

@@ -1,7 +1,7 @@
 #' Quantifying species association with evoregions
 #'
 #' @param comm A matrix with assemblages in rows and species in columns
-#' @param evo.vectors A list returned from evoregions function
+#' @param evo.vectors A list returned from `calc_evoregions` function
 #' @param spp.association A scalar indicating the level of association that will be evaluated. 
 #'     Default is 0.7
 #'
@@ -15,7 +15,7 @@
 #' data(akodon_newick) # phylogenetic tree
 #' spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
 #' akodon_pa_tree <- akodon_pa[, spp_in_tree]
-#' regions <- evoregions(comm = akodon_pa, phy = akodon_newick) # compute evoregions
+#' regions <- calc_evoregions(comm = akodon_pa, phy = akodon_newick) # compute evoregions
 #' calc_spp_association_evoreg(comm = akodon_pa_tree, 
 #'                        evo.vectors = regions, 
 #'                        spp.association = 0.7) # calculate species association

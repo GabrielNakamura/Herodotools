@@ -41,7 +41,7 @@ calc_dispersal_from <- function(W,
                            biogeo){
   
   nodes.list <- get_nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
-  AS <- compute_ancestral_state(tree = tree, ancestral.area = ancestral.area, prefix = "N")
+  AS <- calc_ancestral_state(tree = tree, ancestral.area = ancestral.area, prefix = "N")
   names_spComm <- colnames(W)
   
   #matrix to receive the area from which dispersal ocurred

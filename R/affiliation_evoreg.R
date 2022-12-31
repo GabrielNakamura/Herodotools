@@ -8,7 +8,7 @@
 #' @param phylo.comp.dist A distance matrix indicating the phylogenetic (or taxonomic/functional) distance composition
 #'     among assemblages
 #' @param groups A character vector indicating the group of each assemblage. This object can be obtained with 
-#'     \code{\link{evoregions}} 
+#'     \code{\link{calc_evoregions}} 
 #'
 #' @return A list with two matrix, one containing affiliation values and the group in which each cell 
 #'     is classified and the other containing cell coordinates
@@ -27,7 +27,7 @@
 #'     dplyr::select(-LONG, -LAT)
 #' spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
 #' akodon_pa_tree <- akodon_pa[, spp_in_tree]
-#' regions <- evoregions(comm = akodon_pa, phy = akodon_newick)
+#' regions <- calc_evoregions(comm = akodon_pa, phy = akodon_newick)
 #' site_region <- regions$Cluster_Evoregions # classification of each community in regions
 #' 
 #' axis_sel <- which(regions$PCPS$prop_explainded >= 

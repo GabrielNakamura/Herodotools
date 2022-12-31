@@ -49,6 +49,7 @@ Depends:
 Imports:
     adegenet,
     ape,
+    BioGeoBEARS,
     cowplot,
     dplyr,
     gtools,
@@ -76,7 +77,6 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
-    BioGeoBEARS (>= 1.1.2),
     cladoRcpp,
     daee,
     ggplot2,
