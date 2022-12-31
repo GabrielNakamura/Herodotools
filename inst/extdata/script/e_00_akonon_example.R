@@ -289,7 +289,7 @@ saveRDS(resDEC, here("examples", "output", "resDEC_akodon.rds"))
 
 
 # save phyllip file
-tipranges_to_BioGeoBEARS(
+get_tipranges_to_BioGeoBEARS(
   a.regions, 
   filename = here("examples", "data", "geo_area_akodon.data"),
   areanames = NULL

@@ -303,7 +303,7 @@ The object created in the last step can be used in an auxiliary function in Hero
 
 ```{r echo=TRUE,eval=TRUE}
 # save phyllip file
-Herodotools::tipranges_to_BioGeoBEARS(
+Herodotools::get_tipranges_to_BioGeoBEARS(
   a_region, 
   # please set a new path to save the file
   filename = here::here("inst", "extdata", "geo_area_akodon.data"),

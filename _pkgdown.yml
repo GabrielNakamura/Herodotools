@@ -1,6 +1,13 @@
 url: https://gabrielnakamura.github.io/Herodotools/
 template:
   bootstrap: 5
+  opengraph:
+    image:
+      src: man/figures/logo_herodotools.png
+      alt: "Hexagon with upsidown South America Continent with a phylogeny inside and a fish in one of the tips"
+    twitter:
+      creator: "@gabrielnakamur4"
+      card: summary_large_image
 navbar:
   structure:
     right: [search, github]
@@ -10,3 +17,6 @@ home:
   links:
   - text: Browse source code
     href: https://github.com/GabrielNakamura/Herodotools
+pkgdown:
+  as_is: true
+  extension: pdf

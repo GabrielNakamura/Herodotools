@@ -16,9 +16,10 @@
 #' 
 #' @examples
 #' data(akodon_newick)
-#' spp_nodes(tree = akodon_newick, node.prefix = "N")
+#' get_spp_nodes(tree = akodon_newick, node.prefix = "N")
 #' 
-spp_nodes <- function(tree, node.prefix = "N"){
+get_spp_nodes <- 
+  function(tree, node.prefix = "N"){
   tree_base <- phylobase::phylo4(tree)
   n.nodes <- tree$Nnode
   n.spp <- length(tree$tip.label)

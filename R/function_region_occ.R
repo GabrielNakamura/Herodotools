@@ -1,7 +1,7 @@
 #' Species occurrence in each evoregion
 #'
 #' Auxiliary function to produce an occurrence data frame of species in each region. This object can be 
-#'     with \code{\link{tipranges_to_BioGeoBEARS}} function to produce a phyllip file needed in BioGeoBEARS
+#'     with \code{\link{get_tipranges_to_BioGeoBEARS}} function to produce a phyllip file needed in BioGeoBEARS
 #'     ancestral area reconstruction
 #'
 #' @param comm Occurrence data frame with species in colums and rows corresponding to assemblages
@@ -10,7 +10,7 @@
 #' @return An occurrence data frame with species as rownames and regions as columns
 #' @export
 #' 
-#' @seealso \code{\link{tipranges_to_BioGeoBEARS}}
+#' @seealso \code{\link{get_tipranges_to_BioGeoBEARS}}
 #'
 #' @author Gabriel Nakamura and Arthur Rodrigues
 #'

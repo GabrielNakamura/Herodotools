@@ -21,7 +21,7 @@ calc_ancestral_state <- function(tree,
                             ancestral.area, 
                             prefix = "N")
   {
-  spxnode <- spp_nodes(tree = tree, node.prefix = prefix)
+  spxnode <- get_spp_nodes(tree = tree, node.prefix = prefix)
   AS <- matrix(data = 0, nrow = nrow(spxnode), 
                ncol = ncol(spxnode), 
                dimnames = list(rownames(spxnode), 

@@ -7,7 +7,7 @@
 #' @param tip_range data frame. Tip names in rows, geographical areas in columns. 
 #'   Please provide the tip names as `row.names`. See example. 
 #' @param filename filename to store the data. By default it is 
-#'   `"lagrange_area_data_file.data"`. 
+#'   "lagrange_area_data_file.data". 
 #' @param areanames the names of the areas. By defaut the area names are generated
 #'  as sequencial upper case letters. 
 #'  
@@ -24,7 +24,7 @@
 #' # set the row names
 #' row.names(geo.areas) <- paste0("tip_", 1:nrow(geo.areas))
 #' # it saves the data at 'filename' path.
-#' tipranges_to_BioGeoBEARS(
+#' get_tipranges_to_BioGeoBEARS(
 #'   geo.areas, 
 #'   filename = "lagrange_area_data_file.data", 
 #'   areanames = NULL)
@@ -39,7 +39,8 @@
 #' }
 #'  
 #' @export
-tipranges_to_BioGeoBEARS <- function (
+get_tipranges_to_BioGeoBEARS <- 
+  function(
     tip_range, 
     filename = "lagrange_area_data_file.data", 
     areanames = NULL) 
