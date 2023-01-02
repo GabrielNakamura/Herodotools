@@ -377,13 +377,13 @@ file required to run the analysis of ancestral area reconstruction using
 BioGeoBEARS.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save phyllip file</span></span>
-<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/tipranges_to_BioGeoBEARS.html">tipranges_to_BioGeoBEARS</a></span><span class="op">(</span></span>
+<span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/get_tipranges_to_BioGeoBEARS.html">get_tipranges_to_BioGeoBEARS</a></span><span class="op">(</span></span>
 <span>  <span class="va">a_region</span>, </span>
 <span>  <span class="co"># please set a new path to save the file</span></span>
 <span>  filename <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,</span>
 <span>  areanames <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in Herodotools::tipranges_to_BioGeoBEARS(a_region, filename = here::here("inst", : </span></span>
+<span><span class="co">#&gt; Warning in Herodotools::get_tipranges_to_BioGeoBEARS(a_region, filename = here::here("inst", : </span></span>
 <span><span class="co">#&gt; Note: assigning 'A B C D E' as area names.</span></span>
 <span><span class="co">#&gt; [1] "/Users/gabrielnakamura/OneDrive/Packages/Herodotools/inst/extdata/geo_area_akodon.data"</span></span></code></pre></div>
 <p>Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB

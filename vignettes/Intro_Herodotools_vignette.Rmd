@@ -5,6 +5,14 @@ vignette: >
   %\VignetteIndexEntry{Using Herodotools to analyses of historical biogeography}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{cowplot}
+  %\VignetteDepends{here}
+  %\VignetteDepends{patchwork}
+  %\VignetteDepends{rnaturalearth}
+  %\VignetteDepends{rnaturalearthdata}
+  %\VignetteDepends{tidyr}
+  %\VignetteDepends{glue}
+  %\VignetteDepends{terra}
 ---
 
 ```{r, include = FALSE}

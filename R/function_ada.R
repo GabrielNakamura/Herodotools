@@ -44,7 +44,7 @@ ada <- function(x,
   root.age <- max(cophenetic(phy))/2
   
   # Extract species by nodes matrix
-  spp.nodes <- suppressWarnings(t(spp_nodes(tree = phy)))
+  spp.nodes <- suppressWarnings(t(get_spp_nodes(tree = phy)))
   
   
   # Compute node ages:
