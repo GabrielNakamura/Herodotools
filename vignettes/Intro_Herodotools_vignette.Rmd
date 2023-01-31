@@ -687,11 +687,11 @@ map_PE_all <- map_PE + map_PEinsitu
 
 ```
 
-```{r fig6_PEdb, echo=FALSE, eval=TRUE,out.width="70%", fig.cap="Figure 7 - Phylogenetic endemism (A), and in situ phylogenetic endemism (B) for Akodon assemblages"}
+```{r fig7_PEdb, echo=FALSE, eval=TRUE,out.width="70%", fig.cap="Figure 7 - Phylogenetic endemism (A), and in situ phylogenetic endemism (B) for Akodon assemblages"}
 map_PE_all
 ```
 
-Figure 6 show that the endemism pattern for Akodon assemblages are similar for both metrics, indicating that regions with high endemism are mainly due to in-situ diversificaiton process.
+Figure 7 shows that the endemism pattern for Akodon assemblages are similar for both metrics, indicating that regions with high endemism are mainly due to in-situ diversificaiton process.
 
 ## Tip-based metrics of trait evolution {#traitdynamics}
 
@@ -847,8 +847,8 @@ mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
 
 ```
 
-```{r fig8, echo=FALSE,eval=TRUE,fig.alt="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
-suppressWarnings(mapTransition_rate)
+```{r fig8, echo=FALSE,eval=TRUE,fig.cap="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
+mapTransition_rate
 ```
 
 
