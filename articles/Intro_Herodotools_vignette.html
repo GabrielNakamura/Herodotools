@@ -155,7 +155,7 @@ tree are matching</p>
 we will read the ggplot2 package to produce some maps</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="va">coastline</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rnaturalearth/man/ne_coastline.html" class="external-link">ne_coastline</a></span><span class="op">(</span>returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
+<span><span class="va">coastline</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_coastline.html" class="external-link">ne_coastline</a></span><span class="op">(</span>returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="va">map_limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">95</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>,</span>
 <span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">55</span>, <span class="fl">12</span><span class="op">)</span></span>
@@ -164,7 +164,7 @@ we will read the ggplot2 package to produce some maps</p>
 <span><span class="va">richness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">akodon_pa_tree</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">map_richness</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, richness <span class="op">=</span> <span class="va">richness</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, richness <span class="op">=</span> <span class="va">richness</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">richness</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">rcartocolor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Richness"</span>, type <span class="op">=</span> <span class="st">"quantitative"</span>, palette <span class="op">=</span> <span class="st">"SunsetDark"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -183,8 +183,8 @@ we will read the ggplot2 package to produce some maps</p>
 <span>        axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="Intro_Herodotools_vignette_files/figure-html/outFig1-1.png" alt="Fig.1: Species richness for Akodon genus in South America" width="70%"><p class="caption">
-Fig.1: Species richness for Akodon genus in South America
+<img src="Intro_Herodotools_vignette_files/figure-html/outFig1-1.png" alt="Figure 1: Species richness for Akodon genus in South America" width="70%"><p class="caption">
+Figure 1: Species richness for Akodon genus in South America
 </p>
 </div>
 </div>
@@ -242,7 +242,7 @@ code:</p>
 <span></span>
 <span></span>
 <span><span class="co"># Downloading coastline continents and croping to keep only South America</span></span>
-<span><span class="va">coastline</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rnaturalearth/man/ne_coastline.html" class="external-link">ne_coastline</a></span><span class="op">(</span>returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
+<span><span class="va">coastline</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_coastline.html" class="external-link">ne_coastline</a></span><span class="op">(</span>returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="va">map_limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">95</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>,</span>
 <span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">55</span>, <span class="fl">12</span><span class="op">)</span></span>
@@ -316,7 +316,7 @@ different lineages.</p>
 <span>                          groups <span class="op">=</span> <span class="va">site_region</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># binding the information in a data frame</span></span>
-<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site_region <span class="op">=</span>  <span class="va">site_region</span>, <span class="va">afi</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site_region <span class="op">=</span>  <span class="va">site_region</span>, <span class="va">afi</span><span class="op">)</span></span></code></pre></div>
 <p>Now we can map both evoregions and the affiliation of each cell. The
 degree of affiliation of cells are showed as the degree of fading for
 each color representing the evoregions. As faded the color of the cell,
@@ -452,7 +452,7 @@ the ancestor to the present time. Here we adopted the first option.</p>
 assemblages</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site_region <span class="op">=</span>  <span class="va">site_region</span>, age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span><span class="op">)</span></span>
+<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site_region <span class="op">=</span>  <span class="va">site_region</span>, age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">map_age</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -519,7 +519,7 @@ in-situ diversification for each assemblage. As with age, we can plot
 the in-situ diversification metric to look at the spatial patterns in
 Akodon assemblages.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
+<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>,</span>
 <span>                   age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,</span>
 <span>                   diversification_model_based <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">model_based_Jetz_harmonic_mean_site</span>,</span>
@@ -611,7 +611,7 @@ dipersal from, since it is the source of dispersal to the other
 regions.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
+<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>, </span>
 <span>                   age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,</span>
 <span>                   diversification <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">Jetz_harmonic_mean_site</span>,</span>
@@ -719,7 +719,7 @@ function <code>calc_insitu_metrics</code></p>
 <span>                  PE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>As the other metrics we can plot PDinsitu and PEinsitu in a map</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
+<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>, </span>
 <span>                   age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,</span>
 <span>                   diversification <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">Jetz_harmonic_mean_site</span>,</span>
@@ -780,8 +780,8 @@ function <code>calc_insitu_metrics</code></p>
 <span></span>
 <span><span class="va">map_PE_all</span> <span class="op">&lt;-</span> <span class="va">map_PE</span> <span class="op">+</span> <span class="va">map_PEinsitu</span></span></code></pre></div>
 <div class="figure">
-<img src="Intro_Herodotools_vignette_files/figure-html/fig6_PEdb-1.png" alt="Figure 6 - Phylogenetic endemism (A), and in situ phylogenetic endemism (B) for Akodon assemblages" width="70%"><p class="caption">
-Figure 6 - Phylogenetic endemism (A), and in situ phylogenetic endemism
+<img src="Intro_Herodotools_vignette_files/figure-html/fig6_PEdb-1.png" alt="Figure 7 - Phylogenetic endemism (A), and in situ phylogenetic endemism (B) for Akodon assemblages" width="70%"><p class="caption">
+Figure 7 - Phylogenetic endemism (A), and in situ phylogenetic endemism
 (B) for Akodon assemblages
 </p>
 </div>
