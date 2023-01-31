@@ -132,7 +132,7 @@ dplyr::bind_cols(site_xy, richness = richness) %>%
 
 ```
 
-```{r outFig1, echo=FALSE, eval=TRUE, out.width="70%", fig.cap="Fig.1: Species richness for Akodon genus in South America"}
+```{r outFig1, echo=FALSE, eval=TRUE, out.width="70%", fig.cap="Figure 1: Species richness for Akodon genus in South America"}
 map_richness
 ```
 
@@ -687,7 +687,7 @@ map_PE_all <- map_PE + map_PEinsitu
 
 ```
 
-```{r fig6_PEdb, echo=FALSE, eval=TRUE,out.width="70%", fig.cap="Figure 6 - Phylogenetic endemism (A), and in situ phylogenetic endemism (B) for Akodon assemblages"}
+```{r fig6_PEdb, echo=FALSE, eval=TRUE,out.width="70%", fig.cap="Figure 7 - Phylogenetic endemism (A), and in situ phylogenetic endemism (B) for Akodon assemblages"}
 map_PE_all
 ```
 
@@ -848,7 +848,7 @@ mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
 ```
 
 ```{r fig8, echo=FALSE,eval=TRUE,fig.alt="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
-mapTransition_rate
+suppressWarnings(mapTransition_rate)
 ```
 
 
