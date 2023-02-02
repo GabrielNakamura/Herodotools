@@ -30,7 +30,6 @@ library(magrittr)
 `%>%` <- magrittr::`%>%`
 ```
 
-
 This article will show the main functions of `Herodotools` package. To do so, we will evaluate imprints of historical processes like in situ diversification, historical dispersal, macroevolutionary dynamics in species traits (this last using Sigmodontinae clade) of species assemblages from the genus *Akodon*.
 
 For this aim we will perform the following steps:
@@ -39,12 +38,11 @@ For this aim we will perform the following steps:
 2.  [Classify](#evoregions) Akodon assemblages in meaningful regions using `evoregion` function
 3.  [Calculate](#modelBasedMetrics) macroevolutionary metrics of in situ diversification at assemblage level using an ancestral state reconstruction model
 4.  [Calculate](#phylomodelmetricscomm) community phylogenetic metrics while accounting by in situ diversification process
-5. [Calculate](#traitdynamics) tip-based metrics of trait macroevolutionary dynamics
+5.  [Calculate](#traitdynamics) tip-based metrics of trait macroevolutionary dynamics
 
 # Reading data and libraries
 
-First, let's read some libraries we will use to explore the data and produce the figures. If 
-you do not have the packages already installed, they will be installed using the following code.
+First, let's read some libraries we will use to explore the data and produce the figures. If you do not have the packages already installed, they will be installed using the following code.
 
 ```{r librariesRead, echo=TRUE, eval=TRUE}
 libs <- c("ape", "picante", "dplyr", "tidyr", "purrr",
@@ -66,8 +64,7 @@ library(daee)
 library(BioGeoBEARS)
 ```
 
-Now we need to read the files corresponding to the distribution of species in assemblages of 1x1 cell degrees, and phylogenetic relationship that 
-    will be used in downstream analysis with Herodotools
+Now we need to read the files corresponding to the distribution of species in assemblages of 1x1 cell degrees, and phylogenetic relationship that will be used in downstream analysis with Herodotools
 
 ```{r readData, echo=TRUE, eval=TRUE}
 library(Herodotools)
@@ -299,7 +296,7 @@ map_joint_evoregion_afilliation <-
 map_joint_evoregion_afilliation
 ```
 
-# Ancestral area reconstruction for Akodon species {#mergeMacroAssemblage} and in situ diversification metrics
+# Ancestral area reconstruction for Akodon species and in situ diversification metrics {#mergeMacroAssemblage}
 
 In this section we will show how Herodotools can get the results coming from macroevolutionary analysis, particularly, analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed with [BioGeoBEARS](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution.
 
@@ -324,9 +321,9 @@ Herodotools::get_tipranges_to_BioGeoBEARS(
 
 ```
 
-Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB processor machine), and showing how to perform analysis with BioGeoBEARSwe are not our focus here, we can just read an output from an ancestral analysis reconstruction performed using DEC model to reconstruct the evoregions. If you want to check out the code used to run the BioGeoBEARS models, you can access it with `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`. 
+Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB processor machine), and showing how to perform analysis with BioGeoBEARSwe are not our focus here, we can just read an output from an ancestral analysis reconstruction performed using DEC model to reconstruct the evoregions. If you want to check out the code used to run the BioGeoBEARS models, you can access it with `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`.
 
-Reading the file containing the results of DEC model reconstruction: 
+Reading the file containing the results of DEC model reconstruction:
 
 ```{r loadDECmodel, echo=TRUE, eval=TRUE}
 
@@ -335,11 +332,11 @@ load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools
 
 ```
 
-It is worth to note that the procedures described here can be adapted to work with any model of ancestral area reconstruction from BioGeoBEARS (other than DEC), but for sake of simplicity we decided to use only the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html). 
+It is worth to note that the procedures described here can be adapted to work with any model of ancestral area reconstruction from BioGeoBEARS (other than DEC), but for sake of simplicity we decided to use only the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html).
 
 # Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
 
-Once we have data on present-day occurrence of species, a biogeographical regionalization (obtained with `evoregions` function) and the ancestral area reconstruction, we can integrate these  information to calculate metrics implemented in Herodotools that represent historical variables at assemblage scale.
+Once we have data on present-day occurrence of species, a biogeographical regionalization (obtained with `evoregions` function) and the ancestral area reconstruction, we can integrate these information to calculate metrics implemented in Herodotools that represent historical variables at assemblage scale.
 
 ## Age of assemblages
 
@@ -499,7 +496,7 @@ map_diversification_complete
 
 ## Historical dispersal events
 
-We can also calculate the importance of dispersal events. By using the function `calc_dispersal_from` we can quantify the contribution of a given region to historical dispersal of the species in present-day assemblages. This is done by calculating the proportion of species in an assemblage that dispersed from the focal ancestral range to other regions. This calculation accounts only for the species that present events of dispersal in its ancestral lineage, in other words, species that presented their whole history within a single area are not considered in this analysis. 
+We can also calculate the importance of dispersal events. By using the function `calc_dispersal_from` we can quantify the contribution of a given region to historical dispersal of the species in present-day assemblages. This is done by calculating the proportion of species in an assemblage that dispersed from the focal ancestral range to other regions. This calculation accounts only for the species that present events of dispersal in its ancestral lineage, in other words, species that presented their whole history within a single area are not considered in this analysis.
 
 ```{r dispersal, echo=TRUE,eval=TRUE}
 
@@ -512,7 +509,7 @@ Herodotools::calc_dispersal_from(W = akodon_pa_tree,
 
 ```
 
-We also can map the contribution of dispersal for all regions. Note that the focal area of ancestral range in each map have no values of dipersal from metric, since it is the source of dispersal to the other regions. 
+We also can map the contribution of dispersal for all regions. Note that the focal area of ancestral range in each map have no values of dipersal from metric, since it is the source of dispersal to the other regions.
 
 ```{r mapping_dispersal, echo=TRUE,eval=TRUE}
 
@@ -614,7 +611,7 @@ cowplot::plot_grid(map_evoregion + theme(legend.position = "right"), plot1, ncol
 
 ## Community phylogetic metrics considering in situ diversification {#phylomodelmetricscomm}
 
-We also can calculate common metrics of community phylogenetics considering in situ diversification dynamics. These community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ in a similar way the in situ diversification metric. Namely, PD~in situ~ and PE~in situ~, they correspond to modified versions of the classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The difference is that our metrics considers only the amount of phylogenetic diversity and endemism that emerged after colonization and establishment of the present day lineages in the assemblages. For this we use the function `calc_insitu_metrics`
+We also can calculate common metrics of community phylogenetics considering in situ diversification dynamics. These community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ in a similar way the in situ diversification metric. Namely, PD~in-situ~ and PE~in-situ~, they correspond to modified versions of the classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The difference is that our metrics considers only the amount of phylogenetic diversity and endemism that emerged after colonization and establishment of the present day lineages in the assemblages. For this we use the function `calc_insitu_metrics`
 
 ```{r commPhylo, echo=TRUE, eval=TRUE}
 
@@ -627,7 +624,7 @@ akodon_PD_PE_insitu <- calc_insitu_metrics(W = akodon_pa_tree,
 
 ```
 
-As the other metrics we can plot PD~in situ~ and PE~in situ~ in a map. Here we illustrate it by plotting PE and PE~in situ~ metrics for comparison.
+As the other metrics we can plot PD\~in situ\~ and PE\~in situ\~ in a map. Here we illustrate it by plotting PE and PE\~in situ\~ metrics for comparison.
 
 ```{r map_community_metrics, echo=TRUE,eval=TRUE}
 sites <- dplyr::bind_cols(site_xy,
@@ -711,6 +708,7 @@ First we will load trait and phylogenetic data we need to run the function `calc
 data("rodent_phylo")
 data("trait")
 ```
+
 Now calculate the metrics.
 
 ```{r tipbasedtrait, echo=TRUE,eval=FALSE}
@@ -773,15 +771,13 @@ averaged_rates <- purrr::map_dfr(1:nrow(comm_data), function (i){
 })
 ```
 
-Since the last step take some minutes to complete you can opt to read directly fom the package the table with mean values for all
-metrics
+Since the last step take some minutes to complete you can opt to read directly fom the package the table with mean values for all metrics
 
 ```{r avrates, echo=TRUE,eval=TRUE}
 data("averaged_rates")
 ```
 
 We will represent in space the variation in the tip-based metrics for rodent assemblages. It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained their phenotipic state during more time than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico. These results are potentially reflecting i) the location of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages.
-
 
 ```{r , echo=T,eval=TRUE}
 
@@ -858,7 +854,6 @@ mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
 ```{r fig8, echo=FALSE,eval=TRUE,fig.cap="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
 mapTransition_rate
 ```
-
 
 ```{r figPaper, echo=FALSE, eval=FALSE}
 # This is the Figure 3 of the paper
@@ -999,19 +994,16 @@ ggsave(filename = here::here("vignettes", "maps_historicalVar_Akodon.png"), plot
 
 ```
 
-
 # References
 
-1. Duarte, L. D. S., Debastiani, V. J., Freitas, A. V. L., &  Pillar, V. D. P. (2016). Dissecting phylogenetic fuzzy weighting: theory and application in metacommunity phylogenetics. Methods in Ecology and Evolution, February, 937-946. doi.org/10.1111/2041-210X.12547
+1.  Duarte, L. D. S., Debastiani, V. J., Freitas, A. V. L., & Pillar, V. D. P. (2016). Dissecting phylogenetic fuzzy weighting: theory and application in metacommunity phylogenetics. Methods in Ecology and Evolution, February, 937-946. doi.org/10.1111/2041-210X.12547
 
-2. Jombart, T., Devillar S., & Ballox, F. (2010). Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genomic Data.
+2.  Jombart, T., Devillar S., & Ballox, F. (2010). Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genomic Data.
 
-3. Luza, A. L., Maestri, R., Debastiani, V. J., Patterson, B. D., Maria, S., & Leandro, H. (2021). Is evolution faster at ecotones? A test using rates and tempo of diet transitions in Neotropical Sigmodontinae ( Rodentia , Cricetidae ). Ecology and Evolution, December, 18676–18690. https://doi.org/10.1002/ece3.8476
+3.  Luza, A. L., Maestri, R., Debastiani, V. J., Patterson, B. D., Maria, S., & Leandro, H. (2021). Is evolution faster at ecotones? A test using rates and tempo of diet transitions in Neotropical Sigmodontinae ( Rodentia , Cricetidae ). Ecology and Evolution, December, 18676--18690. <https://doi.org/10.1002/ece3.8476>
 
-4. Maestri, R., & Duarte, L. D. S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions Renan Maestri. Methods in Ecology and Evolution, 2020(August), 1652–1662. https://doi.org/10.1111/2041-210X.13492
+4.  Maestri, R., & Duarte, L. D. S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions Renan Maestri. Methods in Ecology and Evolution, 2020(August), 1652--1662. <https://doi.org/10.1111/2041-210X.13492>
 
-5. Pigot, A. and Etienne, R. (2015). A new dynamic null model for phylogenetic community structure. Ecology Letters, 18(2), 153-163.  https://doi.org/10.1111/ele.12395
+5.  Pigot, A. and Etienne, R. (2015). A new dynamic null model for phylogenetic community structure. Ecology Letters, 18(2), 153-163. <https://doi.org/10.1111/ele.12395>
 
-6. Van Dijk, A., Nakamura, G., Rodrigues, A. V., Maestri, R., & Duarte, L. (2021b). Imprints of tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves: Passeriformes). Biological Journal of the Linnean Society, 134(1), 57–67. https://doi.org/10.1093/biolinnean/blab079
-
-
+6.  Van Dijk, A., Nakamura, G., Rodrigues, A. V., Maestri, R., & Duarte, L. (2021b). Imprints of tropical niche conservatism and historical dispersal in the radiation of Tyrannidae (Aves: Passeriformes). Biological Journal of the Linnean Society, 134(1), 57--67. <https://doi.org/10.1093/biolinnean/blab079>
