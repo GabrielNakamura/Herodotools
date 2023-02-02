@@ -363,8 +363,8 @@ Figure 3 - Evoregion and afilliation for communities of Akodon Genus
 </div>
 </div>
 <div class="section level2">
-<h2 id="ancestral-area-reconstruction-for-akodon-species-mergemacroassemblage-and-in-situ-diversification-metrics">Ancestral area reconstruction for Akodon species
-{#mergeMacroAssemblage} and in situ diversification metrics<a class="anchor" aria-label="anchor" href="#ancestral-area-reconstruction-for-akodon-species-mergemacroassemblage-and-in-situ-diversification-metrics"></a>
+<h2 id="mergeMacroAssemblage">Ancestral area reconstruction for Akodon species and in situ
+diversification metrics<a class="anchor" aria-label="anchor" href="#mergeMacroAssemblage"></a>
 </h2>
 <p>In this section we will show how Herodotools can get the results
 coming from macroevolutionary analysis, particularly, analysis of
@@ -722,13 +722,14 @@ diversification<a class="anchor" aria-label="anchor" href="#phylomodelmetricscom
 considering in situ diversification dynamics. These community
 phylogenetic metrics allows to disentangle the effects of in-situ
 diversification from ex-situ in a similar way the in situ
-diversification metric. Namely, PD~in situ~ and PE~in situ~, they
-correspond to modified versions of the classic Phylogenetic Diversity
-(PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The
-difference is that our metrics considers only the amount of phylogenetic
-diversity and endemism that emerged after colonization and establishment
-of the present day lineages in the assemblages. For this we use the
-function <code>calc_insitu_metrics</code></p>
+diversification metric. Namely, PD<sub>in-situ</sub> and
+PE<sub>in-situ</sub>, they correspond to modified versions of the
+classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et
+al.2009), respectively. The difference is that our metrics considers
+only the amount of phylogenetic diversity and endemism that emerged
+after colonization and establishment of the present day lineages in the
+assemblages. For this we use the function
+<code>calc_insitu_metrics</code></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">akodon_PD_PE_insitu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_insitu_metrics.html">calc_insitu_metrics</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon_pa_tree</span>,</span>
