@@ -124,7 +124,7 @@ dplyr::bind_cols(site_xy, richness = richness) %>%
   ggplot2::theme_bw() +
   ggplot2::theme(
         plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
-        legend.text = element_text(size = 8), 
+        legend.text = element_text(size = 12), 
         axis.text = element_text(size = 7),
         axis.title.x = element_text(size = 11),
         axis.title.y = element_text(size = 11)
@@ -224,13 +224,14 @@ map_evoregion <-
   ggplot2::theme_bw() +
   ggplot2::xlab("Longitude") +
   ggplot2::ylab("Latitude") +
-  ggplot2::theme(
-    legend.position = "bottom",
-    axis.title = element_text(size = 1),
-    axis.text = element_text(size = 7),
-    plot.subtitle = element_text(hjust = 0.5),
-    legend.text = element_text(color = "black", size = 9)
-  )
+   ggplot2::theme(
+        legend.position = "bottom",
+        plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
+        legend.text = element_text(size = 12), 
+        axis.text = element_text(size = 7),
+        axis.title.x = element_text(size = 11),
+        axis.title.y = element_text(size = 11)
+        )
 
 ```
 
