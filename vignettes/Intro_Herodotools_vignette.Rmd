@@ -226,7 +226,7 @@ map_evoregion <-
   ggplot2::ylab("Latitude") +
   ggplot2::theme(
     legend.position = "bottom",
-    axis.title = element_text(size = 11),
+    axis.title = element_text(size = 1),
     axis.text = element_text(size = 7),
     plot.subtitle = element_text(hjust = 0.5),
     legend.text = element_text(color = "black", size = 9)
@@ -286,10 +286,7 @@ map_joint_evoregion_afilliation <-
   ggplot2::ylab("Latitude") +
    ggplot2::theme(
      legend.position = "bottom",
-     axis.title = element_text(size = 11),
-     axis.text = element_text(size = 7),
-     plot.subtitle = element_text(hjust = 0.5),
-     legend.text = element_text(color = "black", size = 9)
+     axis.title = element_text(size = 10)
    )
 
 ```
@@ -397,10 +394,9 @@ map_age <-
                                title.hjust = 0.5)) +
   ggplot2::theme(
     legend.position = "bottom",
-    axis.title = element_text(size = 11),
-    axis.text = element_text(size = 7),
-    plot.subtitle = element_text(hjust = 0.5),
+    axis.title = element_blank(),
     legend.text = element_text(size = 10), 
+    axis.text = element_text(size = 5),
     plot.subtitle = element_text(hjust = 0.5)
   )
 ```
