@@ -457,7 +457,7 @@ map_diversification <-
    ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank(),
-     axis.text = element_text(size = 5)
+     axis.text = element_text(size = 8)
    )
 
 map_diversification_insitu <- 
@@ -474,7 +474,7 @@ map_diversification_insitu <-
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
   ggplot2::ggtitle("B") + 
   ggplot2::theme_bw() +
-  ggplot2::labs(fill = "DRinsitu") +
+  ggplot2::labs(fill = "In situ diversification") +
   ggplot2::guides(fill = guide_colorbar(barheight = unit(3, units = "mm"),  
                                direction = "horizontal",
                                ticks.colour = "grey20",
@@ -485,7 +485,7 @@ map_diversification_insitu <-
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = 8),
     plot.subtitle = element_text(hjust = 0.5)
   )
 
@@ -494,7 +494,7 @@ map_diversification_complete <- map_diversification + map_diversification_insitu
 
 ```
 
-```{r outFig5, echo=FALSE,eval=TRUE,out.width="70%",fig.cap="Figure 5 - Diversification rates (DR - A) and in situ diversification rate (DRinsitu - B) for Akodon assemblages"}
+```{r outFig5, echo=FALSE,eval=TRUE,out.width="70%",fig.cap="Figure 5 - Diversification rates (DR - A) and in situ diversification (In situ diversification - B) for Akodon assemblages"}
 map_diversification_complete
 ```
 
@@ -550,7 +550,7 @@ map_dispersal_D <-
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = 3),
     plot.subtitle = element_text(hjust = 0.5)
   )
 
@@ -576,7 +576,7 @@ map_dispersal_A <-
     legend.position = "bottom",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = 3),
     plot.subtitle = element_text(hjust = 0.5)
   )
 
@@ -596,7 +596,7 @@ map_dispersal_B <-
      legend.position = "right",
      axis.title = element_blank(),
      legend.text = element_text(size = 6), 
-     axis.text = element_text(size = 5),
+     axis.text = element_text(size = 3),
      plot.subtitle = element_text(hjust = 0.5)   
    )
 
@@ -662,7 +662,8 @@ map_PE <-
                                title.hjust = 0.5)) +
    ggplot2::theme(
      legend.position = "bottom",
-     axis.title = element_blank()
+     axis.title = element_blank(),
+     legend.text = element_text(size = 5)
    )
 
 map_PEinsitu <- 
@@ -687,7 +688,8 @@ map_PEinsitu <-
                                title.hjust = 0.5)) +
    ggplot2::theme(
      legend.position = "bottom",
-     axis.title = element_blank()
+     axis.title = element_blank(),
+     legend.text = element_text(size = 5)
    )
 
 map_PE_all <- map_PE + map_PEinsitu
@@ -841,8 +843,8 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
       legend.position = "bottom",
       axis.title = element_blank(),
       legend.title = element_blank(),
-      legend.text = element_text(size = 10), 
-      axis.text = element_text(size = 5),
+      legend.text = element_text(size = 7), 
+      axis.text = element_text(size = 7),
       plot.subtitle = element_text(hjust = 0.5)   
     )
   
