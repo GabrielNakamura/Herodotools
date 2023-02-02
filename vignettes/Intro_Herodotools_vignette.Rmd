@@ -31,20 +31,20 @@ library(magrittr)
 ```
 
 
-This article will show the main functions of `Herodotools`. To do so, we will evaluate the effects of deep past processes, represented by diversification and historical dispersal, on the structure and phenotype of species assemblages from the genus *Akodon*.
+This article will show the main functions of `Herodotools` package. To do so, we will evaluate imprints of historical processes like in situ diversification, historical dispersal, macroevolutionary dynamics in species traits (this last using Sigmodontinae clade) of species assemblages from the genus *Akodon*.
 
 For this aim we will perform the following steps:
 
-1.  [Process](#processing) raw occurrence data and phylogenetic information
+1.  [Process](#processing) raw species occurrence data and phylogenetic information
 2.  [Classify](#evoregions) Akodon assemblages in meaningful regions using `evoregion` function
-3.  [Calculate](#modelBasedMetrics) macroevolutionary model-based metrics of diversification using an ancestral state reconstruction model
-4.  [Calculate](#phylomodelmetricscomm) model-based community phylogenetic metrics
-5. [Calculate](#traitdynamics) tip model-based metrics of trait macroevolutionary dynamics
+3.  [Calculate](#modelBasedMetrics) macroevolutionary metrics of in situ diversification at assemblage level using an ancestral state reconstruction model
+4.  [Calculate](#phylomodelmetricscomm) community phylogenetic metrics while accounting by in situ diversification process
+5. [Calculate](#traitdynamics) tip-based metrics of trait macroevolutionary dynamics
 
 # Reading data and libraries
 
 First, let's read some libraries we will use to explore the data and produce the figures. If 
-you do not have the packages already installed they will be installed.
+you do not have the packages already installed, they will be installed using the following code.
 
 ```{r librariesRead, echo=TRUE, eval=TRUE}
 libs <- c("ape", "picante", "dplyr", "tidyr", "purrr",
@@ -55,7 +55,7 @@ if (!requireNamespace(libs, quietly = TRUE)){
   }
 ```
 
-There are two packages that are not in CRAN, daee and BioGeoBEARS, and are required to run the analysis in this vignette. We suggest to install and read these packages from github using the following code:
+There are two packages that are not in CRAN (daee and BioGeoBEARS) and are required to run the analysis in this vignette. We suggest installing and reading these packages from Github using the following code:
 
 ```{r nonCRAN, echo=TRUE}
 if (!requireNamespace(c("daee","BioGeoBEARS"), quietly = TRUE)){
@@ -66,7 +66,7 @@ library(daee)
 library(BioGeoBEARS)
 ```
 
-Now we need to read the files corresponding to the distribution of species and phylogenetic relationship that 
+Now we need to read the files corresponding to the distribution of species in assemblages of 1x1 cell degrees, and phylogenetic relationship that 
     will be used in downstream analysis with Herodotools
 
 ```{r readData, echo=TRUE, eval=TRUE}
@@ -98,7 +98,7 @@ akodon_pa_tree <- akodon_pa[, spp_in_tree]
 
 # Exploring spatial patterns
 
-Here we can observe the richness pattern for Akodon genus. For this we will read the ggplot2 package to produce some maps
+Here we can plot richness pattern for Akodon genus. For this we will read the ggplot2 package to produce some maps
 
 ```{r richpattern, echo=TRUE, eval=TRUE}
 library(ggplot2)
@@ -138,11 +138,11 @@ map_richness
 
 # Obtaining evoregions {#evoregions}
 
-Here we will use the function `calc_evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools package. This method of classification allows to perform a biogeographical regionalization based on a [phylogenetic fuzzy matrix](https://doi.org/10.1111/2041-210X.12547) coupled with a [Discriminant Analysis of Principal Components based on k-means non-hierarchical clustering](https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94). Evoregions can be viewed as areas that correspond to centers of independent diversification of lineages, reflecting the historical radiation of single clades.
+Here we will use the function `calc_evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools package. This method of classification allows to perform a biogeographical regionalization based on a [phylogenetic fuzzy matrix](https://doi.org/10.1111/2041-210X.12547) coupled with a [Discriminant Analysis of Principal Components based on k-means non-hierarchical clustering](https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94). Evoregions can be viewed as areas corresponding to centers of independent diversification of lineages, reflecting the historical radiation of single clades (Maestri and Duarte, 2020).
 
-To calculate evoregions we need the occurrence matrix, a phylogenetic tree and to define the maximum number of clusters allowed. If the user decided to not inform the maximum number of clusters, evoregion function will perform an automatic procedure based on "elbow" method to set the maximum number of clusters. The "elbow" method is implemented in package [`phyloregion`](https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478). It is worth note that the original proposition of evoregion method use a bootstrap method to define the maximum number of clusters to be used in the analysis. Here we opted to use the "elbow" method mainly due to computational speed, since this method is faster than the bootstrap-based method.
+To calculate evoregions we need an species occurrence matrix and a phylogenetic tree. If the user decide not informing the maximum number of clusters, `evoregion` function will perform an automatic procedure based on "elbow" method to set the maximum number of clusters. The "elbow" method is implemented in package [`phyloregion`](https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478). It is worth noting that the original proposition of evoregion method use a bootstrap method to define the maximum number of clusters to be used in the analysis. Here we opted to use the "elbow" method mainly due to computational speed, since this method is faster than the bootstrap-based method.
 
-**NOTE**: The regions obtained from will present different names at each time that the analysis be performed, but the patterns will be the same. Consequently, if the user run the same code the evoregions will appear with different names, even when specifying an initial seed for this analysis.
+**NOTE**: The regions obtained from `evoregion` function will present different names for each region at each time the user run the analysis. But, the patterns will be the same for the same dataset. Consequently, if the user run the same code evoregions will show up with different names, even when specifying an initial seed for this analysis.
 
 ```{r evoregion_calc, echo=TRUE, eval=FALSE}
 regions <- 
@@ -200,7 +200,7 @@ col_five_hues <- c(
 
 ```
 
-Evoregions can now be mapped using the following code
+Evoregions can be mapped using the following code
 
 ```{r mapEvoregion, echo=TRUE, eval=TRUE}
 
@@ -239,8 +239,7 @@ map_evoregion <-
 map_evoregion
 ```
 
-
-`evoregion` produced five distinct regions, but not all cells have the same degree of affiliation with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to all the other cells presented in the region, on the other hand assemblages with low values of affiliation correspond to [turnover areas](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492), in other words, areas with multiple events of colonization by different lineages.
+The output from `evoregion` produced five distinct regions. However, not all cells have the same degree of affiliation with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to the other cells presented in a region. On the other hand, assemblages with low values of affiliation correspond to areas with [high turnover](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492), in other words, areas with multiple events of colonization by different lineages (Maestri and Duarte, 2020).
 
 ```{r affiliationCalc, echo=TRUE,eval=TRUE}
 
@@ -260,7 +259,7 @@ sites <- dplyr::bind_cols(site_xy, site_region =  site_region, afi)
 
 ```
 
-Now we can map both evoregions and the affiliation of each cell. The degree of affiliation of cells are showed as the degree of fading for each color representing the evoregions. As faded the color of the cell, lesser the affiliation of that cell to its evoregion. Those cell can be interpreted as being zones of high phylogenetic turnover.
+Now we can map evoregions and the affiliation of each cell. The degree of affiliation of cells are showed as the degree of fading for each color representing the evoregions. As faded the color of the cell, lesser the affiliation of that cell to its evoregion.
 
 ```{r mapAffiliation, echo=TRUE, eval=TRUE}
 map_joint_evoregion_afilliation <- 
@@ -300,11 +299,11 @@ map_joint_evoregion_afilliation <-
 map_joint_evoregion_afilliation
 ```
 
-# Ancestral area reconstruction for Akodon species {#mergeMacroAssemblage}
+# Ancestral area reconstruction for Akodon species {#mergeMacroAssemblage} and in situ diversification metrics
 
-In this section we will show how Herodotools can use the results that comes from macroevolutionary analysis, particularly analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed with [BioGeoBEARS](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution.
+In this section we will show how Herodotools can get the results coming from macroevolutionary analysis, particularly, analysis of ancestral state reconstruction, to understand the role of diversification and historical dispersal at assemblage level. For this we will use an ancestral area reconstruction performed with [BioGeoBEARS](https://github.com/nmatzke/BioGeoBEARS), a tool commonly used in macroevolution.
 
-First, we have to define the occurrence of each species in the evoregions. To do this we can use the function `get_region_occ` and obtain a data frame of species in the lines and evoregions in the columns.
+First, we have to assign the occurrence of each species in the evoregions. To do this we can use the function `get_region_occ` and obtain a data frame of species in the lines and evoregions in the columns.
 
 ```{r echo=TRUE, eval=TRUE}
 
@@ -312,7 +311,7 @@ a_region <- Herodotools::get_region_occ(comm = akodon_pa_tree, site.region = sit
 
 ```
 
-The object created in the last step can be used in an auxiliary function in Herodotools to easily produce the [Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) file required to run the analysis of ancestral area reconstruction using BioGeoBEARS.
+The object created in the last step can be used in an auxiliary function in Herodotools to easily obtain the [Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) file required to run the analysis of ancestral area reconstruction using BioGeoBEARS.
 
 ```{r echo=TRUE,eval=TRUE}
 # save phyllip file
@@ -325,9 +324,9 @@ Herodotools::get_tipranges_to_BioGeoBEARS(
 
 ```
 
-Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB processor machine), and we are not focused on macroevolutionary analysis using BioGeoBEARS, we can just read a reconstruction model performed using DEC model to reconstruct the evoregions. However, if you want to see the code we used to run the BioGeoBEARS models, you can access it with `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`. 
+Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB processor machine), and showing how to perform analysis with BioGeoBEARSwe are not our focus here, we can just read an output from an ancestral analysis reconstruction performed using DEC model to reconstruct the evoregions. If you want to check out the code used to run the BioGeoBEARS models, you can access it with `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`. 
 
-Read the file containing the results of DEC model reconstruction: 
+Reading the file containing the results of DEC model reconstruction: 
 
 ```{r loadDECmodel, echo=TRUE, eval=TRUE}
 
@@ -336,7 +335,7 @@ load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools
 
 ```
 
-It is worth to note that the procedures described here can be adapted to work with any model of ancestral area reconstruction from BioGeoBEARS, but for sake of simplicity we decided to use only the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html). 
+It is worth to note that the procedures described here can be adapted to work with any model of ancestral area reconstruction from BioGeoBEARS (other than DEC), but for sake of simplicity we decided to use only the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html). 
 
 # Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
 
@@ -344,7 +343,7 @@ Once we have data on present-day occurrence of species, a biogeographical region
 
 ## Age of assemblages
 
-Let's start by calculating the age of each cell considering the macroevolutionary dynamics of in situ diversification during time . The age here corresponds to the mean arrival time of each species occupying a given assemblage. By arrival time we mean the most ancient ancestor from a lineage that arrived at the assemblage within a region in which the current species occur today. For the original description of this metric see [Van Dijk et al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
+Let's start by calculating the age of each cell considering the macroevolutionary dynamics of in situ diversification during time . The age here corresponds to the mean arrival time of each species occupying a given assemblage. By arrival time we mean the time in which the an ancestor arrived and stablished (no more dispersal events in between) at the assemblage within a region in which the current species occur today. For the original description of this metric see [Van Dijk et al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
 
 ```{r agecalc, echo=TRUE,eval=TRUE}
 
@@ -368,7 +367,7 @@ age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree,
 
 ```
 
-The function `calc_age_arrival` returns a object containing the mean age for each assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is by represent it as a very recent arrival age for those species, and another option is to attribute the age corresponding to half of the branch length connecting the ancestor to the present time. Here we adopted the first option.
+The function `calc_age_arrival` returns a object containing the mean age for each assemblage. Species in which the transition to the current region occurred between the last ancestor and the present can be dealt in two ways: the default is by represent the age as a very recent arrival age for those species. Another option is to attribute the age corresponding to half of the branch length connecting the ancestor to the present time. Here we adopted the first option.
 
 With mean age for each assemblage we can map the ages for all assemblages
 
@@ -412,11 +411,11 @@ map_age <-
 map_age
 ```
 
-## Model-based diversification metrics {#phylomodelmetrics}
+## In situ diversification metrics {#phylomodelmetrics}
 
-We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestors, specifically, we can measure the importance of in situ diversification for assemblage level metrics. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and ex situ. Here we will illustrate this by calculating a common tip-based diversification measure proposed by [Redding and Moers]() that consists in the inverse of equal-splits measure called Diversification Rate (DR).
+We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestors. Specifically, we can measure the importance of in situ diversification to assemblage level diversification metrics. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and ex situ. Here we will illustrate this by calculating a common tip-based diversification measure proposed by [Jetz et al. (2012)](https://www.nature.com/articles/nature11631) that consists in the inverse of equal-splits measure [(Redding and Mooers, 2006)](https://www.jstor.org/stable/4124694) called Diversification Rate (DR).
 
-We modified the original metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy, this value represent the diversification that occurred due to *in situ diversification process*
+We modified the original DR metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy after coloniztion and establishment (no more dispersal events up to the present). This value represent the diversification that occurred due to *in situ diversification process*, and we call it in situ diversification metric.
 
 ```{r diversification, echo=TRUE,eval=TRUE}
 akodon_diversification <- 
@@ -429,7 +428,7 @@ Herodotools::calc_insitu_diversification(W = akodon_pa_tree,
 
 ```
 
-The result of `calc_insitu_diversification` function consist of a data-frame containing the value of in-situ diversification for each species in each assemblage and a vector with the harmonic mean in-situ diversification for each assemblage. As with age, we can plot the in-situ diversification metric to look at the spatial patterns in Akodon assemblages.
+The result of `calc_insitu_diversification` function consist of a data-frame containing the value of in situ diversification for each species in each assemblage and a vector containing the harmonic mean of in-situ diversification for each assemblage. As with age, we can plot the in situ diversification metric to look at the spatial patterns in Akodon assemblages.
 
 ```{r mapdiversification, echo=TRUE,eval=TRUE}
 sites <- dplyr::bind_cols(site_xy,
@@ -500,7 +499,7 @@ map_diversification_complete
 
 ## Historical dispersal events
 
-We can also calculate the importance of dispersal events related to each ancestral range. By using the function `calc_dispersal_from` we can quantify the contribution of a given region to historical dispersal of the species in present-day assemblages. This is done by calculating the proportion of species in an assemblage that dispersed from the focal ancestral range to other regions. This calculation accounts only for the species that present events of dispersal in its ancestral lineage, in other words, species that presented their whole history shaped by in situ diversification are not considered in this analysis. 
+We can also calculate the importance of dispersal events. By using the function `calc_dispersal_from` we can quantify the contribution of a given region to historical dispersal of the species in present-day assemblages. This is done by calculating the proportion of species in an assemblage that dispersed from the focal ancestral range to other regions. This calculation accounts only for the species that present events of dispersal in its ancestral lineage, in other words, species that presented their whole history within a single area are not considered in this analysis. 
 
 ```{r dispersal, echo=TRUE,eval=TRUE}
 
@@ -513,7 +512,7 @@ Herodotools::calc_dispersal_from(W = akodon_pa_tree,
 
 ```
 
-We also can map the contribution of dispersal for all regions. Note that the focal area of ancestral range in each map have no values of dipersal from, since it is the source of dispersal to the other regions. 
+We also can map the contribution of dispersal for all regions. Note that the focal area of ancestral range in each map have no values of dipersal from metric, since it is the source of dispersal to the other regions. 
 
 ```{r mapping_dispersal, echo=TRUE,eval=TRUE}
 
@@ -613,9 +612,9 @@ cowplot::plot_grid(map_evoregion + theme(legend.position = "right"), plot1, ncol
                    rel_heights = c(2, 1.2))
 ```
 
-## Model based community phylogetic metrics {#phylomodelmetricscomm}
+## Community phylogetic metrics considering in situ diversification {#phylomodelmetricscomm}
 
-We also can calculate common metrics of community phylogenetics considering the macroevolutionary dynamics in the calculation. These model-based community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ. For this we use the function `calc_insitu_metrics`
+We also can calculate common metrics of community phylogenetics considering in situ diversification dynamics. These community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ in a similar way the in situ diversification metric. Namely, PD~in situ~ and PE~in situ~, they correspond to modified versions of the classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The difference is that our metrics considers only the amount of phylogenetic diversity and endemism that emerged after colonization and establishment of the present day lineages in the assemblages. For this we use the function `calc_insitu_metrics`
 
 ```{r commPhylo, echo=TRUE, eval=TRUE}
 
@@ -628,7 +627,7 @@ akodon_PD_PE_insitu <- calc_insitu_metrics(W = akodon_pa_tree,
 
 ```
 
-As the other metrics we can plot PDinsitu and PEinsitu in a map
+As the other metrics we can plot PD~in situ~ and PE~in situ~ in a map. Here we illustrate it by plotting PE and PE~in situ~ metrics for comparison.
 
 ```{r map_community_metrics, echo=TRUE,eval=TRUE}
 sites <- dplyr::bind_cols(site_xy,
@@ -700,7 +699,7 @@ map_PE_all <- map_PE + map_PEinsitu
 map_PE_all
 ```
 
-Figure 7 shows that the endemism pattern for Akodon assemblages are similar for both metrics, indicating that regions with high endemism are mainly due to in-situ diversificaiton process.
+Figure 7 shows that the endemism pattern for Akodon assemblages are similar for both metrics, indicating that regions with high endemism are mainly due to in situ diversification process.
 
 ## Tip-based metrics of trait evolution {#traitdynamics}
 
