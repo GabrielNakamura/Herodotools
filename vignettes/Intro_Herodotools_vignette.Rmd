@@ -340,7 +340,7 @@ Once we have data on present-day occurrence of species, a biogeographical region
 
 ## Age of assemblages
 
-Let's start by calculating the age of each cell considering the macroevolutionary dynamics of in situ diversification during time . The age here corresponds to the mean arrival time of each species occupying a given assemblage. By arrival time we mean the time in which the an ancestor arrived and stablished (no more dispersal events in between) at the assemblage within a region in which the current species occur today. For the original description of this metric see [Van Dijk et al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
+Let's start by calculating the age of each cell considering the macroevolutionary dynamics of in-situ diversification during time . The age here corresponds to the mean arrival time of each species occupying a given assemblage. By arrival time we mean the time in which the an ancestor arrived and stablished (no more dispersal events in between) at the assemblage within a region in which the current species occur today. For the original description of this metric see [Van Dijk et al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
 
 ```{r agecalc, echo=TRUE,eval=TRUE}
 
@@ -408,11 +408,11 @@ map_age <-
 map_age
 ```
 
-## In situ diversification metrics {#phylomodelmetrics}
+## In-situ diversification metrics {#phylomodelmetrics}
 
-We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestors. Specifically, we can measure the importance of in situ diversification to assemblage level diversification metrics. The new measures allows to decompose the effects of two macroevolutionary process: in situ diversification and ex situ. Here we will illustrate this by calculating a common tip-based diversification measure proposed by [Jetz et al. (2012)](https://www.nature.com/articles/nature11631) that consists in the inverse of equal-splits measure [(Redding and Mooers, 2006)](https://www.jstor.org/stable/4124694) called Diversification Rate (DR).
+We can also calculate measures of diversification considering the macroevolutionary dynamics of ancestors. Specifically, we can measure the importance of in-situ diversification to assemblage level diversification metrics. The new measures allows to decompose the effects of two macroevolutionary process: in-situ diversification and ex situ. Here we will illustrate this by calculating a common tip-based diversification measure proposed by [Jetz et al. (2012)](https://www.nature.com/articles/nature11631) that consists in the inverse of equal-splits measure [(Redding and Mooers, 2006)](https://www.jstor.org/stable/4124694) called Diversification Rate (DR).
 
-We modified the original DR metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy after coloniztion and establishment (no more dispersal events up to the present). This value represent the diversification that occurred due to *in situ diversification process*, and we call it in situ diversification metric.
+We modified the original DR metric to take into account only the portion of evolutionary history that is associated with the region in which the species currently occupy after coloniztion and establishment (no more dispersal events up to the present). This value represent the diversification that occurred due to *in-situ diversification process*, and we call it in-situ diversification metric.
 
 ```{r diversification, echo=TRUE,eval=TRUE}
 akodon_diversification <- 
@@ -425,7 +425,7 @@ Herodotools::calc_insitu_diversification(W = akodon_pa_tree,
 
 ```
 
-The result of `calc_insitu_diversification` function consist of a data-frame containing the value of in situ diversification for each species in each assemblage and a vector containing the harmonic mean of in-situ diversification for each assemblage. As with age, we can plot the in situ diversification metric to look at the spatial patterns in Akodon assemblages.
+The result of `calc_insitu_diversification` function consist of a data-frame containing the value of in-situ diversification for each species in each assemblage and a vector containing the harmonic mean of in-situ diversification for each assemblage. As with age, we can plot the in-situ diversification metric to look at the spatial patterns in Akodon assemblages.
 
 ```{r mapdiversification, echo=TRUE,eval=TRUE}
 sites <- dplyr::bind_cols(site_xy,
@@ -490,7 +490,7 @@ map_diversification_complete <- map_diversification + map_diversification_insitu
 
 ```
 
-```{r outFig5, echo=FALSE,eval=TRUE,out.width="70%",fig.cap="Figure 5 - Diversification rates (DR - A) and in situ diversification (In situ diversification - B) for Akodon assemblages"}
+```{r outFig5, echo=FALSE,eval=TRUE,out.width="70%",fig.cap="Figure 5 - Diversification rates (DR - A) and in-situ diversification (in-situ diversification - B) for Akodon assemblages"}
 map_diversification_complete
 ```
 
@@ -609,9 +609,9 @@ cowplot::plot_grid(map_evoregion + theme(legend.position = "right"), plot1, ncol
                    rel_heights = c(2, 1.2))
 ```
 
-## Community phylogetic metrics considering in situ diversification {#phylomodelmetricscomm}
+## Community phylogetic metrics considering in-situ diversification {#phylomodelmetricscomm}
 
-We also can calculate common metrics of community phylogenetics considering in situ diversification dynamics. These community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ in a similar way the in situ diversification metric. Namely, PD~in-situ~ and PE~in-situ~, they correspond to modified versions of the classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The difference is that our metrics considers only the amount of phylogenetic diversity and endemism that emerged after colonization and establishment of the present day lineages in the assemblages. For this we use the function `calc_insitu_metrics`
+We also can calculate common metrics of community phylogenetics considering in-situ diversification dynamics. These community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ in a similar way the in-situ diversification metric. Namely, PD~in-situ~ and PE~in-situ~, they correspond to modified versions of the classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The difference is that our metrics considers only the amount of phylogenetic diversity and endemism that emerged after colonization and establishment of the present day lineages in the assemblages. For this we use the function `calc_insitu_metrics`
 
 ```{r commPhylo, echo=TRUE, eval=TRUE}
 
@@ -624,7 +624,7 @@ akodon_PD_PE_insitu <- calc_insitu_metrics(W = akodon_pa_tree,
 
 ```
 
-As the other metrics we can plot PD\~in situ\~ and PE\~in situ\~ in a map. Here we illustrate it by plotting PE and PE\~in situ\~ metrics for comparison.
+As the other metrics we can plot PD~in-situ~ and PE~in-situ~ in a map. Here we illustrate it by plotting PE and PE~in-situ~ metrics for comparison.
 
 ```{r map_community_metrics, echo=TRUE,eval=TRUE}
 sites <- dplyr::bind_cols(site_xy,
@@ -729,7 +729,7 @@ Since this analysis can take several minutes we can read the result obtained usi
 load(system.file("extdata", "transition_rate_res.RData", package = "Herodotools"))
 ```
 
-Now we have in hand the estimates of the three tip-based metrics for 214 rodent species. We can summarize the tip-based metrics at the ecological assemblage scale. First we will load assemblage & geographic data comprising 1770 grid cells located at the Neotropics.
+Now we have the estimates of the three tip-based metrics for 214 rodent species. We can summarize the tip-based metrics at the assemblage scale. First we will load assemblage and geographic data comprising 1770 grid cells located at the Neotropics.
 
 ```{r loadCommData, echo=TRUE,eval=TRUE}
 
@@ -771,7 +771,7 @@ averaged_rates <- purrr::map_dfr(1:nrow(comm_data), function (i){
 })
 ```
 
-Since the last step take some minutes to complete you can opt to read directly fom the package the table with mean values for all metrics
+Since the last step take some minutes to complete you can opt to read directly from the package the table with mean values for all metrics
 
 ```{r avrates, echo=TRUE,eval=TRUE}
 data("averaged_rates")
