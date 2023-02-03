@@ -425,7 +425,7 @@ represent historical variables at assemblage scale.</p>
 <h3 id="age-of-assemblages">Age of assemblages<a class="anchor" aria-label="anchor" href="#age-of-assemblages"></a>
 </h3>
 <p>Let’s start by calculating the age of each cell considering the
-macroevolutionary dynamics of in situ diversification during time . The
+macroevolutionary dynamics of in-situ diversification during time . The
 age here corresponds to the mean arrival time of each species occupying
 a given assemblage. By arrival time we mean the time in which the an
 ancestor arrived and stablished (no more dispersal events in between) at
@@ -501,13 +501,13 @@ Figure 4 - Age of assemblages
 </div>
 </div>
 <div class="section level3">
-<h3 id="phylomodelmetrics">In situ diversification metrics<a class="anchor" aria-label="anchor" href="#phylomodelmetrics"></a>
+<h3 id="phylomodelmetrics">In-situ diversification metrics<a class="anchor" aria-label="anchor" href="#phylomodelmetrics"></a>
 </h3>
 <p>We can also calculate measures of diversification considering the
 macroevolutionary dynamics of ancestors. Specifically, we can measure
-the importance of in situ diversification to assemblage level
+the importance of in-situ diversification to assemblage level
 diversification metrics. The new measures allows to decompose the
-effects of two macroevolutionary process: in situ diversification and ex
+effects of two macroevolutionary process: in-situ diversification and ex
 situ. Here we will illustrate this by calculating a common tip-based
 diversification measure proposed by <a href="https://www.nature.com/articles/nature11631" class="external-link">Jetz et
 al. (2012)</a> that consists in the inverse of equal-splits measure <a href="https://www.jstor.org/stable/4124694" class="external-link">(Redding and Mooers,
@@ -516,8 +516,8 @@ al. (2012)</a> that consists in the inverse of equal-splits measure <a href="ht
 portion of evolutionary history that is associated with the region in
 which the species currently occupy after coloniztion and establishment
 (no more dispersal events up to the present). This value represent the
-diversification that occurred due to <em>in situ diversification
-process</em>, and we call it in situ diversification metric.</p>
+diversification that occurred due to <em>in-situ diversification
+process</em>, and we call it in-situ diversification metric.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">akodon_diversification</span> <span class="op">&lt;-</span> </span>
 <span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/calc_insitu_diversification.html">calc_insitu_diversification</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon_pa_tree</span>,</span>
@@ -527,10 +527,10 @@ process</em>, and we call it in situ diversification metric.</p>
 <span>                   diversification <span class="op">=</span> <span class="st">"jetz"</span>,</span>
 <span>                   type <span class="op">=</span> <span class="st">"equal.splits"</span><span class="op">)</span></span></code></pre></div>
 <p>The result of <code>calc_insitu_diversification</code> function
-consist of a data-frame containing the value of in situ diversification
+consist of a data-frame containing the value of in-situ diversification
 for each species in each assemblage and a vector containing the harmonic
 mean of in-situ diversification for each assemblage. As with age, we can
-plot the in situ diversification metric to look at the spatial patterns
+plot the in-situ diversification metric to look at the spatial patterns
 in Akodon assemblages.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
@@ -593,9 +593,9 @@ in Akodon assemblages.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span> <span class="co"># using patchwork to put the maps together</span></span>
 <span><span class="va">map_diversification_complete</span> <span class="op">&lt;-</span> <span class="va">map_diversification</span> <span class="op">+</span> <span class="va">map_diversification_insitu</span></span></code></pre></div>
 <div class="figure">
-<img src="Intro_Herodotools_vignette_files/figure-html/outFig5-1.png" alt="Figure 5 - Diversification rates (DR - A) and in situ diversification (In situ diversification - B) for Akodon assemblages" width="70%"><p class="caption">
-Figure 5 - Diversification rates (DR - A) and in situ diversification
-(In situ diversification - B) for Akodon assemblages
+<img src="Intro_Herodotools_vignette_files/figure-html/outFig5-1.png" alt="Figure 5 - Diversification rates (DR - A) and in-situ diversification (in-situ diversification - B) for Akodon assemblages" width="70%"><p class="caption">
+Figure 5 - Diversification rates (DR - A) and in-situ diversification
+(in-situ diversification - B) for Akodon assemblages
 </p>
 </div>
 </div>
@@ -715,13 +715,13 @@ other regions regarding historical dispersal of lineages
 </div>
 </div>
 <div class="section level3">
-<h3 id="phylomodelmetricscomm">Community phylogetic metrics considering in situ
+<h3 id="phylomodelmetricscomm">Community phylogetic metrics considering in-situ
 diversification<a class="anchor" aria-label="anchor" href="#phylomodelmetricscomm"></a>
 </h3>
 <p>We also can calculate common metrics of community phylogenetics
-considering in situ diversification dynamics. These community
+considering in-situ diversification dynamics. These community
 phylogenetic metrics allows to disentangle the effects of in-situ
-diversification from ex-situ in a similar way the in situ
+diversification from ex-situ in a similar way the in-situ
 diversification metric. Namely, PD<sub>in-situ</sub> and
 PE<sub>in-situ</sub>, they correspond to modified versions of the
 classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et
@@ -738,9 +738,9 @@ assemblages. For this we use the function
 <span>                  biogeo <span class="op">=</span> <span class="va">biogeo_area</span>, </span>
 <span>                  PD <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                  PE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>As the other metrics we can plot PD~in situ~ and PE~in situ~ in a
-map. Here we illustrate it by plotting PE and PE~in situ~ metrics for
-comparison.</p>
+<p>As the other metrics we can plot PD<sub>in-situ</sub> and
+PE<sub>in-situ</sub> in a map. Here we illustrate it by plotting PE and
+PE<sub>in-situ</sub> metrics for comparison.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>, </span>
@@ -858,11 +858,10 @@ function <code>calc_tip_based_trait_evo</code>.</p>
 obtained using the same code above</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"transition_rate_res.RData"</span>, package <span class="op">=</span> <span class="st">"Herodotools"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Now we have in hand the estimates of the three tip-based metrics for
-214 rodent species. We can summarize the tip-based metrics at the
-ecological assemblage scale. First we will load assemblage &amp;
-geographic data comprising 1770 grid cells located at the
-Neotropics.</p>
+<p>Now we have the estimates of the three tip-based metrics for 214
+rodent species. We can summarize the tip-based metrics at the assemblage
+scale. First we will load assemblage and geographic data comprising 1770
+grid cells located at the Neotropics.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># load community data</span></span>
@@ -899,7 +898,7 @@ each assemblage.</p>
 <span>    <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">mean</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Since the last step take some minutes to complete you can opt to read
-directly fom the package the table with mean values for all metrics</p>
+directly from the package the table with mean values for all metrics</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"averaged_rates"</span><span class="op">)</span></span></code></pre></div>
 <p>We will represent in space the variation in the tip-based metrics for
