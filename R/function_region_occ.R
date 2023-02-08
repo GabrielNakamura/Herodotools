@@ -33,7 +33,7 @@ get_region_occ <-
     ) %>% 
     # transform the matrix in a longer dataframe 
     tidyr::pivot_longer(
-      cols = 1:30, 
+      cols = 1:ncol(comm), 
       names_to = "species",
       values_to = "presence"
     ) %>% 
