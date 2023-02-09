@@ -1,7 +1,7 @@
 #' Diversification-based PD and PE
 #' 
 #' @details This function computes two modified versions of Phylogenetic Diversity (PD) and Phylogenetic
-#'     endemism by considering in the calculation the in-situ diversification. the Db-PD and Db-PE are calculated
+#'     endemism by considering in the calculation the in-situ diversification. the PD~in-situ~ and PE~in-situ~ are calculated
 #'     by coupling in the calculation an ancetral area reconstruction that divide the phylogenetic tree in two parts, 
 #'     one that correspond to dispersion events and another that correspond to in-situ diversification events. 
 #'     We use the in-situ diversification part to calculate both Db-PD and Db-PE
@@ -10,10 +10,10 @@
 #' @param tree Phylogenetic hipothesis in newick format
 #' @param ancestral.area One column data frame with nodes in rows and one column indicating the occurrence area of nodes
 #' @param biogeo One columns data frame with rows indicating assemblages and one column indicating the biome/ecoregion of each assemblage
-#' @param PD Logical, if TRUE (default) Db-PD will be computed
-#' @param PE Logical, if TRUE (default) Db-PE will be computed
+#' @param PD Logical, if TRUE (default) PD~in-situ~ will be computed
+#' @param PE Logical, if TRUE (default) PE~in-situ~ will be computed
 #'
-#' @return A data frame containing the values of original PD and PE and also their model
+#' @return A data frame containing the values of original PD and PE and also their in-situ diversification
 #'     based version
 #' 
 #' @author Gabriel Nakamura <gabriel.nakamura.souza@@gmail.com>
