@@ -1,4 +1,4 @@
-#' Tip-based and model-based diversification metrics 
+#' Tip-based in-situ diversification metrics 
 #'
 #' @param W Assemblage occurrence matrix, rows are assemblages and columns are species
 #' @param tree Phylogenetic tree in newick format
@@ -18,9 +18,9 @@
 #'         the values of Jetz tip-based diversification metric for each assemblage} 
 #'     \item{Jetz_harmonic_mean_site}{Harmonic mean of Jetz tip-based
 #'         diversification metric}
-#'      \item{model_based_Jetz_species_sites}{Matrix with model-based Jetz metric for each species
+#'      \item{insitu_Jetz_species_sites}{Matrix with model-based Jetz metric for each species
 #'         in each assemblage} 
-#'     \item{model_based_Jetz_harmonic_mean_site}{Harmonic mean of model-based Jetz diversification}
+#'     \item{insitu_Jetz_harmonic_mean_site}{Harmonic mean of model-based Jetz diversification}
 #' }
 #' 
 #' @author Gabriel Nakamura <gabriel.nakamura.souza@@gmail.com> and Arthur V Rodrigues
@@ -183,8 +183,8 @@ calc_insitu_diversification <-
       names(list_res_jetz) <- c("Jetz_per_spp",
                                 "Jetz_species_site",
                                 "Jetz_harmonic_mean_site",
-                                "model_based_Jetz_species_sites", 
-                                "model_based_Jetz_harmonic_mean_site")
+                                "insitu_Jetz_species_sites", 
+                                "insitu_Jetz_harmonic_mean_site")
       
     }
     
