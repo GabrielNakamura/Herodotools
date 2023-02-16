@@ -35,8 +35,8 @@
 #'
 #' @return A list of length four containing:
 #' \itemize{
-#'    \item `PCPS_vectors` A matrix with PCPS vectors
-#'    \item `cluster_evoregion` A vector indicating the region in which each 
+#'    \item `PCPS` A matrix with PCPS vectors
+#'    \item `cluster_evoregions` A vector indicating the region in which each 
 #'      assemblage was classified
 #' }
 #' 
