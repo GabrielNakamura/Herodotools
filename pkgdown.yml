@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   Intro_Herodotools_vignette: Intro_Herodotools_vignette.html
-last_built: 2023-02-16T18:47Z
+last_built: 2023-02-16T19:15Z
 urls:
   reference: https://gabrielnakamura.github.io/Herodotools/reference
   article: https://gabrielnakamura.github.io/Herodotools/articles
