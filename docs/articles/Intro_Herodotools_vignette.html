@@ -166,7 +166,7 @@ read the ggplot2 package to produce some maps</p>
 <span><span class="va">richness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">akodon_pa_tree</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">map_richness</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, richness <span class="op">=</span> <span class="va">richness</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, richness <span class="op">=</span> <span class="va">richness</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">richness</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">rcartocolor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Richness"</span>, type <span class="op">=</span> <span class="st">"quantitative"</span>, palette <span class="op">=</span> <span class="st">"SunsetDark"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -320,7 +320,7 @@ by different lineages (Maestri and Duarte, 2020).</p>
 <span>                          groups <span class="op">=</span> <span class="va">site_region</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># binding the information in a data frame</span></span>
-<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site_region <span class="op">=</span>  <span class="va">site_region</span>, <span class="va">afi</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site_region <span class="op">=</span>  <span class="va">site_region</span>, <span class="va">afi</span><span class="op">)</span></span></code></pre></div>
 <p>Now we can map evoregions and the affiliation of each cell. The
 degree of affiliation of cells are showed as the degree of fading for
 each color representing the evoregions. As faded the color of the cell,
@@ -462,7 +462,7 @@ the ancestor to the present time. Here we adopted the first option.</p>
 assemblages</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site_region <span class="op">=</span>  <span class="va">site_region</span>, age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span><span class="op">)</span></span>
+<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>, site_region <span class="op">=</span>  <span class="va">site_region</span>, age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">map_age</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">sites</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -533,7 +533,7 @@ mean of in-situ diversification for each assemblage. As with age, we can
 plot the in-situ diversification metric to look at the spatial patterns
 in Akodon assemblages.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
+<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>,</span>
 <span>                   age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,</span>
 <span>                   diversification_model_based <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">insitu_Jetz_harmonic_mean_site</span>,</span>
@@ -624,7 +624,7 @@ dipersal from metric, since it is the source of dispersal to the other
 regions.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
+<span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>, </span>
 <span>                   age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,</span>
 <span>                   diversification <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">Jetz_harmonic_mean_site</span>,</span>
@@ -742,7 +742,7 @@ assemblages. For this we use the function
 PE<sub>in-situ</sub> in a map. Here we illustrate it by plotting PE and
 PE<sub>in-situ</sub> metrics for comparison.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
+<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>, </span>
 <span>                   age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,</span>
 <span>                   diversification <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">Jetz_harmonic_mean_site</span>,</span>
@@ -954,7 +954,7 @@ species closely related to basal lineages.</p>
 <span>  <span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sel_data</span>, </span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sel_data</span>, </span>
 <span>                <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONG</span>, y <span class="op">=</span> <span class="va">LAT</span>, fill <span class="op">=</span> <span class="va">values</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">rcartocolor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rcartocolor/man/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span></span>
 <span>      type <span class="op">=</span> <span class="st">"quantitative"</span>, </span>
@@ -987,18 +987,6 @@ species closely related to basal lineages.</p>
 <span><span class="co"># Create map</span></span>
 <span><span class="va">mapTransition_rate</span> <span class="op">&lt;-</span> <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">list_map_transitions</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>tag_levels <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Warning: Raster pixels are placed at uneven horizontal intervals and will be shifted</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider using `geom_tile()` instead.</span></span>
-<span><span class="co">#&gt; Raster pixels are placed at uneven horizontal intervals and will be shifted</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider using `geom_tile()` instead.</span></span>
-<span><span class="co">#&gt; Raster pixels are placed at uneven horizontal intervals and will be shifted</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider using `geom_tile()` instead.</span></span>
-<span><span class="co">#&gt; Raster pixels are placed at uneven horizontal intervals and will be shifted</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider using `geom_tile()` instead.</span></span>
-<span><span class="co">#&gt; Raster pixels are placed at uneven horizontal intervals and will be shifted</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider using `geom_tile()` instead.</span></span>
-<span><span class="co">#&gt; Raster pixels are placed at uneven horizontal intervals and will be shifted</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider using `geom_tile()` instead.</span></span></code></pre>
 <div class="figure">
 <img src="Intro_Herodotools_vignette_files/figure-html/fig8-1.png" alt="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species" width="700"><p class="caption">
 Figure 8: Maps with tip metrics of evolution dynamics of life mode for

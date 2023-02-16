@@ -815,7 +815,7 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
   )
   
   ggplot() +
-    ggplot2::geom_raster(data = sel_data, 
+    ggplot2::geom_tile(data = sel_data, 
                 ggplot2::aes(x = LONG, y = LAT, fill = values)) +
     rcartocolor::scale_fill_carto_c(
       type = "quantitative", 
