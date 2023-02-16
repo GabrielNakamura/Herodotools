@@ -536,7 +536,7 @@ in Akodon assemblages.</p>
 <code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">site_xy</span>,</span>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>,</span>
 <span>                   age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,</span>
-<span>                   diversification_model_based <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">model_based_Jetz_harmonic_mean_site</span>,</span>
+<span>                   diversification_model_based <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">insitu_Jetz_harmonic_mean_site</span>,</span>
 <span>                   diversification <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">Jetz_harmonic_mean_site</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">map_diversification</span> <span class="op">&lt;-</span> </span>
@@ -628,7 +628,7 @@ regions.</p>
 <span>                   site_region <span class="op">=</span>  <span class="va">site_region</span>, </span>
 <span>                   age <span class="op">=</span> <span class="va">age_comm</span><span class="op">$</span><span class="va">mean_age_per_assemblage</span>,</span>
 <span>                   diversification <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">Jetz_harmonic_mean_site</span>,</span>
-<span>                   diversification_model_based <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">model_based_Jetz_harmonic_mean_site</span>,</span>
+<span>                   diversification_model_based <span class="op">=</span> <span class="va">akodon_diversification</span><span class="op">$</span><span class="va">insitu_Jetz_harmonic_mean_site</span>,</span>
 <span>                   dispersal.D <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, </span>
 <span>                   dispersal.A <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,</span>
 <span>                   dispersal.E <span class="op">=</span> <span class="va">akodon_dispersal</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>,</span>
