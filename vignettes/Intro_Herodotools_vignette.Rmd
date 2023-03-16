@@ -284,10 +284,10 @@ map_joint_evoregion_afilliation <-
   ggplot2::theme(
         legend.position = "bottom",
         plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
-        legend.text = element_text(size = 12), 
-        axis.text = element_text(size = 7),
-        axis.title.x = element_text(size = 11),
-        axis.title.y = element_text(size = 11)
+        legend.text = element_text(size = 10), 
+        axis.text = element_text(size = 8),
+        axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10)
         )
 
 ```
@@ -396,10 +396,10 @@ map_age <-
   ggplot2::theme(
         legend.position = "bottom",
         plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
-        legend.text = element_text(size = 12), 
-        axis.text = element_text(size = 7),
-        axis.title.x = element_text(size = 11),
-        axis.title.y = element_text(size = 11),
+        legend.text = element_text(size = 9), 
+        axis.text = element_text(size = 8),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
         plot.subtitle = element_text(hjust = 0.5)
         )
 ```
@@ -453,7 +453,7 @@ map_diversification <-
    ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank(),
-     axis.text = element_text(size = 8)
+     axis.text = element_text(size = 6)
    )
 
 map_diversification_insitu <- 
@@ -659,7 +659,7 @@ map_PE <-
    ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank(),
-     legend.text = element_text(size = 5)
+     legend.text = element_text(size = 7)
    )
 
 map_PEinsitu <- 
@@ -685,7 +685,7 @@ map_PEinsitu <-
    ggplot2::theme(
      legend.position = "bottom",
      axis.title = element_blank(),
-     legend.text = element_text(size = 5)
+     legend.text = element_text(size = 7)
    )
 
 map_PE_all <- map_PE + map_PEinsitu
