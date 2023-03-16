@@ -888,9 +888,10 @@ map_evoregion <-
   ggplot2::ggtitle("(a)") + 
   ggplot2::theme_bw() +
   ggplot2::theme(
+    title = element_text(size = 8), 
     legend.position = "bottom",
     axis.title = element_blank(),
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = 7),
     plot.subtitle = element_text(hjust = 0.5),
     legend.text = element_text(color = "black", size = 8)
   )
@@ -918,10 +919,11 @@ map_age <-
                                label.position = "bottom",
                                title.hjust = 0.5)) +
   ggplot2::theme(
+    title = element_text(size = 8), 
     legend.position = "bottom",
     axis.title = element_blank(),
-    legend.text = element_text(size = 10), 
-    axis.text = element_text(size = 5),
+    legend.text = element_text(size = 8), 
+    axis.text = element_text(size = 7),
     plot.subtitle = element_text(hjust = 0.5)
   )
 
@@ -948,10 +950,11 @@ map_diversification_insitu <-
                                label.position = "bottom",
                                title.hjust = 0.5)) +
   ggplot2::theme(
+    title = element_text(size = 8), 
     legend.position = "bottom",
     axis.title = element_blank(),
-    legend.text = element_text(size = 10), 
-    axis.text = element_text(size = 5),
+    legend.text = element_text(size = 8), 
+    axis.text = element_text(size = 7),
     plot.subtitle = element_text(hjust = 0.5)
   )
 
@@ -980,10 +983,11 @@ map_dispersal_D <-
                                label.position = "bottom",
                                title.hjust = 0.5)) +
   ggplot2::theme(
+    title = element_text(size = 8), 
     legend.position = "bottom",
     axis.title = element_blank(),
-    legend.text = element_text(size = 10), 
-    axis.text = element_text(size = 5),
+    legend.text = element_text(size = 8), 
+    axis.text = element_text(size = 7),
     plot.subtitle = element_text(hjust = 0.5)   
   )
 
