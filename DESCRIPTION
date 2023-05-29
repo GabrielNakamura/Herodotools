@@ -63,6 +63,7 @@ Imports:
     rlang,
     rlist,
     scales,
+    stringr,
     SYNCSA,
     vegan
 VignetteBuilder:
