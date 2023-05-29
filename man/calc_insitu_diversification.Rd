@@ -2,7 +2,7 @@
 % Please edit documentation in R/function_model_based_diversificationJetz.R
 \name{calc_insitu_diversification}
 \alias{calc_insitu_diversification}
-\title{Tip-based and model-based diversification metrics}
+\title{Tip-based in-situ diversification metrics}
 \usage{
 calc_insitu_diversification(
   W,
@@ -34,13 +34,13 @@ A list with the following objects:
 the values of Jetz tip-based diversification metric for each assemblage}
 \item{Jetz_harmonic_mean_site}{Harmonic mean of Jetz tip-based
 diversification metric}
-\item{model_based_Jetz_species_sites}{Matrix with model-based Jetz metric for each species
+\item{insitu_Jetz_species_sites}{Matrix with model-based Jetz metric for each species
 in each assemblage}
-\item{model_based_Jetz_harmonic_mean_site}{Harmonic mean of model-based Jetz diversification}
+\item{insitu_Jetz_harmonic_mean_site}{Harmonic mean of model-based Jetz diversification}
 }
 }
 \description{
-Tip-based and model-based diversification metrics
+Tip-based in-situ diversification metrics
 }
 \details{
 model-based measure of diversification is calculated as the proportion of total tip-based diversification

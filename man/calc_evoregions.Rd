@@ -54,8 +54,8 @@ of these procedures.}
 \value{
 A list of length four containing:
 \itemize{
-\item \code{PCPS_vectors} A matrix with PCPS vectors
-\item \code{cluster_evoregion} A vector indicating the region in which each
+\item \code{PCPS} A matrix with PCPS vectors
+\item \code{cluster_evoregions} A vector indicating the region in which each
 assemblage was classified
 }
 }
