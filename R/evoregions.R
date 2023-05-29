@@ -131,7 +131,7 @@ calc_evoregions <-
     prop_explainded = values.bray[,2],
     tresh_dist = tresh.dist
   )
-  list_res[[2]] <- std_name_evoregion(clust.vec.bray$grp)
+  list_res[[2]] <- clust.vec.bray$grp
   
   
   names(list_res) <- c("PCPS", 
