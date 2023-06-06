@@ -32,6 +32,8 @@
 #'   for automatic selection of the optimal number of clusters. 
 #'   See `criterion` argument in \code{\link[adegenet]{find.clusters}} for an explanation
 #'   of these procedures.
+#' @param seed default NULL. Set a seed to the \code{\link[adegenet]{find.clusters}}, 
+#'   which provides the same names for cluster groups
 #'
 #' @return A list of length four containing:
 #' \itemize{
