@@ -32,6 +32,8 @@
 #'   for automatic selection of the optimal number of clusters. 
 #'   See `criterion` argument in \code{\link[adegenet]{find.clusters}} for an explanation
 #'   of these procedures.
+#' @param seed default NULL. Set a seed to the \code{\link[adegenet]{find.clusters}}, 
+#'   which provides the same names for cluster groups
 #'
 #' @return A list of length four containing:
 #' \itemize{
@@ -48,12 +50,14 @@
 #' @examples 
 #' \dontrun{
 #' data(akodon_sites) # occurrence data 
+#' data(akodon_newick) # phylogenetic tree
+#' 
 #' akodon_pa <- akodon_sites %>% 
 #'     dplyr::select(-LONG, -LAT)
-#' data(akodon_newick)
+#'     
 #' spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
 #' akodon_pa_tree <- akodon_pa[, spp_in_tree]
-#' data(akodon_newick) # phylogenetic tree
+#' 
 #' regions <- calc_evoregions(comm = akodon_pa_tree, phy = akodon_newick)
 #' site_region <- regions$cluster_evoregions # classification of each community in regions
 #' }
@@ -69,7 +73,8 @@ calc_evoregions <-
            method.clust = "kmeans",
            stat.clust = "BIC", 
            n.iter.clust = 1e7, 
-           criterion.clust = "diffNgroup"
+           criterion.clust = "diffNgroup", 
+           seed = NULL
 )
 {
   
@@ -114,6 +119,8 @@ calc_evoregions <-
   cum.sum.thresh.bray <- cumsum(as.data.frame(values.bray[, 2])
   )[1:thresh.bray, ][3]
   vec.bray <- pcps.comm.bray$vectors
+  
+  set.seed(seed)
   clust.vec.bray <- adegenet::find.clusters(vec.bray[, 1:thresh.bray], 
                                             clust = NULL, 
                                             choose.n.clust = FALSE, 

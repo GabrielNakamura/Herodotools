@@ -63,7 +63,6 @@ Imports:
     rlang,
     rlist,
     scales,
-    stringr,
     SYNCSA,
     vegan
 VignetteBuilder:
@@ -90,7 +89,9 @@ Suggests:
     rnaturalearthdata,
     sf,
     terra,
+    testthat (>= 3.0.0),
     tidyr
 Remotes: 
     nmatzke/BioGeoBEARS,
     vanderleidebastiani/daee
+Config/testthat/edition: 3
