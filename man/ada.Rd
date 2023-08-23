@@ -2,46 +2,51 @@
 % Please edit documentation in R/function_ada.R
 \name{ada}
 \alias{ada}
-\title{Ancestral Diversity Analysis}
+\title{Ancestral Diversity Analysis for assemblage data}
 \usage{
 ada(
   x,
   phy,
-  sp.bin = "Sturges",
+  node.names = FALSE,
+  type = c("discrete", "continuous"),
   marginal = FALSE,
+  sp.bin = 15,
   lik.threshold = FALSE,
-  threshold = 0.7,
-  compute.fields = F
+  threshold = 0.2,
+  compute.node.by.sites = FALSE,
+  compute.fields = F,
+  allowSplit = T,
+  credMass = 0.95,
+  compute.metrics = FALSE
 )
 }
 \arguments{
-\item{x}{Community occurrence matrix. Rows are sites and columns are species}
+\item{x}{}
 
-\item{phy}{Phylogenetic tree}
+\item{phy}{}
 
-\item{sp.bin}{Character indicating the methods to be used to compute the number of time slices in which metrics will be computed. Default is "Sturges"}
+\item{node.names}{}
 
-\item{marginal}{Logical indicating}
+\item{type}{}
 
-\item{lik.threshold}{Logical indicating if some threshold value will be used to select the likelihood values of ancestor species in a site. Default is TRUE}
+\item{marginal}{}
 
-\item{threshold}{Scalar indicating the threshold value used to select the likelihood of a given species be present at a site}
+\item{sp.bin}{}
 
-\item{compute.fields}{Logical, indicates if phylogenetic fields will be computed. Default is FALSE}
-}
-\value{
-A list of size eight containing the following objects
-\item{Phylogeny}{Phylogenetic tree} \item{Root.Age}{Numeric containing root age of the tree used}
-\item{Per.node.ancestral.area}{Matrix containing the ancestors (nodes) for each species }
-\item{Diversity.Through.Time}{Age of each node in the phylogeny}
-\item{Cell.Metric}{Matrix containing the assemblage level metrics for richness and ancestral diversity}
+\item{lik.threshold}{}
+
+\item{threshold}{}
+
+\item{compute.node.by.sites}{}
+
+\item{compute.fields}{}
+
+\item{allowSplit}{}
+
+\item{credMass}{}
+
+\item{compute.metrics}{}
 }
 \description{
-This function computes different assemblage level
-metrics using an ancestral community reconstruction
+Ancestral Diversity Analysis for assemblage data
 }
-\details{
-ada function calculates an ancestral assemblage reconstruction for each assemblage
-in a matrix using for this reconstruction \link[ape]{ace} function from ape package
-}
-\keyword{internal}
