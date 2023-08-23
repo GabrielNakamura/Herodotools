@@ -57,7 +57,8 @@
 <span>  method.clust <span class="op">=</span> <span class="st">"kmeans"</span>,</span>
 <span>  stat.clust <span class="op">=</span> <span class="st">"BIC"</span>,</span>
 <span>  n.iter.clust <span class="op">=</span> <span class="fl">1e+07</span>,</span>
-<span>  criterion.clust <span class="op">=</span> <span class="st">"diffNgroup"</span></span>
+<span>  criterion.clust <span class="op">=</span> <span class="st">"diffNgroup"</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -114,6 +115,11 @@ for automatic selection of the optimal number of clusters.
 See <code>criterion</code> argument in <code><a href="https://rdrr.io/pkg/adegenet/man/find.clusters.html" class="external-link">find.clusters</a></code> for an explanation
 of these procedures.</p></dd>
 
+
+<dt>seed</dt>
+<dd><p>default NULL. Set a seed to the <code><a href="https://rdrr.io/pkg/adegenet/man/find.clusters.html" class="external-link">find.clusters</a></code>,
+which provides the same names for cluster groups</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -141,12 +147,14 @@ used</p></div>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon_sites</span><span class="op">)</span> <span class="co"># occurrence data </span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon_newick</span><span class="op">)</span> <span class="co"># phylogenetic tree</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">akodon_pa</span> <span class="op">&lt;-</span> <span class="va">akodon_sites</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
 <span class="r-in"><span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">LONG</span>, <span class="op">-</span><span class="va">LAT</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon_newick</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    </span></span>
 <span class="r-in"><span><span class="va">spp_in_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">akodon_pa</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">akodon_newick</span><span class="op">$</span><span class="va">tip.label</span></span></span>
 <span class="r-in"><span><span class="va">akodon_pa_tree</span> <span class="op">&lt;-</span> <span class="va">akodon_pa</span><span class="op">[</span>, <span class="va">spp_in_tree</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">akodon_newick</span><span class="op">)</span> <span class="co"># phylogenetic tree</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu">calc_evoregions</span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa_tree</span>, phy <span class="op">=</span> <span class="va">akodon_newick</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">site_region</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">$</span><span class="va">cluster_evoregions</span> <span class="co"># classification of each community in regions</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>

@@ -158,6 +158,14 @@ read the ggplot2 package to produce some maps</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="va">coastline</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_coastline.html" class="external-link">ne_coastline</a></span><span class="op">(</span>returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
+<span><span class="co">#&gt; which was just loaded, will retire in October 2023.</span></span>
+<span><span class="co">#&gt; Please refer to R-spatial evolution reports for details, especially</span></span>
+<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
+<span><span class="co">#&gt; It may be desirable to make the sf package available;</span></span>
+<span><span class="co">#&gt; package maintainers should consider adding sf to Suggests:.</span></span>
+<span><span class="co">#&gt; The sp package is now running under evolution status 2</span></span>
+<span><span class="co">#&gt;      (status 2 uses the sf package in place of rgdal)</span></span>
 <span><span class="va">map_limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">95</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>,</span>
 <span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">55</span>, <span class="fl">12</span><span class="op">)</span></span>
@@ -239,7 +247,7 @@ code:</p>
 <span><span class="va">r_evoregion</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">evoregion_df</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Converting evoregion to a spatial polygon data frame, so it can be plotted</span></span>
-<span><span class="va">sf_evoregion</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r_evoregion</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">sf_evoregion</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r_evoregion</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span></span>
@@ -737,15 +745,7 @@ assemblages. For this we use the function
 <span>                  ancestral.area <span class="op">=</span> <span class="va">node_area</span>, </span>
 <span>                  biogeo <span class="op">=</span> <span class="va">biogeo_area</span>, </span>
 <span>                  PD <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                  PE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; rgeos version: 0.6-3, (SVN revision 696)</span></span>
-<span><span class="co">#&gt;  GEOS runtime version: 3.10.2-CAPI-1.16.0 </span></span>
-<span><span class="co">#&gt;  Please note that rgeos will be retired during October 2023,</span></span>
-<span><span class="co">#&gt; plan transition to sf or terra functions using GEOS at your earliest convenience.</span></span>
-<span><span class="co">#&gt; See https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
-<span><span class="co">#&gt;  GEOS using OverlayNG</span></span>
-<span><span class="co">#&gt;  Linking to sp version: 1.6-0 </span></span>
-<span><span class="co">#&gt;  Polygon checking: TRUE</span></span></code></pre></div>
+<span>                  PE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>As the other metrics we can plot PD<sub>in-situ</sub> and
 PE<sub>in-situ</sub> in a map. Here we illustrate it by plotting PE and
 PE<sub>in-situ</sub> metrics for comparison.</p>
