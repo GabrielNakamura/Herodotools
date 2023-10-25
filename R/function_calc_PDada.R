@@ -25,7 +25,7 @@ calc_PD_ada <-
     
     # nodes community
     
-    comm_obs_total <- which(x["comm_10", ] == 1) # spp observed
+    comm_obs_total <- which(comm["comm_10", ] == 1) # spp observed
     
     # core components
     phy <- ape::makeNodeLabel(phy = tree, method = "number", prefix = "Node")
@@ -45,7 +45,7 @@ calc_PD_ada <-
     names_potential <- unique(unlist(lapply(tip_potential, names)))
     
     # PDs
-    PD_obs_base <- picante::pd(samp = t(as.matrix(x[comm.name, ])), tree = phy, include.root = TRUE)
+    PD_obs_base <- picante::pd(samp = t(as.matrix(comm[comm.name, ])), tree = phy, include.root = TRUE)
     PD_insitu <- 
       picante::pd(samp = matrix(1, nrow = 1, ncol = length(tips_in_situ), dimnames = list("comm", tips_in_situ)),
                   tree = phy)

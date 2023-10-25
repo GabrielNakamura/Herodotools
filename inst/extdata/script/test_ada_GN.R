@@ -1,12 +1,23 @@
 devtools::load_all()
-tree <- geiger::sim.bdtree(n = 10)
-comm <- matrix(data = rpois(200, lambda = 1), 
+tree1 <- geiger::sim.bdtree(n = 10)
+comm1 <- matrix(data = rpois(200, lambda = 1), 
                nrow = 20,
                ncol = 10,
-               dimnames = list(paste("comm", 1:20, sep = "_"), tree$tip.label))
-comm <- ifelse(comm >= 1, 1, 0)
-phy = tree
-x = comm
+               dimnames = list(paste("comm", 1:20, sep = "_"), tree1$tip.label))
+res_ada <- ada_core(x = comm1, phy = tree1, type = "continuous")
+reconstruction <- phyloregion::dense2long(t(ifelse(res_ada$reconstruction >= 0.6, 1, 0))) # nodes predicted from reconstruction
+phylo_only <- phyloregion::dense2long(res_ada$phylogeny) # Nodes extracted from phylogeny 
+nodes_reconstruction <-
+  reconstruction %>% 
+  subset(grids == "comm_2") # reconstruction
+nodes_phylogeny <- 
+  phylo_only %>% 
+  subset(grids == "comm_2") # phylogeny
+
+
+comm1 <- ifelse(comm >= 1, 1, 0)
+phy = tree1
+x = comm1
 type = "continuous"
 marginal = FALSE
 sp.bin = 15
