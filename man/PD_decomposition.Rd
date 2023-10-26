@@ -16,7 +16,8 @@ PD_decomposition(comm, ada.obj, phy, threshold)
 \item{threshold}{a scalar indicating the threshold used to consider the presence of a species in a community}
 }
 \value{
-a data frame with three columns. partition indicates the PD component, value is the values of partitions, community is the name of community
+a list of length two. The element of the list named decomposition is a data frame with decomposition values of PD for all communities.
+The element of the list named tree_table_potential is a tibble with node information for the potential tree for each community
 }
 \description{
 Phylogenetic diversity decomposition

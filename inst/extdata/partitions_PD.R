@@ -5,9 +5,9 @@ tree_test <- ape::read.tree(text = tree_topo)
 tree_test <- ape::makeNodeLabel(tree_test, prefix = "N", method = "number")
 
 # resultado da reconstrucao 
-comm_obs <- matrix(1, nrow = 1, ncol = 4, dimnames = list("comm_1", c("s1", "s2", "s8", "s9")))
-nodes_reconstruction <- data.frame(comm = "comm_1", nodes = c("N3", "N2", "N1"))
-nodes_comm <- data.frame(comm = "comm_1", nodes = c("N3", "N1", "N5"))
+comm_obs <- matrix(1, nrow = 1, ncol = 5, dimnames = list("comm_1", c("s1", "s2", "s5", "s8", "s9")))
+nodes_reconstruction <- data.frame(comm = "comm_1", nodes = c("N3", "N2", "N7", "N8", "N5"))
+nodes_comm <- data.frame(comm = "comm_1", nodes = c("N3", "N1", "N6", "N5"))
 
 # encontrando a arvore potencial
 node_sequence <- gsub(pattern = "N", replacement = "", unique(c(nodes_reconstruction$nodes, nodes_comm$nodes)))
@@ -31,23 +31,41 @@ tree_potential$node.label[match(node_emmigration, tree_potential$node.label)] <-
 node_exsitu <- tree_potential$node.label[-grep(pattern = "_", tree_potential$node.label)] 
 tree_potential$node.label[match(node_exsitu, tree_potential$node.label)] <- paste(tree_potential$node.label[match(node_exsitu, tree_potential$node.label)], "ESD", sep = "_")
 
-# PD
+# table node combinations
 table_tree_potential <- tidytree::as_tibble(tree_potential)
 library(dplyr)
 library(tidyr)
+
 table_tree_potential2 <- 
   table_tree_potential %>% 
   mutate(pres = ifelse(label %in% colnames(comm_obs), "pres", "abs")) %>% 
   mutate(ancestor = table_tree_potential$label[table_tree_potential$parent]) %>% 
   mutate(descendant = table_tree_potential$label[table_tree_potential$node]) %>% 
-  mutate(partition1 = gsub(pattern = ".*_", replacement = "", x = ancestor)) %>% 
-  mutate(partition2 = gsub(pattern = ".*_", replacement = "", x = descendant)) %>% 
-  mutate(partition.IS = ifelse(partition1 == "IS" | partition2 == "IS", "IS", NA)) %>% 
-  mutate(partition.IM = ifelse(partition1 == "IM" & pres == "pres" | partition1 == "ESD" & pres == "pres", "IM", NA)) %>% 
-  mutate(partition.EM = ifelse(partition1 == "EM" & partition2 == "ESD", "EM", NA)) %>% 
-  mutate(partition.ESD = ifelse(is.na(partition.IS) == TRUE & is.na(partition.IM) == TRUE & is.na(partition.EM) == TRUE, "ESD", NA))
-  
-# calculo PD
+  mutate(ancestor1 = gsub(pattern = ".*_", replacement = "", x = ancestor)) %>% 
+  mutate(descendent1 = gsub(pattern = ".*_", replacement = "", x = descendant)) %>% 
+  mutate(partition.IS = ifelse(ancestor1 == "IS" & descendent1 == "IS" |
+                                 ancestor1 == "IS" & descendent1 == "EM" |
+                                 ancestor1 == "EM" & descendent1 == "IS" | 
+                                 ancestor1 == "EM" & descendent1 == "EM" |
+                                 ancestor1 == "IS" & pres == "pres" |
+                                 ancestor1 == "EM" & pres == "pres",
+                               "IS", NA)) %>% 
+  mutate(partition.IM = ifelse(ancestor1 == "IM" & descendent1 == "IS" |
+                                 ancestor1 == "IM" & descendent1 == "EM",
+                               "IM", NA)) %>% 
+  mutate(partition.EM = ifelse(ancestor1 == "IS" & descendent1 == "IM" |
+                                 ancestor1 == "EM" & descendent1 == "ESD" |
+                                 ancestor1 == "EM" & descendent1 == "IM" | 
+                                 ancestor1 == "EM" & pres == "abs" & descendent1 != "IS", 
+                               "EM", NA)) %>% 
+  mutate(partition.ESD = ifelse(ancestor1 == "ESD" & descendent1 == "ESD" |
+                                  ancestor1 == "ESD" & pres == "abs", "ESD", NA)) %>% 
+  mutate(partition.unknown = ifelse(ancestor1 == "IM" & descendent1 == "IM", "unknown", NA))
+
+
+
+
+# PD decomposition
 
 PDinsitu <- 
   table_tree_potential2 %>% 
@@ -71,8 +89,20 @@ PDexsitu <-
   select(branch.length) %>% 
   sum(na.rm = TRUE)
 
-PDtotal <- PDinsitu + PDimmigration + PDemmigration + PDexsitu
+PDunknown <- 
+  table_tree_potential2 %>% 
+  filter(partition.unknown == "unknown") %>% 
+  select(branch.length) %>% 
+  sum(na.rm = TRUE)
+
+
+PDtotal <- PDinsitu + PDimmigration + PDemmigration + PDexsitu + PDunknown
 
 data_res <- 
-  data.frame(partition = c("PDinsitu", "PDimmigration", "PDemmigration", "PDexsitu", "PDtotal"), 
-             value = c(PDinsitu, PDimmigration, PDemmigration, PDexsitu, PDtotal), community = comm_names[i])
+  data.frame(partition = c("PDinsitu", "PDimmigration", "PDemmigration", "PDexsitu", "PDtotal", "PDunknown"), 
+             value = c(PDinsitu, PDimmigration, PDemmigration, PDexsitu, PDtotal, PDunknown), community = "comm_1")
+
+
+PDinsitu + PDimmigration
+
+picante::pd(matrix(1, nrow = 1, ncol = 5, dimnames = list("comm_1", c("s1", "s2", "s5", "s8", "s9"))), tree = tree_potential)
