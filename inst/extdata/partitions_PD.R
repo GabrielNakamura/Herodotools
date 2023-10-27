@@ -76,7 +76,21 @@ PDimmigration <-
   table_tree_potential2 %>% 
   filter(partition.IM == "IM") %>% 
   select(branch.length) %>% 
+  mutate(qnt0 = lapply(branch.length, function(x) quantile(seq(from = 0.0001, to = x, by = 0.001)))[1]) %>% 
+  mutate(qnt25 = lapply(branch.length, function(x) quantile(seq(from = 0.0001, to = x, by = 0.001)))[[1]][2]) %>% 
+  mutate(qnt50 = lapply(branch.length, function(x) quantile(seq(from = 0.0001, to = x, by = 0.001)))[[1]][3])
+
   sum(na.rm = T)
+
+unlist(lapply(5, function(x) quantile(seq(from = 0.0001, to = x, by = 0.001))))
+data("iris")
+iris %>% 
+  mutate(Max.Len= purrr::pmap_dbl(list(Sepal.Length, Petal.Length), max))
+
+table_tree_potential2 %>% 
+  filter(partition.IM == "IM") %>% 
+  select(branch.length) %>% 
+  mutate(qnt0 = purrr::pmap_dbl(list(branch.length), quantile(seq(from = 0.0001,  by = 0.001))))
 
 PDemmigration <- 
   table_tree_potential2 %>% 
