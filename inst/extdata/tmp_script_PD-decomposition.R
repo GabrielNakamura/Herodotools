@@ -1,3 +1,6 @@
+library(dplyr)
+devtools::load_all()
+
 # primates
 res_primates <- load(here::here("inst", "extdata", "primates_PD_decomp.RData")) # results from primates
 res_ada_primates <- load(here::here("inst", "extdata", "Primates_ada_test2.RData"))
@@ -8,9 +11,17 @@ threshold = 0.9  # threshold to be used in function
 
 # tiranideos
 
-res_tiranideo <- load(here::here("inst", "extdata", "ada_tiranideos.RData")) # results from primates
+res_tiranideo <- load(here::here("inst", "extdata",  "ada_tiranideos.RData")) # results from primates
 comm = comm # community matrix
 ada.obj = ada.obj # output from ada reconstruction
+phy = phy # phylogenetic tree
+threshold = 0.9  # threshold to be used in function
+
+# sigmodontideos
+
+res_sigmo <- load(here::here("inst", "extdata", "ada_sigmo", "adaobj_sig.RData")) # results from primates
+comm = comm # community matrix
+ada.obj = ada.obj.sig # output from ada reconstruction
 phy = phy # phylogenetic tree
 threshold = 0.9  # threshold to be used in function
 
@@ -27,8 +38,8 @@ PD_decomposition <-
     reconstruction <- phyloregion::dense2long(t(ifelse(ada.obj$reconstruction >= threshold, 1, 0))) # nodes predicted from reconstruction
     community <- phyloregion::dense2long(ada.obj$phylogeny) # Nodes extracted from community phylogeny 
     phy_tibble <- tidytree::as_tibble(phy)
-    for(i in 2001:3100){
-      # i = 500
+    for(i in length(list_res)){
+      # i = 200
       # setting a progress bar
       pb <- txtProgressBar(min = 0,      
                            max = length(list_res), 
@@ -43,15 +54,27 @@ PD_decomposition <-
       nodes_comm <- 
         community %>% 
         subset(grids == comm_names[i]) # phylogeny
+      spp_comm <- names(which(comm[i, ] == 1))
+      comm_tible <- phy_tibble[match(c(spp_comm, nodes_comm$species), phy_tibble$label), ]
+      spp_potential <- do.call(rbind, tidytree::offspring(phy_tibble, nodes_reconstruction$species)) %>% 
+        distinct(label) # species in observed communities
+      spp_potential2 <- phy$tip.label[phy$tip.label %in% spp_potential$label] # species names from nodes estimated in reconstruction
+      spp_potential_all <- unique(c(spp_potential2, spp_comm)) # joining community and reconstruction 
+      tree_potential <- keep.tip(phy = phy, tip = spp_potential_all) # keeping only species observed in communities and estimated in reconstruction
       
       # finding the most basal node among all set of nodes including reconstruction and community nodes for a given community
-      node_sequence <- gsub(pattern = "Node", replacement = "", unique(c(nodes_reconstruction$species, nodes_comm$species)))
-      data_nodes <- data.frame(nodes = unique(c(nodes_reconstruction$species, nodes_comm$species)), node_sequence = as.numeric(node_sequence))
-      nodes_all <- phy_tibble[phy_tibble$label %in% data_nodes$nodes, "node"]$node
-      spp_potential <- unique(unlist(lapply(nodes_all, function(x) phytools::getDescendants(tree = phy, node = x)))) %in% 1:length(phy$tip.label)
-      desc_potential <- unique(unlist(lapply(nodes_all, function(x) phytools::getDescendants(tree = phy, node = x))))[spp_potential]
-      mrca_potential <- ape::getMRCA(phy = phy, tip = desc_potential)
-      tree_potential <- ape::extract.clade(phy = phy, node = mrca_potential)
+      # node_sequence <- gsub(pattern = "Node", replacement = "", unique(c(nodes_reconstruction$species, nodes_comm$species)))
+      # data_nodes <- data.frame(nodes = unique(c(nodes_reconstruction$species, nodes_comm$species)), node_sequence = as.numeric(node_sequence))
+      # nodes_all <- phy_tibble[phy_tibble$label %in% data_nodes$nodes, "node"]$node
+      # nodes_rec <- phy_tibble[phy_tibble$label %in% nodes_reconstruction$species, "node"]$node  
+      # 
+      # 
+      # spp_potential <- unique(unlist(lapply(nodes_all, function(x) phytools::getDescendants(tree = phy, node = x)))) %in% 1:length(phy$tip.label)
+      # spp_potential_rec <- unique(unlist(lapply(nodes_rec, function(x) phytools::getDescendants(tree = phy, node = x)))) %in% 1:length(phy$tip.label)
+      
+      # desc_potential <- unique(unlist(lapply(nodes_all, function(x) phytools::getDescendants(tree = phy, node = x))))[spp_potential]
+      # mrca_potential <- ape::getMRCA(phy = phy, tip = desc_potential)
+      # tree_potential <- ape::extract.clade(phy = phy, node = mrca_potential)
       
       
       # naming node categories
@@ -97,15 +120,21 @@ PD_decomposition <-
                                               ancestor1 == "EM" & descendent1 == "ESD" |
                                               ancestor1 == "EM" & descendent1 == "IM" | 
                                               ancestor1 == "IS" & descendent1 == "ESD" |
-                                              ancestor1 == "EM" & pres == "abs" & descendent1 != "IS", 
+                                              ancestor1 == "EM" & pres == "abs" & is.na(partition.IS) == TRUE, 
                                             "EM", NA)) %>% 
         dplyr::mutate(partition.ESD = ifelse(ancestor1 == "ESD" & descendent1 == "ESD" |
                                                ancestor1 == "ESD" & descendent1 == "IM" |
                                                ancestor1 == "ESD" & pres == "abs", "ESD", NA)) %>% 
-        dplyr::mutate(partition.unknown = ifelse(is.na(partition.IS) & is.na(partition.IM) & is.na(partition.EM) & is.na(partition.ESD), "unknown", "known")) %>% 
-        dplyr::mutate(class.unknown = dplyr::case_when(partition.unknown == "unknown" ~ ifelse(pres == "pres", paste(ancestor1, pres, sep = "_"), paste(ancestor1, descendent1, sep = "_")))) %>% 
-        dplyr::mutate(class.known = dplyr::case_when(partition.unknown == "known" ~ ifelse(pres == "pres", paste(ancestor1, pres, sep = "_"), paste(ancestor1, descendent1, sep = "_"))))
+        dplyr::mutate(partition.undefined = ifelse(is.na(partition.IS) & is.na(partition.IM) & is.na(partition.EM) & is.na(partition.ESD), "undefined", "defined")) %>% 
+        dplyr::mutate(class.undefined = dplyr::case_when(partition.undefined == "undefined" ~ ifelse(pres == "pres", paste(ancestor1, pres, sep = "_"), paste(ancestor1, descendent1, sep = "_")))) %>% 
+        dplyr::mutate(class.defined = dplyr::case_when(partition.undefined == "defined" ~ ifelse(pres == "pres", paste(ancestor1, pres, sep = "_"), paste(ancestor1, descendent1, sep = "_"))))
      
+      # adding a group to all species - this will be useful to plot the partitions
+      table_tree_potential2 <- 
+        table_tree_potential2 %>% 
+        mutate(group = coalesce(partition.IS, partition.IM, partition.EM, partition.ESD)) %>% 
+        mutate(group = ifelse(is.na(group) == T, "undefined", group)) 
+      
       # calculating PD components
       PDinsitu <- 
         table_tree_potential2 %>% 
@@ -129,19 +158,19 @@ PD_decomposition <-
         dplyr::select(branch.length) %>% 
         sum(na.rm = TRUE)
       
-      PDunknown <- 
+      PDundefined <- 
         table_tree_potential2 %>% 
-        filter(partition.unknown == "unknown") %>% 
+        filter(partition.undefined == "undefined") %>% 
         select(branch.length) %>% 
         sum(na.rm = TRUE)
       
       
-      PDtotal <- PDinsitu + PDimmigration + PDemmigration + PDexsitu + PDunknown
+      PDtotal <- PDinsitu + PDimmigration + PDemmigration + PDexsitu + PDundefined
       
       #joining all results
       data_res <- 
-        data.frame(partition = c("PDinsitu", "PDimmigration", "PDemmigration", "PDexsitu", "PDtotal", "PDunknown"), 
-                   value = c(PDinsitu, PDimmigration, PDemmigration, PDexsitu, PDtotal, PDunknown), community = comm_names[i])
+        data.frame(partition = c("PDinsitu", "PDimmigration", "PDemmigration", "PDexsitu", "PDtotal", "PDundefined"), 
+                   value = c(PDinsitu, PDimmigration, PDemmigration, PDexsitu, PDtotal, PDundefined), community = comm_names[i])
       table_tree_potential_res <- table_tree_potential2
       list_res[[i]] <- data_res
       list_res2[[i]] <- table_tree_potential_res
@@ -159,15 +188,15 @@ PD_decomposition <-
     # calculating unknown node links for each community
     
     list_unknown_count <- 
-      lapply(list_res_final$tree_table_potential[1:10], function(x){
+      lapply(list_res_final$tree_table_potential, function(x){
       x %>% 
-        filter(partition.unknown == "unknown") %>% 
-        group_by(class.unknown) %>% 
+        filter(partition.undefined == "undefined") %>% 
+        group_by(class.undefined) %>% 
         add_count() %>% 
         distinct() %>% 
-        select(parent, node, branch.length, label, ancestor, descendant, class.unknown, n)
+        select(parent, node, branch.length, label, ancestor, descendant, class.undefined, n)
     })
-    list_res_final$unknown <- list_unknown_count
+    list_res_final$undefined <- list_undefined_count
     
     # matrix of PD decomposition - dense format
     
