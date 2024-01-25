@@ -27,15 +27,17 @@ threshold = 0.9  # threshold to be used in function
 
 
 # Muroidea
-res_muro <- load(here::here("inst", "extdata", "Muroidea.RData")) # results from primates
+res_muro <- load(here::here("inst", "extdata", "Muroidea_test.RData")) # results from primates
 comm = comm # community matrix
-comm <- comm[ -which(rowSums(comm) == 0 | rowSums(comm) == 1 | rowSums(comm) == 2 | rowSums(comm) == 3), ]
+comm <- comm[ -which(rowSums(comm) == 0 | rowSums(comm) == 1 | rowSums(comm) == 2), ]
 ada.obj = ada.obj.mur # output from ada reconstruction
 phy = phy # phylogenetic tree
 threshold = 0.9  # threshold to be used in function
 
-test_muro <- PD_decomposition(comm = comm, ada.obj = ada.obj, phy = phy, threshold = threshold)
-
+test_muro <- PD_decomposition(comm = comm.test, ada.obj = ada.obj.mur, phy = phy, threshold = 0.9)
+test2 <- readRDS(here::here("inst", "extdata", "res_muroidea.rds"))
+test2$decomp_potential$dense_matrix_PD
+test2$decomp_faith$dense_matrix_PD
 ### Versão leandro PD decomposition
 
 PD_decomposition <- 

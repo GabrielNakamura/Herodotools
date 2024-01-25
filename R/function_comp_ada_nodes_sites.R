@@ -1,3 +1,21 @@
+get_spp_nodes2 <- 
+  function(tree){
+    tree_base <- phylobase::phylo4(tree)
+    n.nodes <- tree$Nnode
+    n.spp <- length(tree$tip.label)
+    spxnode <- matrix(data = 0, 
+                      nrow =  length(tree$tip.label), 
+                      ncol =  n.nodes, 
+                      dimnames = list(tree$tip.label,
+                                      tree$node.label)
+    )
+    for (i in 1:n.spp){
+      anc_nodes <- phylobase::ancestors(phy = tree_base, node = i)
+      anc_nodes <- anc_nodes - length(tree$tip.label)
+      spxnode[i, anc_nodes] <- 1
+    }
+    t(spxnode)
+  }
 
 #' Compute a matrix of node occurrences in each site
 #'
@@ -17,15 +35,20 @@ comp_ada_nodes_sites <-
                             ncol = nrow(comm),
                             dimnames = list(phy$node.label, rownames(comm))
                             )
-    names_node <- phy$node.label
-    for(i in 1:length(names_node)){
+    # names_node <- phy$node.label
+    node_comp <- suppressWarnings(get_spp_nodes2(phy))  
+    for(i in 1:phy$Nnode){
+      # i = 4
       for(j in 1:nrow(comm)){
-        comm_samp <- comm[, which(comm[j, ] == 1)]
-        samp_nodes <- picante::prune.sample(samp = comm_samp, phylo = phy)$node.label
-        node_samp_mat[i, j] <- ifelse(names_node[i] %in% samp_nodes, 1, 0)
+        # j = 1
+        comm_samp <- comm[i, which(comm[j, ] == 1)]
+        node_samp <- which(rowSums(node_comp[, names(comm_samp)]) >= 1)
+        node_samp_mat[names(node_samp), j] <- 1
+        # node_samp_mat[i, j] <- ifelse(names_node[i] %in% node_samp, 1, 0)
       }
     }
     node_samp_mat <- t(node_samp_mat)
+    node_samp_mat <- ifelse(is.na(node_samp_mat), 0, node_samp_mat)
     if(long == TRUE){
       node_samp_mat <- phyloregion::dense2long(node_samp_mat)
       return(node_samp_mat)
