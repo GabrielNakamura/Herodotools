@@ -34,18 +34,13 @@ comp_ada_nodes_sites <-
                             nrow = phy$Nnode,
                             ncol = nrow(comm),
                             dimnames = list(phy$node.label, rownames(comm))
-                            )
-    # names_node <- phy$node.label
+    )
     node_comp <- suppressWarnings(get_spp_nodes2(phy))  
-    for(i in 1:phy$Nnode){
-      # i = 4
-      for(j in 1:nrow(comm)){
-        # j = 1
-        comm_samp <- comm[i, which(comm[j, ] == 1)]
-        node_samp <- which(rowSums(node_comp[, names(comm_samp)]) >= 1)
-        node_samp_mat[names(node_samp), j] <- 1
-        # node_samp_mat[i, j] <- ifelse(names_node[i] %in% node_samp, 1, 0)
-      }
+    for(j in 1:nrow(comm)){
+      comm_samp <- comm[j, which(comm[j, ] == 1)]
+      tree_comm <- ape::keep.tip(phy = phy, tip = names(comm_samp))
+      nodes_comm <- rownames(get_spp_nodes2(tree_comm))
+      node_samp_mat[nodes_comm, j] <- 1
     }
     node_samp_mat <- t(node_samp_mat)
     node_samp_mat <- ifelse(is.na(node_samp_mat), 0, node_samp_mat)
@@ -56,4 +51,3 @@ comp_ada_nodes_sites <-
       return(node_samp_mat)
     }
   }
-
