@@ -16,7 +16,7 @@ partition_pd <-
     
     data2 <- 
       data %>% 
-      dplyr::mutate(pres = ifelse(label %in% comm, "pres", "abs")) %>% 
+      dplyr::mutate(pres = ifelse(label %in% colnames(comm), "pres", "abs")) %>% 
       dplyr::mutate(ancestor = data$label[data$parent]) %>% 
       dplyr::mutate(descendant = data$label[data$node]) %>% 
       dplyr::mutate(ancestor1 = gsub(pattern = ".*_", replacement = "", x = ancestor)) %>% 
@@ -34,7 +34,7 @@ partition_pd <-
                                             ancestor1 == "ESD" & descendent1 == "EM"|
                                             ancestor1 == "ESD" & pres == "pres"| 
                                             ancestor1 == "IM" & pres == "pres",
-                                          "IM", NA)) %>% 
+                                          "IM", NA)) %>%
       dplyr::mutate(partition.EM = ifelse(ancestor1 == "IS" & descendent1 == "IM" |
                                             ancestor1 == "EM" & descendent1 == "ESD" |
                                             ancestor1 == "EM" & descendent1 == "IM" | 

@@ -35,7 +35,6 @@ comp_ada_nodes_sites <-
                             ncol = nrow(comm),
                             dimnames = list(phy$node.label, rownames(comm))
     )
-    node_comp <- suppressWarnings(get_spp_nodes2(phy))  
     for(j in 1:nrow(comm)){
       comm_samp <- comm[j, which(comm[j, ] == 1)]
       tree_comm <- ape::keep.tip(phy = phy, tip = names(comm_samp))

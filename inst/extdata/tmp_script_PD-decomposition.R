@@ -42,8 +42,11 @@ test2$decomp_faith$dense_matrix_PD
 
 # simulacao
 
-comm = comm.sim
-ada.obj = node_samp_mat
+comm = comm.sim2
+phy = phy.sim2
+threshold = 0.7
+
+ada.obj = ada_obj
 
 
 #######
@@ -93,6 +96,7 @@ PD_decomposition <-
       # starting calculation of PD components
       if(is.null(df_offspring_rec) == TRUE){ # when communities were not reconstructed at all
         tree_potential <- ape::keep.tip(phy = phy, tip = spp_comm)
+        spp_potential_all <- tree_potential$tip.label
       } else{
         spp_potential <- 
           df_offspring_rec %>% 
