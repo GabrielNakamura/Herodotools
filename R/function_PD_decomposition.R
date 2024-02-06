@@ -4,6 +4,7 @@
 #' @param ada.obj an object calculated from \code{\link{ada_core}} containing community reconstruction 
 #' @param phy a newick object containing phylogenetic relationships among species
 #' @param threshold a scalar indicating the threshold used to consider the presence of a species in a community
+#' @param make.node.label Logical. If TRUE (the default) the nodes of the phylogeny will be named with the letter N preceding the number of the node
 #'
 #' @return a list of length two. The element of the list named decomposition is a data frame with decomposition values of PD for all communities.
 #'     The element of the list named tree_table_potential is a tibble with node information for the potential tree for each community
@@ -11,9 +12,11 @@
 #'
 #' @examples
 PD_decomposition <- 
-  function(comm, ada.obj, phy, threshold){
+  function(comm, ada.obj, phy, threshold, make.node.label = TRUE){
     comm <- ifelse(comm >= 1, 1, 0)
-    phy <- ape::makeNodeLabel(phy = phy, method = "number", prefix = "Node")
+    if(make.node.label == TRUE){
+      phy <- ape::makeNodeLabel(phy = phy, method = "number", prefix = "Node")
+    }
     comm_names <- rownames(comm)
     list_res <- vector(mode = "list", length = nrow(comm)) # object to receive potential tree partition
     list_res2 <- vector(mode = "list", length = nrow(comm)) # object to receive potential tree partition

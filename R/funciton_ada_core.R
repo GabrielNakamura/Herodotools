@@ -7,6 +7,7 @@
 #' @param lik.threshold Logical, default is FALSE
 #' @param threshold scalar indicating the threshold to be used when considering the presence of a lineage in a site
 #' @param compute.node.by.sites Logical, TRUE (default) computes a matrix of node occurrence by site
+#' @param make.node.label Logical, if TRUE (default) the nodes of the phylogeny will be named as the letter "N" preceding node number
 #'
 #' @return a list with three elements. reconstruction is the result of ancestral area reconstruction; phylogeny is the matrix containing
 #'     the occurrence of nodes in sites and joint.phylo.obs is the joint occurrence of nodes and species in phylonetic tree
@@ -20,7 +21,8 @@ ada_core <-
            type = c("discrete", "continuous"),
            lik.threshold = FALSE,
            threshold = 0.20, 
-           compute.node.by.sites = TRUE
+           compute.node.by.sites = TRUE, 
+           make.node.label = TRUE
            ){
     # Enter and organize data:
     match <- picante::match.phylo.comm(phy, x)
@@ -29,7 +31,9 @@ ada_core <-
     root.age <- max(cophenetic(phy))/2
     
     # Extract species by nodes matrix with Herodotools
-    phy <- ape::makeNodeLabel(phy = phy, method = "number", prefix = "Node")
+    if(make.node.label == TRUE){
+      phy <- ape::makeNodeLabel(phy = phy, method = "number", prefix = "Node")
+    }
     spp_nodes <- t(get_spp_nodes(tree = phy, node.prefix = "Node")) # alternative
     
     # Run Ancestral Area Reconstruction:
