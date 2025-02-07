@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' 
-ada_core <- 
+sbears <- 
   function(x, 
            phy, 
            type = c("discrete", "continuous"),
