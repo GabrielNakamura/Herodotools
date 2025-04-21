@@ -4,18 +4,20 @@
 \alias{calc_spp_association_evoreg}
 \title{Quantifying species association with evoregions}
 \usage{
-calc_spp_association_evoreg(comm, evo.vectors, spp.association = 0.7)
+calc_spp_association_evoreg(comm, group.comm, spp.association = 0.7)
 }
 \arguments{
-\item{comm}{A matrix with assemblages in rows and species in columns}
+\item{comm}{An assemblage/community matrix with communities in rows and species in columns}
 
-\item{evo.vectors}{A list returned from \code{calc_evoregions} function}
+\item{group.comm}{A vector containing the classification of each community in groups}
 
-\item{spp.association}{A scalar indicating the level of association that will be evaluated.
+\item{spp.association}{A scalar indicating the level of association that will be evaluated to assign species to groups.
 Default is 0.7}
 }
 \value{
-A matrix with species association value for each assemblage
+A matrix with species in the rows and one columns indicating the name of the group in which the species
+is associated given the level of species association used in the argument spp.association. If the species fail to reach the threshold
+it will be assigned the "fuzzy" status
 }
 \description{
 Quantifying species association with evoregions
@@ -28,9 +30,17 @@ data(akodon_newick) # phylogenetic tree
 spp_in_tree <- names(akodon_pa) \%in\% akodon_newick$tip.label
 akodon_pa_tree <- akodon_pa[, spp_in_tree]
 regions <- calc_evoregions(comm = akodon_pa, phy = akodon_newick) # compute evoregions
+groups <- regions$cluster_evoregions
 calc_spp_association_evoreg(comm = akodon_pa_tree, 
-                       evo.vectors = regions, 
+                       group.comm = groups, 
                        spp.association = 0.7) # calculate species association
 }
 
+}
+\references{
+Maestri, R. and Duarte, L.d.S. (2020). Evoregions: Mapping shifts in phylogenetic turnover across biogeographic regions.
+Methods Ecol. Evol., 11, 1652-1662.
+}
+\author{
+Leandro Duarte, Renan Maestri and Gabriel Nakamura \href{mailto:gabriel.nakamura.souza@gmail.com}{gabriel.nakamura.souza@gmail.com}
 }
