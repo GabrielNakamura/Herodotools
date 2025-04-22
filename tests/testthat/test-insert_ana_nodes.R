@@ -1,14 +1,27 @@
+library(ggtree)
+library(ape)
+library(dplyr)
+library(stringr)
+library(devtools)
+library(patchwork)
+
+load_all()
+
 # create data ----
 set.seed(42)
 tree <- rcoal(5)
 
-library(ggtree)
+plot(tree)
+nodelabels()
+tiplabels()
+
 
 # Create trait table
 node_area <- data.frame(
-  area = c("A", "B", "C", "D", "D", "A", "A", "BC", "D"), 
-  row.names = paste0("N", 1:9)
+  area = c("A", "A", "BC", "D"), 
+  row.names = paste0("N", 6:9)
 )
+
 
 # Find edge to insert on (e.g., tip 3)
 gdata <- ggtree(tree)$data
@@ -25,7 +38,7 @@ inserts <- tibble(
 )
 
 # Run function
-result <- insert_ana_nodes2(tree, inserts, node_area = node_area)
+result <- insert_ana_nodes(tree, inserts, node_area = node_area)
 
 # Now plot
 plt_phy <- ggtree(result$phylo) +
@@ -37,10 +50,8 @@ plt_dt <- ggtree(result$data) +
   geom_point2(color = "red", size = 3) +
   geom_text2(aes(label = node_area), vjust = -0.3, hjust = -0.3)
 
-plot(tree)
-nodelabels()
-tiplabels()
 
+plt_phy + plt_dt
 
 
 # Confirm tree height remains the same
