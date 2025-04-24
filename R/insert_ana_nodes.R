@@ -3,7 +3,25 @@ insert_ana_nodes <- function(tree, inserts, node_area = NULL) {
   library(dplyr)
   library(tibble)
   
-  # Assuming you have a phylo object `tree` and a node_area table
+  # Ensure node labels are present on the tree
+  if (is.null(tree$node.label)) {
+    tree$node.label <- paste0("N", seq_len(tree$Nnode) + Ntip(tree))
+  }
+  
+  
+  # Build initial ggtree data
+  p <- ggtree(tree)
+  gdata <- p$data
+  
+  # Ensure child and parent exist in the tree
+  if (!all(inserts$child %in% gdata$node)) {
+    stop("Some 'child' values in inserts do not exist in the tree.")
+  }
+  if (!all(inserts$parent %in% gdata$node)) {
+    stop("Some 'parent' values in inserts do not exist in the tree.")
+  }
+  
+  # Ensure match between node_area and internal nodes in tree
   expected_nodes <- tree$Nnode
   actual_nodes <- nrow(node_area)
   
@@ -12,11 +30,7 @@ insert_ana_nodes <- function(tree, inserts, node_area = NULL) {
                 " internal nodes, but node_area has ", actual_nodes, " rows."))
   }
   
-  # Ensure node labels are present on the tree
-  if (is.null(tree$node.label)) {
-    tree$node.label <- paste0("N", seq_len(tree$Nnode) + Ntip(tree))
-  }
-  
+
   # Check that node labels match rownames in node_area
   if (!is.null(node_area)) {
     expected_labels <- tree$node.label
@@ -25,9 +39,19 @@ insert_ana_nodes <- function(tree, inserts, node_area = NULL) {
     }
   }
   
-  # Build initial ggtree data
-  p <- ggtree(tree)
-  gdata <- p$data
+   # Ensure child-parent relationship is valid in the tree
+  valid_edges <- gdata %>% select(parent, node) %>% filter(parent != 0)
+  insert_edges <- inserts %>% select(parent, child)
+  if (!all(paste(insert_edges$parent, insert_edges$child) %in%
+           paste(valid_edges$parent, valid_edges$node))) {
+    stop("Some insertions refer to invalid parent-child relationships.")
+  }
+  
+  # No duplicate insertions at the same event_time on the same branch
+  if (any(duplicated(inserts %>% select(parent, child, event_time)))) {
+    stop("Duplicated insertion times for the same branch are not allowed.")
+  }
+  
   new_data <- gdata
   
   # Add node_area info to ggtree data (for original nodes)
@@ -95,10 +119,11 @@ insert_ana_nodes <- function(tree, inserts, node_area = NULL) {
   # Convert to phylo
   new_tree <- as.phylo(new_data)
   
-  # Reorder node_area using helper
-  new_node_area <- match_node_area(new_tree, new_data %>% 
-                                     transmute(node = paste0("ana_N", node), area = node_area) %>%
-                                     filter(!is.na(area)))
+  new_node_area <- new_data %>% 
+    as.data.frame() %>% 
+    transmute(node = label, area = node_area) %>%
+    filter(!is.na(area)) %>% 
+    column_to_rownames("node")
   
   return(list(
     phylo = new_tree,
@@ -106,14 +131,4 @@ insert_ana_nodes <- function(tree, inserts, node_area = NULL) {
   ))
 }
 
-
-
-match_node_area <- function(phylo, node_area) {
-  internal_nodes <- phylo$node.label
-  ana_nodes <- grep("^ana_N", rownames(node_area), value = TRUE)
-  ordered_labels <- c(phylo$tip.label, internal_nodes, ana_nodes)
-  
-  matched <- node_area[ordered_labels[ordered_labels %in% rownames(node_area)], , drop = FALSE]
-  return(matched)
-}
 
