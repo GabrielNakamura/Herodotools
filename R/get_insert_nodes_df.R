@@ -1,8 +1,7 @@
-get_insert_nodes_df <- function(bsm, phyllip.file, max.range.size) {
-  ana_events <- bsm$RES_ana_events_tables[[1]]
-  clado_events <- bsm$RES_clado_events_tables[[1]]
+get_insert_df <- function(bsm, phyllip.file, max.range.size) {
+  n_maps <- length(bsm$RES_clado_events_tables)
   
-  # Step 1: Get area/state mappings using BioGeoBEARS internals
+  # Step 1: Get area/state mappings
   tipranges <- BioGeoBEARS::getranges_from_LagrangePHYLIP(lgdata_fn = phyllip.file)
   areas <- BioGeoBEARS::getareas_from_tipranges_object(tipranges)
   states_list_0based <- cladoRcpp::rcpp_areas_list_to_states_list(
@@ -10,7 +9,6 @@ get_insert_nodes_df <- function(bsm, phyllip.file, max.range.size) {
     maxareas = max.range.size,
     include_null_range = TRUE
   )
-  
   ranges_list <- purrr::map_chr(states_list_0based, function(state) {
     if (length(state) == 1 && is.na(state)) {
       "_"
@@ -19,56 +17,50 @@ get_insert_nodes_df <- function(bsm, phyllip.file, max.range.size) {
     }
   })
   
-  # Step 2: Extract post-split pseudo-events
-  clado_shifts <- purrr::map_dfr(seq_len(nrow(clado_events)), function(i) {
-    row <- clado_events[i, ]
-    parent_state <- row$sampled_states_AT_nodes
-    data <- list()
+  # Step 2: Loop over each stochastic map
+  insert_dfs <- purrr::map(seq_len(n_maps), function(i) {
+    ana_events <- bsm$RES_ana_events_tables[[i]]
+    clado_events <- bsm$RES_clado_events_tables[[i]]
     
-    for (desc in c("left_desc_nodes", "right_desc_nodes")) {
-      desc_node <- row[[desc]]
+    # Post-split events
+    clado_shifts <- purrr::map_dfr(seq_len(nrow(clado_events)), function(j) {
+      row <- clado_events[j, ]
+      parent_state <- row$sampled_states_AT_nodes
+      data <- list()
       
-      if (!is.null(desc_node) && !is.na(desc_node)) {
-        
-        # define post-split state
-        if(desc == "left_desc_nodes") desc_state <- row$samp_LEFT_dcorner
-        if(desc == "right_desc_nodes") desc_state <- row$samp_RIGHT_dcorner
-        
-        if (desc_state != parent_state) {
-          data[[length(data) + 1]] <- data.frame(
-            node = desc_node,
-            ancestor = row$node,
-            event_time = 1e-20,
-            from_state = parent_state,
-            to_state = desc_state,
-            from_range = ranges_list[parent_state],
-            to_range = ranges_list[desc_state],
-            event_type = "post_split",
-            source = "post_split"
-          )
+      for (desc in c("left_desc_nodes", "right_desc_nodes")) {
+        desc_node <- row[[desc]]
+        if (!is.null(desc_node) && !is.na(desc_node)) {
+          desc_state <- if (desc == "left_desc_nodes") row$samp_LEFT_dcorner else row$samp_RIGHT_dcorner
+          if (desc_state != parent_state) {
+            data[[length(data) + 1]] <- data.frame(
+              child = desc_node,
+              parent = row$node,
+              event_time = 1e-20,
+              node_area = ranges_list[desc_state],
+              event_type = row$clado_event_type,
+              source = "cladogenetic"
+            )
+          }
         }
       }
-    }
-    if (length(data) > 0) do.call(rbind, data) else NULL
+      if (length(data) > 0) do.call(rbind, data) else NULL
+    })
+    
+    # Anagenetic events
+    ana_shifts <- ana_events %>%
+      dplyr::filter(!is.na(event_type)) %>%
+      dplyr::transmute(
+        child = nodenum_at_top_of_branch,
+        parent = ancestor,
+        event_time = event_time,
+        node_area = new_rangetxt,
+        event_type = event_type,
+        source = "anagenetic"
+      )
+    
+    dplyr::bind_rows(ana_shifts, clado_shifts)
   })
   
-  # Step 3: True anagenetic events (already use range strings)
-  ana_shifts <- ana_events %>%
-    dplyr::filter(!is.na(event_type)) %>%
-    dplyr::transmute(
-      node = nodenum_at_top_of_branch,
-      ancestor = ancestor,
-      event_time = event_time,
-      from_state = NA,
-      to_state = NA,
-      from_range = current_rangetxt,
-      to_range = new_rangetxt,
-      event_type = event_type,
-      source = "anagenetic"
-    )
-  
-  # Step 4: Combine both
-  out <- dplyr::bind_rows(ana_shifts, clado_shifts)
-  return(out)
+    return(insert_dfs)
 }
-

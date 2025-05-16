@@ -1,18 +1,18 @@
 get_bsm_node_area <- function(
-    result_bsm = bsm_res, 
-    BioGeoBEARS.data = resDEC,
-    phyllip.file = phyllip_file,
-    tree.path = "akodon.new",
-    max.range.size = 4 
+    bsm, 
+    BioGeoBEARS.data,
+    phyllip.file,
+    tree.path,
+    max.range.size 
 ){
   
   res <- BioGeoBEARS.data
   res$inputs$trfn <- tree.path
   res$inputs$geogfn <- phyllip.file
   
-  clado_events_tables <- result_bsm$RES_clado_events_tables
+  clado_events_tables <- bsm$RES_clado_events_tables
   
-  l_bsm_realizations <- lapply(1:length(clado_events_tables), function(i){
+  l_bsm_realizations <- purrr::map(1:length(clado_events_tables), function(i){
     
     # Convert the BSM into a modified res object
     master_table_cladogenetic_events = clado_events_tables[[i]]
