@@ -21,18 +21,22 @@ insert_ana_nodes <- function(tree, inserts, node_area = NULL) {
     stop("Some 'parent' values in inserts do not exist in the tree.")
   }
   
-  # Ensure match between node_area and internal nodes in tree
-  expected_nodes <- tree$Nnode
-  actual_nodes <- nrow(node_area)
+
   
-  if (expected_nodes != actual_nodes) {
-    stop(paste0("Node count mismatch: tree has ", expected_nodes,
-                " internal nodes, but node_area has ", actual_nodes, " rows."))
-  }
   
 
   # Check that node labels match rownames in node_area
   if (!is.null(node_area)) {
+    
+    # Ensure match between node_area and internal nodes in tree
+    expected_nodes <- tree$Nnode
+    actual_nodes <- nrow(node_area)
+    
+    if (expected_nodes != actual_nodes) {
+      stop(paste0("Node count mismatch: tree has ", expected_nodes,
+                  " internal nodes, but node_area has ", actual_nodes, " rows."))
+    }
+    
     expected_labels <- tree$node.label
     if (!all(tree$node.label == rownames(node_area))) {
       stop("Mismatch between tree node labels and rownames in node_area.")

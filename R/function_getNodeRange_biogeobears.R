@@ -39,7 +39,7 @@ get_node_range_BioGeoBEARS <-
     
     tipranges <- BioGeoBEARS::getranges_from_LagrangePHYLIP(lgdata_fn = phyllip.file)
     trtable <- BioGeoBEARS::prt(tree, printflag=FALSE)
-    prob_state <- BioGeoBEARS.data$ML_marginal_prob_each_state_at_branch_bottom_below_node
+    prob_state <- BioGeoBEARS.data$ML_marginal_prob_each_state_at_branch_top_AT_node
     areas <- BioGeoBEARS::getareas_from_tipranges_object(tipranges)
     states_list_0based <- cladoRcpp::rcpp_areas_list_to_states_list(areas = areas, 
                                                                     maxareas = max.range.size, 
