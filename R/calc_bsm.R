@@ -7,14 +7,15 @@
 #' @param BioGeoBEARS.data a BioGeoBEARS result model object 
 #' @param phyllip.file path to the phyllip file used in the original model 
 #' @param tree.path path for the phylogenetic tree used in the original model
-#' @param max.maps maximum number of stochastic maps to try to generate (passed to `maxnum_maps_to_try`)
+#' @param max.maps maximum number of stochastic maps to try to generate 
+#'        (passed to `maxnum_maps_to_try` in `runBSM()` from `{BioGeoBEARS}`)
 #' @param n.maps.goal Target number of successfully generated stochastic maps
 #' @param seed Optional seed for reproducibility of stochastic simulations.
 #' @param save_after_every_try Logical. If `TRUE`, results will be saved after each attempt (default is `FALSE`).
-#' @param ... Additional arguments passed to [BioGeoBEARS::runBSM()]
+#' @param ... Additional arguments passed to `runBSM()` from `{BioGeoBEARS}`
 #'
 #' @return A list (BSM output) containing the simulated mappings, including ancestral range estimates
-#'         and event counts. This output is directly produced by [BioGeoBEARS::runBSM()].
+#'         and event counts. This output is directly produced by `runBSM()` from `{BioGeoBEARS}`.
 #'
 #' @examples
 #' \dontrun{

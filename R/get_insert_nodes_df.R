@@ -1,4 +1,23 @@
-get_insert_df <- function(bsm, phyllip.file, max.range.size) {
+#' Get data frame of transition states from Biogeographical Stochastic Mapping
+#'
+#' @param bsm results from the function [Herodotools::calc_bsm()]
+#' @param phyllip.file path to the phyllip file used in the original model
+#' @param max.range.size maximum range size used in the biogeographical reconstruction
+#' @param include_null_range default TRUE. 
+#'
+#' @returns a list with same length as the number of stochastic mapping. Each 
+#'  list element is a data frame with columns:
+#'    * `child` = child node number,
+#'    * `parent` = ancestor node number,
+#'    * `event_time` = time of the event from parent to child, 
+#'    * `node_area` = the range area in the event,
+#'    * `event_type` = the type of event,
+#'    * `source` = can be 'cladogenesis' or 'anagenesis'
+#'    
+#' @export
+#'
+
+get_insert_df <- function(bsm, phyllip.file, max.range.size, include_null_range = TRUE) {
   n_maps <- length(bsm$RES_clado_events_tables)
   
   # Step 1: Get area/state mappings
@@ -7,7 +26,7 @@ get_insert_df <- function(bsm, phyllip.file, max.range.size) {
   states_list_0based <- cladoRcpp::rcpp_areas_list_to_states_list(
     areas = areas,
     maxareas = max.range.size,
-    include_null_range = TRUE
+    include_null_range = include_null_range
   )
   ranges_list <- purrr::map_chr(states_list_0based, function(state) {
     if (length(state) == 1 && is.na(state)) {
@@ -39,7 +58,7 @@ get_insert_df <- function(bsm, phyllip.file, max.range.size) {
               event_time = 1e-20,
               node_area = ranges_list[desc_state],
               event_type = row$clado_event_type,
-              source = "cladogenetic"
+              source = "cladogenesis"
             )
           }
         }
@@ -56,7 +75,7 @@ get_insert_df <- function(bsm, phyllip.file, max.range.size) {
         event_time = event_time,
         node_area = new_rangetxt,
         event_type = event_type,
-        source = "anagenetic"
+        source = "anagenesis"
       )
     
     dplyr::bind_rows(ana_shifts, clado_shifts)

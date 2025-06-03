@@ -1,15 +1,8 @@
-library(ggtree)
-library(ape)
-library(dplyr)
-library(stringr)
-library(devtools)
-library(patchwork)
 
-load_all()
 
 # create data ----
 set.seed(4523)
-tree <- rcoal(5)
+tree <- ape::rcoal(5)
 
 # Create node area table
 node_area <- data.frame(
@@ -18,13 +11,13 @@ node_area <- data.frame(
 )
 
 # Find edge to insert on (e.g., tip 3)
-gdata <- ggtree(tree)$data
-ins_data <- gdata %>% filter(node %in% c(3, 8, 7)) 
-ins_data <- add_row(ins_data, ins_data[3,])
+gdata <- ggtree::ggtree(tree)$data
+ins_data <- gdata %>% dplyr::filter(node %in% c(3, 8, 7)) 
+ins_data <- tibble::add_row(ins_data, ins_data[3,])
 
 # Define insertion
 # insert 2 nodes in 2 branches
-inserts <- tibble(
+inserts <- tibble::tibble(
   parent = ins_data$parent,
   child = ins_data$node,
   event_time = c(0.2, 0.8, 0.5, .9),
@@ -32,7 +25,7 @@ inserts <- tibble(
 )
 
 # Run function
-result <- insert_ana_nodes(tree, inserts, node_area = node_area)
+result <- insert_nodes(tree, inserts, node_area = node_area)
 
 tree_out <- result$phylo
 node_area_out <- result$node_area
@@ -41,8 +34,8 @@ node_area_out <- result$node_area
 
 test_that("After node addition, tree has the same total length", {
   expect_equal(
-    max(node.depth.edgelength(tree)),
-    max(node.depth.edgelength(tree_out))
+    max(ape::node.depth.edgelength(tree)),
+    max(ape::node.depth.edgelength(tree_out))
     )
 })
 
@@ -55,14 +48,14 @@ expect_equal(tree_out$node.label, rownames(node_area_out))
 
 test_that("Original node labels are preserved when no insertions are made", {
   
-  original_labels <- paste("nodes", 1:Nnode(tree))
+  original_labels <- paste("nodes", 1:ape::Nnode(tree))
   tree_nl <- tree
   tree_nl$node.label <- original_labels
   
   node_area_nl <- node_area
   rownames(node_area_nl) <- original_labels
   
-  tree_no_insert <- insert_ana_nodes(tree_nl, inserts[0, ], node_area_nl)$phylo
+  tree_no_insert <- insert_nodes(tree_nl, inserts[0, ], node_area_nl)$phylo
   
   expect_equal(tree_no_insert$node.label[1:length(original_labels)], original_labels)
 })
@@ -70,7 +63,7 @@ test_that("Original node labels are preserved when no insertions are made", {
 test_that("Invalid rownames in node_area throw an error", {
   bad_node_area <- node_area
   rownames(bad_node_area)[1] <- "WRONG"
-  expect_error(insert_ana_nodes(tree, inserts, bad_node_area))
+  expect_error(insert_nodes(tree, inserts, bad_node_area))
 })
 
 test_that("Node count increases by number of insertions", {
@@ -82,10 +75,10 @@ test_that("Node count increases by number of insertions", {
 test_that("Insertion with invalid event_time throws error", {
   invalid_inserts <- inserts
   invalid_inserts$event_time[1] <- 0  # too small
-  expect_error(insert_ana_nodes(tree, invalid_inserts, node_area))
+  expect_error(insert_nodes(tree, invalid_inserts, node_area))
   
   invalid_inserts$event_time[1] <- 1e6  # too large
-  expect_error(insert_ana_nodes(tree, invalid_inserts, node_area))
+  expect_error(insert_nodes(tree, invalid_inserts, node_area))
 })
 
 
@@ -97,19 +90,39 @@ test_that("Inserted nodes are labeled with 'ana_N' prefix", {
 test_that("Invalid rownames in node_area throw an error", {
   bad_node_area <- node_area
   rownames(bad_node_area)[1] <- "WRONG"
-  expect_error(insert_ana_nodes(tree, inserts, bad_node_area))
+  expect_error(insert_nodes(tree, inserts, bad_node_area))
 })
 
 
 # Branch Length Consistency per edge (inserted vs original)
 # This is a bit more elaborate and focuses on per-branch logic
 
+
+# function to the tests
+get_path_between_nodes <- function(gdata, start, end) {
+  path <- c(start)
+  current <- start
+  
+  while (current != end) {
+    parent <- gdata$parent[gdata$node == current]
+    if (is.na(parent)) {
+      stop("End node is not an ancestor of the start node.")
+    }
+    path <- c(path, parent)
+    current <- parent
+  }
+  
+  final_path <- path[-length(path)]
+  # Return rows in gdata for the nodes along the path
+  gdata %>% dplyr::filter(node %in% final_path)
+}
+
 test_that("Branch length is preserved per edge after insertion", {
-  gdata_orig <- ggtree(tree)$data
-  gdata_new <- ggtree(tree_out)$data
+  gdata_orig <- ggtree::ggtree(tree)$data
+  gdata_new <- ggtree::ggtree(tree_out)$data
   
   # Unique parent-child pairs (edges) where insertions occurred
-  branch_keys <- inserts %>% distinct(parent, child)
+  branch_keys <- inserts %>% dplyr::distinct(parent, child)
   
   for (i in seq_len(nrow(branch_keys))) {
     parent_i <- branch_keys$parent[i]
@@ -131,10 +144,9 @@ test_that("Branch length is preserved per edge after insertion", {
 
 
 test_that("Multiple insertions on same branch are in increasing x order", {
-  gdata <- ggtree(tree_out)$data
+  gdata <- ggtree::ggtree(tree_out)$data
   
-  branch_keys <- inserts %>% 
-    distinct(parent, child)
+  branch_keys <- inserts %>% dplyr::distinct(parent, child)
   
   for (i in seq_len(nrow(branch_keys))) {
     parent_i <- branch_keys$parent[i]
@@ -145,8 +157,8 @@ test_that("Multiple insertions on same branch are in increasing x order", {
     
     # Only consider inserted (anagenetic) nodes in the path
     ana_nodes <- path_df %>% 
-      filter(grepl("^ana_N", label)) %>% 
-      arrange(x)  # should already be in increasing order of x
+      dplyr::filter(grepl("^ana_N", label)) %>% 
+      dplyr::arrange(x)  # should already be in increasing order of x
     
     # Confirm increasing x
     if (nrow(ana_nodes) > 1) {
@@ -156,19 +168,19 @@ test_that("Multiple insertions on same branch are in increasing x order", {
 })
 
 test_that("Inserted nodes are at the correct x (time) position", {
-  gdata <- ggtree(tree_out)$data
+  gdata <- ggtree::ggtree(tree_out)$data
   
-  inserts_sorted <- inserts %>% arrange(child, event_time)
+  inserts_sorted <- inserts %>% dplyr::arrange(child, event_time)
   n_inserts <- nrow(inserts_sorted)
   
   for (i in seq_len(n_inserts)) {
     ins <- inserts_sorted[i, ]
     
     # Match expected node number and label
-    expected_node <- Ntip(tree) + tree$Nnode + i
+    expected_node <- ape::Ntip(tree) + tree$Nnode + i
     expected_label <- paste0("ana_N", expected_node)
     
-    inserted_row <- gdata %>% filter(label == expected_label)
+    inserted_row <- gdata %>% dplyr::filter(label == expected_label)
     expect_equal(nrow(inserted_row), 1)
     
     parent_x <- gdata$x[gdata$node == ins$parent]
@@ -184,7 +196,7 @@ test_that("Inserted nodes are at the correct x (time) position", {
 test_that("Fails when node_area row count does not match number of internal nodes", {
   bad_node_area <- node_area[-1, , drop = FALSE]  # Remove a row
   expect_error(
-    insert_ana_nodes(tree, inserts, node_area = bad_node_area),
+    insert_nodes(tree, inserts, node_area = bad_node_area),
     "Node count mismatch"
   )
 })
@@ -193,7 +205,7 @@ test_that("Fails when node labels and node_area rownames do not match", {
   bad_node_area <- node_area
   rownames(bad_node_area)[1] <- "WrongLabel"
   expect_error(
-    insert_ana_nodes(tree, inserts, node_area = bad_node_area),
+    insert_nodes(tree, inserts, node_area = bad_node_area),
     "Mismatch between tree node labels and rownames in node_area"
   )
 })
@@ -202,7 +214,7 @@ test_that("Fails if event_time is outside valid range", {
   bad_inserts <- inserts
   bad_inserts$event_time[1] <- 5  # Too long
   expect_error(
-    insert_ana_nodes(tree, bad_inserts, node_area = node_area),
+    insert_nodes(tree, bad_inserts, node_area = node_area),
     "event_time must be > 0 and < original branch length"
   )
 })
@@ -211,7 +223,7 @@ test_that("Fails if child node in inserts does not exist in tree", {
   bad_inserts <- inserts
   bad_inserts$child[1] <- 999  # Nonexistent node
   expect_error(
-    insert_ana_nodes(tree, bad_inserts, node_area = node_area),
+    insert_nodes(tree, bad_inserts, node_area = node_area),
     "do not exist in the tree"
   )
 })
@@ -220,7 +232,7 @@ test_that("Fails if parent node in inserts does not exist in tree", {
   bad_inserts <- inserts
   bad_inserts$parent[1] <- 999
   expect_error(
-    insert_ana_nodes(tree, bad_inserts, node_area = node_area),
+    insert_nodes(tree, bad_inserts, node_area = node_area),
     "do not exist in the tree"
   )
 })
@@ -229,7 +241,7 @@ test_that("Fails if parent-child relation in inserts is not in the tree", {
   bad_inserts <- inserts
   bad_inserts$parent[1] <- bad_inserts$parent[1] + 1  # Break the edge
   expect_error(
-    insert_ana_nodes(tree, bad_inserts, node_area = node_area),
+    insert_nodes(tree, bad_inserts, node_area = node_area),
     "refer to invalid parent-child relationships"
   )
 })
@@ -239,19 +251,19 @@ test_that("Fails if duplicate insertions on the same edge at the same time", {
   duplicated_edge <- inserts[1, ]
   duplicated_edge$node_area <- "Dummy"  # make it different in content
   
-  bad_inserts <- bind_rows(inserts, duplicated_edge)
+  bad_inserts <- dplyr::bind_rows(inserts, duplicated_edge)
   
   expect_error(
-    insert_ana_nodes(tree, bad_inserts, node_area = node_area),
+    insert_nodes(tree, bad_inserts, node_area = node_area),
     "Duplicated insertion times for the same branch are not allowed"
   )
 })
 
 
 test_that("Fails if duplicate insertions on the same edge at the same time", {
-  bad_inserts <- bind_rows(inserts, inserts[1, ])  # Exact duplicate
+  bad_inserts <- dplyr::bind_rows(inserts, inserts[1, ])  # Exact duplicate
   expect_error(
-    insert_ana_nodes(tree, bad_inserts, node_area = node_area),
+    insert_nodes(tree, bad_inserts, node_area = node_area),
     "Duplicated insertion times for the same branch are not allowed"
   )
 })
