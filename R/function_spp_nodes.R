@@ -20,7 +20,7 @@
 #' 
 get_spp_nodes <- 
   function(tree, node.prefix = "N"){
-  tree_base <- phylobase::phylo4(tree)
+  tree_base <- phylobase::phylo4(tree) %>% suppressWarnings()
   n.nodes <- tree$Nnode
   n.spp <- length(tree$tip.label)
   spxnode <- matrix(data = 0, 
@@ -28,7 +28,7 @@ get_spp_nodes <-
                     ncol =  n.nodes, 
                     dimnames = list(tree$tip.label,
                                     paste(node.prefix, 
-                                          (n.spp+1):(n.spp+(n.spp-1)),
+                                          (n.spp+1):(n.spp+(n.nodes)),
                                           sep="")
                                     )
                     )

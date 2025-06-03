@@ -57,14 +57,24 @@ calc_age_arrival <- function(W,
               -max(ape::node.depth.edgelength(tree)))[-c(1:length(tree$tip.label))]
   ages <- data.frame(age = ages)
   s <- length(tree$tip.label)
-  rownames(ages) <- paste("N", (s+1):(s+(s-1)), sep = "")
+  
+  n.nodes <- tree$Nnode
+  rownames(ages) <- paste("N", (s+1):(s+(n.nodes)), sep = "")
   
   age_arrival<-  matrix(0,
                         nrow = nrow(W),
                         ncol = ncol(W),
                         dimnames = list(rownames(W), colnames(W)))
+  
   names_spComm <- colnames(W)
-  nodes.list <- get_nodes_info_core(W = W, tree = tree, ancestral.area = ancestral.area, biogeo = biogeo)
+  
+  nodes.list <- get_nodes_info_core(
+    W = W, 
+    tree = tree, 
+    ancestral.area = ancestral.area, 
+    biogeo = biogeo
+    )
+  
   # site; species; first node (root in the ecoregion)
   
   ## NA means the time of arrival is unknown
