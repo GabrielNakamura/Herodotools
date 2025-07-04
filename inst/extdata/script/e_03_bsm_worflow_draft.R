@@ -6,7 +6,8 @@ library(BioGeoBEARS)
 
 data("akodon_newick")
 data("resDEC")  # BioGeoBEARS model result
-
+data("akodon_sites")
+data("regions")
 # Paths to tree and geography files
 
 tree_path <- system.file("extdata", "akodon.new", package = "Herodotools")
@@ -64,7 +65,7 @@ new_nodes_tree <- insert_nodes(
 ## All modifications done ---
 
 ## VISUALIZATION
-
+quartz()
 plot(new_nodes_tree[[1]]$phylo)
 nodelabels()
 tiplabels()
@@ -111,7 +112,7 @@ tree_data <- as_tibble(p$data)
 
 # Parse node_area to match the ggtree structure
 new_tree_data <- node_area %>%
-  rownames_to_column("label") %>%
+  tibble::rownames_to_column("label") %>%
   #mutate(node = as.numeric(gsub("ana_N|N", "", label))) %>%
   add_row(tip_area_df) %>% 
   right_join(tree_data)  
@@ -122,7 +123,7 @@ areas <- sort(unique(na.omit(new_tree_data$area)))
 n_areas <- length(areas)
 
 # Better than viridis for categorical: colorspace
-biome_colors <- qualitative_hcl(n_areas, palette = "Dark 3")  # or "Set 2", "Dynamic"
+biome_colors <- colorspace::qualitative_hcl(n_areas, palette = "Dark 3")  # or "Set 2", "Dynamic"
 names(biome_colors) <- areas
 
 # Plot tree with tip labels
