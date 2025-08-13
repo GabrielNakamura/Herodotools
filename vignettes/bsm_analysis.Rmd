@@ -171,6 +171,9 @@ map_limits <- list(
 
 
 ```{r}
+
+biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion_df$site_region)) 
+
 # calculating age arrival 
 l_age_comm <- lapply(bsm_tree, function(bsm_map){
   
