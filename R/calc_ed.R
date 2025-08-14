@@ -98,7 +98,7 @@ calc_ed <- function(tree, ancestral.area, current.area = NULL, type = c("equal.s
   edge <- tree$edge
   edge.length <- tree$edge.length
   n_tips <- length(tree$tip.label)
-  n_node <- Nnode(tree)
+  n_node <- ape::Nnode(tree)
   
   # Map node labels to node numbers
   node_labels <- setNames(n_tips + seq_along(tree$node.label), tree$node.label)
