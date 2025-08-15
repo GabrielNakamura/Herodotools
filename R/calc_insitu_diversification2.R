@@ -10,14 +10,14 @@ calc_insitu_diversification2 <- function(W,
     stop("Tip-based diversification measures must be one of 'jetz' or 'freckleton'")
   }
   
-  # Function to compute harmonic mean including zeros
-  # x is a vector of a site
-  # NA are removed from the calculation 
-  harmonic_mean <- function(x) {
-    x <- x[!is.na(x)]
-    if (any(x == 0)) return(0)  # harmonic mean is 0 if any value is 0
-    length(x) / sum(1 / x)
-  }
+  # # Function to compute harmonic mean including zeros
+  # # x is a vector of a site
+  # # NA are removed from the calculation 
+  # harmonic_mean <- function(x) {
+  #   x <- x[!x==0]
+  #  
+  #   length(x) / sum(1 / x)
+  # }
   
  
   ## step 1 - calc tip rates for all species in all areas
@@ -50,47 +50,126 @@ calc_insitu_diversification2 <- function(W,
     for (i in seq_len(nrow(W))) {
       region <- biogeo[i, 1]
       jetz_vals <- l_jetz_partial[[region]][colnames(W)]
-      pres_only <- ifelse(W[i, ] == 0, NA, W[i, ])
-      matrix_XJetz[i, ] <- pres_only * jetz_vals
+      
+      # adds a very low value when the most recent ancestor or range shift
+      # is different than the current area of the site
+      matrix_XJetz[i, ] <- ifelse(
+        W[i, ] == 1 & jetz_vals == 0, 0.00001, W[i, ] * jetz_vals
+      )
     }
     
+    # Summarazing results for each site ---------------------------------------
+    
+    ## calculating harmonic mean for Jetz
+    
+    # sum of communities local diversification
+    sum_localDiv <- apply(matrix_XJetz,
+                          1,
+                          function(x) sum(x[which(x != 0 & x != 0.00001)]))
     
     
-    matrix_XJetz <- ifelse(matrix_XJetz == 0, 0.00001, matrix_XJetz)
-
+    #object to receive Jetz diversification values
+    matrix_totalDiv_Jetz <- W
     
-    # Apply to each row
-    JetzLocalComm_harmonic <- apply(matrix_XJetz, 1, harmonic_mean)
+    # Total jetz values for each community
+    for(i in colnames(W)){
+      matrix_totalDiv_Jetz[ , i] <- ifelse(matrix_totalDiv_Jetz[ , i] == 1, 
+                                           jetz_total[i],
+                                           0) # input Jetz total diversification values in occurence matrix
+    }
     
+    #sum of communities total diversification
+    sum_totalDiv <- apply(matrix_totalDiv_Jetz,
+                          1,
+                          function(x) sum(x[which(x != 0)]))
     
+    numerator_values <- apply(matrix_totalDiv_Jetz, 1, function(x){
+      sum(1/x[which(x != 0)])
+    })
     
- 
+    denom_values <- apply(matrix_totalDiv_Jetz, 1, function(x){
+      length(which(x != 0))
+    })
     
+    #harmonic mean for Jetz total diversification
+    JetzTotalComm_harmonic <- denom_values/numerator_values
     
-    
-  }
+    #harmonic mean for Jetz local diversification
+    JetzLocalComm_harmonic <- (JetzTotalComm_harmonic*(sum_localDiv/sum_totalDiv))
+    list_res_jetz <- vector(mode = "list", length = 5)
+    list_res_jetz[[1]] <- jetz_total
+    list_res_jetz[[2]] <- matrix_totalDiv_Jetz
+    list_res_jetz[[3]] <- JetzTotalComm_harmonic # jetz harmonic mean diversification per community
+    list_res_jetz[[4]] <- matrix_XJetz # model-based metric per community per species
+    list_res_jetz[[5]] <- JetzLocalComm_harmonic # model-based metric harmonic mean 
+    names(list_res_jetz) <- c("Jetz_per_spp",
+                              "Jetz_species_site",
+                              "Jetz_harmonic_mean_site",
+                              "insitu_Jetz_species_sites", 
+                              "insitu_Jetz_harmonic_mean_site")
+    }
   
-  # compute total diversification 
-  #look at type and compute the ed metric for 
-  # using each area as the current area per iteration. 
+
   
   # if freckleton:
   #  # compute total diversification 
   # compute the nd for all the areas as current area 
   
-  ## step 2 - compute the mean rates per site
+  if(any(diversification == "freckleton")){
   
-  ## calculating harmonic mean for Jetz
+    nd_total <- calc_node_density(tree, ancestral.area)
+    
+    l_nd_local <- lapply(unique_areas, function(area){
+      calc_node_density(tree, ancestral.area, current.area = area)
+      })
+    
+    matrix_XFreck<- matrix(0,
+                           nrow = nrow(W),
+                           ncol = ncol(W),
+                           dimnames = list(rownames(W), colnames(W)))
+    
+    # Loop through each community
+    for (i in seq_len(nrow(W))) {
+      region <- biogeo[i, 1]
+      nd_vals <- l_nd_local[[region]][colnames(W)]
+      
+      # adds a very low value when the most recent ancestor or range shift
+      # is different than the current area of the site
+      matrix_XFreck[i, ] <- ifelse(
+        W[i, ] == 1 & nd_vals == 0, 0.00001, W[i, ] * nd_vals
+      )
+    }
+    
+    FreckLocalComm_mean <- sapply(1:nrow(matrix_XFreck), function(i){
+      pres <- matrix_XFreck[i, ][W[i, ] >= 1]
+      mean(pres, na.rm = T)
+    })
+    
+    #objet to receive Jetz diversification values
+    matrix_totalDiv_Freck <- W
+    
+    #substitui a matrix de ocorrencia pelos valores de div total do Freck
+    for(i in colnames(W)){
+      matrix_totalDiv_Freck[, i] <- ifelse(matrix_totalDiv_Freck[, i] >= 1, nd_total[i], 0)
+    }
+    
+    FreckTotalComm_mean <- sapply(1:nrow(matrix_totalDiv_Freck), function(i){
+      pres <- matrix_totalDiv_Freck[i, ][W[i, ] >= 1]
+      mean(pres, na.rm = T)
+    })
+    
+    list_res_freckleton <-  data.frame(FreckTotal = FreckTotalComm_mean,
+                                       FreckLocal = FreckLocalComm_mean,
+                                       FreckLocalProp = FreckLocalComm_mean/
+                                         FreckTotalComm_mean,
+                                       row.names = row.names(W))
+    
+    
+    }
   
-  # sum of communities local diversification
-  
-  #sum of communities total diversification
-  #harmonic mean for Jetz total diversification
-  #harmonic mean for Jetz local diversification
   
   
-  #substitui a matrix de ocorrencia pelos valores de div total do Freck
-  # mean freck
+ 
   
   ## step 3 - prepare output data
   

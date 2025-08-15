@@ -189,7 +189,7 @@ calc_insitu_diversification <-
     }
     
     
-    if(any(diversification == "freck")){
+    if(any(diversification == "freckleton")){
       ## Freckleton local
       # modifyed equation 4 from Freckleton et al (2008) considering only the nodes
       # that diversified in ecoregion of local i, plus one is only a correction of the
