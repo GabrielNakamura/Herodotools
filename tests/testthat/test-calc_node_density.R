@@ -140,7 +140,7 @@ recent speciation event", {
   
 })
 
-calc_node_density(tree_out, ancestral.area = node_area_out, current.area = "C")
+
 
 
 

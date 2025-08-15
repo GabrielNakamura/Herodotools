@@ -6,8 +6,27 @@ calc_node_density <- function(tree, ancestral.area, current.area = NULL) {
   edge.length <- tree$edge.length
   n_tips <- length(tree$tip.label)
   
+  # Ensure node labels are present on the tree
+  if (is.null(tree$node.label)) {
+    tree$node.label <- paste0("N", seq_len(tree$Nnode) + ape::Ntip(tree))
+  }
+  
+  # Internal node label check ---
+  expected_nums <- (length(tree$tip.label) + 1):(length(tree$tip.label) + ape::Nnode(tree))
+  expected_labels <- c(
+    paste0("N", expected_nums),
+    paste0("new_N", expected_nums)
+  )
+  
+  invalid_labels <- which(!(tree$node.label %in% expected_labels))
+  if (length(invalid_labels) > 0) {
+    stop("Invalid node labels found: ", paste(tree$node.label[invalid_labels], collapse = ", "))
+  }
+  
   # Map node labels to node numbers
   node_labels <- setNames(n_tips + seq_along(tree$node.label), tree$node.label)
+  
+
   
   # Identify inserted nodes to ignore
   ignore_nodes <- grep("^new_N", tree$node.label, value = TRUE)

@@ -146,3 +146,13 @@ test_that("Partial ED (fair.proportion) computes contributions before stopping",
   expect_equal(as.numeric(ed_partialB["t3"]), ed_t3_B)
   expect_equal(as.numeric(ed_partialC["t3"]), ed_t3_C)
 })
+
+
+test_that("calc_ed stops with invalid node labels", {
+  bad_tree <- tree_sim
+  bad_tree$node.label <- c("N6", "N7_extra", "new_N8", "new_N9")
+  expect_error(
+    calc_ed(bad_tree, ancestral.area = node_area, type = "equal.splits"),
+    regexp = "Invalid node labels"
+  )
+})
