@@ -1,19 +1,42 @@
-#' Calculate a evolutionary distinctiveness (ED) based on biogeographical model
+#' Calculate evolutionary distinctiveness (ED) based on a biogeographical model
 #' 
-#' For each tip, the function calculates the ED based on the current area and the 
-#' ancestral area based on a biogeographical model. ED is calculated for the connecting 
-#' branched from tip to internal node that are in the same area as the current area. 
-#' This means that the evolutionary distinctiveness occurred in situ (same biogeographical region). 
-#' If current area is not provided, the function gives same result as 'picante::evol.distinct()'
+#' For each tip, the function calculates evolutionary distinctiveness (ED), which 
+#' can be the total ED or in situ ED. See details. By default, it calculates total ED. 
+#' 
+#' * **Total ED** (no biogeographical restriction):  
+#'   If neither `ancestral.area` nor `current.area` are provided, the function 
+#'   calculates ED as originally proposed by Redding & Mooers (2006, 2007).
+#' 
+#' * **In situ ED** (biogeographical restriction):  
+#'   If both `ancestral.area` and `current.area` are provided, ED is calculated 
+#'   only along branches where the ancestral area matches the provided `current.area`. 
+#'   This represents evolutionary distinctiveness accumulated *in situ* within 
+#'   the specified biogeographical region.
+#' 
+#' You must provide **either both** `ancestral.area` and `current.area` (for 
+#' in situ ED), **or neither** (for total ED). Providing only one of them will 
+#' result in an error.
 #'
-#' @param tree Phylogenetic tree of class 'phylo'.
-#' @param ancestral.area One column data frame indicating the Ecoregion of occurrence of each node (rows)
-#' @param current.area character. A single area that will represent the current area of all tips in the phylogeny.
-#' @param type Character indicating the type of evolutionary distinctiveness metric to be used. 
-#'    It can be "equal.splits" or "fair.proportion", "equal-splits" is the default.
+#' @param tree Phylogenetic tree of class `'phylo'`.
+#' @param ancestral.area A one-column data frame indicating the area of occurrence 
+#'   of each node (rows). Row names must correspond to node labels in the tree.
+#' @param current.area A character string indicating the focal area. All tips 
+#'   are assumed to be present in this area when computing in situ ED.
+#' @param type Character indicating the type of ED metric to use. One of 
+#'   `"equal.splits"` (default) or `"fair.proportion"`.
 #'
-#' @returns a named numeric vector with values for all tips in the phylogeny
+#' @return A named numeric vector with ED values for all tips in the phylogeny.
 #' @export
+#'
+#' @references
+#' Redding, D. W., & Mooers, A. Ø. (2006). Incorporating evolutionary measures into 
+#' conservation prioritization. *Conservation Biology*, 20(6), 1670–1678. 
+#' https://doi.org/10.1111/j.1523-1739.2006.00555.x
+#' 
+#' Redding, D. W., & Mooers, A. Ø. (2007). The shape of phylogenetic trees and the 
+#' context for conservation: a review of macroevolutionary macroecology. 
+#' *Philosophical Transactions of the Royal Society B: Biological Sciences*, 362(1478), 849–860. 
+#' https://doi.org/10.1098/rstb.2006.1977
 #'
 #' @examples
 #' 
@@ -89,11 +112,20 @@
 #' 
 
 
-calc_ed <- function(tree, ancestral.area, current.area = NULL, type = c("equal.splits", "fair.proportion")) {
+calc_ed <- function(tree, ancestral.area = NULL, current.area = NULL, type = c("equal.splits", "fair.proportion")) {
   type <- match.arg(type)
   
   if (!inherits(tree, "phylo")) stop("tree must be of class 'phylo'")
-  if (!is.data.frame(ancestral.area)) stop("ancestral.area must be a data.frame with rownames as node labels and a column 'area'")
+  
+  # Argument consistency check ---
+  if (xor(is.null(ancestral.area), is.null(current.area))) {
+    stop("You must provide either both 'ancestral.area' and 'current.area' (for in situ ED), 
+          or none of them (for total ED).")
+  }
+  
+  if (!is.null(ancestral.area) & !is.data.frame(ancestral.area)){
+    stop("ancestral.area must be a data.frame with rownames as node labels and a column 'area'")
+  }
   
   edge <- tree$edge
   edge.length <- tree$edge.length
@@ -126,8 +158,11 @@ calc_ed <- function(tree, ancestral.area, current.area = NULL, type = c("equal.s
   ignored_node_nums <- unname(node_labels[ignore_nodes])
   
   # Convert ancestral.area to map from node number to area
-  ancestral.area$node <- node_labels[rownames(ancestral.area)]
-  area_by_node <- setNames(as.character(ancestral.area$area), ancestral.area$node)
+  if(!is.null(ancestral.area)) {
+    ancestral.area$node <- node_labels[rownames(ancestral.area)]
+    area_by_node <- setNames(as.character(ancestral.area$area), ancestral.area$node)
+    }
+ 
   
   # For fair proportion: precompute descendant tip counts
   if (type == "fair.proportion") {

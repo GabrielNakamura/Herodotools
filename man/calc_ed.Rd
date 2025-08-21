@@ -2,34 +2,49 @@
 % Please edit documentation in R/calc_ed.R
 \name{calc_ed}
 \alias{calc_ed}
-\title{Calculate a evolutionary distinctiveness (ED) based on biogeographical model}
+\title{Calculate evolutionary distinctiveness (ED) based on a biogeographical model}
 \usage{
 calc_ed(
   tree,
-  ancestral.area,
+  ancestral.area = NULL,
   current.area = NULL,
   type = c("equal.splits", "fair.proportion")
 )
 }
 \arguments{
-\item{tree}{Phylogenetic tree of class 'phylo'.}
+\item{tree}{Phylogenetic tree of class \code{'phylo'}.}
 
-\item{ancestral.area}{One column data frame indicating the Ecoregion of occurrence of each node (rows)}
+\item{ancestral.area}{A one-column data frame indicating the area of occurrence
+of each node (rows). Row names must correspond to node labels in the tree.}
 
-\item{current.area}{character. A single area that will represent the current area of all tips in the phylogeny.}
+\item{current.area}{A character string indicating the focal area. All tips
+are assumed to be present in this area when computing in situ ED.}
 
-\item{type}{Character indicating the type of evolutionary distinctiveness metric to be used.
-It can be "equal.splits" or "fair.proportion", "equal-splits" is the default.}
+\item{type}{Character indicating the type of ED metric to use. One of
+\code{"equal.splits"} (default) or \code{"fair.proportion"}.}
 }
 \value{
-a named numeric vector with values for all tips in the phylogeny
+A named numeric vector with ED values for all tips in the phylogeny.
 }
 \description{
-For each tip, the function calculates the ED based on the current area and the
-ancestral area based on a biogeographical model. ED is calculated for the connecting
-branched from tip to internal node that are in the same area as the current area.
-This means that the evolutionary distinctiveness occurred in situ (same biogeographical region).
-If current area is not provided, the function gives same result as 'picante::evol.distinct()'
+For each tip, the function calculates evolutionary distinctiveness (ED), which
+can be the total ED or in situ ED. See details. By default, it calculates total ED.
+}
+\details{
+\itemize{
+\item \strong{Total ED} (no biogeographical restriction):
+If neither \code{ancestral.area} nor \code{current.area} are provided, the function
+calculates ED as originally proposed by Redding & Mooers (2006, 2007).
+\item \strong{In situ ED} (biogeographical restriction):
+If both \code{ancestral.area} and \code{current.area} are provided, ED is calculated
+only along branches where the ancestral area matches the provided \code{current.area}.
+This represents evolutionary distinctiveness accumulated \emph{in situ} within
+the specified biogeographical region.
+}
+
+You must provide \strong{either both} \code{ancestral.area} and \code{current.area} (for
+in situ ED), \strong{or neither} (for total ED). Providing only one of them will
+result in an error.
 }
 \examples{
 
@@ -103,4 +118,14 @@ nodelabels(adj = 1.2)
 
 
 
+}
+\references{
+Redding, D. W., & Mooers, A. Ø. (2006). Incorporating evolutionary measures into
+conservation prioritization. \emph{Conservation Biology}, 20(6), 1670–1678.
+https://doi.org/10.1111/j.1523-1739.2006.00555.x
+
+Redding, D. W., & Mooers, A. Ø. (2007). The shape of phylogenetic trees and the
+context for conservation: a review of macroevolutionary macroecology.
+\emph{Philosophical Transactions of the Royal Society B: Biological Sciences}, 362(1478), 849–860.
+https://doi.org/10.1098/rstb.2006.1977
 }
