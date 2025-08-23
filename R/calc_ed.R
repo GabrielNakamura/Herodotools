@@ -188,6 +188,9 @@ calc_ed <- function(tree, ancestral.area = NULL, current.area = NULL, type = c("
       # check if node area is different than the site area (current.area)
       if (!is.null(current.area)) {
         parent_area <- area_by_node[as.character(parent_node)]
+        
+        # when parent_area area is different than the current.area
+        # the while loop breaks, and return the ed_value computed so far. 
         if (is.na(parent_area) || !grepl(paste0("[", current.area, "]"), parent_area)) {
           if (type == "equal.splits") {
             ed_value <- ed_value + (pending_length * (0.5 ^ decay_index))
