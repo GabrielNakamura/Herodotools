@@ -180,3 +180,74 @@ test_that("calc_ed stops with invalid node labels", {
     regexp = "Invalid node labels"
   )
 })
+
+
+test_that("calc_ed fails if ancestral.area is not a data.frame", {
+  tree <- ape::rcoal(5)
+  tree$node.label <- paste0("N", seq_len(tree$Nnode) + ape::Ntip(tree))
+  
+  expect_error(
+    calc_ed(tree, ancestral.area = list(a = 1), current.area = "A"),
+    "ancestral.area must be a data.frame"
+  )
+})
+
+test_that("calc_ed fails if ancestral.area has more than one column", {
+  tree <- ape::rcoal(5)
+  tree$node.label <- paste0("N", seq_len(tree$Nnode) + ape::Ntip(tree))
+  
+  aa <- data.frame(a = rep("A", tree$Nnode), b = 1:tree$Nnode)
+  rownames(aa) <- tree$node.label
+  
+  expect_error(
+    calc_ed(tree, ancestral.area = aa, current.area = "A"),
+    "ancestral.area must be a data.frame with a single column"
+  )
+})
+
+test_that("calc_ed fails if rownames of ancestral.area do not match tree$node.label", {
+  tree <- ape::rcoal(5)
+  tree$node.label <- paste0("N", seq_len(tree$Nnode) + ape::Ntip(tree))
+  
+  aa <- data.frame(a = rep("A", tree$Nnode))
+  rownames(aa) <- paste0("X", seq_len(tree$Nnode))  # wrong labels
+  
+  expect_error(
+    calc_ed(tree, ancestral.area = aa, current.area = "A"),
+    "Row names of ancestral.area must match node labels in the tree"
+  )
+})
+
+test_that("calc_ed works silently when ancestral.area is valid", {
+  tree <- ape::rcoal(5)
+  tree$node.label <- paste0("N", seq_len(tree$Nnode) + ape::Ntip(tree))
+  
+  aa <- data.frame(foo = rep("A", tree$Nnode))
+  rownames(aa) <- tree$node.label
+  
+  expect_silent(
+    calc_ed(tree, ancestral.area = aa, current.area = "A")
+  )
+})
+
+test_that("calc_ed generates node labels when tree$node.label is NULL", {
+  tree <- ape::rcoal(5)  # no node labels
+  aa <- data.frame(bar = rep("A", tree$Nnode))
+  
+  expect_silent(
+    res <- calc_ed(tree, ancestral.area = aa, current.area = "A")
+  )
+  
+  # After the function, labels should have been auto-generated
+  expect_true(all(grepl("^N[0-9]+", tree$node.label)))
+})
+
+test_that("calc_ed overwrites ancestral.area rownames when tree$node.label is NULL", {
+  tree <- ape::rcoal(5)  # no node labels
+  aa <- data.frame(bar = rep("A", tree$Nnode))
+  rownames(aa) <- paste0("wrong", seq_len(tree$Nnode))  # mismatched rownames
+  
+  expect_silent(
+    calc_ed(tree, ancestral.area = aa, current.area = "A")
+  )
+})

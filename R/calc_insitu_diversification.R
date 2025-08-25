@@ -2,7 +2,7 @@
 #'
 #' @param W A species occurrence (assemblage) matrix. Rows represent assemblages (sites) and columns represent species.
 #' @param tree A phylogenetic tree object (class `phylo`).
-#' @param ancestral.area A one-column data frame indicating the ecoregion of occurrence of each node (rows).
+#' @param ancestral.area A one-column data frame indicating the ecorregion of occurrence of each node (rows).
 #' @param biogeo A data frame with one column indicating the ecoregion of each assemblage (row).
 #' @param type Character string indicating the type of evolutionary distinctiveness (ED) metric to be used.
 #'   Options are `"equal.splits"` (default) or `"fair.proportion"`.
@@ -45,14 +45,16 @@
 #' # Example with a random tree and toy data
 #' library(ape)
 #' tree <- rcoal(5)
-#' W <- matrix(c(1,0,1, 1,1,0), nrow=2, byrow=TRUE,
+#' W <- matrix(c(1,0,1,1,1,0,1,1,0,1 ), nrow=2, byrow=TRUE,
 #'             dimnames = list(c("site1","site2"), tree$tip.label))
 #' biogeo <- data.frame(region=c("A","B"))
 #' ancestral.area <- data.frame(region=rep("A", tree$Nnode))
 #'
-#' res <- calc_insitu_diversification2(W, tree, ancestral.area, biogeo)
+#' res <- calc_insitu_diversification(W, tree, ancestral.area, biogeo)
 #' str(res)
 #' }
+#' 
+#' @export
 
 
 
@@ -62,10 +64,24 @@ calc_insitu_diversification <- function(W,
                                          biogeo, 
                                          type = "equal.splits"){
   
+  if(!is.data.frame(W)) W <- as.matrix(W)
   
-  # if(all(diversification != c("jetz")) == TRUE){
-  #   stop("Tip-based diversification measures must be 'jetz'")
-  # }
+  
+  if (!is.null(ancestral.area)) {
+    if (!is.data.frame(ancestral.area)) {
+      stop("ancestral.area must be a data.frame")
+    }
+    if (ncol(ancestral.area) != 1) {
+      stop("ancestral.area must be a data.frame with a single column")
+    }
+    
+    if(!is.null(tree$node.label)){
+      if (!all(rownames(ancestral.area) %in% tree$node.label)) {
+        stop("Row names of ancestral.area must match node labels in the tree")
+      }
+    }
+    
+  }
   
   if(all(type != c("equal.splits", "fair.proportion")) == TRUE){
     stop('"type" must be "equal.splits" or "fair.proportion"')
