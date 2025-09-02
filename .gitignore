@@ -8,3 +8,4 @@ lagrange_area_data_file.data
 
 docs
 inst/doc
+*.Rproj
