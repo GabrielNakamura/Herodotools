@@ -420,7 +420,6 @@ Herodotools::calc_insitu_diversification(W = akodon_pa_tree,
                    tree = akodon_newick, 
                    ancestral.area = node_area, 
                    biogeo = biogeo_area, 
-                   diversification = "jetz",
                    type = "equal.splits")
 
 ```
@@ -431,8 +430,8 @@ The result of `calc_insitu_diversification` function consist of a data-frame con
 sites <- dplyr::bind_cols(site_xy,
                    site_region =  site_region,
                    age = age_comm$mean_age_per_assemblage,
-                   diversification_model_based = akodon_diversification$insitu_Jetz_harmonic_mean_site,
-                   diversification = akodon_diversification$Jetz_harmonic_mean_site)
+                   diversification_model_based = akodon_diversification$insitu_comm_mean,
+                   diversification = akodon_diversification$jetz_comm_mean)
 
 map_diversification <- 
    sites %>% 

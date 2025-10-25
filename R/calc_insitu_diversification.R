@@ -1,27 +1,37 @@
 #' Tip-based in-situ diversification metrics
 #'
-#' @param W A species occurrence (assemblage) matrix. Rows represent assemblages (sites) and columns represent species.
+#' @param W A species occurrence (assemblage) matrix. Rows represent assemblages
+#'      (sites) and columns represent species.
 #' @param tree A phylogenetic tree object (class `phylo`).
-#' @param ancestral.area A one-column data frame indicating the ecorregion of occurrence of each node (rows).
-#' @param biogeo A data frame with one column indicating the ecoregion of each assemblage (row).
+#' @param ancestral.area A one-column data frame indicating the ecorregion of 
+#'      occurrence of each node (rows).
+#' @param biogeo A data frame with one column indicating the ecoregion of each 
+#'      assemblage (row).
 #' @param type Character string indicating the type of evolutionary distinctiveness (ED) metric to be used.
 #'   Options are `"equal.splits"` (default) or `"fair.proportion"`.
 #'
 #' @details
 #' This function calculates three related diversification metrics:
 #' \itemize{
-#'   \item **Jetz diversification rate (DR_jetz):** the inverse of the evolutionary distinctiveness (ED) metric
-#'         for each species across the full phylogeny.
-#'   \item **In-situ diversification rate (DR_insitu):** a model-based measure of diversification calculated as
+#'   \item **Jetz diversification rate (DR_jetz):** The inverse of the evolutionary distinctiveness (ED) metric
+#'         for each species across the full phylogeny. This is the same as 
+#'         described in [Jetz et al (2012)](https://www.nature.com/articles/nature11631)
+#'         
+#'         \deqn{
+#'            DR_{i} = (\sum_{j=1}^{N_i}\cdot l_j \cdot 1/2^{j-1})^{-1}
+#'         }
+#'         
+#'   \item **In-situ diversification rate (DR_insitu):** In situ measure of diversification calculated as
 #'         the inverse of ED, but restricted to the portion of a species' branches that diversified in the
-#'         ecoregion matching the assemblage.
-#'   \item **Proportional diversification rate (DR_prop):** the fraction of diversification that occurred
-#'         in a given ecoregion, calculated as the proportion of ED in that region relative to the total ED,
+#'         region (informed in biogeo argument) matching the assemblage.
+#'   \item **Proportional diversification rate (DR_prop):** The fraction of diversification that occurred
+#'         in a given ecoregion (informed in biogeo argument), calculated as the 
+#'         proportion of ED in that region relative to the total ED,
 #'         multiplied by the species’ total diversification rate (DR_jetz).
 #' }
 #'
 #' For assemblage-level summaries, site-by-species matrices are generated for each metric, and
-#' site-level means are calculated:
+#' site-level means are calculated as:
 #' \itemize{
 #'   \item **Harmonic mean (Jetz and in-situ):** computed across species in each assemblage.
 #'     Zeros in the in-situ matrix are ignored in the harmonic mean calculation to
@@ -31,10 +41,10 @@
 #'
 #' @return A named list containing the following elements (if available):
 #' \itemize{
-#'   \item `jetz_site_sp`: Site-by-species matrix of Jetz diversification rates.
-#'   \item `jetz_comm_mean`: Harmonic mean of Jetz diversification rates per site.
-#'   \item `insitu_site_sp`: Site-by-species matrix of in-situ diversification rates.
-#'   \item `insitu_comm_mean`: Harmonic mean of in-situ diversification rates per site
+#'   \item `jetz_site_sp`: Site-by-species matrix of DR diversification rates.
+#'   \item `jetz_comm_mean`: Harmonic mean of DR diversification rates per site.
+#'   \item `insitu_site_sp`: Site-by-species matrix of \eqn{DR_in-situ} diversification rates.
+#'   \item `insitu_comm_mean`: Harmonic mean of \eqn{DR_in-situ} diversification rates per site
 #'         (ignoring zeros when specified).
 #'   \item `prop_site_sp`: Site-by-species matrix of proportional diversification rates.
 #'   \item `prop_comm_mean`: Arithmetic mean of proportional diversification rates per site.
@@ -55,8 +65,6 @@
 #' }
 #' 
 #' @export
-
-
 
 calc_insitu_diversification <- function(W,
                                          tree,
