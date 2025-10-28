@@ -17,12 +17,18 @@ calc_pairwise_group_classification <-
 #' @param x A data.frame or matrix object containing eigenvectors by sites.
 #' @param threshold Scalar. The number of eigenvectors used to perform classification.
 #' @param nperm Scalar. Number of times classification will be performed.
-#' @param method c("kmeans","ward"). See \code{\link{find.clusters}} of adegenet package.
-#' @param stat c("BIC", "AIC", or "WSS"). See \code{\link{find.clusters}} of adegenet package.
-#' @param criterion c("diffNgroup", "min","goesup", "smoothNgoesup", or "goodfit"). See \code{\link{find.clusters}} of adegenet package.
-#' @param max.nclust Scalar indicating the maximum number of groups to be evaluated.
-#' @param subset number of cells used in the analysis. It is particularly important whenever the total number of cells is large (> 1000).
-#' @param confidence.level threshold confidence level used to estimate congruence in the classification pattern.
+#' @param method Character, one of c("kmeans","ward"). This will be used in `find.clusters` function. 
+#'     See \code{\link{find.clusters}} of adegenet package. Default is "kmeans"
+#' @param stat Character, one of c("BIC", "AIC", or "WSS"). This will be used in `find.clusters` function. 
+#'     See \code{\link{find.clusters}} of adegenet package. Default is "BIC".
+#' @param criterion Character one of c("diffNgroup", "min","goesup", "smoothNgoesup", or "goodfit"). 
+#'     This will be used in `find.clusters` function. Default is "diffNgroup". 
+#'     See \code{\link{find.clusters}} of adegenet package.
+#' @param max.nclust A vector containing values of the maximum number of groups to be evaluated.
+#' @param subset Scalar. The number of cells used in the analysis. 
+#'     It is particularly important whenever the total number of cells is large (> 1000).
+#' @param confidence.level A vector containing values with threshold confidence
+#'     level used to estimate congruence in the classification pattern.
 #'
 #' @return Matrix containing congruence values ranging between 0-1 for each max.nclust 
 #'     value (see Arguments) and confidence level.

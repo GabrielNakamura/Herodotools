@@ -21,19 +21,25 @@ find_max_nclust(
 
 \item{threshold}{Scalar. The number of eigenvectors used to perform classification.}
 
-\item{max.nclust}{Scalar indicating the maximum number of groups to be evaluated.}
+\item{max.nclust}{A vector containing values of the maximum number of groups to be evaluated.}
 
 \item{nperm}{Scalar. Number of times classification will be performed.}
 
-\item{method}{c("kmeans","ward"). See \code{\link{find.clusters}} of adegenet package.}
+\item{method}{Character, one of c("kmeans","ward"). This will be used in \code{find.clusters} function.
+See \code{\link{find.clusters}} of adegenet package. Default is "kmeans"}
 
-\item{stat}{c("BIC", "AIC", or "WSS"). See \code{\link{find.clusters}} of adegenet package.}
+\item{stat}{Character, one of c("BIC", "AIC", or "WSS"). This will be used in \code{find.clusters} function.
+See \code{\link{find.clusters}} of adegenet package. Default is "BIC".}
 
-\item{criterion}{c("diffNgroup", "min","goesup", "smoothNgoesup", or "goodfit"). See \code{\link{find.clusters}} of adegenet package.}
+\item{criterion}{Character one of c("diffNgroup", "min","goesup", "smoothNgoesup", or "goodfit").
+This will be used in \code{find.clusters} function. Default is "diffNgroup".
+See \code{\link{find.clusters}} of adegenet package.}
 
-\item{subset}{number of cells used in the analysis. It is particularly important whenever the total number of cells is large (> 1000).}
+\item{subset}{Scalar. The number of cells used in the analysis.
+It is particularly important whenever the total number of cells is large (> 1000).}
 
-\item{confidence.level}{threshold confidence level used to estimate congruence in the classification pattern.}
+\item{confidence.level}{A vector containing values with threshold confidence
+level used to estimate congruence in the classification pattern.}
 }
 \value{
 Matrix containing congruence values ranging between 0-1 for each max.nclust

@@ -1,0 +1,192 @@
+---
+title: "Computing evoregions analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{building-evoregions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This article contains the basic workflow to construct evoregions, from setting
+    the maximum number of clusters allowed in the analysis to plot and vizualize
+    the results obtained from the function `evoregion`. Therefore, this article
+    is divided in two parts: 
+    
+    1.  [Setting the maximum number](#setclust) of clusters to be used in the evoregion
+        analysis
+        
+    2.  [Compute evoregions](#evoregion) using the maximum number of clusters that 
+        produce the most stable solution in evoregion analysis
+
+# Selecting the maximum number of clusters used in evoregions
+
+```{r setup, echo=TRUE, eval=FALSE}
+library(Herodotools)
+```
+
+
+```{r readData, echo=TRUE}
+data("akodon_sites")
+data("akodon_newick")
+```
+
+
+Processing data 
+
+```{r dataproc, echo=TRUE}
+site_xy <- akodon_sites  |>  
+  dplyr::select(LONG, LAT) 
+
+akodon_pa <- akodon_sites |> 
+  dplyr::select(-LONG, -LAT)
+
+spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
+
+```
+
+# Finding optimal number of maximum groups for evoregion analysis
+
+First obtaining PCPS matrix to be used in the function `find_max_clust`
+
+```{r}
+pcps.muro.bray <-
+  PCPS::pcps(akodon_pa_tree, phylodist = cophenetic(akodon_newick), method = "bray")
+
+values.bray <- pcps.muro.bray$values # PCPS values
+
+# Define a threshold value (eigenvectors containing more than 5% of variation)
+thresh.bray <- max(which(values.bray[, 2] >= 0.05))
+cum.sum.thresh.bray <-
+  cumsum(as.data.frame(values.bray[, 2]))[1:thresh.bray,][3]
+vec.bray <- pcps.muro.bray$vectors
+```
+
+Calculating maximum number of groups. The function supports parallel computation
+    with {`future`} package. First set future parallel computation
+
+```{r}
+# setting function to work in parallel according to user settings
+library(future)
+library(progressr)
+
+# Detect safe max cores
+ncores <- future::availableCores()  # dynamic
+safety_margin <- 1
+workers <- max(1, ncores - safety_margin)
+
+plan(multisession, workers = workers)
+handlers(global = TRUE)
+handlers("txtprogressbar")   # terminal progress bar + timing info
+
+test_find_cluster <- 
+  find_max_nclust(x = vec.bray,
+                  threshold = thresh.bray, 
+                  max.nclust = c(3, 4, 5, 7, 9, 10),
+                  nperm = 300, 
+                  method = "kmeans", 
+                  stat = "BIC", 
+                  criterion = "diffNgroup",
+                  subset = 100,
+                  confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99))
+
+
+```
+This matrix summarizes the results of the analysis of stability of cluster computation for different values of the maximum number of groups. Each row corresponds to a tested number of groups and contains the associated confidence level. The confidence level represents the proportion of correlation values that are equal to or greater than the threshold being evaluated. Values closer to 1 indicate a higher stability of the clustering solution for that number of groups under the specified confidence level. In other words, values approaching 1 suggest that a given number of groups yields consistent and reliable cluster structures. 
+
+According to this analysis the maximum number of three and seven groups corresponds 
+    to the maximum values that produce the most stable solutions to the data used.
+    In the next analysis we will use the number five as the maximum number of 
+    groups in evoregion analysis
+    
+    
+# Computing evoregions
+
+```{r}
+regions <- 
+  Herodotools::calc_evoregions(
+  comm = akodon_pa_tree,
+  phy = akodon_newick, 
+  seed = 100, max.n.clust = 7
+  )
+
+site_region <- regions$cluster_evoregions # this is the classification result for each site
+```
+
+
+```{r}
+evoregion_df <- data.frame(
+  site_xy, 
+  site_region
+)
+
+r_evoregion <- terra::rast(evoregion_df)
+
+# Converting evoregion to a spatial polygon data frame, so it can be plotted
+sf_evoregion <- terra::as.polygons(r_evoregion) |> 
+  sf::st_as_sf()
+
+
+# Downloading coastline continents and croping to keep only South America
+coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
+map_limits <- list(
+  x = c(-95, -30),
+  y = c(-55, 12)
+)
+
+# Assigning the same projection to both spatial objects
+sf::st_crs(sf_evoregion) <- sf::st_crs(coastline)
+
+# Colours to plot evoregions
+col_five_hues <- c(
+  "#3d291a",
+  "#a9344f",
+  "#578a5b",
+  "#83a6c4",
+  "#fcc573"
+)
+
+```
+
+Plotting evoregions in the map
+
+```{r}
+map_evoregion <- 
+  evoregion_df |> 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = site_region)) + 
+  ggplot2::scale_fill_manual(
+    name = "", 
+    labels = LETTERS[1:5],
+    values = rev(col_five_hues)
+  ) +
+  ggplot2::geom_sf(data = coastline) +
+  ggplot2::geom_sf(
+    data = sf_evoregion, 
+    color = "#040400",
+    fill = NA, 
+    size = 0.2) +
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
+  ggplot2::ggtitle("") + 
+  ggplot2::theme_bw() +
+  ggplot2::xlab("Longitude") +
+  ggplot2::ylab("Latitude") +
+  ggplot2::theme(
+        legend.position = "bottom",
+        plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
+        legend.text = element_text(size = 12), 
+        axis.text = element_text(size = 7),
+        axis.title.x = element_text(size = 11),
+        axis.title.y = element_text(size = 11)
+        )
+
+map_evoregion
+```
+
