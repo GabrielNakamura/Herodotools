@@ -36,10 +36,14 @@ find_max_nclust(
 \item{confidence.level}{threshold confidence level used to estimate congruence in the classification pattern.}
 }
 \value{
-Matrix containing congruence values ranging between 0-1 for each max.nclust value (see Arguments) and confidence level.
+Matrix containing congruence values ranging between 0-1 for each max.nclust
+value (see Arguments) and confidence level.
 }
 \description{
 Estimate the maximum number of groups in DAPC analysis
+}
+\details{
+Additional details...
 }
 \examples{
 \dontrun{

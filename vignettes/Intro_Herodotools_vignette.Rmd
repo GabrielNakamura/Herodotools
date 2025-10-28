@@ -95,7 +95,7 @@ akodon_pa_tree <- akodon_pa[, spp_in_tree]
 
 # Exploring spatial patterns
 
-Here we can plot richness pattern for Akodon genus. For this we will read the ggplot2 package to produce some maps
+Here we plot richness pattern for Akodon genus. For this we will use the ggplot2 package to produce some maps
 
 ```{r richpattern, echo=TRUE, eval=TRUE}
 library(ggplot2)
@@ -145,7 +145,8 @@ To calculate evoregions we need an species occurrence matrix and a phylogenetic 
 regions <- 
   Herodotools::calc_evoregions(
   comm = akodon_pa_tree,
-  phy = akodon_newick
+  phy = akodon_newick, 
+  seed = 100 
   )
 
 site_region <- regions$cluster_evoregions
@@ -184,7 +185,6 @@ map_limits <- list(
 # Assigning the same projection to both spatial objects
 sf::st_crs(sf_evoregion) <- sf::st_crs(coastline)
 
-
 # Colours to plot evoregions
 col_five_hues <- c(
   "#3d291a",
@@ -193,7 +193,6 @@ col_five_hues <- c(
   "#83a6c4",
   "#fcc573"
 )
-
 
 ```
 

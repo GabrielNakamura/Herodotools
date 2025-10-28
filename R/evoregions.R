@@ -1,18 +1,24 @@
 #' Defining biogeographic regions based on phylogenetic turnover
 #' 
 #' 
-#' @details evoregions performs biogeographical regionalization analysis, 
-#'     differently from other methods, evoregion uses a phylogenetic turnover 
-#'     metric based on fuzzy sets, therefore accounting for characteristics of 
-#'     evolutionary history, e.g tree imbalance, that is not accounted by other
-#'     metrics of phylogenetic turnover.
+#' @details evoregions performs biogeographical regionalization based on phylogenetic
+#' turnover. Unlike other approaches, it uses a fuzzy‐set–based metric of
+#' phylogenetic dissimilarity that incorporates features of evolutionary history
+#' (e.g., tree imbalance). This allows evoregions to capture variation in lineage
+#' diversification and historical relationships that are not accounted for by
+#' conventional phylogenetic turnover metrics.
+#' 
+#' Some important details when running evoregions
 #'
 #' @param comm Species occurrence matrix. Assemblages are rows and species are
 #'   columns
 #' @param phy phylogenetic tree of class `phylo` containing the species in 
 #'   `comm`.
 #' @param max.n.clust Integer value to be used in \code{\link[adegenet]{find.clusters}}. 
-#'   Indicates the maximum number of clusters to be tried. 
+#'   Indicates the maximum number of clusters to be tried. If NULL (the default)
+#'   the function uses \code{optimal_phyloregion} function from phyloregion 
+#'   package to determine the optimal number of clusters. This function is based
+#'   on the "elbow"/"knee" method. See details.
 #' @param method.dist Character. The method to be used to compute phyogenetic 
 #'   distances among assemblages. Dissimilarity index, as accepted by 
 #'   \code{\link[vegan]{vegdist}} (Default "bray").
