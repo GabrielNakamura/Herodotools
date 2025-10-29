@@ -67,10 +67,10 @@
 #' @export
 
 calc_insitu_diversification <- function(W,
-                                         tree,
-                                         ancestral.area, 
-                                         biogeo, 
-                                         type = "equal.splits"){
+                                        tree,
+                                        ancestral.area, 
+                                        biogeo, 
+                                        type = "equal.splits"){
   
   if(!is.data.frame(W)) W <- as.matrix(W)
   
@@ -143,7 +143,7 @@ calc_insitu_diversification <- function(W,
                         nrow = nrow(W),
                         ncol = ncol(W), 
                         dimnames = dimnames(W)
-                        )
+  )
   
   ## populate jetz_site_sp ----
   
@@ -152,7 +152,7 @@ calc_insitu_diversification <- function(W,
   
   for(i in colnames(W)){
     # input Jetz total diversification values in occurence matrix
-    jetz_site_sp[ , i] <- ifelse(W[ , i] == 1, jetz_sp[i], NA) 
+    jetz_site_sp[ , i] <- ifelse(as.numeric(W[ , i]) == 1, jetz_sp[i], NA) 
   }
   
   ## populate insitu_site_sp and prop_site_sp ----
@@ -166,9 +166,7 @@ calc_insitu_diversification <- function(W,
     # Populate insitu_site_sp if needed 
     if (exists("l_insitu_sp")) {
       insitu_vals <- l_insitu_sp[[region]][colnames(W)]
-      insitu_site_sp[i, ] <- ifelse(
-        W[i, ] == 1, W[i, ] * insitu_vals, NA
-      )
+      insitu_site_sp[i, ] <- ifelse(as.numeric(W[i, ]) == 1, as.numeric(W[i, ]) * insitu_vals, NA)
       
     }
     
@@ -176,7 +174,7 @@ calc_insitu_diversification <- function(W,
     if (exists("l_prop_sp")) {
       prop_vals <- l_prop_sp[[region]][colnames(W)]
       prop_site_sp[i, ] <- ifelse(
-        W[i, ] == 1, W[i, ] * prop_vals, NA
+        as.numeric(W[i, ]) == 1, as.numeric(W[i, ]) * prop_vals, NA
       )
       
       
@@ -197,8 +195,8 @@ calc_insitu_diversification <- function(W,
     # By ignoring zero the site harmonic mean takes into account only the 
     # species with in situ diversification rates. 
     calc_harmonic_mean(x, na.rm = T, ignore.zero = T)
-    })
-    
+  })
+  
   ## prop_comm_mean ----
   sum_prop_site <- rowSums(prop_site_sp, na.rm = T)
   sum_jetz_site <- rowSums(jetz_site_sp, na.rm = T)
@@ -207,7 +205,7 @@ calc_insitu_diversification <- function(W,
   
   # Step 4 - prepare results list
   
-    list_res <- list()
+  list_res <- list()
   
   # Add elements only if they exist
   if (exists("jetz_site_sp"))   list_res$jetz_site_sp   <- jetz_site_sp

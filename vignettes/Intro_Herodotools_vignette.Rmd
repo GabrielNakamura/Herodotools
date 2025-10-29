@@ -133,25 +133,8 @@ dplyr::bind_cols(site_xy, richness = richness) %>%
 map_richness
 ```
 
-# Obtaining evoregions {#evoregions}
+# Reading classification from evoregion analysis
 
-Here we will use the function `calc_evoregion`, originally described in [Maestri and Duarte (2020)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13492), and implemented in Herodotools package. This method of classification allows to perform a biogeographical regionalization based on a [phylogenetic fuzzy matrix](https://doi.org/10.1111/2041-210X.12547) coupled with a [Discriminant Analysis of Principal Components based on k-means non-hierarchical clustering](https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94). Evoregions can be viewed as areas corresponding to centers of independent diversification of lineages, reflecting the historical radiation of single clades (Maestri and Duarte, 2020).
-
-To calculate evoregions we need an species occurrence matrix and a phylogenetic tree. If the user decide not informing the maximum number of clusters, `evoregion` function will perform an automatic procedure based on "elbow" method to set the maximum number of clusters. The "elbow" method is implemented in package [`phyloregion`](https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478). It is worth noting that the original proposition of evoregion method use a bootstrap method to define the maximum number of clusters to be used in the analysis. Here we opted to use the "elbow" method mainly due to computational speed, since this method is faster than the bootstrap-based method.
-
-**NOTE**: The regions obtained from `evoregion` function will present different names for each region at each time the user run the analysis. But, the patterns will be the same for the same dataset. Consequently, if the user run the same code evoregions will show up with different names, even when specifying an initial seed for this analysis.
-
-```{r evoregion_calc, echo=TRUE, eval=FALSE}
-regions <- 
-  Herodotools::calc_evoregions(
-  comm = akodon_pa_tree,
-  phy = akodon_newick, 
-  seed = 100 
-  )
-
-site_region <- regions$cluster_evoregions
-
-```
 
 ```{r save_evoregion_calc, echo=FALSE, eval=TRUE}
 
@@ -235,65 +218,7 @@ map_evoregion <-
 map_evoregion
 ```
 
-The output from `evoregion` produced five distinct regions. However, not all cells have the same degree of affiliation with the region in which it was classified. Cells with high affiliation indicates assemblages that are more similar to the other cells presented in a region. On the other hand, assemblages with low values of affiliation correspond to areas with [high turnover](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13492), in other words, areas with multiple events of colonization by different lineages (Maestri and Duarte, 2020).
-
-```{r affiliationCalc, echo=TRUE,eval=TRUE}
-
-# Selecting only axis with more than 5% of explained variance from evoregion output
-axis_sel <- which(regions$PCPS$prop_explainded >= regions$PCPS$tresh_dist)
-PCPS_thresh <- regions$PCPS$vectors[, axis_sel] 
-
-# distance matrix using 4 significant PCPS axis accordingly to the 5% threshold 
-dist_phylo_PCPS <- vegan::vegdist(PCPS_thresh, method = "euclidean")
-
-# calculating affiliation values for each assemblage 
-afi <- calc_affiliation_evoreg(phylo.comp.dist = dist_phylo_PCPS,
-                          groups = site_region) 
-
-# binding the information in a data frame
-sites <- dplyr::bind_cols(site_xy, site_region =  site_region, afi)
-
-```
-
-Now we can map evoregions and the affiliation of each cell. The degree of affiliation of cells are showed as the degree of fading for each color representing the evoregions. As faded the color of the cell, lesser the affiliation of that cell to its evoregion.
-
-```{r mapAffiliation, echo=TRUE, eval=TRUE}
-map_joint_evoregion_afilliation <- 
-   evoregion_df %>% 
-   ggplot() + 
-   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = site_region), 
-               alpha = sites[, "afilliation"]) + 
-   ggplot2::scale_fill_manual(
-     name = "", 
-     labels = LETTERS[1:5],
-     values = rev(col_five_hues)
-   ) +
-   ggplot2::geom_sf(data = coastline, size = 0.4) +
-   ggplot2::geom_sf(
-     data = sf_evoregion, 
-     color = rev(col_five_hues),
-     fill = NA, 
-     size = 0.7) +
-   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
-   ggplot2::ggtitle("") + 
-   guides(guide_legend(direction = "vertical")) +
-   ggplot2::theme_bw() +
-  ggplot2::xlab("Longitude") +
-  ggplot2::ylab("Latitude") +
-  ggplot2::theme(
-        legend.position = "bottom",
-        plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
-        legend.text = element_text(size = 10), 
-        axis.text = element_text(size = 8),
-        axis.title.x = element_text(size = 10),
-        axis.title.y = element_text(size = 10)
-        )
-
-```
-
-```{r outFig3, echo=FALSE,eval=TRUE,out.width="70%",fig.cap="Figure 3 - Evoregion and afilliation for communities of Akodon Genus"}
-map_joint_evoregion_afilliation
-```
+Ancestral area reconstruction will follow the evoregion classification.
 
 # Ancestral area reconstruction for Akodon species and in situ diversification metrics {#mergeMacroAssemblage}
 
@@ -415,11 +340,11 @@ We modified the original DR metric to take into account only the portion of evol
 
 ```{r diversification, echo=TRUE,eval=TRUE}
 akodon_diversification <- 
-Herodotools::calc_insitu_diversification(W = akodon_pa_tree,
-                   tree = akodon_newick, 
-                   ancestral.area = node_area, 
-                   biogeo = biogeo_area, 
-                   type = "equal.splits")
+  Herodotools::calc_insitu_diversification(W = akodon_pa_tree,
+                                           tree = akodon_newick, 
+                                           ancestral.area = node_area, 
+                                           biogeo = biogeo_area, 
+                                           type = "equal.splits")
 
 ```
 
