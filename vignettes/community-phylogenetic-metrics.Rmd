@@ -7,6 +7,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+::: important
+This article is under construction...
+:::
+
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -21,9 +26,73 @@ library(Herodotools)
 
 ## Community phylogetic metrics considering in-situ diversification {#phylomodelmetricscomm}
 
-We also can calculate common metrics of community phylogenetics considering in-situ diversification dynamics. These community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ in a similar way the in-situ diversification metric. Namely, PD~in-situ~ and PE~in-situ~, they correspond to modified versions of the classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The difference is that our metrics considers only the amount of phylogenetic diversity and endemism that emerged after colonization and establishment of the present day lineages in the assemblages. For this we use the function `calc_insitu_metrics`
+We also can calculate common metrics of community phylogenetics considering in-situ diversification dynamics. These community phylogenetic metrics allows to disentangle the effects of in-situ diversification from ex-situ in a similar way the in-situ diversification metric. Namely, PD~in-situ~ and PE~in-situ~, they correspond to modified versions of the classic Phylogenetic Diversity (PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The difference is that our metrics considers only the amount of phylogenetic diversity and endemism that emerged after colonization and establishment of the present day lineages in the assemblages. For this we use the function `calc_insitu_metrics`.
 
-```{r commPhylo, echo=TRUE, eval=TRUE}
+First, we have to assign the occurrence of each species in the evoregions. To do this we can use the function `get_region_occ` and obtain a data frame of species in the lines and evoregions in the columns.
+
+```{r echo=TRUE, eval=FALSE}
+
+a_region <- Herodotools::get_region_occ(comm = akodon_pa_tree, site.region = site_region)
+
+```
+
+The object created in the last step can be used in an auxiliary function in Herodotools to easily obtain the [Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) file required to run the analysis of ancestral area reconstruction using BioGeoBEARS.
+
+```{r echo=TRUE,eval=FALSE}
+# save phyllip file
+Herodotools::get_tipranges_to_BioGeoBEARS(
+  a_region, 
+  # please set a new path to save the file
+  filename = here::here("inst", "extdata", "geo_area_akodon.data"),
+  areanames = NULL
+  )
+
+```
+
+Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB processor machine), and showing how to perform analysis with BioGeoBEARSwe are not our focus here, we can just read an output from an ancestral analysis reconstruction performed using DEC model to reconstruct the evoregions. If you want to check out the code used to run the BioGeoBEARS models, you can access it with `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`.
+
+Reading the file containing the results of DEC model reconstruction:
+
+```{r loadDECmodel, echo=TRUE, eval=FALSE}
+
+# ancestral reconstruction
+load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
+
+```
+
+It is worth to note that the procedures described here can be adapted to work with any model of ancestral area reconstruction from BioGeoBEARS (other than DEC), but for sake of simplicity we decided to use only the [DEC model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html).
+
+# Merging macroevolutionary models with assemblage level metrics {#modelBasedMetrics}
+
+Once we have data on present-day occurrence of species, a biogeographical regionalization (obtained with `evoregions` function) and the ancestral area reconstruction, we can integrate these information to calculate metrics implemented in Herodotools that represent historical variables at assemblage scale.
+
+## Age of assemblages
+
+Let's start by calculating the age of each cell considering the macroevolutionary dynamics of in-situ diversification during time . The age here corresponds to the mean arrival time of each species occupying a given assemblage. By arrival time we mean the time in which the an ancestor arrived and stablished (no more dispersal events in between) at the assemblage within a region in which the current species occur today. For the original description of this metric see [Van Dijk et al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
+
+```{r agecalc, echo=TRUE,eval=FALSE}
+
+# converting numbers to character
+biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion_df$site_region)) 
+
+# getting the ancestral range area for each node 
+node_area <- 
+  Herodotools::get_node_range_BioGeoBEARS(
+    resDEC,
+    phyllip.file = here::here("inst", "extdata", "geo_area_akodon.data"),
+    akodon_newick,
+    max.range.size = 4 
+  )
+
+# calculating age arrival 
+age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree, 
+                        tree = akodon_newick, 
+                        ancestral.area = node_area, 
+                        biogeo = biogeo_area) 
+
+```
+
+```{r commPhylo, echo=TRUE, eval=FALSE}
 
 akodon_PD_PE_insitu <- calc_insitu_metrics(W = akodon_pa_tree,
                   tree = akodon_newick, 
@@ -36,7 +105,7 @@ akodon_PD_PE_insitu <- calc_insitu_metrics(W = akodon_pa_tree,
 
 As the other metrics we can plot PD~in-situ~ and PE~in-situ~ in a map. Here we illustrate it by plotting PE and PE~in-situ~ metrics for comparison.
 
-```{r map_community_metrics, echo=TRUE,eval=TRUE}
+```{r map_community_metrics, echo=TRUE,eval=FALSE}
 sites <- dplyr::bind_cols(site_xy,
                    site_region =  site_region, 
                    age = age_comm$mean_age_per_assemblage,
@@ -102,7 +171,7 @@ map_PE_all <- map_PE + map_PEinsitu
 
 ```
 
-```{r fig7_PEdb, echo=FALSE, eval=TRUE,out.width="70%", fig.cap="Figure 7 - Phylogenetic endemism (A), and in situ phylogenetic endemism (B) for Akodon assemblages"}
+```{r fig7_PEdb, echo=FALSE, eval=FALSE,out.width="70%", fig.cap="Figure 7 - Phylogenetic endemism (A), and in situ phylogenetic endemism (B) for Akodon assemblages"}
 map_PE_all
 ```
 
@@ -114,7 +183,7 @@ Here we will show how to implement three tip-based metrics proposed by [Luza et 
 
 First we will load trait and phylogenetic data we need to run the function `calc_tip_based_trait_evo`.
 
-```{r loadTraitData, echo=T,eval=T}
+```{r loadTraitData, echo=T,eval=FALSE}
 data("rodent_phylo")
 data("trait")
 ```
@@ -135,13 +204,13 @@ trans_rates <- Herodotools::calc_tip_based_trait_evo(tree = match_data$phy,
 
 Since this analysis can take several minutes we can read the result obtained using the same code above
 
-```{r loadResTransition, echo=TRUE,eval=TRUE}
+```{r loadResTransition, echo=TRUE,eval=FALSE}
 load(system.file("extdata", "transition_rate_res.RData", package = "Herodotools"))
 ```
 
 Now we have the estimates of the three tip-based metrics for 214 rodent species. We can summarize the tip-based metrics at the assemblage scale. First we will load assemblage and geographic data comprising 1770 grid cells located at the Neotropics.
 
-```{r loadCommData, echo=TRUE,eval=TRUE}
+```{r loadCommData, echo=TRUE,eval=FALSE}
 
 # load community data
 comm_data <- read.table(
@@ -183,13 +252,13 @@ averaged_rates <- purrr::map_dfr(1:nrow(comm_data), function (i){
 
 Since the last step take some minutes to complete you can opt to read directly from the package the table with mean values for all metrics
 
-```{r avrates, echo=TRUE,eval=TRUE}
+```{r avrates, echo=TRUE,eval=FALSE}
 data("averaged_rates")
 ```
 
 We will represent in space the variation in the tip-based metrics for rodent assemblages. It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained their phenotipic state during more time than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico. These results are potentially reflecting i) the location of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages.
 
-```{r , echo=T,eval=TRUE}
+```{r , echo=T,eval=FALSE}
 
 # prepare data to map
 data_to_map_wide <- data.frame(geo_data[,c("LONG", "LAT")], averaged_rates)
@@ -261,7 +330,7 @@ mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
 
 ```
 
-```{r fig8, echo=FALSE,eval=TRUE,fig.cap="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
+```{r fig8, echo=FALSE,eval=FALSE,fig.cap="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
 mapTransition_rate
 ```
 

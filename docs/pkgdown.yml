@@ -1,10 +1,12 @@
-pandoc: '2.18'
-pkgdown: 2.0.7
+pandoc: 3.6.3
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
-  Intro_Herodotools_vignette: Intro_Herodotools_vignette.html
-last_built: 2023-02-16T19:06Z
+  bsm_analysis: bsm_analysis.html
+  building-evoregions: building-evoregions.html
+  community-phylogenetic-metrics: community-phylogenetic-metrics.html
+  Intro_calc_insitu_dispersal: Intro_calc_insitu_dispersal.html
+last_built: 2025-10-29T11:11Z
 urls:
   reference: https://gabrielnakamura.github.io/Herodotools/reference
   article: https://gabrielnakamura.github.io/Herodotools/articles
-

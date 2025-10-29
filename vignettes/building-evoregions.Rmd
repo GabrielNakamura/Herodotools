@@ -5,6 +5,13 @@ vignette: >
   %\VignetteIndexEntry{building-evoregions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{here}
+  %\VignetteDepends{vegan}
+  %\VignetteDepends{PCPS}
+  %\VignetteDepends{dplyr}
+  %\VignetteDepends{tidyr}
+  %\VignetteDepends{glue}
+  %\VignetteDepends{terra}
 ---
 
 ```{r, include = FALSE}
@@ -83,23 +90,28 @@ vec_bray <- pcps_bray$vectors # eigenvectors
 
 Now we can estimate the optimal maximum number of groups using the `find_max_nclust()`
 function implemented in {Herodotools}. This function supports parallel computation
-via the {future} package. Therefore, we first need to set up the parallel backend
-using `future::plan()`.
+via the {future} package. We recomend to set  the parallel backend
+using `future::plan()` first.
 
-```{r}
+```{r, echo=TRUE, eval=FALSE}
 # setting function to work in parallel according to user settings
 library(future)
 library(progressr)
 
 # Detect safe max cores
-#ncores <- future::availableCores()  # dynamic
-#safety_margin <- 1
-#workers <- max(1, ncores - safety_margin)
+ncores <- future::availableCores()  # dynamic
+safety_margin <- 1
+workers <- max(1, ncores - safety_margin)
 
-# plan(multisession, workers = workers) this should be called when running
-#future::plan(sequential)
-#handlers(global = TRUE)
-#handlers("txtprogressbar")   # terminal progress bar + timing info
+plan(multisession, workers = workers) this 
+future::plan(sequential)
+handlers(global = TRUE)
+handlers("txtprogressbar")   # terminal progress bar + timing info
+```
+
+Then, run the `find_max_clust` function
+
+```{r}
 
 matrix_optimal_maxclust <- 
   find_max_nclust(x = vec_bray,
@@ -111,7 +123,6 @@ matrix_optimal_maxclust <-
                   criterion = "diffNgroup",
                   subset = 100,
                   confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99))
-
 
 ```
 This matrix summarizes the results of the analysis of stability of cluster computation for different values of the maximum number of groups. Each row corresponds to a tested number of groups and contains the associated confidence level. The confidence level represents the proportion of correlation values that are equal to or greater than the threshold being evaluated. Values closer to 1 indicate a higher stability of the clustering solution for that number of groups under the specified confidence level. In other words, values approaching 1 suggest that a given number of groups yields consistent and reliable cluster structures. 
@@ -197,6 +208,7 @@ col_two_hues <- c(
 Finally, plotting evoregions in the map
 
 ```{r}
+library(ggplot2)
 map_evoregion <- 
   evoregion_df |> 
   ggplot2::ggplot() + 

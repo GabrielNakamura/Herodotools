@@ -55,6 +55,6 @@ Additional details...
 \dontrun{
 data(regions)
 evovectors <- regions$PCPS$vectors # eigenvectors by site
-find_max_nclust(x=evovectors, threshold=3,max.nclust=10)
+find_max_nclust(x = evovectors, threshold = 3, max.nclust = 10)
 }
 }
