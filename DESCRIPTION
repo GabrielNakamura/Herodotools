@@ -51,6 +51,7 @@ Imports:
     ape,
     BioGeoBEARS,
     dplyr,
+    future.apply,
     ggtree,
     gtools,
     HDInterval,
