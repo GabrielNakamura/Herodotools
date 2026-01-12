@@ -10,15 +10,25 @@ l.Jetz.local <- lapply(nodes.list , function(site){
   lapply(1:length(nodes.list[[593]]$nodes_species), function(j){
     # nodes_div <- nodes.list[[3]]$nodes_species[[1]]
     # sp <- names(nodes.list[[3]]$nodes_species)[1]
-    # j = 2
+    # j = 1
     nodes_div <- nodes.list[[593]]$nodes_species[[j]]
     sp <- names(nodes.list[[593]]$nodes_species)[j]
     
     if(length(nodes_div) == 1){
-      internal.brlen_div <- tree$edge.length[which(tree$edge[,
-                                                             2] %in% nodes_div)] #branch lenghts (in times) for internal branch lengths of the most ancient ancestral
+      # Firts testing if the node is from an anagenetic origin
+      node_test_anagenetic <- tree$node.label[stringr::str_detect(tree$node.label, as.character(nodes_div))]
+      if(grepl("\\bnew_", node_test_anagenetic) == TRUE){
+        # if TRUE we get the height of the node up to the first cladogenetic node
+        internal.brlen_div <- tree$edge.length[which(tree$edge[,
+                                         1] %in% nodes_div)]
+      } else{
+        #  get the internal branch length from the parent node to the target node
+        internal.brlen_div <- tree$edge.length[which(tree$edge[,
+                                                               2] %in% nodes_div)] #branch lengths (in times) for internal branch lengths of the most ancient ancestral
+      }
+     
     } else{
-      nodes_div <- nodes_div[-1] #internal nodes that form the path from most ancient ancestral that was presented at Ecoregion of local i to species j
+      nodes_div <- nodes_div[-1] # this is used to remove the path to the node in another area - ancient ancestral that was presented at Ecoregion of local i to species j
       internal.brlen_div <- tree$edge.length[which(tree$edge[,
                                                              2] %in% nodes_div)] #ages for internal nodes of nodes_div object
     }

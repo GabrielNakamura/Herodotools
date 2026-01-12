@@ -56,7 +56,7 @@
 #' 
 #' gdata <- ggtree::ggtree(tree_sim)$data
 #' ins_data <- gdata %>% dplyr::filter(node %in% c(3, 9, 8))
-#' ins_data <- tibble::add_row(ins_data, ins_data[2, ]) %>% arrange(node)
+#' ins_data <- tibble::add_row(ins_data, ins_data[2, ]) %>% dplyr::arrange(node)
 #' 
 #' # Define inserted nodes with areas
 #' inserts <- tibble::tibble(
@@ -76,22 +76,21 @@
 #' 
 #' # ED total (same results as picante::evol.distinct())
 #' ed_total <- calc_ed(  
-#'   tree_out, 
-#'   node_area = node_area_out, 
+#'   tree = tree_out,
 #'   type = "equal.splits")
 #'   
 #' # ED partial. Account for in situ distinctiveness only
 #' 
 #' ed_partial_A <- calc_ed(
-#'   tree_out,
-#'   node_area = node_area_out, 
-#'   current_area = "A", 
+#'   tree = tree_out,
+#'   ancestral.area = node_area_out, 
+#'   current.area = "A", 
 #'   type = "equal.splits")
 #'   
 #' ed_partial_D <- calc_ed(
-#'   tree_out,
-#'   node_area = node_area_out, 
-#'   current_area = "D", 
+#'   tree = tree_out,
+#'   ancestral.area = node_area_out, 
+#'   current.area = "D", 
 #'   type = "equal.splits")
 #'   
 #' data.frame(
@@ -105,8 +104,8 @@
 #' tree_viz <- tree_out
 #' tree_viz$node.label <- node_area_out$area
 #' 
-#' plot(tree_viz, show.node.label = T)
-#' nodelabels(adj = 1.2)
+#' plot(tree_viz, show.node.label = TRUE)
+#' ape::nodelabels(adj = 1.2)
 #' 
 #' 
 #' 

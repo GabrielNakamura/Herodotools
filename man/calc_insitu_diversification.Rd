@@ -13,13 +13,16 @@ calc_insitu_diversification(
 )
 }
 \arguments{
-\item{W}{A species occurrence (assemblage) matrix. Rows represent assemblages (sites) and columns represent species.}
+\item{W}{A species occurrence (assemblage) matrix. Rows represent assemblages
+(sites) and columns represent species.}
 
 \item{tree}{A phylogenetic tree object (class \code{phylo}).}
 
-\item{ancestral.area}{A one-column data frame indicating the ecoregion of occurrence of each node (rows).}
+\item{ancestral.area}{A one-column data frame indicating the ecorregion of
+occurrence of each node (rows).}
 
-\item{biogeo}{A data frame with one column indicating the ecoregion of each assemblage (row).}
+\item{biogeo}{A data frame with one column indicating the ecoregion of each
+assemblage (row).}
 
 \item{type}{Character string indicating the type of evolutionary distinctiveness (ED) metric to be used.
 Options are \code{"equal.splits"} (default) or \code{"fair.proportion"}.}
@@ -27,10 +30,10 @@ Options are \code{"equal.splits"} (default) or \code{"fair.proportion"}.}
 \value{
 A named list containing the following elements (if available):
 \itemize{
-\item \code{jetz_site_sp}: Site-by-species matrix of Jetz diversification rates.
-\item \code{jetz_comm_mean}: Harmonic mean of Jetz diversification rates per site.
-\item \code{insitu_site_sp}: Site-by-species matrix of in-situ diversification rates.
-\item \code{insitu_comm_mean}: Harmonic mean of in-situ diversification rates per site
+\item \code{jetz_site_sp}: Site-by-species matrix of DR diversification rates.
+\item \code{jetz_comm_mean}: Harmonic mean of DR diversification rates per site.
+\item \code{insitu_site_sp}: Site-by-species matrix of \eqn{DR_in-situ} diversification rates.
+\item \code{insitu_comm_mean}: Harmonic mean of \eqn{DR_in-situ} diversification rates per site
 (ignoring zeros when specified).
 \item \code{prop_site_sp}: Site-by-species matrix of proportional diversification rates.
 \item \code{prop_comm_mean}: Arithmetic mean of proportional diversification rates per site.
@@ -42,18 +45,26 @@ Tip-based in-situ diversification metrics
 \details{
 This function calculates three related diversification metrics:
 \itemize{
-\item \strong{Jetz diversification rate (DR_jetz):} the inverse of the evolutionary distinctiveness (ED) metric
-for each species across the full phylogeny.
-\item \strong{In-situ diversification rate (DR_insitu):} a model-based measure of diversification calculated as
+\item \strong{Jetz diversification rate (DR_jetz):} The inverse of the evolutionary distinctiveness (ED) metric
+for each species across the full phylogeny. This is the same as
+described in \href{https://www.nature.com/articles/nature11631}{Jetz et al (2012)}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    \deqn{
+           DR_{i} = (\sum_{j=1}^{N_i}\cdot l_j \cdot 1/2^{j-1})^{-1}
+        }
+}\if{html}{\out{</div>}}
+
+\item \strong{In-situ diversification rate (DR_insitu):} In situ measure of diversification calculated as
 the inverse of ED, but restricted to the portion of a species' branches that diversified in the
-ecoregion matching the assemblage.
-\item \strong{Proportional diversification rate (DR_prop):} the fraction of diversification that occurred
-in a given ecoregion, calculated as the proportion of ED in that region relative to the total ED,
+region (informed in biogeo argument) matching the assemblage.
+\item \strong{Proportional diversification rate (DR_prop):} The fraction of diversification that occurred
+in a given ecoregion (informed in biogeo argument), calculated as the
+proportion of ED in that region relative to the total ED,
 multiplied by the species’ total diversification rate (DR_jetz).
 }
 
 For assemblage-level summaries, site-by-species matrices are generated for each metric, and
-site-level means are calculated:
+site-level means are calculated as:
 \itemize{
 \item \strong{Harmonic mean (Jetz and in-situ):} computed across species in each assemblage.
 Zeros in the in-situ matrix are ignored in the harmonic mean calculation to

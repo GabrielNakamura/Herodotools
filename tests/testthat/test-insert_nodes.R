@@ -12,7 +12,7 @@ node_area <- data.frame(
 
 # Find edge to insert on (e.g., tip 3)
 gdata <- ggtree::ggtree(tree)$data
-ins_data <- gdata %>% dplyr::filter(node %in% c(3, 8, 7)) 
+ins_data <- gdata |> dplyr::filter(node %in% c(3, 8, 7)) 
 ins_data <- tibble::add_row(ins_data, ins_data[3,])
 
 # Define insertion
@@ -82,8 +82,8 @@ test_that("Insertion with invalid event_time throws error", {
 })
 
 
-test_that("Inserted nodes are labeled with 'ana_N' prefix", {
-  ana_nodes <- tree_out$node.label[grepl("^ana_N", tree_out$node.label)]
+test_that("Inserted nodes are labeled with 'new_N' prefix", {
+  ana_nodes <- tree_out$node.label[grepl("^new_N", tree_out$node.label)]
   expect_true(length(ana_nodes) == nrow(node_area_out) - tree$Nnode)
 })
 
@@ -178,7 +178,7 @@ test_that("Inserted nodes are at the correct x (time) position", {
     
     # Match expected node number and label
     expected_node <- ape::Ntip(tree) + tree$Nnode + i
-    expected_label <- paste0("ana_N", expected_node)
+    expected_label <- paste0("new_N", expected_node)
     
     inserted_row <- gdata %>% dplyr::filter(label == expected_label)
     expect_equal(nrow(inserted_row), 1)
