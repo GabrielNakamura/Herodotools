@@ -1,0 +1,387 @@
+# community-phylogenetic-metrics
+
+This article is under construction…
+
+``` r
+library(Herodotools)
+```
+
+### Community phylogetic metrics considering in-situ diversification
+
+We also can calculate common metrics of community phylogenetics
+considering in-situ diversification dynamics. These community
+phylogenetic metrics allows to disentangle the effects of in-situ
+diversification from ex-situ in a similar way the in-situ
+diversification metric. Namely, PD_(in-situ) and PE_(in-situ), they
+correspond to modified versions of the classic Phylogenetic Diversity
+(PD) (Faith, 1998), and PE (Rosauer, et al.2009), respectively. The
+difference is that our metrics considers only the amount of phylogenetic
+diversity and endemism that emerged after colonization and establishment
+of the present day lineages in the assemblages. For this we use the
+function `calc_insitu_metrics`.
+
+First, we have to assign the occurrence of each species in the
+evoregions. To do this we can use the function `get_region_occ` and
+obtain a data frame of species in the lines and evoregions in the
+columns.
+
+``` r
+
+a_region <- Herodotools::get_region_occ(comm = akodon_pa_tree, site.region = site_region)
+```
+
+The object created in the last step can be used in an auxiliary function
+in Herodotools to easily obtain the
+[Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.md)
+file required to run the analysis of ancestral area reconstruction using
+BioGeoBEARS.
+
+``` r
+# save phyllip file
+Herodotools::get_tipranges_to_BioGeoBEARS(
+  a_region, 
+  # please set a new path to save the file
+  filename = here::here("inst", "extdata", "geo_area_akodon.data"),
+  areanames = NULL
+  )
+```
+
+Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB
+processor machine), and showing how to perform analysis with
+BioGeoBEARSwe are not our focus here, we can just read an output from an
+ancestral analysis reconstruction performed using DEC model to
+reconstruct the evoregions. If you want to check out the code used to
+run the BioGeoBEARS models, you can access it with
+`file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`.
+
+Reading the file containing the results of DEC model reconstruction:
+
+``` r
+
+# ancestral reconstruction
+load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
+```
+
+It is worth to note that the procedures described here can be adapted to
+work with any model of ancestral area reconstruction from BioGeoBEARS
+(other than DEC), but for sake of simplicity we decided to use only the
+[DEC
+model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html).
+
+## Merging macroevolutionary models with assemblage level metrics
+
+Once we have data on present-day occurrence of species, a
+biogeographical regionalization (obtained with `evoregions` function)
+and the ancestral area reconstruction, we can integrate these
+information to calculate metrics implemented in Herodotools that
+represent historical variables at assemblage scale.
+
+### Age of assemblages
+
+Let’s start by calculating the age of each cell considering the
+macroevolutionary dynamics of in-situ diversification during time . The
+age here corresponds to the mean arrival time of each species occupying
+a given assemblage. By arrival time we mean the time in which the an
+ancestor arrived and stablished (no more dispersal events in between) at
+the assemblage within a region in which the current species occur today.
+For the original description of this metric see [Van Dijk et
+al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
+
+``` r
+
+# converting numbers to character
+biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion_df$site_region)) 
+
+# getting the ancestral range area for each node 
+node_area <- 
+  Herodotools::get_node_range_BioGeoBEARS(
+    resDEC,
+    phyllip.file = here::here("inst", "extdata", "geo_area_akodon.data"),
+    akodon_newick,
+    max.range.size = 4 
+  )
+
+# calculating age arrival 
+age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree, 
+                        tree = akodon_newick, 
+                        ancestral.area = node_area, 
+                        biogeo = biogeo_area) 
+```
+
+``` r
+
+akodon_PD_PE_insitu <- calc_insitu_metrics(W = akodon_pa_tree,
+                  tree = akodon_newick, 
+                  ancestral.area = node_area, 
+                  biogeo = biogeo_area, 
+                  PD = TRUE, 
+                  PE = TRUE)
+```
+
+As the other metrics we can plot PD_(in-situ) and PE_(in-situ) in a map.
+Here we illustrate it by plotting PE and PE_(in-situ) metrics for
+comparison.
+
+``` r
+sites <- dplyr::bind_cols(site_xy,
+                   site_region =  site_region, 
+                   age = age_comm$mean_age_per_assemblage,
+                   diversification = akodon_diversification$Jetz_harmonic_mean_site,
+                   PE = akodon_PD_PE_insitu$PE, 
+                   PEinsitu = akodon_PD_PE_insitu$PEinsitu,
+                   PD = akodon_PD_PE_insitu$PD,
+                   PDinsitu = akodon_PD_PE_insitu$PDinsitu)
+
+map_PE <- 
+   sites %>% 
+   ggplot2::ggplot() + 
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = PE)) + 
+   rcartocolor::scale_fill_carto_c(palette = "SunsetDark", 
+                                  direction = 1, 
+                                  limits = c(0, 0.6),  ## max percent overall
+                                  breaks = seq(0, 0.6, by = .1)
+                                  ) +
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
+   ggplot2::ggtitle("A") + 
+   ggplot2::theme_bw() +
+   ggplot2::labs(fill = "PE") +
+    ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                               direction = "horizontal",
+                               ticks.colour = "grey20",
+                               title.position = "top",
+                               label.position = "bottom",
+                               title.hjust = 0.5)) +
+   ggplot2::theme(
+     legend.position = "bottom",
+     axis.title = element_blank(),
+     legend.text = element_text(size = 7)
+   )
+
+map_PEinsitu <- 
+   sites %>% 
+   ggplot2::ggplot() + 
+   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = PEinsitu)) + 
+   rcartocolor::scale_fill_carto_c(palette = "SunsetDark", 
+                                  direction = 1, 
+                                  limits = c(0, 0.6),  ## max percent overall
+                                  breaks = seq(0, 0.6, by = .1)
+                                  ) +
+   ggplot2::geom_sf(data = coastline, size = 0.4) +
+   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
+   ggplot2::ggtitle("B") + 
+   ggplot2::theme_bw() +
+   ggplot2::labs(fill = "PEinsitu") +
+    ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                               direction = "horizontal",
+                               ticks.colour = "grey20",
+                               title.position = "top",
+                               label.position = "bottom",
+                               title.hjust = 0.5)) +
+   ggplot2::theme(
+     legend.position = "bottom",
+     axis.title = element_blank(),
+     legend.text = element_text(size = 7)
+   )
+
+map_PE_all <- map_PE + map_PEinsitu
+```
+
+Figure 7 shows that the endemism pattern for Akodon assemblages are
+similar for both metrics, indicating that regions with high endemism are
+mainly due to in situ diversification process.
+
+### Tip-based metrics of trait evolution
+
+Here we will show how to implement three tip-based metrics proposed by
+[Luza et
+al. (2021)](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476).
+Note that these tip-based metrics were estimated using the stochastic
+mapping of discrete/categorical traits (diet in the original
+publication), but can be extended to other traits as we will show here.
+The three tip-based metrics are *Transition rates*, *Stasis time*, and
+*Last transition time*, and are implemented in the function
+`calc_tip_based_trait_evo`. *Transition rates* indicate how many times
+the ancestral character has changed over time. *Stasis time* indicates
+the maximum branch length (time interval) which the current
+tip-character was maintained across the whole phylogeny. Finally, *last
+transition time* is the sum of branch lengths from the tip to the
+prior/previous node with a reconstructed character equal to current
+tip-character. As in the [original
+publication](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8476),
+we will use the stochastic character mapping on discrete trait data.
+This time, however, we will reconstruct the species foraging strata
+(Elton Traits’ database, Wilman et al. 2014). We will reconstruct the
+foraging strata for 214 sigmodontine rodent species with trait and
+phylogenetic data (consensus phylogeny of [Upham et
+al. 2019](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000494)).
+
+First we will load trait and phylogenetic data we need to run the
+function `calc_tip_based_trait_evo`.
+
+``` r
+data("rodent_phylo")
+data("trait")
+```
+
+Now calculate the metrics.
+
+``` r
+# run `calc_tip_based_trait_evo` function 
+trans_rates <- Herodotools::calc_tip_based_trait_evo(tree = match_data$phy,
+                                   trait = trait , # need to be named to work
+                                   nsim = 50,
+                                   method = c("transition_rates",
+                                              "last_transition_time",
+                                              "stasis_time")
+                                   )
+  
+```
+
+Since this analysis can take several minutes we can read the result
+obtained using the same code above
+
+``` r
+load(system.file("extdata", "transition_rate_res.RData", package = "Herodotools"))
+```
+
+Now we have the estimates of the three tip-based metrics for 214 rodent
+species. We can summarize the tip-based metrics at the assemblage scale.
+First we will load assemblage and geographic data comprising 1770 grid
+cells located at the Neotropics.
+
+``` r
+
+# load community data
+comm_data <- read.table(
+   system.file("extdata", "PresAbs_228sp_Neotropical_MainDataBase_Ordenado.txt", 
+               package = "Herodotools"),
+   header = T, sep = "\t"
+   )
+
+# load latlong of these communities
+geo_data <- read.table(
+  system.file("extdata", "Lon-lat-Disparity.txt", package = "Herodotools"),
+  header = T, sep = "\t"
+  )
+```
+
+Now we calculate the values of tip-based metrics for all species for
+each assemblage.
+
+``` r
+
+# transition rates for each community
+averaged_rates <- purrr::map_dfr(1:nrow(comm_data), function (i){
+  # across assemblages
+  purrr::map_dfr(trans_rates, function (sims) { # across simulations
+    
+    # species in the assemblages
+    gather_names <- names(comm_data[i,][which(comm_data[i,]>0)]) # get the names
+    # subset of rates
+    rates <- sims[which(rownames (sims) %in% gather_names),
+                   c("prop.transitions", 
+                     "stasis.time",
+                     "last.transition.time")]
+    mean_rates <- apply(rates, 2, mean) # and calculate the average
+    mean_rates
+  }) %>% 
+    purrr::map(mean)
+})
+```
+
+Since the last step take some minutes to complete you can opt to read
+directly from the package the table with mean values for all metrics
+
+``` r
+data("averaged_rates")
+```
+
+We will represent in space the variation in the tip-based metrics for
+rodent assemblages. It seems that, in general, assemblages of the
+southern, western and northeastern Neotropics have species with higher
+Transition Rates in foraging strata than communities from elsewhere
+(i.e., they have many species that often changed their foraging strata
+over time). Assemblage-level Stasis Time was high for two groups of
+assemblages: one from northeastern Neotropics, and another in central
+Amazonia. The first group in particular also showed high Transition
+Rates. Taken together, these results indicate that, despite the frequent
+changes in foraging strata, the species of northeastern assemblages
+retained their phenotipic state during more time than the species found
+elsewhere. Finally, the Last Transition Time metric shows that the
+transitions leading to the present species foraging strata were older in
+the i) north of the Amazonia and ii) central Mexico. These results are
+potentially reflecting i) the location of arrival of ancestral
+sigmodontine rodents in south America, and ii) the occurrence of several
+species closely related to basal lineages.
+
+``` r
+
+# prepare data to map
+data_to_map_wide <- data.frame(geo_data[,c("LONG", "LAT")], averaged_rates)
+
+data_to_map_long <- 
+  data_to_map_wide %>% 
+  tidyr::pivot_longer(
+    cols = 3:5,
+    names_to = "variables",
+    values_to = "values"
+  )
+
+# create a list with the maps
+list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metric){
+  
+  plot.title <- switch(
+    metric,
+    "prop.transitions" = "Transition Rates",
+    "stasis.time" = "Stasis Time",
+    "last.transition.time" = "Last Transition Time"
+  )
+  
+  sel_data <- 
+    data_to_map_long %>% 
+    dplyr::filter(variables == metric)
+  
+  var_range <- range(sel_data$values) %>% round(2)
+  var_breaks <- seq(var_range[1], var_range[2], diff(var_range/4)) %>% round(2)
+  
+  sig_map_limits <- list(
+    x = range(sel_data$LONG), 
+    y = range(sel_data$LAT)
+  )
+  
+  ggplot() +
+    ggplot2::geom_tile(data = sel_data, 
+                ggplot2::aes(x = LONG, y = LAT, fill = values)) +
+    rcartocolor::scale_fill_carto_c(
+      type = "quantitative", 
+      palette = "SunsetDark", 
+      na.value = "white", 
+      limits = var_range, 
+      breaks = var_breaks
+    )+ 
+    ggplot2::geom_sf(data = coastline, size = 0.4) +
+    ggplot2::coord_sf(xlim = sig_map_limits$x, ylim = sig_map_limits$y) +
+    ggplot2::theme_bw() +
+    ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
+                                 direction = "horizontal",
+                                 ticks.colour = "grey20",
+                                 title.position = "top",
+                                 label.position = "bottom",
+                                 title.hjust = 0.5)) +
+    ggplot2::labs(title = plot.title) +
+    ggplot2::theme(
+      legend.position = "bottom",
+      axis.title = element_blank(),
+      legend.title = element_blank(),
+      legend.text = element_text(size = 7), 
+      axis.text = element_text(size = 7),
+      plot.subtitle = element_text(hjust = 0.5)   
+    )
+  
+})
+
+# Create map
+mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
+  patchwork::plot_annotation(tag_levels = "A")
+```

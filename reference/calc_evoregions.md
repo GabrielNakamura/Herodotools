@@ -1,0 +1,131 @@
+# Defining biogeographic regions based on phylogenetic turnover
+
+Defining biogeographic regions based on phylogenetic turnover
+
+## Usage
+
+``` r
+calc_evoregions(
+  comm,
+  phy,
+  max.n.clust = NULL,
+  method.dist = "bray",
+  tresh.dist = 0.05,
+  method.clust = "kmeans",
+  stat.clust = "BIC",
+  n.iter.clust = 1e+07,
+  criterion.clust = "diffNgroup",
+  seed = NULL
+)
+```
+
+## Arguments
+
+- comm:
+
+  Species occurrence matrix. Assemblages are rows and species are
+  columns
+
+- phy:
+
+  phylogenetic tree of class `phylo` containing the species in `comm`.
+
+- max.n.clust:
+
+  Integer value to be used in
+  [`find.clusters`](https://rdrr.io/pkg/adegenet/man/find.clusters.html).
+  Indicates the maximum number of clusters to be tried. If NULL (the
+  default) the function uses `optimal_phyloregion` function from
+  phyloregion package to determine the optimal number of clusters. This
+  function is based on the "elbow"/"knee" method. See details.
+
+- method.dist:
+
+  Character. The method to be used to compute phyogenetic distances
+  among assemblages. Dissimilarity index, as accepted by
+  [`vegdist`](https://vegandevs.github.io/vegan/reference/vegdist.html)
+  (Default "bray").
+
+- tresh.dist:
+
+  A scalar informing the threshold value to select eigenvectors based on
+  the amount of variation of each eigenvector. Default is 0.05
+  (eigenvector with at least 5% of variation). See details.
+
+- method.clust:
+
+  Character indicating the grouping algorithm to be used in cluster
+  analysis. Options avalible are "kmeans" (default) or "ward".
+
+- stat.clust:
+
+  Character to be used in
+  [`find.clusters`](https://rdrr.io/pkg/adegenet/man/find.clusters.html)
+  indicating the statistic to be computed for each model. Can be "BIC"
+  (default), "AIC" or "WSS".
+
+- n.iter.clust:
+
+  Integer to be used in
+  [`find.clusters`](https://rdrr.io/pkg/adegenet/man/find.clusters.html)
+  function of adegenet package to indicate the number of iterations to
+  be used in each run of K-means algorithm
+
+- criterion.clust:
+
+  Character string matching "diffNgroup" (default), "min", "goesup",
+  "smoothNgoesup", or "goodfit", indicating the criterion for automatic
+  selection of the optimal number of clusters. See `criterion` argument
+  in
+  [`find.clusters`](https://rdrr.io/pkg/adegenet/man/find.clusters.html)
+  for an explanation of these procedures.
+
+- seed:
+
+  default NULL. Set a seed to the
+  [`find.clusters`](https://rdrr.io/pkg/adegenet/man/find.clusters.html),
+  which provides the same names for cluster groups
+
+## Value
+
+A list of length four containing:
+
+- `PCPS` A matrix with PCPS vectors
+
+- `cluster_evoregions` A vector indicating the region in which each
+  assemblage was classified
+
+## Details
+
+evoregions performs biogeographical regionalization based on
+phylogenetic turnover. Unlike other approaches, it uses a
+fuzzy‐set–based metric of phylogenetic dissimilarity that incorporates
+features of evolutionary history (e.g., tree imbalance). This allows
+evoregions to capture variation in lineage diversification and
+historical relationships that are not accounted for by conventional
+phylogenetic turnover metrics.
+
+Some important details when running evoregions
+
+## See also
+
+[`find_max_nclust`](https://gabrielnakamura.github.io/Herodotools/reference/find_max_nclust.md)
+to decide the maximum number of clusters to be used
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+data(akodon_sites) # occurrence data 
+data(akodon_newick) # phylogenetic tree
+
+akodon_pa <- akodon_sites %>% 
+    dplyr::select(-LONG, -LAT)
+    
+spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
+
+regions <- calc_evoregions(comm = akodon_pa_tree, phy = akodon_newick)
+site_region <- regions$cluster_evoregions # classification of each community in regions
+} # }
+```
