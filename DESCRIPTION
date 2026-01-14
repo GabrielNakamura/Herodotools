@@ -1,6 +1,6 @@
 Package: Herodotools
 Title: Tools for Historical Biogeography analysis
-Version: 1.1.0
+Version: 2.0.0.9001
 Authors@R: c(
            person(given = "Gabriel",
            family = "Nakamura",
