@@ -31,12 +31,15 @@
 #'   seed = 1234
 #' )
 #' }
-#'
+#' 
+#' 
 #' @references
 #' Matzke, N. J. (2013). Probabilistic historical biogeography: new models for founder-event speciation, imperfect detection, and fossils allow improved accuracy and model-testing. *Frontiers of Biogeography*, 5(4).
 #' 
 #' Dupin, J., et al. (2017). Bayesian estimation of the global biogeographical history of the Solanaceae. *Journal of Biogeography*, 44(4), 887–899.
 #'
+#' @importFrom utils capture.output
+#' 
 #' @export
 
 
@@ -60,7 +63,7 @@ calc_bsm <- function(
   stochastic_mapping_inputs_list <- withCallingHandlers(
     {
       temp <- NULL
-      invisible(capture.output({
+      invisible(utils::capture.output({
         temp <- BioGeoBEARS::get_inputs_for_stochastic_mapping(res = res)
       }))
       temp

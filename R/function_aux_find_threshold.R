@@ -16,8 +16,9 @@
 #'     }
 #'     
 #' @export
+#' 
 #'
-#' @examples
+
 find_threshold <- function(x, 
                            threshold.steps = c(0.4, 0.45, 0.5,
                                              0.55, 0.6, 0.65, 0.7, 
@@ -69,7 +70,7 @@ find_threshold <- function(x,
     set_diff[k,]<-eig_diff[k+1]-eig_diff[k]
   }
   #plot(x=rownames(set_diff),y=set_diff,type="l",ylab="Eigenvalue increment",xlab="Excluded threshold")
-  d_crit<-hclust(dist(set_diff),"ward.D2")
+  d_crit<-stats::hclust(stats::dist(set_diff),"ward.D2")
   plot(d_crit,xlab="Excluded threshold")
   sel=set_diff
   return(list(Maximum_site_probability=max,Removed_sites=sites_off,Correlation_between_steps=cor_steps,Correlation_between_steps=eigen,Select_threshold=sel))

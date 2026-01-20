@@ -57,6 +57,7 @@ bsm_result <- calc_bsm(
 )
 }
 
+
 }
 \references{
 Matzke, N. J. (2013). Probabilistic historical biogeography: new models for founder-event speciation, imperfect detection, and fossils allow improved accuracy and model-testing. \emph{Frontiers of Biogeography}, 5(4).

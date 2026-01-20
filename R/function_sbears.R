@@ -45,6 +45,7 @@
 #'     niche and neutrality: the continuum hypothesis. 2006. Ecology Letters 
 #'     \doi{10.1111/j.1461-0248.2006.00884.x}
 #'     
+#'
 #' @export
 #'
 #' @examples
@@ -82,19 +83,21 @@ calc_sbears <-
     m.node.anc.area <- rowMeans(node.anc.area)
     sd.node.anc.area <- numeric()
     for(i in 1:nrow(node.anc.area)){
-      sd.node.anc.area[i] <- sd(as.numeric(node.anc.area[i,]))
+      sd.node.anc.area[i] <- stats::sd(as.numeric(node.anc.area[i,]))
     }
     for(i in 1:nrow(node.anc.area)){
       # i = 1
       for(p in 1:ncol(node.anc.area)){
         # p = 1
-        node.anc.area[i,p] <- pnorm(q = (node.anc.area[i, p] - m.node.anc.area[i])/sd.node.anc.area[i],
+        node.anc.area[i,p] <- stats::pnorm(q = (node.anc.area[i, p] - m.node.anc.area[i])/sd.node.anc.area[i],
                                     mean=0,sd=1, lower.tail=TRUE)
       }
     }
     
     if (method == "disp_assembly"){
+      if (requireNamespace("geodist", quietly = TRUE)) {
       r <- scales::rescale(geodist::geodist(x = coords, measure = "geodesic")/1000,diag = T, upper = T, c(0, 1)) # in km
+      }
       rownames(r)<-colnames(r)<-rownames(x)
       max_disp_dist<-sqrt(-log(min_disp_prob)/w_slope) # max distance
       anc_list<-list()
