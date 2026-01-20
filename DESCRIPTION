@@ -45,7 +45,7 @@ Description: Toolset to analyze patterns and processess associated with historic
 License: MIT + file LICENSE
 URL: https://gabrielnakamura.github.io/Herodotools/
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 Imports:
     adegenet,
     ape,
