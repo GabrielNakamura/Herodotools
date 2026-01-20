@@ -1,0 +1,19 @@
+---
+title: "Introduction to SBEARS - Site Based"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Intro_sbears}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Herodotools)
+```
