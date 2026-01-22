@@ -2,7 +2,7 @@
 title: "Tip based metrics of trait evolution"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{community-phylogenetic-metrics}
+  %\VignetteIndexEntry{Tip based metrics of trait evolution}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,13 +14,25 @@ Here we will show how to implement three tip-based metrics proposed by [Luza et 
 First we will load trait and phylogenetic data we need to run the function `calc_tip_based_trait_evo`.
 
 ```{r loadTraitData, echo=T,eval=TRUE}
+
+# load packages
+library(Herodotools)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+
+
 data("rodent_phylo")
 data("trait")
 ```
 
 Now calculate the metrics.
 
-```{r tipbasedtrait, echo=TRUE,eval=TRUE}
+```{r tipbasedtrait, echo=TRUE,eval=FALSE}
+
+match_data <- picante::match.phylo.data(rodent_phylo, trait)
+
 # run `calc_tip_based_trait_evo` function 
 trans_rates <- Herodotools::calc_tip_based_trait_evo(tree = match_data$phy,
                                    trait = trait , # need to be named to work
@@ -59,7 +71,7 @@ geo_data <- read.table(
 
 Now we calculate the values of tip-based metrics for all species for each assemblage.
 
-```{r TransitionAssemblage, echo=T,eval=TRUE}
+```{r TransitionAssemblage, echo=T,eval=FALSE}
 
 # transition rates for each community
 averaged_rates <- purrr::map_dfr(1:nrow(comm_data), function (i){
@@ -83,12 +95,14 @@ averaged_rates <- purrr::map_dfr(1:nrow(comm_data), function (i){
 Since the last step take some minutes to complete you can opt to read directly from the package the table with mean values for all metrics
 
 ```{r avrates, echo=TRUE,eval=TRUE}
-data("averaged_rates")
+
 ```
 
 We will represent in space the variation in the tip-based metrics for rodent assemblages. It seems that, in general, assemblages of the southern, western and northeastern Neotropics have species with higher Transition Rates in foraging strata than communities from elsewhere (i.e., they have many species that often changed their foraging strata over time). Assemblage-level Stasis Time was high for two groups of assemblages: one from northeastern Neotropics, and another in central Amazonia. The first group in particular also showed high Transition Rates. Taken together, these results indicate that, despite the frequent changes in foraging strata, the species of northeastern assemblages retained their phenotipic state during more time than the species found elsewhere. Finally, the Last Transition Time metric shows that the transitions leading to the present species foraging strata were older in the i) north of the Amazonia and ii) central Mexico. These results are potentially reflecting i) the location of arrival of ancestral sigmodontine rodents in south America, and ii) the occurrence of several species closely related to basal lineages.
 
 ```{r , echo=T,eval=TRUE}
+
+data("averaged_rates", package = "Herodotools")
 
 # prepare data to map
 data_to_map_wide <- data.frame(geo_data[,c("LONG", "LAT")], averaged_rates)
@@ -100,6 +114,8 @@ data_to_map_long <-
     names_to = "variables",
     values_to = "values"
   )
+
+coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
 
 # create a list with the maps
 list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metric){
@@ -127,6 +143,7 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
     ggplot2::geom_tile(data = sel_data, 
                 ggplot2::aes(x = LONG, y = LAT, fill = values)) +
     rcartocolor::scale_fill_carto_c(
+      name = NULL, 
       type = "quantitative", 
       palette = "SunsetDark", 
       na.value = "white", 
@@ -158,9 +175,10 @@ list_map_transitions <- lapply(unique(data_to_map_long$variables), function(metr
 mapTransition_rate <- patchwork::wrap_plots(list_map_transitions) +
   patchwork::plot_annotation(tag_levels = "A")
 
+
 ```
 
-```{r fig8, echo=FALSE,eval=TRUE,fig.cap="Figure 8: Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species"}
+```{r fig8, echo=FALSE,eval=TRUE,fig.cap="Maps with tip metrics of evolution dynamics of life mode for Sigmodontine species", fig.height= 3.5, fig.width=7}
 mapTransition_rate
 ```
 
