@@ -45,9 +45,9 @@ assemblage level perspective.
 library(Herodotools)
 library(rnaturalearth)
 library(sf)
-#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 library(rcartocolor)
 library(ggplot2)
+library(patchwork)
 
 
 # load the data ----------------------------------------------------------------
@@ -114,7 +114,7 @@ and
 
 ``` r
 
-# prepare the insertions -------------------------------------------------------
+# prepare  insertions -------------------------------------------------------
 ## get_insert_df ----
 
 insert_list <- get_insert_df(
@@ -183,8 +183,8 @@ bsm_tree[[10]]$phylo
 
 Now, we are going to calculate the metrics in {Herodotools}. Before it,
 let’s prepare the data. For that we are going to separate the
-coordinates from the presence-absence data in the `akodon_sites`. Then
-we will load the evoregions of the sites.
+coordinates from the presence-absence data in the `akodon_sites`, filter
+species present in the phylogeny, and load the evoregions of the sites.
 
 ``` r
 
@@ -209,6 +209,7 @@ evoreg_path <- system.file("extdata", "regions_results.RData", package = "Herodo
 load(file = evoreg_path)
 site_region <- regions$Cluster_Evoregions
 evoregion_df <- data.frame(site_xy, site_region)
+biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion_df$site_region)) 
 
 
 # for visualization 
@@ -221,11 +222,18 @@ map_limits <- list(
 
 #### Age of arrival
 
+To calculate the metric for each BSM realization we need to build a loop
+to get the phylogeny and node_area for each BSM and then run the
+{Herodotools} function, in this case
+[`calc_age_arrival()`](https://gabrielnakamura.github.io/Herodotools/reference/calc_age_arrival.md).
+In this example we have only 10 BSM maps, so using `lapply` for the loop
+is ok in computation time. If you need, you can use some sort of
+parallel computation (e.g. {future} or {furrr}) to speed the computation
+time across several BSMs.
+
 ``` r
 
-biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion_df$site_region)) 
-
-# calculating age arrival 
+# calculating age arrival -----
 l_age_comm <- lapply(bsm_tree, function(bsm_map){
   
   tree <- bsm_map$phylo
@@ -254,15 +262,89 @@ bsm_metrics <- cbind(
 )
 ```
 
-``` r
-# Visualization 
+#### In situ diversidication
 
+Same logic applies to in situ diversification metrics from
+[`calc_insitu_diversification()`](https://gabrielnakamura.github.io/Herodotools/reference/calc_insitu_diversification.md).
+We create a loop to calculate the in situ diversification for each BSM
+map.
+
+``` r
+# calculating in situ diversification -----
+
+l_div_insitu <- lapply(bsm_tree, function(bsm_map){
+  
+  tree <- bsm_map$phylo
+  #tree$node.label <- NULL
+  anc_area <- bsm_map$node_area 
+  
+  calc_insitu_diversification(
+    W = as.matrix(akodon_pa_tree),
+    tree = tree, 
+    ancestral.area = anc_area, 
+    biogeo = biogeo_area, 
+    type = "equal.splits"
+  )
+  
+})
+```
+
+[`calc_insitu_diversification()`](https://gabrielnakamura.github.io/Herodotools/reference/calc_insitu_diversification.md)
+returns three community mean metrics, DRjetz, DRinsitu and DRprop.
+DRjetz is the original DR metric, which does not rely on biogeographical
+recontructions. DRinsitu is the in situ diversification rate based on
+biogeographical recostruction. And DRprop is a relationship between the
+two metrics, quantifying the proportion of diversification that occurred
+in situ.
+
+The code below extract each of the community metrics and summarize it
+for visualization.
+
+``` r
+
+
+# jetz_comm_mean ----
+DR_jetz_mtx <- sapply(l_div_insitu, function(x) x$jetz_comm_mean)
+
+# DR Jetz in not depended on the BSM models, so it should not change
+max(apply(DR_jetz_mtx, 1, sd))
+#> [1] 0
+# SD across BSM models shows max sd as 0. It does not change across BSMs.
+
+# insitu_comm_mean ----
+DR_insitu_mtx <- sapply(l_div_insitu, function(x) x$insitu_comm_mean)
+
+# prop_comm_mean ----
+DR_prop_mtx <- sapply(l_div_insitu, function(x) x$prop_comm_mean)
+
+# summarize results
+
+bsm_metrics <- cbind(
+  bsm_metrics, 
+  DR_jetz = DR_jetz_mtx[,1],
+  DR_insitu_bsm_mean = rowMeans(DR_insitu_mtx),
+  DR_insitu_bsm_sd = apply(DR_insitu_mtx, 1, sd),
+  DR_prop_bsm_mean = rowMeans(DR_prop_mtx),
+  DR_prop_bsm_sd = apply(DR_prop_mtx, 1, sd)
+  )
+```
+
+### Visualization of BSM results
+
+Now we can plot the maps as see the spatial patterns. We are creating a
+common theme for the maps first, then creating a map for each metric.
+Finally, we create figures with mean estimates across BSM metrics and
+uncertainty around those mean estimates.
+
+``` r
+# Visualization ----
 
 # create a theme
-
 theme_htools <- list(
   ggplot2::geom_sf(data = coastline, size = 0.4),
   ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y),
+  scale_x_continuous(n.breaks = 2),
+  scale_y_continuous(n.breaks = 2),
   ggplot2::ggtitle(""),
   ggplot2::theme_bw(),
   ggplot2::guides(fill = ggplot2::guide_colorbar(barheight = unit(2.3, units = "mm"),  
@@ -274,39 +356,121 @@ theme_htools <- list(
   ggplot2::theme(
     legend.position = "bottom",
     plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
-    legend.text = element_text(size = 9), 
-    axis.text = element_text(size = 8),
-    axis.title.x = element_text(size = 8),
-    axis.title.y = element_text(size = 8),
-    plot.subtitle = element_text(hjust = 0.5)
+    text = element_text(size = 8)
   )
 )
+```
 
-bsm_metrics %>% 
+#### Mean across BSMs
+
+``` r
+
+# Spatial patterns, mean across BSMs ----
+
+# Colonization age
+plot_age_mean <- bsm_metrics %>% 
   ggplot2::ggplot() + 
   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = age_bsm_mean)) + 
   rcartocolor::scale_fill_carto_c(type = "quantitative", 
                                   palette = "SunsetDark",
                                   direction = 1) +
-  ggplot2::labs(fill = "Mean age (Myr)") +
+  ggplot2::labs(fill = "Mean colonization age (Myr)") +
+  theme_htools
+
+# DR jetz
+plot_DR_jetz <- bsm_metrics %>% 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = DR_jetz)) + 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
+                                  palette = "SunsetDark",
+                                  direction = 1) +
+  ggplot2::labs(fill = "DR jetz") +
+  theme_htools
+
+# DR in situ
+plot_DR_insitu_mean <- bsm_metrics %>% 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = DR_insitu_bsm_mean)) + 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
+                                  palette = "SunsetDark",
+                                  direction = 1) +
+  ggplot2::labs(fill = "Mean DR in situ") +
+  theme_htools
+
+# DR prop
+plot_DR_prop_mean <- bsm_metrics %>% 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = DR_prop_bsm_mean)) + 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
+                                  palette = "SunsetDark",
+                                  direction = 1) +
+  ggplot2::labs(fill = "Mean DR prop") +
   theme_htools
 ```
-
-![](bsm_analysis_files/figure-html/unnamed-chunk-9-1.png)
 
 ``` r
 
-bsm_metrics %>% 
+l_plot_bsm_mean <- list(plot_age_mean, plot_DR_jetz, plot_DR_insitu_mean, plot_DR_prop_mean)
+
+patchwork::wrap_plots(l_plot_bsm_mean, nrow = 1, axes = "collect") +
+  patchwork::plot_annotation(title = "Mean across BSMs (Except DR jetz)")
+```
+
+![](bsm_analysis_files/figure-html/unnamed-chunk-2-1.png)
+
+#### Uncertainty across BSMs
+
+``` r
+
+# Spatial patterns, uncertainty across BSMs ----
+
+
+# Colonization age
+plot_age_sd <- bsm_metrics %>% 
   ggplot2::ggplot() + 
   ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = age_bsm_sd)) + 
   rcartocolor::scale_fill_carto_c(type = "quantitative", 
-                                  palette = "BrwnYl",
+                                  palette = "SunsetDark",
                                   direction = 1) +
-  ggplot2::labs(fill = "SD age (Myr)") +
+  ggplot2::labs(fill = "Sd colonization age (Myr)") +
+  theme_htools
+
+# DR in situ
+plot_DR_insitu_sd <- bsm_metrics %>% 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = DR_insitu_bsm_sd)) + 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
+                                  palette = "SunsetDark",
+                                  direction = 1) +
+  ggplot2::labs(fill = "Sd DR in situ") +
+  theme_htools
+
+# DR prop
+plot_DR_prop_sd <- bsm_metrics %>% 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = LONG, y = LAT, fill = DR_prop_bsm_sd)) + 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
+                                  palette = "SunsetDark",
+                                  direction = 1) +
+  ggplot2::labs(fill = "Sd DR prop") +
   theme_htools
 ```
 
-![](bsm_analysis_files/figure-html/unnamed-chunk-9-2.png)
+``` r
+
+l_plot_bsm_sd <- list(plot_age_sd, plot_DR_insitu_sd, plot_DR_prop_sd)
+
+patchwork::wrap_plots(l_plot_bsm_sd, nrow = 1, axes = "collect") +
+  patchwork::plot_annotation(title = "SD across BSMs")
+```
+
+![](bsm_analysis_files/figure-html/unnamed-chunk-3-1.png)
+
+Using the BSM approach in the {Herodotools} it is possible to propagate
+the uncertainty in the estimates of ancestral area reconstructions to
+the community-level in situ metrics. This is important for reliable
+estimates and interpretation of the in situ diverisification spatial
+patterns.
 
 ## References:
 
