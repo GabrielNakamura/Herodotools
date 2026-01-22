@@ -110,6 +110,8 @@ plot_age_arrival <- function(age_arrival_comm,
                                           title.position = "top",
                                           title.hjust = 0.5)) +
     ggplot2::theme_bw() +
+    ggplot2::xlab("\nLongitude") +
+    ggplot2::ylab("Latitude\n") +
     ggplot2::labs(fill = "Mean age (Myr)\n") +
     ggplot2::theme(
       panel.grid.major = element_line(linetype = "dashed",
