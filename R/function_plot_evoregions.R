@@ -23,7 +23,7 @@
 #'
 #' #' #Load data
 #'
-#' site_xy <- akodon_sites %>%
+#' site_xy <- akodon_sites |>
 #'     dplyr::select(LONG, LAT)
 #'
 #' coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
@@ -50,7 +50,7 @@ plot_evoregions <- function(evoregions,
                             shapefile) {
 
 
-  # ---- checks for sites_xy ----
+  # step 1 - checks for coords ----
   if (!is.data.frame(coords)) {
     stop("coords must be a data.frame or tibble with longitude and latitude.")
   }
@@ -75,6 +75,8 @@ plot_evoregions <- function(evoregions,
     LAT  = !!col2
   )
 
+  # step 2 - checks for evoregions ---
+
   site_region <- evoregions$cluster_evoregions
 
   df_evoregions <- data.frame(
@@ -84,10 +86,12 @@ plot_evoregions <- function(evoregions,
 
   r_evoregions <- terra::rast(df_evoregions)
 
-  sf_evoregions <- terra::as.polygons(r_evoregions) %>%
+  sf_evoregions <- terra::as.polygons(r_evoregions) |>
     sf::st_as_sf()
 
   sf::st_crs(sf_evoregions) <- sf::st_crs(shapefile)
+
+  # step 3 - output
 
   ggplot2::ggplot(df_evoregions) +
     ggplot2::geom_raster(
