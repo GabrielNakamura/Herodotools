@@ -92,7 +92,7 @@ plot_age_arrival <- function(age_arrival_comm,
     ) +
     rcartocolor::scale_fill_carto_c(
       type = "quantitative",
-      palette = palette,
+      palette = color_palette,
       direction = 1,
       limits = c(0, 3.5),
       breaks = seq(0, 3.5, by = .5),
