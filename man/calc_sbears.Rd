@@ -11,8 +11,8 @@ calc_sbears(
   method = c("single_site", "disp_assembly"),
   w_slope = 5,
   min_disp_prob = 0.8,
-  compute.node.by.sites = FALSE,
-  make.node.label = FALSE
+  compute.node.by.sites = TRUE,
+  make.node.label = TRUE
 )
 }
 \arguments{
@@ -67,6 +67,31 @@ the focal cell. This probability of an ancestral species to disperse
 from a cell to any other can be defined using a dispersal kernel function
 proposed by Gravel et al (2006).
 }
+}
+\examples{
+
+data("akodon_newick")
+data("akodon_sites")
+
+
+site_xy <- akodon_sites \%>\% 
+  dplyr::select(LONG, LAT) 
+
+akodon_pa <- akodon_sites \%>\% 
+  dplyr::select(-LONG, -LAT)
+ 
+akd <- picante::match.phylo.comm(akodon_newick, akodon_pa)
+
+akodon_sbears <- calc_sbears(x = ak$comm, phy = ak$phy, coords = site_xy)
+
+# Visualize root node area
+
+sbears_df <- cbind(site_xy, akodon_sbears$PD_nodes_by_sites)
+
+ggplot(sbears_df) +
+  geom_tile(aes(x = LONG, y = LAT, fill = Node1))
+
+
 }
 \references{
 Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling

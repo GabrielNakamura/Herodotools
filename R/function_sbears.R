@@ -49,7 +49,32 @@
 #' @export
 #'
 #' @examples
+#' 
+#' data("akodon_newick")
+#' data("akodon_sites")
+#' 
+#' 
+#' site_xy <- akodon_sites %>% 
+#'   dplyr::select(LONG, LAT) 
+#' 
+#' akodon_pa <- akodon_sites %>% 
+#'   dplyr::select(-LONG, -LAT)
+#'  
+#' akd <- picante::match.phylo.comm(akodon_newick, akodon_pa)
+#' 
+#' akodon_sbears <- calc_sbears(x = ak$comm, phy = ak$phy, coords = site_xy)
+#' 
+#' # Visualize root node area
+#' 
+#' sbears_df <- cbind(site_xy, akodon_sbears$PD_nodes_by_sites)
+#' 
+#' ggplot(sbears_df) +
+#'   geom_tile(aes(x = LONG, y = LAT, fill = Node1))
 #'
+#'
+
+
+
 calc_sbears <-
   function(x,
            phy,
@@ -57,17 +82,27 @@ calc_sbears <-
            method = c("single_site", "disp_assembly"),
            w_slope = 5,
            min_disp_prob=0.8,
-           compute.node.by.sites = FALSE,
-           make.node.label = FALSE
+           compute.node.by.sites = TRUE,
+           make.node.label = TRUE
   ){
     # Enter and organize data:
     match <- picante::match.phylo.comm(phy, x)
     x <- match$comm
     
+    method <- match.arg(method)
+    
     # Extract species by nodes matrix with Herodotools
     if(make.node.label == TRUE){
       phy <- ape::makeNodeLabel(phy = phy, method = "number", prefix = "Node")
     }
+    
+    # if FALSE, make sure phy has node.labels
+    if(make.node.label == FALSE){
+      if(is.null(phy$node.label)){
+        stop("Please provide 'phy$node.label' or use 'make.node.label = TRUE'")
+      }
+    }
+    
     #spp_nodes <- t(get_spp_nodes(tree = phy, node.prefix = "Node")) # alternative
     
     # Run Ancestral Area Reconstruction:
