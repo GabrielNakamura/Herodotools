@@ -90,9 +90,9 @@ ncores <- future::availableCores()  # dynamic
 safety_margin <- 1
 workers <- max(1, ncores - safety_margin)
 
-plan(multisession, workers = workers) this 
+plan(multisession, workers = workers)  
 future::plan(sequential)
-handlers(global = TRUE)
+
 handlers("txtprogressbar")   # terminal progress bar + timing info
 ```
 
@@ -110,94 +110,22 @@ matrix_optimal_maxclust <-
                   criterion = "diffNgroup",
                   subset = 100,
                   confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99))
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_lapply-1') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_lapply-1'
-#> (ffb469fa32bae2d7d3473511df1e00b7-2); on
-#> ffb469fa32bae2d7d3473511df1e00b7@runnervmmtnos<9143>]
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_lapply-1') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_lapply-1'
-#> (ffb469fa32bae2d7d3473511df1e00b7-3); on
-#> ffb469fa32bae2d7d3473511df1e00b7@runnervmmtnos<9143>]
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_lapply-1') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_lapply-1'
-#> (ffb469fa32bae2d7d3473511df1e00b7-4); on
-#> ffb469fa32bae2d7d3473511df1e00b7@runnervmmtnos<9143>]
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_lapply-1') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_lapply-1'
-#> (ffb469fa32bae2d7d3473511df1e00b7-5); on
-#> ffb469fa32bae2d7d3473511df1e00b7@runnervmmtnos<9143>]
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: did not converge in 100000 iterations
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_lapply-1') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_lapply-1'
-#> (ffb469fa32bae2d7d3473511df1e00b7-6); on
-#> ffb469fa32bae2d7d3473511df1e00b7@runnervmmtnos<9143>]
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: did not converge in 100000 iterations
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: did not converge in 100000 iterations
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: did not converge in 100000 iterations
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: did not converge in 100000 iterations
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: did not converge in 100000 iterations
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: Quick-TRANSfer stage steps exceeded maximum (= 36600)
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_lapply-1') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_lapply-1'
-#> (ffb469fa32bae2d7d3473511df1e00b7-7); on
-#> ffb469fa32bae2d7d3473511df1e00b7@runnervmmtnos<9143>]
+
+matrix_optimal_maxclust
+#>             confidence_lev_0.7 confidence_lev_0.8 confidence_lev_0.9
+#> group.max3           1.0000000          1.0000000          1.0000000
+#> group.max4           0.9800000          0.7200000          0.0000000
+#> group.max5           1.0000000          1.0000000          0.9966667
+#> group.max7           1.0000000          0.9966667          0.9966667
+#> group.max9           1.0000000          0.9933333          0.9800000
+#> group.max10          0.9933333          0.9800000          0.9700000
+#>             confidence_lev_0.95 confidence_lev_0.99
+#> group.max3            1.0000000           1.0000000
+#> group.max4            0.0000000           0.0000000
+#> group.max5            0.9966667           0.9966667
+#> group.max7            0.9966667           0.9933333
+#> group.max9            0.9800000           0.9800000
+#> group.max10           0.9633333           0.9633333
 ```
 
 This matrix summarizes the results of the analysis of stability of
@@ -212,7 +140,7 @@ that a given number of groups yields consistent and reliable cluster
 structures.
 
 In this example, the maximum number of groups that yields the most
-stable solution is 3. Therefore, we use this value in the `evoregion()`
+stable solution is 5. Therefore, we use this value in the `evoregion()`
 computation that follows.
 
 ## Computing evoregions
@@ -249,7 +177,7 @@ assigned to the groups. Without setting a seed, the group labels (i.e.,
 the cluster numbers) may differ across runs even when the grouping
 structure remains the same.
 
-Here, we set `max.n.clust = 3`, based on the result obtained in the
+Here, we set `max.n.clust = 5`, based on the result obtained in the
 previous step.
 
 ``` r
@@ -257,7 +185,7 @@ regions <-
   Herodotools::calc_evoregions(
   comm = akodon_pa_tree,
   phy = akodon_newick, 
-  seed = 100, max.n.clust = 3
+  seed = 100, max.n.clust = 5
   )
 
 site_region <- regions$cluster_evoregions # this is the classification result for each site
@@ -289,8 +217,11 @@ map_limits <- list(
 sf::st_crs(sf_evoregion) <- sf::st_crs(coastline)
 
 # Colours to plot evoregions
-col_two_hues <- c(
+col_five_hues <- c(
   "#3d291a",
+  "#a9344f",
+  "#578a5b",
+  "#83a6c4",
   "#fcc573"
 )
 ```
@@ -306,7 +237,7 @@ map_evoregion <-
   ggplot2::scale_fill_manual(
     name = "", 
     labels = LETTERS[1:5],
-    values = rev(col_two_hues)
+    values = rev(col_five_hues)
   ) +
   ggplot2::geom_sf(data = coastline) +
   ggplot2::geom_sf(
@@ -373,13 +304,13 @@ map_joint_evoregion_afilliation <-
                alpha = sites[, "afilliation"]) + 
    ggplot2::scale_fill_manual(
      name = "", 
-     labels = LETTERS[1:2],
-     values = rev(col_two_hues)
+     labels = LETTERS[1:5],
+     values = rev(col_five_hues)
    ) +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
      data = sf_evoregion, 
-     color = rev(col_two_hues),
+     color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
