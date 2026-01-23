@@ -52,6 +52,9 @@
 - [`calc_tip_based_trait_evo()`](https://gabrielnakamura.github.io/Herodotools/reference/calc_tip_based_trait_evo.md)
   : Tip-based metrics of trait evolution
 
+- [`comp_ada_nodes_sites()`](https://gabrielnakamura.github.io/Herodotools/reference/comp_ada_nodes_sites.md)
+  : Axiliary function to compute node composition by sites
+
 - [`find_max_nclust()`](https://gabrielnakamura.github.io/Herodotools/reference/find_max_nclust.md)
   : Estimate the maximum number of groups in DAPC analysis
 

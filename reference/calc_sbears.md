@@ -111,7 +111,7 @@ akd <- picante::match.phylo.comm(akodon_newick, akodon_pa)
 #> [7] "A_serrensis"         "A_surdus"           
 
 akodon_sbears <- calc_sbears(x = ak$comm, phy = ak$phy, coords = site_xy)
-#> Error: object 'ak' not found
+#> Error in if (method != "single_site" & method != "disp_assembly") {    stop(paste("Invalid input!", "Expected arguments are single_site or disp_assembly",         sep = "\n"))}: the condition has length > 1
 
 # Visualize root node area
 
