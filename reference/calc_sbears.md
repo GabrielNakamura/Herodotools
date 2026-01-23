@@ -12,8 +12,8 @@ calc_sbears(
   method = c("single_site", "disp_assembly"),
   w_slope = 5,
   min_disp_prob = 0.8,
-  compute.node.by.sites = FALSE,
-  make.node.label = FALSE
+  compute.node.by.sites = TRUE,
+  make.node.label = TRUE
 )
 ```
 
@@ -90,3 +90,36 @@ information.
 Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling niche and
 neutrality: the continuum hypothesis. 2006. Ecology Letters
 [doi:10.1111/j.1461-0248.2006.00884.x](https://doi.org/10.1111/j.1461-0248.2006.00884.x)
+
+## Examples
+
+``` r
+data("akodon_newick")
+data("akodon_sites")
+
+
+site_xy <- akodon_sites %>% 
+  dplyr::select(LONG, LAT) 
+
+akodon_pa <- akodon_sites %>% 
+  dplyr::select(-LONG, -LAT)
+ 
+akd <- picante::match.phylo.comm(akodon_newick, akodon_pa)
+#> [1] "Dropping taxa from the community because they are not present in the phylogeny:"
+#> [1] "A_caenosus"          "A_josemariarguedasi" "A_pervalens"        
+#> [4] "A_polopi"            "A_sanctipaulensis"   "A_philipmyersi"     
+#> [7] "A_serrensis"         "A_surdus"           
+
+akodon_sbears <- calc_sbears(x = ak$comm, phy = ak$phy, coords = site_xy)
+#> Error: object 'ak' not found
+
+# Visualize root node area
+
+sbears_df <- cbind(site_xy, akodon_sbears$PD_nodes_by_sites)
+#> Error: object 'akodon_sbears' not found
+
+ggplot(sbears_df) +
+  geom_tile(aes(x = LONG, y = LAT, fill = Node1))
+#> Error in ggplot(sbears_df): could not find function "ggplot"
+
+```
