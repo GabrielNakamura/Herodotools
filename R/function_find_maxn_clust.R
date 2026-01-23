@@ -98,8 +98,8 @@ find_max_nclust <-
             # just in case the group sample is used, if all the samples they are only in a different order
             groups <- clust_vec$grp[group.sample]
             return(groups)
-          })
-        })
+          }, future.seed=TRUE)
+        }, future.seed=TRUE)
     })
     
     # renaming all classifications for all levels of max cluster and all repetitions
