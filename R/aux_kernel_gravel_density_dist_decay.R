@@ -24,7 +24,10 @@ comp_kernel_gravel <-
     rownames(r) <- colnames(r) <- colnames(x) # naming distance matrix with assemblage names
     max_disp_dist <- sqrt(-log(min_disp_prob)/w_slope) # max distance to be used in kernel 
     anc_list <- vector(mode = "list", length = nrow(r)) # list with all distance decay values for each focal site
-   
+    site_values_pernode <- matrix(NA, 
+                                  ncol(x), 
+                                  ncol(x),
+                                  dimnames = list(colnames(x), colnames(x)))
      # matrix to receive distance decay values of each node per focal cell
     site_values_pernode <- 
       matrix(NA, 
@@ -47,7 +50,7 @@ comp_kernel_gravel <-
       for (k in rownames(r_pruned)){
         for (j in 1:phy$Nnode){ # each node in all sites
           for (p in colnames(r_pruned)){
-            dist.decay[j, p] <- node.anc.area[j, k]*exp(1)^-(w_slope*r_pruned[k, p]^2)
+            dist.decay[j, p] <- x[j, k]*exp(1)^-(w_slope*r_pruned[k, p]^2)
           }
         }
       }
@@ -63,12 +66,14 @@ comp_kernel_gravel <-
           site_values_pernode[l, k] <- anc_list[[l]][j, k]
         }
       }
-      for(k in 1:ncol(node.anc.area)){
-        dens_site_node_pernode <- 
-          density(site_values_pernode,
-                  from = 0, 
-                  to = 1, 
-                  na.rm = TRUE)
+      for(k in 1:ncol(x)){
+        site_values_pernode_site <- site_values_pernode[,k][which(!is.na(site_values_pernode[,k]==TRUE))]
+        dens_site_node_pernode <- density(site_values_pernode_site, from = 0, to = 1)
+        #dens_site_node_pernode <- 
+        #  density(site_values_pernode[, k],
+        #          from = 0, 
+        #          to = 1, 
+        #          na.rm = TRUE)
         node.anc.area.spat[j, k] <- 
           dens_site_node_pernode$x[which.max(dens_site_node_pernode$y)]
       }
