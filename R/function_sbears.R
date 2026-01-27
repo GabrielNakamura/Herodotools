@@ -36,7 +36,17 @@
 #'         proposed by Gravel et al (2006).
 #' }
 #' 
-#' @return 
+#' @return A list with two elements. 
+#' \itemize{
+#'     \item \code{reconstruction}: a matrix with assemblages in rows and 
+#'         ancestral nodes in columns. The values represent the occupation
+#'         probability of each ancestral node in each assemblage.
+#'         
+#'     \item \code{site_node_composition}: a matrix with assemblage in rows and 
+#'         node names in columns. The values represent the presence of a given
+#'         node in a given assemblage based on the occurrence of current species
+#'         in the assemblages.
+#' }
 #' 
 #' @references Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling
 #'     niche and neutrality: the continuum hypothesis. 2006. Ecology Letters 
@@ -115,15 +125,23 @@ calc_sbears <-
     }
     
     # Run Ancestral Area Reconstruction:
-    node.list <- list()
-    node.anc.area.spat <- node.anc.area <- node.samp.mat <- matrix(NA, nrow = phy$Nnode, ncol = nrow(x), dimnames = list(phy$node.label, rownames(x)))
+    node.anc.area.spat <- node.samp.mat <- matrix(NA, nrow = phy$Nnode, ncol = nrow(x), dimnames = list(phy$node.label, rownames(x)))
     
-    for(i in 1:nrow(x)){
-      node.list[[i]] <- phytools::fastAnc(phy, x[i, ])
-      node.anc.area[, i] <- node.list[[i]]
-      #print(i)
-    }
+    # Run Ancestral Area Reconstruction:
+    progressr::with_progress({
+      p <- progressr::progressor(steps = nrow(x))
+      node.anc.area <-
+        future.apply::future_apply(x, MARGIN = 1, function(y){
+          rec <- phytools::fastAnc(phy, y)
+          p(message = sprintf("reconstructed site =%s", y))
+          return(rec)
+        })
+    })
     
+    # renaming rownames corresponding to node in the phy object
+    rownames(node.anc.area) <- phy$node.label
+    
+    # Standardization process for node occupancy probability
     m.node.anc.area <- rowMeans(node.anc.area)
     sd.node.anc.area <- numeric()
     for(i in 1:nrow(node.anc.area)){
@@ -189,12 +207,14 @@ calc_sbears <-
     }
     
     # Compute a matrix of nodes by sites
-    if(compute.node.by.sites==TRUE){
+    if(compute.node.by.sites == TRUE){ # if true return a two object list
       node.samp.mat <- comp_ada_nodes_sites(phy = phy, comm = x, long = FALSE)
-    } else {
-      node.samp.mat <- "Nops..."
+      list_res <- list(reconstruction = node.anc.area,
+                       site_node_composition = node.samp.mat)
+    } else { # if false return only the matrix with area reconstruction
+      list_res <- node.anc.area
     }
     
-    list_res <- list(reconstruction = node.anc.area, PD_nodes_by_sites = node.samp.mat)
+    # output
     return(list_res)
   }
