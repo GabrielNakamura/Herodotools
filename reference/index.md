@@ -55,6 +55,10 @@
 - [`comp_ada_nodes_sites()`](https://gabrielnakamura.github.io/Herodotools/reference/comp_ada_nodes_sites.md)
   : Axiliary function to compute node composition by sites
 
+- [`comp_kernel_gravel()`](https://gabrielnakamura.github.io/Herodotools/reference/comp_kernel_gravel.md)
+  : Occupancy probability of each node in each site considering a kernel
+  density funcion
+
 - [`find_max_nclust()`](https://gabrielnakamura.github.io/Herodotools/reference/find_max_nclust.md)
   : Estimate the maximum number of groups in DAPC analysis
 
@@ -72,6 +76,9 @@
 
 - [`get_node_range_BioGeoBEARS()`](https://gabrielnakamura.github.io/Herodotools/reference/get_node_range_BioGeoBEARS.md)
   : Get node ranges from BioGeoBEARS biome reconstruction model
+
+- [`get_node_site_matrix()`](https://gabrielnakamura.github.io/Herodotools/reference/get_node_site_matrix.md)
+  : Extract a composition matrix of communities and nodes
 
 - [`get_nodes_info_core()`](https://gabrielnakamura.github.io/Herodotools/reference/get_nodes_info_core.md)
   : Auxiliary function to compute information of node path and dispersal

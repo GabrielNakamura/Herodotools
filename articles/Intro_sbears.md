@@ -1,15 +1,165 @@
 # Introduction to SBEARS - Site Based
 
+## Context
+
+Here we will demonstrate how to fit a model of ancestral area
+reconstruction called SBEARS (Site Based Estimation of Ancestral Range
+of Species) [(Duarte et al
+2025)](https://academic.oup.com/evolut/article-abstract/79/11/2341/8244149?redirectedFrom=fulltext&login=false).
+SBEARS allows you to reconstruct ancestral ranges at finer spatial
+resolution (grids) without requiring any *a priori* definition of
+biogeographic regions. The output provides the spatial distribution of
+ancestral nodes in a user-friendly matrix format that can be used for
+other methods in community ecology and macroecology.
+
+In SBEARS, the reconstruction is carried out based on the current
+distribution of species across the geographic space of species belonging
+to a monophyletic lineage. This information can be organized as an
+occurrence/ presence-absence matrix of sites occupied by species. The
+reconstruction is performed using a phylogenetic tree through a
+stochastic evolutionary model based on a Brownian motion model,
+implemented in the function `fastAnc` of
+[phytools](https://cran.r-project.org/web/packages/phytools/index.html)
+R package. In this model, each site is treated as a binary categorical
+trait representing the presence (state 1) or absence (state 0) of every
+species in the site, which is reconstructed at the nodes of a phylogeny.
+
+This process is repeated for all sites (with each site corresponding to
+a different trait) and the final product is a matrix describing the
+probability value for each node to occur in each site of the grid. The
+probability is standardized to account for variation in the range size
+of nodes. This is the procedure called **Single Site**. There is also
+another option called **Dispersal Assembly** in which the reconstruction
+probability also depends on the probability of an ancestor occurring in
+a site dispersing to a neighboring site, given the geographical distance
+among sites weighted by a dispersal kernel function.
+
+Next, we will show how these two methods can be used in the Herodotools
+package, how to interpret the results of the `calc_sbears` function, and
+how to visualize them.
+
+## Data
+
+To perform SBEARS reconstruction, we need a community matrix, the
+geographical coordinates of these communities, and a phylogeny for the
+species occurring in the communities. As an example, we will use the
+same data used in [Maestri et al
+(2019)](https://besjournals.onlinelibrary.wiley.com/action/oidcStart?redirectUri=%2Fdoi%2Fabs%2F10.1111%2F2041-210X.13492)
+and [Duarte et al
+(2025)](https://academic.oup.com/evolut/article-abstract/79/11/2341/8244149?redirectedFrom=fulltext&login=false)
+that comprise data on the occurrence and phylogeny of Sigmodontinae
+rodents. The community matrix corresponds to grids of approximately XX
+km².
+
 ``` r
 library(Herodotools)
-```
-
-## Sigmodontinae data
-
-Reading data used in Maestri and Duarte (2021)
-
-``` r
 data("comm_sbears")
 data("coords_sbears")
 data("phy_sbears")
 ```
+
+## Single site algorithm
+
+To perform the single site algorithm, we can use the `calc_sbears`
+function with the argument `method = "single_site"`.
+
+``` r
+out_single_site <- calc_sbears(x = comm_sbears, 
+                               phy = phy_sbears, 
+                               coords = coords_sbears,
+                               method = "single_site",
+                               compute.node.by.sites = TRUE, 
+                               make.node.label = TRUE)
+```
+
+The `calc_sbears` function also supports parallel computation via the
+package. This is recommended for large community matrices, as
+computation time can otherwise be substantial. To run the function in
+parallel, the user can proceed as follows:
+
+``` r
+# setting function to work in parallel according to user settings
+library(future)
+library(progressr)
+
+# Detect safe max cores
+ncores <- future::availableCores()  # dynamic
+safety_margin <- 1
+workers <- max(1, ncores - safety_margin)
+
+plan(multisession, workers = workers)  
+handlers("txtprogressbar")   # terminal progress bar + timing info
+
+out_single_site <- calc_sbears(x = comm_sbears, 
+                               phy = phy_sbears, 
+                               coords = coords_sbears,
+                               method = "single_site",
+                               compute.node.by.sites = TRUE, 
+                               make.node.label = TRUE)
+#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
+#> ('future_apply-1') unexpectedly generated random numbers without declaring so.
+#> There is a risk that those random numbers are not statistically sound and the
+#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
+#> ensures that proper, parallel-safe random numbers are produced via a parallel
+#> RNG method. To disable this check, use 'future.seed = NULL', or set option
+#> 'future.rng.onMisuse' to "ignore". [future 'future_apply-1'
+#> (bc64de20c2556cb443f7734d5d8363ef-2); on
+#> bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l<9563>]
+#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
+#> ('future_apply-2') unexpectedly generated random numbers without declaring so.
+#> There is a risk that those random numbers are not statistically sound and the
+#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
+#> ensures that proper, parallel-safe random numbers are produced via a parallel
+#> RNG method. To disable this check, use 'future.seed = NULL', or set option
+#> 'future.rng.onMisuse' to "ignore". [future 'future_apply-2'
+#> (bc64de20c2556cb443f7734d5d8363ef-3); on
+#> bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l<9563>]
+#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
+#> ('future_apply-3') unexpectedly generated random numbers without declaring so.
+#> There is a risk that those random numbers are not statistically sound and the
+#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
+#> ensures that proper, parallel-safe random numbers are produced via a parallel
+#> RNG method. To disable this check, use 'future.seed = NULL', or set option
+#> 'future.rng.onMisuse' to "ignore". [future 'future_apply-3'
+#> (bc64de20c2556cb443f7734d5d8363ef-4); on
+#> bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l<9563>]
+
+# going back to sequential plan
+future::plan(sequential)
+```
+
+The function output is a list or a single matrix depending on the
+arguments used in the function. If the user sets the argument
+`compute.node.by.site` as TRUE the function returns the output as a list
+with two elements:
+
+    - `reconstruction`: a matrix with assemblages in rows and ancestral nodes 
+        in columns. The values represent the occupation probability of each
+        ancestral node in each assemblage.
+        
+    - `site_node_composition`: a matrix with assemblage in rows and 
+       node names in columns. The values represent the presence of a given
+       node in a given assemblage based on the occurrence of current species
+       in the assemblages.
+
+## Dispersal Assembly algorithm
+
+Here we have to set up two additional arguments: `w_slope` corresponds
+to the slope parameter used in kernel function, and `min_disp_prob` that
+corresponds to the minimum probability of a node between two cells in
+geographic space.
+
+``` r
+out_disp_assembly <- calc_sbears(x = comm_sbears,
+                                 phy = phy_sbears, 
+                                 coords = coords_sbears, 
+                                 method = "disp_assembly",
+                                 w_slope = 5,
+                                 min_disp_prob = 0.8, 
+                                 compute.node.by.sites = TRUE, 
+                                 make.node.label = TRUE)
+```
+
+The structure of the output for `calc_sbears` function with dispersal
+assembly algorithm is the same as the one with the `single_site`
+algorithm

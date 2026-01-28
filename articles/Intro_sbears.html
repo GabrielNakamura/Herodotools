@@ -68,18 +68,160 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gabrielnakamura.github.io/Herodotools/">Herodotools</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="sigmodontinae-data">Sigmodontinae data<a class="anchor" aria-label="anchor" href="#sigmodontinae-data"></a>
+<h2 id="context">Context<a class="anchor" aria-label="anchor" href="#context"></a>
 </h2>
-<p>Reading data used in Maestri and Duarte (2021)</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"comm_sbears"</span><span class="op">)</span></span>
+<p>Here we will demonstrate how to fit a model of ancestral area
+reconstruction called SBEARS (Site Based Estimation of Ancestral Range
+of Species) <a href="https://academic.oup.com/evolut/article-abstract/79/11/2341/8244149?redirectedFrom=fulltext&amp;login=false" class="external-link">(Duarte
+et al 2025)</a>. SBEARS allows you to reconstruct ancestral ranges at
+finer spatial resolution (grids) without requiring any <em>a priori</em>
+definition of biogeographic regions. The output provides the spatial
+distribution of ancestral nodes in a user-friendly matrix format that
+can be used for other methods in community ecology and macroecology.</p>
+<p>In SBEARS, the reconstruction is carried out based on the current
+distribution of species across the geographic space of species belonging
+to a monophyletic lineage. This information can be organized as an
+occurrence/ presence-absence matrix of sites occupied by species. The
+reconstruction is performed using a phylogenetic tree through a
+stochastic evolutionary model based on a Brownian motion model,
+implemented in the function <code>fastAnc</code> of <a href="https://cran.r-project.org/web/packages/phytools/index.html" class="external-link">phytools</a>
+R package. In this model, each site is treated as a binary categorical
+trait representing the presence (state 1) or absence (state 0) of every
+species in the site, which is reconstructed at the nodes of a
+phylogeny.</p>
+<p>This process is repeated for all sites (with each site corresponding
+to a different trait) and the final product is a matrix describing the
+probability value for each node to occur in each site of the grid. The
+probability is standardized to account for variation in the range size
+of nodes. This is the procedure called <strong>Single Site</strong>.
+There is also another option called <strong>Dispersal Assembly</strong>
+in which the reconstruction probability also depends on the probability
+of an ancestor occurring in a site dispersing to a neighboring site,
+given the geographical distance among sites weighted by a dispersal
+kernel function.</p>
+<p>Next, we will show how these two methods can be used in the
+Herodotools package, how to interpret the results of the
+<code>calc_sbears</code> function, and how to visualize them.</p>
+</div>
+<div class="section level2">
+<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+</h2>
+<p>To perform SBEARS reconstruction, we need a community matrix, the
+geographical coordinates of these communities, and a phylogeny for the
+species occurring in the communities. As an example, we will use the
+same data used in <a href="https://besjournals.onlinelibrary.wiley.com/action/oidcStart?redirectUri=%2Fdoi%2Fabs%2F10.1111%2F2041-210X.13492" class="external-link">Maestri
+et al (2019)</a> and <a href="https://academic.oup.com/evolut/article-abstract/79/11/2341/8244149?redirectedFrom=fulltext&amp;login=false" class="external-link">Duarte
+et al (2025)</a> that comprise data on the occurrence and phylogeny of
+Sigmodontinae rodents. The community matrix corresponds to grids of
+approximately XX km².</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gabrielnakamura.github.io/Herodotools/">Herodotools</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"comm_sbears"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"coords_sbears"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phy_sbears"</span><span class="op">)</span></span></code></pre></div>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="single-site-algorithm">Single site algorithm<a class="anchor" aria-label="anchor" href="#single-site-algorithm"></a>
+</h2>
+<p>To perform the single site algorithm, we can use the
+<code>calc_sbears</code> function with the argument
+<code>method = "single_site"</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_single_site</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_sbears.html">calc_sbears</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">comm_sbears</span>, </span>
+<span>                               phy <span class="op">=</span> <span class="va">phy_sbears</span>, </span>
+<span>                               coords <span class="op">=</span> <span class="va">coords_sbears</span>,</span>
+<span>                               method <span class="op">=</span> <span class="st">"single_site"</span>,</span>
+<span>                               compute.node.by.sites <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                               make.node.label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>The <code>calc_sbears</code> function also supports parallel
+computation via the package. This is recommended for large community
+matrices, as computation time can otherwise be substantial. To run the
+function in parallel, the user can proceed as follows:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># setting function to work in parallel according to user settings</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://progressr.futureverse.org" class="external-link">progressr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Detect safe max cores</span></span>
+<span><span class="va">ncores</span> <span class="op">&lt;-</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://parallelly.futureverse.org/reference/availableCores.html" class="external-link">availableCores</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># dynamic</span></span>
+<span><span class="va">safety_margin</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">workers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">ncores</span> <span class="op">-</span> <span class="va">safety_margin</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="va">workers</span><span class="op">)</span>  </span>
+<span><span class="fu"><a href="https://progressr.futureverse.org/reference/handlers.html" class="external-link">handlers</a></span><span class="op">(</span><span class="st">"txtprogressbar"</span><span class="op">)</span>   <span class="co"># terminal progress bar + timing info</span></span>
+<span></span>
+<span><span class="va">out_single_site</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_sbears.html">calc_sbears</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">comm_sbears</span>, </span>
+<span>                               phy <span class="op">=</span> <span class="va">phy_sbears</span>, </span>
+<span>                               coords <span class="op">=</span> <span class="va">coords_sbears</span>,</span>
+<span>                               method <span class="op">=</span> <span class="st">"single_site"</span>,</span>
+<span>                               compute.node.by.sites <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                               make.node.label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations</span></span>
+<span><span class="co">#&gt; ('future_apply-1') unexpectedly generated random numbers without declaring so.</span></span>
+<span><span class="co">#&gt; There is a risk that those random numbers are not statistically sound and the</span></span>
+<span><span class="co">#&gt; overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This</span></span>
+<span><span class="co">#&gt; ensures that proper, parallel-safe random numbers are produced via a parallel</span></span>
+<span><span class="co">#&gt; RNG method. To disable this check, use 'future.seed = NULL', or set option</span></span>
+<span><span class="co">#&gt; 'future.rng.onMisuse' to "ignore". [future 'future_apply-1'</span></span>
+<span><span class="co">#&gt; (bc64de20c2556cb443f7734d5d8363ef-2); on</span></span>
+<span><span class="co">#&gt; bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l&lt;9563&gt;]</span></span>
+<span><span class="co">#&gt; Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations</span></span>
+<span><span class="co">#&gt; ('future_apply-2') unexpectedly generated random numbers without declaring so.</span></span>
+<span><span class="co">#&gt; There is a risk that those random numbers are not statistically sound and the</span></span>
+<span><span class="co">#&gt; overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This</span></span>
+<span><span class="co">#&gt; ensures that proper, parallel-safe random numbers are produced via a parallel</span></span>
+<span><span class="co">#&gt; RNG method. To disable this check, use 'future.seed = NULL', or set option</span></span>
+<span><span class="co">#&gt; 'future.rng.onMisuse' to "ignore". [future 'future_apply-2'</span></span>
+<span><span class="co">#&gt; (bc64de20c2556cb443f7734d5d8363ef-3); on</span></span>
+<span><span class="co">#&gt; bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l&lt;9563&gt;]</span></span>
+<span><span class="co">#&gt; Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations</span></span>
+<span><span class="co">#&gt; ('future_apply-3') unexpectedly generated random numbers without declaring so.</span></span>
+<span><span class="co">#&gt; There is a risk that those random numbers are not statistically sound and the</span></span>
+<span><span class="co">#&gt; overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This</span></span>
+<span><span class="co">#&gt; ensures that proper, parallel-safe random numbers are produced via a parallel</span></span>
+<span><span class="co">#&gt; RNG method. To disable this check, use 'future.seed = NULL', or set option</span></span>
+<span><span class="co">#&gt; 'future.rng.onMisuse' to "ignore". [future 'future_apply-3'</span></span>
+<span><span class="co">#&gt; (bc64de20c2556cb443f7734d5d8363ef-4); on</span></span>
+<span><span class="co">#&gt; bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l&lt;9563&gt;]</span></span>
+<span></span>
+<span><span class="co"># going back to sequential plan</span></span>
+<span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span></code></pre></div>
+<p>The function output is a list or a single matrix depending on the
+arguments used in the function. If the user sets the argument
+<code>compute.node.by.site</code> as TRUE the function returns the
+output as a list with two elements:</p>
+<pre><code>- `reconstruction`: a matrix with assemblages in rows and ancestral nodes 
+    in columns. The values represent the occupation probability of each
+    ancestral node in each assemblage.
+    
+- `site_node_composition`: a matrix with assemblage in rows and 
+   node names in columns. The values represent the presence of a given
+   node in a given assemblage based on the occurrence of current species
+   in the assemblages.</code></pre>
+</div>
+<div class="section level2">
+<h2 id="dispersal-assembly-algorithm">Dispersal Assembly algorithm<a class="anchor" aria-label="anchor" href="#dispersal-assembly-algorithm"></a>
+</h2>
+<p>Here we have to set up two additional arguments: <code>w_slope</code>
+corresponds to the slope parameter used in kernel function, and
+<code>min_disp_prob</code> that corresponds to the minimum probability
+of a node between two cells in geographic space.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out_disp_assembly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_sbears.html">calc_sbears</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">comm_sbears</span>,</span>
+<span>                                 phy <span class="op">=</span> <span class="va">phy_sbears</span>, </span>
+<span>                                 coords <span class="op">=</span> <span class="va">coords_sbears</span>, </span>
+<span>                                 method <span class="op">=</span> <span class="st">"disp_assembly"</span>,</span>
+<span>                                 w_slope <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                                 min_disp_prob <span class="op">=</span> <span class="fl">0.8</span>, </span>
+<span>                                 compute.node.by.sites <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                 make.node.label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>The structure of the output for <code>calc_sbears</code> function
+with dispersal assembly algorithm is the same as the one with the
+<code>single_site</code> algorithm</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

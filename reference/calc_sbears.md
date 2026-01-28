@@ -54,10 +54,16 @@ calc_sbears(
 
 ## Value
 
-a list with three elements. reconstruction is the result of ancestral .
-area reconstruction; phylogeny is the matrix containing the occurrence
-of nodes in sites and joint.phylo.obs is the joint occurrence of nodes
-and species in phylogenetic tree.
+A list with two elements.
+
+- `reconstruction`: a matrix with ancestral nodes in rows and
+  assemblages in columns. The numeric values represent the occupation
+  probability of each ancestral node in each assemblage.
+
+      \item \code{site_node_composition}: a matrix with assemblage in rows and
+          node names in columns. The values represent the presence of a given
+          node in a given assemblage based on the occurrence of current species
+          in the assemblages.
 
 ## Details
 
@@ -66,7 +72,8 @@ for ancestral state reconstruction of species geographic ranges. It
 operates at fine spatial resolution and does not require predefined
 discrete biogeographic areas. The method estimates ancestral ranges
 under a maximum likelihood framework, using site-level occurrence
-information.
+information. For large matrix this function supports parallel
+computation with package `future`
 
 - the method used to compute ancestral range probabilities can be
   `single_site` or `disp_assembly`. For both methods SBEARS use the
@@ -94,32 +101,40 @@ neutrality: the continuum hypothesis. 2006. Ecology Letters
 ## Examples
 
 ``` r
-data("akodon_newick")
-data("akodon_sites")
+# phylogenetic tree
+phylo <- geiger::sim.bdtree(n = 10, seed = 42)
+#> Error in loadNamespace(x): there is no package called ‘geiger’
+phylo <- ape::makeNodeLabel(phy = phylo)
+#> Error: object 'phylo' not found
 
+# community composition matrix
+comm <- 
+ matrix(sample(c(0, 1), size = 10*20, replace = TRUE),
+        nrow = 20, 
+        ncol = 10, 
+        dimnames = list(paste("comm", 1:20), phylo$tip.label)
+ )
+#> Error: object 'phylo' not found
 
-site_xy <- akodon_sites %>% 
-  dplyr::select(LONG, LAT) 
+# coordinates - this is necessary for "disperal_assembly" algorithm
+xy_coords <- 
+ matrix(runif(1:10), 
+        nrow = nrow(comm),
+        ncol = 2, 
+        dimnames = list(rownames(comm), c("lng", "lat")
+        )
+ )
+#> Error: object 'comm' not found
 
-akodon_pa <- akodon_sites %>% 
-  dplyr::select(-LONG, -LAT)
- 
-akd <- picante::match.phylo.comm(akodon_newick, akodon_pa)
-#> [1] "Dropping taxa from the community because they are not present in the phylogeny:"
-#> [1] "A_caenosus"          "A_josemariarguedasi" "A_pervalens"        
-#> [4] "A_polopi"            "A_sanctipaulensis"   "A_philipmyersi"     
-#> [7] "A_serrensis"         "A_surdus"           
+# running sbears with "single_site" algorithm
+out_sbears <- 
+ calc_sbears(x = comm,
+             phy = phylo, 
+             coords = xy_coords, 
+             method = "single_site")
+#> Error: object 'phylo' not found
 
-akodon_sbears <- calc_sbears(x = ak$comm, phy = ak$phy, coords = site_xy)
-#> Error in if (method != "single_site" & method != "disp_assembly") {    stop(paste("Invalid input!", "Expected arguments are single_site or disp_assembly",         sep = "\n"))}: the condition has length > 1
-
-# Visualize root node area
-
-sbears_df <- cbind(site_xy, akodon_sbears$PD_nodes_by_sites)
-#> Error: object 'akodon_sbears' not found
-
-ggplot(sbears_df) +
-  geom_tile(aes(x = LONG, y = LAT, fill = Node1))
-#> Error in ggplot(sbears_df): could not find function "ggplot"
-
+# matrix containing ancestral reconsturction, nodes are rows and columns are sites
+anc_reconstruction <- out_sbears$reconstruction
+#> Error: object 'out_sbears' not found
 ```

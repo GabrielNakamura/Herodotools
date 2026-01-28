@@ -16,7 +16,7 @@ find_threshold(
 
 - x:
 
-  A matri containing the continuous probabilities of occurrences of
+  A matrix containing the continuous probabilities of occurrences of
   nodes accross the sites
 
 - threshold.steps:

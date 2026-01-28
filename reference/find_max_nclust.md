@@ -72,7 +72,10 @@ max.nclust value (see Arguments) and confidence level.
 
 ## Details
 
-Additional details...
+This function can be used to find the maximum number of clusters that
+maximizes the congruence of the grouping procedure. Basically it
+consists in repeat DAPC analysis multiple times using a set of candidate
+maximum values (indicated in the argument `max.nclust`)
 
 ## Examples
 
