@@ -58,6 +58,7 @@ To perform SBEARS reconstruction, we need a community matrix, the geographical
     XX km². 
 
 ```{r}
+library(Herodotools)
 data("comm_sbears")
 data("coords_sbears")
 data("phy_sbears")
@@ -76,6 +77,37 @@ out_single_site <- calc_sbears(x = comm_sbears,
                                compute.node.by.sites = TRUE, 
                                make.node.label = TRUE)
 ```
+
+The `calc_sbears` function also supports parallel computation via the
+    \code{\link{future}} package. This is recommended for large community
+    matrices, as computation time can otherwise be substantial. To run the
+    function in parallel, the user can proceed as follows:
+    
+```{r}
+# setting function to work in parallel according to user settings
+library(future)
+library(progressr)
+
+# Detect safe max cores
+ncores <- future::availableCores()  # dynamic
+safety_margin <- 1
+workers <- max(1, ncores - safety_margin)
+
+plan(multisession, workers = workers)  
+handlers("txtprogressbar")   # terminal progress bar + timing info
+
+out_single_site <- calc_sbears(x = comm_sbears, 
+                               phy = phy_sbears, 
+                               coords = coords_sbears,
+                               method = "single_site",
+                               compute.node.by.sites = TRUE, 
+                               make.node.label = TRUE)
+
+# going back to sequential plan
+future::plan(sequential)
+
+```
+
 The function output is a list or a single matrix depending on the arguments 
     used in the function. If the user sets the argument `compute.node.by.site` 
     as TRUE the function returns the output as a list with two elements: 

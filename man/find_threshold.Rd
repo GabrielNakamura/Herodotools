@@ -10,7 +10,7 @@ find_threshold(
 )
 }
 \arguments{
-\item{x}{A matri containing the continuous probabilities of occurrences of
+\item{x}{A matrix containing the continuous probabilities of occurrences of
 nodes accross the sites}
 
 \item{threshold.steps}{A numeric vector defining the threshold values that will
