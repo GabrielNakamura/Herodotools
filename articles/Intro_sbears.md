@@ -1,4 +1,4 @@
-# Introduction to SBEARS - Site Based
+# Introduction to SBEARS - Site Based Estimation of Ancestral Range of Species
 
 ## Context
 
@@ -96,33 +96,6 @@ out_single_site <- calc_sbears(x = comm_sbears,
                                method = "single_site",
                                compute.node.by.sites = TRUE, 
                                make.node.label = TRUE)
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_apply-1') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_apply-1'
-#> (81223842d02e6a1396f98be38245700a-2); on
-#> 81223842d02e6a1396f98be38245700a@runnervmymu0l<9483>]
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_apply-2') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_apply-2'
-#> (81223842d02e6a1396f98be38245700a-3); on
-#> 81223842d02e6a1396f98be38245700a@runnervmymu0l<9483>]
-#> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
-#> ('future_apply-3') unexpectedly generated random numbers without declaring so.
-#> There is a risk that those random numbers are not statistically sound and the
-#> overall results might be invalid. To fix this, specify 'future.seed=TRUE'. This
-#> ensures that proper, parallel-safe random numbers are produced via a parallel
-#> RNG method. To disable this check, use 'future.seed = NULL', or set option
-#> 'future.rng.onMisuse' to "ignore". [future 'future_apply-3'
-#> (81223842d02e6a1396f98be38245700a-4); on
-#> 81223842d02e6a1396f98be38245700a@runnervmymu0l<9483>]
 
 # going back to sequential plan
 future::plan(sequential)
