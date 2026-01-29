@@ -149,7 +149,9 @@ The structure of the output for `calc_sbears` function with dispersal assembly
 We can use the objects from `calc_sbears` function to plot the ancestral range of ancestral nodes. 
     
 ```{r}
-
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 # dense to long format
 long_out_reconstruction <- 
   as.data.frame(as.table(out_single_site$reconstruction))
