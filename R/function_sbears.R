@@ -141,7 +141,8 @@ calc_sbears <-
           rec <- phytools::fastAnc(phy, y)
           p(message = sprintf("reconstructed site =%s", y))
           return(rec)
-        })
+        }, 
+        future.seed = TRUE)
     })
     
     # renaming rownames corresponding to node in the phy object

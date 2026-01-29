@@ -1,5 +1,5 @@
 ---
-title: "Introduction to SBEARS - Site Based"
+title: "Introduction to SBEARS - Site Based Estimation of Ancestral Range of Species"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Intro_sbears}
