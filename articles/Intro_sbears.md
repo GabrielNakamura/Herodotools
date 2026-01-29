@@ -103,8 +103,8 @@ out_single_site <- calc_sbears(x = comm_sbears,
 #> ensures that proper, parallel-safe random numbers are produced via a parallel
 #> RNG method. To disable this check, use 'future.seed = NULL', or set option
 #> 'future.rng.onMisuse' to "ignore". [future 'future_apply-1'
-#> (bc64de20c2556cb443f7734d5d8363ef-2); on
-#> bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l<9563>]
+#> (81223842d02e6a1396f98be38245700a-2); on
+#> 81223842d02e6a1396f98be38245700a@runnervmymu0l<9483>]
 #> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
 #> ('future_apply-2') unexpectedly generated random numbers without declaring so.
 #> There is a risk that those random numbers are not statistically sound and the
@@ -112,8 +112,8 @@ out_single_site <- calc_sbears(x = comm_sbears,
 #> ensures that proper, parallel-safe random numbers are produced via a parallel
 #> RNG method. To disable this check, use 'future.seed = NULL', or set option
 #> 'future.rng.onMisuse' to "ignore". [future 'future_apply-2'
-#> (bc64de20c2556cb443f7734d5d8363ef-3); on
-#> bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l<9563>]
+#> (81223842d02e6a1396f98be38245700a-3); on
+#> 81223842d02e6a1396f98be38245700a@runnervmymu0l<9483>]
 #> Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations
 #> ('future_apply-3') unexpectedly generated random numbers without declaring so.
 #> There is a risk that those random numbers are not statistically sound and the
@@ -121,8 +121,8 @@ out_single_site <- calc_sbears(x = comm_sbears,
 #> ensures that proper, parallel-safe random numbers are produced via a parallel
 #> RNG method. To disable this check, use 'future.seed = NULL', or set option
 #> 'future.rng.onMisuse' to "ignore". [future 'future_apply-3'
-#> (bc64de20c2556cb443f7734d5d8363ef-4); on
-#> bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l<9563>]
+#> (81223842d02e6a1396f98be38245700a-4); on
+#> 81223842d02e6a1396f98be38245700a@runnervmymu0l<9483>]
 
 # going back to sequential plan
 future::plan(sequential)
@@ -133,20 +133,21 @@ arguments used in the function. If the user sets the argument
 `compute.node.by.site` as TRUE the function returns the output as a list
 with two elements:
 
-    - `reconstruction`: a matrix with assemblages in rows and ancestral nodes 
+    - `reconstruction`: a matrix with ancestral nodes in rows and sites 
         in columns. The values represent the occupation probability of each
-        ancestral node in each assemblage.
+        ancestral node in each site
         
     - `site_node_composition`: a matrix with assemblage in rows and 
        node names in columns. The values represent the presence of a given
        node in a given assemblage based on the occurrence of current species
-       in the assemblages.
+       representing that lineage in the sites.
 
 ## Dispersal Assembly algorithm
 
-Here we have to set up two additional arguments: `w_slope` corresponds
-to the slope parameter used in kernel function, and `min_disp_prob` that
-corresponds to the minimum probability of a node between two cells in
+When using sbears with the Dispersal Assembly algorithm, two additional
+arguments must be specified: w_slope, which corresponds to the slope
+parameter used in the kernel function, and min_disp_prob, which defines
+the minimum dispersal probability of a node between two cells in
 geographic space.
 
 ``` r
@@ -163,3 +164,114 @@ out_disp_assembly <- calc_sbears(x = comm_sbears,
 The structure of the output for `calc_sbears` function with dispersal
 assembly algorithm is the same as the one with the `single_site`
 algorithm
+
+## Visualizing ancestral areas
+
+We can use the objects from `calc_sbears` function to plot the ancestral
+range of ancestral nodes.
+
+``` r
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+library(tidyr)
+library(ggplot2)
+# dense to long format
+long_out_reconstruction <- 
+  as.data.frame(as.table(out_single_site$reconstruction))
+
+# naming data frame
+colnames(long_out_reconstruction) <- c("nodes", "site", "prob.occurr")
+
+# joining with coordinates
+df_coords_sbears <- 
+  coords_sbears |> 
+  tibble::rownames_to_column("site")
+
+# joining reconstruction with site coordinates
+df_reconstruction_coords <- 
+  long_out_reconstruction |> 
+  left_join(df_coords_sbears, by = "site")
+
+
+# for visualization 
+coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
+map_limits <- list(
+  x = c(-95, -30),
+  y = c(-55, 12)
+)
+
+theme_htools <- list(
+  ggplot2::geom_sf(data = coastline, size = 0.4),
+  ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y),
+  ggplot2::scale_x_continuous(n.breaks = 2),
+  ggplot2::scale_y_continuous(n.breaks = 2),
+  ggplot2::ggtitle(""),
+  ggplot2::theme_bw(),
+  ggplot2::guides(fill = ggplot2::guide_colorbar(barheight = ggplot2::unit(2.3, units = "mm"),  
+                                        direction = "horizontal",
+                                        ticks.colour = "grey20",
+                                        title.position = "top",
+                                        label.position = "bottom",
+                                        title.hjust = 0.5)),
+  ggplot2::theme(
+    legend.position = "bottom",
+    plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "mm"),
+    text = element_text(size = 8)
+  )
+)
+
+# plotting node 114
+plot_Node114 <- 
+  df_reconstruction_coords |> 
+  filter(nodes == "Node114") |> 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = longitude, y = latitude, fill = prob.occurr)) + 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
+                                  palette = "SunsetDark",
+                                  direction = 1) +
+  ggplot2::labs(fill = "Occurrence probability 
+                Node 114", title = "Node 114") +
+  theme_htools
+
+# plotting node 180
+plot_Node180 <- 
+  df_reconstruction_coords |> 
+  filter(nodes == "Node180") |> 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = longitude, y = latitude, fill = prob.occurr)) + 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
+                                  palette = "SunsetDark",
+                                  direction = 1) +
+  ggplot2::labs(fill = "Occurrence probability 
+                Node 180", title = "Node 180") +
+  theme_htools
+
+# plotting node 88
+plot_Node88 <- 
+  df_reconstruction_coords |> 
+  filter(nodes == "Node88") |> 
+  ggplot2::ggplot() + 
+  ggplot2::geom_raster(ggplot2::aes(x = longitude, y = latitude, fill = prob.occurr)) + 
+  rcartocolor::scale_fill_carto_c(type = "quantitative", 
+                                  palette = "SunsetDark",
+                                  direction = 1) +
+  ggplot2::labs(fill = "Occurrence probability 
+                Node 88", title = "Node 88") +
+  theme_htools
+
+# All plots
+
+l_plot_prob_occ <- list(plot_Node114, plot_Node180, plot_Node88)
+
+patchwork::wrap_plots(l_plot_prob_occ, nrow = 1, axes = "collect") +
+  patchwork::plot_annotation(title = "Occurrence probability of Nodes in sites")
+```
+
+![](Intro_sbears_files/figure-html/unnamed-chunk-6-1.png)

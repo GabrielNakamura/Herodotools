@@ -164,8 +164,8 @@ function in parallel, the user can proceed as follows:</p>
 <span><span class="co">#&gt; ensures that proper, parallel-safe random numbers are produced via a parallel</span></span>
 <span><span class="co">#&gt; RNG method. To disable this check, use 'future.seed = NULL', or set option</span></span>
 <span><span class="co">#&gt; 'future.rng.onMisuse' to "ignore". [future 'future_apply-1'</span></span>
-<span><span class="co">#&gt; (bc64de20c2556cb443f7734d5d8363ef-2); on</span></span>
-<span><span class="co">#&gt; bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l&lt;9563&gt;]</span></span>
+<span><span class="co">#&gt; (81223842d02e6a1396f98be38245700a-2); on</span></span>
+<span><span class="co">#&gt; 81223842d02e6a1396f98be38245700a@runnervmymu0l&lt;9483&gt;]</span></span>
 <span><span class="co">#&gt; Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations</span></span>
 <span><span class="co">#&gt; ('future_apply-2') unexpectedly generated random numbers without declaring so.</span></span>
 <span><span class="co">#&gt; There is a risk that those random numbers are not statistically sound and the</span></span>
@@ -173,8 +173,8 @@ function in parallel, the user can proceed as follows:</p>
 <span><span class="co">#&gt; ensures that proper, parallel-safe random numbers are produced via a parallel</span></span>
 <span><span class="co">#&gt; RNG method. To disable this check, use 'future.seed = NULL', or set option</span></span>
 <span><span class="co">#&gt; 'future.rng.onMisuse' to "ignore". [future 'future_apply-2'</span></span>
-<span><span class="co">#&gt; (bc64de20c2556cb443f7734d5d8363ef-3); on</span></span>
-<span><span class="co">#&gt; bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l&lt;9563&gt;]</span></span>
+<span><span class="co">#&gt; (81223842d02e6a1396f98be38245700a-3); on</span></span>
+<span><span class="co">#&gt; 81223842d02e6a1396f98be38245700a@runnervmymu0l&lt;9483&gt;]</span></span>
 <span><span class="co">#&gt; Warning: UNRELIABLE VALUE: One of the 'future.apply' iterations</span></span>
 <span><span class="co">#&gt; ('future_apply-3') unexpectedly generated random numbers without declaring so.</span></span>
 <span><span class="co">#&gt; There is a risk that those random numbers are not statistically sound and the</span></span>
@@ -182,8 +182,8 @@ function in parallel, the user can proceed as follows:</p>
 <span><span class="co">#&gt; ensures that proper, parallel-safe random numbers are produced via a parallel</span></span>
 <span><span class="co">#&gt; RNG method. To disable this check, use 'future.seed = NULL', or set option</span></span>
 <span><span class="co">#&gt; 'future.rng.onMisuse' to "ignore". [future 'future_apply-3'</span></span>
-<span><span class="co">#&gt; (bc64de20c2556cb443f7734d5d8363ef-4); on</span></span>
-<span><span class="co">#&gt; bc64de20c2556cb443f7734d5d8363ef@runnervmymu0l&lt;9563&gt;]</span></span>
+<span><span class="co">#&gt; (81223842d02e6a1396f98be38245700a-4); on</span></span>
+<span><span class="co">#&gt; 81223842d02e6a1396f98be38245700a@runnervmymu0l&lt;9483&gt;]</span></span>
 <span></span>
 <span><span class="co"># going back to sequential plan</span></span>
 <span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span></code></pre></div>
@@ -191,22 +191,23 @@ function in parallel, the user can proceed as follows:</p>
 arguments used in the function. If the user sets the argument
 <code>compute.node.by.site</code> as TRUE the function returns the
 output as a list with two elements:</p>
-<pre><code>- `reconstruction`: a matrix with assemblages in rows and ancestral nodes 
+<pre><code>- `reconstruction`: a matrix with ancestral nodes in rows and sites 
     in columns. The values represent the occupation probability of each
-    ancestral node in each assemblage.
+    ancestral node in each site
     
 - `site_node_composition`: a matrix with assemblage in rows and 
    node names in columns. The values represent the presence of a given
    node in a given assemblage based on the occurrence of current species
-   in the assemblages.</code></pre>
+   representing that lineage in the sites.</code></pre>
 </div>
 <div class="section level2">
 <h2 id="dispersal-assembly-algorithm">Dispersal Assembly algorithm<a class="anchor" aria-label="anchor" href="#dispersal-assembly-algorithm"></a>
 </h2>
-<p>Here we have to set up two additional arguments: <code>w_slope</code>
-corresponds to the slope parameter used in kernel function, and
-<code>min_disp_prob</code> that corresponds to the minimum probability
-of a node between two cells in geographic space.</p>
+<p>When using sbears with the Dispersal Assembly algorithm, two
+additional arguments must be specified: w_slope, which corresponds to
+the slope parameter used in the kernel function, and min_disp_prob,
+which defines the minimum dispersal probability of a node between two
+cells in geographic space.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out_disp_assembly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_sbears.html">calc_sbears</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">comm_sbears</span>,</span>
 <span>                                 phy <span class="op">=</span> <span class="va">phy_sbears</span>, </span>
@@ -219,6 +220,115 @@ of a node between two cells in geographic space.</p>
 <p>The structure of the output for <code>calc_sbears</code> function
 with dispersal assembly algorithm is the same as the one with the
 <code>single_site</code> algorithm</p>
+</div>
+<div class="section level2">
+<h2 id="visualizing-ancestral-areas">Visualizing ancestral areas<a class="anchor" aria-label="anchor" href="#visualizing-ancestral-areas"></a>
+</h2>
+<p>We can use the objects from <code>calc_sbears</code> function to plot
+the ancestral range of ancestral nodes.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter, lag</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="co"># dense to long format</span></span>
+<span><span class="va">long_out_reconstruction</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table</a></span><span class="op">(</span><span class="va">out_single_site</span><span class="op">$</span><span class="va">reconstruction</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># naming data frame</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">long_out_reconstruction</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nodes"</span>, <span class="st">"site"</span>, <span class="st">"prob.occurr"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># joining with coordinates</span></span>
+<span><span class="va">df_coords_sbears</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">coords_sbears</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames_to_column</a></span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># joining reconstruction with site coordinates</span></span>
+<span><span class="va">df_reconstruction_coords</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">long_out_reconstruction</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">df_coords_sbears</span>, by <span class="op">=</span> <span class="st">"site"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># for visualization </span></span>
+<span><span class="va">coastline</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_coastline.html" class="external-link">ne_coastline</a></span><span class="op">(</span>returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
+<span><span class="va">map_limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">95</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">55</span>, <span class="fl">12</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">theme_htools</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coastline</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span>,</span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">x</span>, ylim <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>,</span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>n.breaks <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>n.breaks <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,</span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html" class="external-link">guide_colorbar</a></span><span class="op">(</span>barheight <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2.3</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span>,  </span>
+<span>                                        direction <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
+<span>                                        ticks.colour <span class="op">=</span> <span class="st">"grey20"</span>,</span>
+<span>                                        title.position <span class="op">=</span> <span class="st">"top"</span>,</span>
+<span>                                        label.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>                                        title.hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>    legend.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>    plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plotting node 114</span></span>
+<span><span class="va">plot_Node114</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">df_reconstruction_coords</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">nodes</span> <span class="op">==</span> <span class="st">"Node114"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">longitude</span>, y <span class="op">=</span> <span class="va">latitude</span>, fill <span class="op">=</span> <span class="va">prob.occurr</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">rcartocolor</span><span class="fu">::</span><span class="fu"><a href="https://jakubnowosad.com/rcartocolor/reference/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, </span>
+<span>                                  palette <span class="op">=</span> <span class="st">"SunsetDark"</span>,</span>
+<span>                                  direction <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Occurrence probability </span></span>
+<span><span class="st">                Node 114"</span>, title <span class="op">=</span> <span class="st">"Node 114"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="va">theme_htools</span></span>
+<span></span>
+<span><span class="co"># plotting node 180</span></span>
+<span><span class="va">plot_Node180</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">df_reconstruction_coords</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">nodes</span> <span class="op">==</span> <span class="st">"Node180"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">longitude</span>, y <span class="op">=</span> <span class="va">latitude</span>, fill <span class="op">=</span> <span class="va">prob.occurr</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">rcartocolor</span><span class="fu">::</span><span class="fu"><a href="https://jakubnowosad.com/rcartocolor/reference/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, </span>
+<span>                                  palette <span class="op">=</span> <span class="st">"SunsetDark"</span>,</span>
+<span>                                  direction <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Occurrence probability </span></span>
+<span><span class="st">                Node 180"</span>, title <span class="op">=</span> <span class="st">"Node 180"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="va">theme_htools</span></span>
+<span></span>
+<span><span class="co"># plotting node 88</span></span>
+<span><span class="va">plot_Node88</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">df_reconstruction_coords</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">nodes</span> <span class="op">==</span> <span class="st">"Node88"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">longitude</span>, y <span class="op">=</span> <span class="va">latitude</span>, fill <span class="op">=</span> <span class="va">prob.occurr</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">rcartocolor</span><span class="fu">::</span><span class="fu"><a href="https://jakubnowosad.com/rcartocolor/reference/carto_scale.html" class="external-link">scale_fill_carto_c</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"quantitative"</span>, </span>
+<span>                                  palette <span class="op">=</span> <span class="st">"SunsetDark"</span>,</span>
+<span>                                  direction <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Occurrence probability </span></span>
+<span><span class="st">                Node 88"</span>, title <span class="op">=</span> <span class="st">"Node 88"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="va">theme_htools</span></span>
+<span></span>
+<span><span class="co"># All plots</span></span>
+<span></span>
+<span><span class="va">l_plot_prob_occ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">plot_Node114</span>, <span class="va">plot_Node180</span>, <span class="va">plot_Node88</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">l_plot_prob_occ</span>, nrow <span class="op">=</span> <span class="fl">1</span>, axes <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Occurrence probability of Nodes in sites"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Intro_sbears_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
