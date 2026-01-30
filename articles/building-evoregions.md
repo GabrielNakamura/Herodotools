@@ -114,18 +114,18 @@ matrix_optimal_maxclust <-
 matrix_optimal_maxclust
 #>             confidence_lev_0.7 confidence_lev_0.8 confidence_lev_0.9
 #> group.max3           1.0000000          1.0000000          1.0000000
-#> group.max4           0.9800000          0.7200000          0.0000000
-#> group.max5           1.0000000          1.0000000          0.9966667
-#> group.max7           1.0000000          0.9966667          0.9966667
-#> group.max9           1.0000000          0.9933333          0.9800000
-#> group.max10          0.9933333          0.9800000          0.9700000
+#> group.max4           0.9866667          0.7533333          0.7533333
+#> group.max5           1.0000000          1.0000000          1.0000000
+#> group.max7           1.0000000          0.9933333          0.9933333
+#> group.max9           1.0000000          0.9866667          0.9766667
+#> group.max10          0.9900000          0.9733333          0.9666667
 #>             confidence_lev_0.95 confidence_lev_0.99
 #> group.max3            1.0000000           1.0000000
 #> group.max4            0.0000000           0.0000000
-#> group.max5            0.9966667           0.9966667
-#> group.max7            0.9966667           0.9933333
-#> group.max9            0.9800000           0.9800000
-#> group.max10           0.9633333           0.9633333
+#> group.max5            1.0000000           1.0000000
+#> group.max7            0.9933333           0.9933333
+#> group.max9            0.9766667           0.9766667
+#> group.max10           0.9666667           0.9666667
 ```
 
 This matrix summarizes the results of the analysis of stability of
