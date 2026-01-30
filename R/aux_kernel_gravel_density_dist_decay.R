@@ -4,10 +4,11 @@
 #' @param phy phylo object 
 #' @param coords data frame with spatial coordinate of communities
 #'
-#' @returns
+#' @returns A list with length equal the number of sites. Each element of the list
+#'     contains a matrix with nodes in rows and sites in columns and the probability
+#'     of occurrence of each ancestral node in each site.  
 #' @export
-#'
-#' @examples
+
 comp_kernel_gravel <- 
   function(x, phy, coords, w_slope, min_disp_prob){
     

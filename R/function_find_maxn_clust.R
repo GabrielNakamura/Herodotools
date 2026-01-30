@@ -10,10 +10,10 @@ calc_pairwise_group_classification <-
 
 #' Estimate the maximum number of groups in DAPC analysis
 #'
-#' @details
-#' Additional details...
-#' 
-#' 
+#' @details This function can be used to find the maximum number of clusters
+#'     that maximizes the congruence of the grouping procedure. Basically it 
+#'     consists in repeat DAPC analysis multiple times using a set of candidate
+#'     maximum values (indicated in the argument \code{\link{max.nclust}})
 #' @param x A data.frame or matrix object containing eigenvectors by sites.
 #' @param threshold Scalar. The number of eigenvectors used to perform classification.
 #' @param nperm Scalar. Number of times classification will be performed.

@@ -16,7 +16,8 @@
 #' ancestral state reconstruction of species geographic ranges. It operates at 
 #' fine spatial resolution and does not require predefined discrete biogeographic 
 #' areas. The method estimates ancestral ranges under a maximum likelihood 
-#' framework, using site-level occurrence information.
+#' framework, using site-level occurrence information. For large matrix this 
+#' function supports parallel computation with package \code{\link{future}}
 #' \itemize{
 #'     \item the method used to compute ancestral range probabilities can be 
 #'         \code{single_site} or \code{disp_assembly}. For both methods SBEARS use the function 
@@ -38,8 +39,8 @@
 #' 
 #' @return A list with two elements. 
 #' \itemize{
-#'     \item \code{reconstruction}: a matrix with assemblages in rows and 
-#'         ancestral nodes in columns. The values represent the occupation
+#'     \item \code{reconstruction}: a matrix with ancestral nodes in rows and 
+#'         assemblages in columns. The numeric values represent the occupation
 #'         probability of each ancestral node in each assemblage.
 #'         
 #'     \item \code{site_node_composition}: a matrix with assemblage in rows and 
@@ -56,31 +57,36 @@
 #' @export
 #'
 #' @examples
-#' 
-#' data("akodon_newick")
-#' data("akodon_sites")
-#' 
-#' 
-#' site_xy <- akodon_sites %>% 
-#'   dplyr::select(LONG, LAT) 
-#' 
-#' akodon_pa <- akodon_sites %>% 
-#'   dplyr::select(-LONG, -LAT)
-#'  
-#' akd <- picante::match.phylo.comm(akodon_newick, akodon_pa)
-#' 
-#' akodon_sbears <- calc_sbears(x = ak$comm, phy = ak$phy, coords = site_xy)
-#' 
-#' # Visualize root node area
-#' 
-#' sbears_df <- cbind(site_xy, akodon_sbears$PD_nodes_by_sites)
-#' 
-#' ggplot(sbears_df) +
-#'   geom_tile(aes(x = LONG, y = LAT, fill = Node1))
+#' # phylogenetic tree
+#' phylo <- geiger::sim.bdtree(n = 10, seed = 42)
+#' phylo <- ape::makeNodeLabel(phy = phylo)
 #'
+#' # community composition matrix
+#' comm <- 
+#'  matrix(sample(c(0, 1), size = 10*20, replace = TRUE),
+#'         nrow = 20, 
+#'         ncol = 10, 
+#'         dimnames = list(paste("comm", 1:20), phylo$tip.label)
+#'  )
 #'
-
-
+#' # coordinates - this is necessary for "disperal_assembly" algorithm
+#' xy_coords <- 
+#'  matrix(runif(1:10), 
+#'         nrow = nrow(comm),
+#'         ncol = 2, 
+#'         dimnames = list(rownames(comm), c("lng", "lat")
+#'         )
+#'  )
+#'
+#' # running sbears with "single_site" algorithm
+#' out_sbears <- 
+#'  calc_sbears(x = comm,
+#'              phy = phylo, 
+#'              coords = xy_coords, 
+#'              method = "single_site")
+#'
+#' # matrix containing ancestral reconsturction, nodes are rows and columns are sites
+#' anc_reconstruction <- out_sbears$reconstruction
 
 calc_sbears <-
   function(x,
@@ -135,7 +141,8 @@ calc_sbears <-
           rec <- phytools::fastAnc(phy, y)
           p(message = sprintf("reconstructed site =%s", y))
           return(rec)
-        })
+        }, 
+        future.seed = TRUE)
     })
     
     # renaming rownames corresponding to node in the phy object
@@ -159,6 +166,8 @@ calc_sbears <-
     
     # Initiating dispersal assembly method
     if (method == "disp_assembly"){
+      # renaming coordinate column names 
+      colnames(coords) <- c("x", "y")
       r <- 
         scales::rescale(geodist::geodist(x = coords, measure = "geodesic")/
                           1000,diag = T, upper = T, c(0, 1)) # in km
@@ -169,8 +178,8 @@ calc_sbears <-
       site_values_pernode <- matrix(NA, nrow(x), nrow(x), dimnames = list(rownames(x), rownames(x)))
       for (i in 1:nrow(r)){
         r_below_threshold<-which(r[i,]<=max_disp_dist)
-        r_pruned<-r[r_below_threshold,r_below_threshold]
-        dist.decay<-matrix(NA, 
+        r_pruned <- r[r_below_threshold, r_below_threshold]
+        dist.decay <- matrix(NA, 
                            nrow = phy$Nnode, 
                            ncol = nrow(r_pruned),
                            dimnames = list(phy$node.label, 
