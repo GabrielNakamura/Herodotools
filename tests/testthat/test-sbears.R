@@ -84,7 +84,7 @@ testthat::test_that("output is in the right format and dimensions", {
                  nrow(anc_reconstruction_single) == phylo$Nnode, TRUE)
   
   # check if the function is returning probabilities 
-  expect_all_true(all.equal(anc_reconstruction_disp <= 1, 
+  expect_true(all.equal(anc_reconstruction_disp <= 1, 
                             anc_reconstruction_single <= 1),
                   TRUE)
   
