@@ -35,10 +35,19 @@ The options are "single_site" or "disp_assembly"}
 \item{make.node.label}{Logical, if TRUE (default) the nodes of the phylogeny will be named as the letter "N" preceding node number}
 }
 \value{
-a list with three elements. reconstruction is the result of ancestral
-.   area reconstruction; phylogeny is the matrix containing
-the occurrence of nodes in sites and joint.phylo.obs is the joint occurrence
-of nodes and species in phylogenetic tree.
+A list with two elements.
+\itemize{
+\item \code{reconstruction}: a matrix with assemblages in rows and
+ancestral nodes in columns. The values represent the occupation
+probability of each ancestral node in each assemblage.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{\\item \code{site_node_composition}: a matrix with assemblage in rows and 
+    node names in columns. The values represent the presence of a given
+    node in a given assemblage based on the occurrence of current species
+    in the assemblages.
+}\if{html}{\out{</div>}}
+
+}
 }
 \description{
 Site-Based Estimation of Ancestral Range of Species

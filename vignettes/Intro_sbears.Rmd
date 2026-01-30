@@ -58,6 +58,7 @@ To perform SBEARS reconstruction, we need a community matrix, the geographical
     XX km². 
 
 ```{r}
+library(Herodotools)
 data("comm_sbears")
 data("coords_sbears")
 data("phy_sbears")
