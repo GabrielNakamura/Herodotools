@@ -1,23 +1,24 @@
 # Calculating in situ diversification and historical dispersal
 
-This article will show the main functions of `Herodotools` package. To
-do so, we will evaluate imprints of historical processes like in situ
-diversification and historical dispersal of species assemblages from the
-genus *Akodon*.
+This article will show some metrics calculated at assemblage level
+implemented in `Herodotools` package. Specifically, we will calculate
+metrics that are proxies for in situ diversification, historical
+dispersal and colonization age of assemblages. For this we will use
+distribution data of genus *Akodon*.
 
-For this aim we will perform the following steps:
+Briefly, we will perform the following steps:
 
 1.  [Process](#processing) raw species occurrence data and phylogenetic
     information
-2.  [Calculate](#modelBasedMetrics) macroevolutionary metrics of in situ
-    diversification at assemblage level using an ancestral state
-    reconstruction model
+2.  [Calculate](#modelBasedMetrics) metrics of in situ diversification,
+    assemblage colonization age, and the proportion of species in a
+    region resulting from historical dispersal among regions.
 
 ## Reading data and libraries
 
-First, let’s read some libraries we will use to explore the data and
-produce the figures. If you do not have the packages already installed,
-they will be installed using the following code.
+First, let’s read libraries we will use to explore the data and produce
+the figures. If you do not have the packages already installed, they
+will be installed using the following code.
 
 ``` r
 libs <- c("ape", "picante", "dplyr", "tidyr", "purrr",
@@ -198,29 +199,27 @@ Ancestral area reconstruction will follow the evoregion classification.
 
 ## Ancestral area reconstruction for Akodon species and in situ diversification metrics
 
-In this section we will show how Herodotools can get the results coming
-from macroevolutionary analysis, particularly, analysis of ancestral
-state reconstruction, to understand the role of diversification and
-historical dispersal at assemblage level. For this we will use an
+In this section, we demonstrate how Herodotools can use results from
+macroevolutionary analyses—particularly ancestral state
+reconstructions—to disentangle the roles of diversification and
+historical dispersal at the assemblage level. To do so, we use an
 ancestral area reconstruction performed with
 [BioGeoBEARS](https://github.com/nmatzke/BioGeoBEARS), a tool commonly
 used in macroevolution.
 
-First, we have to assign the occurrence of each species in the
-evoregions. To do this we can use the function `get_region_occ` and
-obtain a data frame of species in the lines and evoregions in the
-columns.
+First, we assign species occurrences to evoregions using the
+`get_region_occ` function, obtaining a data frame with species as rows
+and evoregions as columns.
 
 ``` r
 
 a_region <- Herodotools::get_region_occ(comm = akodon_pa_tree, site.region = site_region)
 ```
 
-The object created in the last step can be used in an auxiliary function
-in Herodotools to easily obtain the
-[Phyllip](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.md)
-file required to run the analysis of ancestral area reconstruction using
-BioGeoBEARS.
+The object generated in the previous step can be passed to an auxiliary
+Herodotools function to easily produce the
+[PHYLIP](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.md)
+file required for ancestral area reconstruction in BioGeoBEARS.
 
 ``` r
 # save phyllip file
@@ -235,12 +234,11 @@ Herodotools::get_tipranges_to_BioGeoBEARS(
 #> [1] "/home/runner/work/Herodotools/Herodotools/inst/extdata/geo_area_akodon.data"
 ```
 
-Since it take some time to run BioGeoBEARS (about 15 minutes in a 4GB
-processor machine), and showing how to perform analysis with
-BioGeoBEARSwe are not our focus here, we can just read an output from an
-ancestral analysis reconstruction performed using DEC model to
-reconstruct the evoregions. If you want to check out the code used to
-run the BioGeoBEARS models, you can access it with
+Since running BioGeoBEARS can be time-consuming, and demonstrating how
+to perform BioGeoBEARS analyses is not the focus here, we instead read
+the output from an ancestral range reconstruction performed under the
+DEC model to infer evoregions. If you wish to inspect the code used to
+run the BioGeoBEARS models, you can access it at
 `file.edit(system.file("extdata", "script", "e_01_run_DEC_model.R", package = "Herodotools"))`.
 
 Reading the file containing the results of DEC model reconstruction:
@@ -251,13 +249,13 @@ Reading the file containing the results of DEC model reconstruction:
 load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
 ```
 
-It is worth to note that the procedures described here can be adapted to
-work with any model of ancestral area reconstruction from BioGeoBEARS
-(other than DEC), but for sake of simplicity we decided to use only the
-[DEC
+It is worth noting that the procedures described here can be adapted to
+work with any ancestral area reconstruction model implemented in
+BioGeoBEARS (other than DEC); however, for the sake of simplicity, we
+chose to use only the [DEC
 model](https://revbayes.github.io/tutorials/biogeo/biogeo_intro.html).
 
-## Merging macroevolutionary models with assemblage level metrics
+## Merging ancestral area reconstruction model with assemblage level metrics
 
 Once we have data on present-day occurrence of species, a
 biogeographical regionalization (obtained with `evoregions` function)
@@ -265,15 +263,14 @@ and the ancestral area reconstruction, we can integrate these
 information to calculate metrics implemented in Herodotools that
 represent historical variables at assemblage scale.
 
-### Age of assemblages
+### Colonization age of assemblages
 
-Let’s start by calculating the age of each cell considering the
-macroevolutionary dynamics of in-situ diversification during time . The
-age here corresponds to the mean arrival time of each species occupying
-a given assemblage. By arrival time we mean the time in which the an
-ancestor arrived and stablished (no more dispersal events in between) at
-the assemblage within a region in which the current species occur today.
-For the original description of this metric see [Van Dijk et
+Here, colonization age of assemblages corresponds to the mean arrival
+time of the species occupying a given assemblage. By arrival time, we
+refer to the time at which an ancestor arrived and became established in
+the assemblage—i.e., with no subsequent dispersal events—within the
+region where the species currently occurs. For the original description
+of this metric, see [Van Dijk et
 al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
 
 ``` r
@@ -298,12 +295,12 @@ age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree,
 ```
 
 The function `calc_age_arrival` returns a object containing the mean age
-for each assemblage. Species in which the transition to the current
-region occurred between the last ancestor and the present can be dealt
-in two ways: the default is by represent the age as a very recent
-arrival age for those species. Another option is to attribute the age
-corresponding to half of the branch length connecting the ancestor to
-the present time. Here we adopted the first option.
+for colonization events of each assemblage. Species in which the
+transition to the current region occurred between the last ancestor and
+the present can be dealt in two ways: the default is by represent the
+age as a very recent arrival age for those species. Another option is to
+attribute the age corresponding to half of the branch length connecting
+the ancestor to the present time. Here we adopted the first option.
 
 With mean age for each assemblage we can map the ages for all
 assemblages
