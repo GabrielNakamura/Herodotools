@@ -84,7 +84,6 @@ Suggests:
     future,
     ggplot2,
     glue,
-    here,
     knitr,
     patchwork,
     phangorn,
