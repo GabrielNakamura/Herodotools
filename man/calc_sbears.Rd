@@ -40,13 +40,10 @@ A list with two elements.
 \item \code{reconstruction}: a matrix with ancestral nodes in rows and
 assemblages in columns. The numeric values represent the occupation
 probability of each ancestral node in each assemblage.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{\\item \code{site_node_composition}: a matrix with assemblage in rows and 
-    node names in columns. The values represent the presence of a given
-    node in a given assemblage based on the occurrence of current species
-    in the assemblages.
-}\if{html}{\out{</div>}}
-
+\item \code{site_node_composition}: a matrix with assemblage in rows and
+node names in columns. The values represent the presence of a given
+node in a given assemblage based on the occurrence of current species
+in the assemblages.
 }
 }
 \description{
@@ -80,7 +77,8 @@ proposed by Gravel et al (2006).
 }
 \examples{
 # phylogenetic tree
-phylo <- geiger::sim.bdtree(n = 10, seed = 42)
+set.seed(42)
+phylo <- ape::rcoal(n = 10)
 phylo <- ape::makeNodeLabel(phy = phylo)
 
 # community composition matrix
@@ -113,5 +111,5 @@ anc_reconstruction <- out_sbears$reconstruction
 \references{
 Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling
 niche and neutrality: the continuum hypothesis. 2006. Ecology Letters
-\doi{10.1111/j.1461-0248.2006.00884.x}
+\href{https://doi.org/10.1111/j.1461-0248.2006.00884.x}{doi.org/10.1111/j.1461-0248.2006.00884.x}
 }

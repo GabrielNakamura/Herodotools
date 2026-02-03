@@ -2,7 +2,8 @@
 # generating data for tests -----------------------------------------------
 
 # phylogenetic tree
-phylo <- geiger::sim.bdtree(n = 10, seed = 42)
+set.seed(42)
+phylo <- ape::rcoal(n = 10)
 phylo <- ape::makeNodeLabel(phy = phylo)
 
 # community composition matrix
@@ -93,3 +94,4 @@ testthat::test_that("output is in the right format and dimensions", {
                 colnames(anc_reconstruction_single) == rownames(comm)), TRUE)
   
 })
+

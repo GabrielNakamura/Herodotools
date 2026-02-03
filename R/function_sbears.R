@@ -41,8 +41,7 @@
 #' \itemize{
 #'     \item \code{reconstruction}: a matrix with ancestral nodes in rows and 
 #'         assemblages in columns. The numeric values represent the occupation
-#'         probability of each ancestral node in each assemblage.
-#'         
+#'         probability of each ancestral node in each assemblage.         
 #'     \item \code{site_node_composition}: a matrix with assemblage in rows and 
 #'         node names in columns. The values represent the presence of a given
 #'         node in a given assemblage based on the occurrence of current species
@@ -51,14 +50,15 @@
 #' 
 #' @references Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling
 #'     niche and neutrality: the continuum hypothesis. 2006. Ecology Letters 
-#'     \doi{10.1111/j.1461-0248.2006.00884.x}
+#'     [doi.org/10.1111/j.1461-0248.2006.00884.x](https://doi.org/10.1111/j.1461-0248.2006.00884.x)
 #'     
 #'
 #' @export
 #'
 #' @examples
 #' # phylogenetic tree
-#' phylo <- geiger::sim.bdtree(n = 10, seed = 42)
+#' set.seed(42)
+#' phylo <- ape::rcoal(n = 10)
 #' phylo <- ape::makeNodeLabel(phy = phylo)
 #'
 #' # community composition matrix
