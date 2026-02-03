@@ -55,7 +55,8 @@ ancestral state reconstruction of species geographic ranges. It operates at
 fine spatial resolution and does not require predefined discrete biogeographic
 areas. The method estimates ancestral ranges under a maximum likelihood
 framework, using site-level occurrence information. For large matrix this
-function supports parallel computation with package \code{\link{future}}
+function supports parallel computation with package \code{future}.
+
 \itemize{
 \item the method used to compute ancestral range probabilities can be
 \code{single_site} or \code{disp_assembly}. For both methods SBEARS use the function

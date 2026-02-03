@@ -11,13 +11,14 @@
 #' @param w_slope A scalar representing the slope of the dispersal kernel function.
 #' @param compute.node.by.sites Logical, TRUE (default) computes a matrix of node occurrence by site.
 #' @param make.node.label Logical, if TRUE (default) the nodes of the phylogeny will be named as the letter "N" preceding node number
-#' @details
-#' SBEARS (Site-Based Estimation of Ancestral Range of Species) is a method for 
+#' 
+#' @details SBEARS (Site-Based Estimation of Ancestral Range of Species) is a method for 
 #' ancestral state reconstruction of species geographic ranges. It operates at 
 #' fine spatial resolution and does not require predefined discrete biogeographic 
 #' areas. The method estimates ancestral ranges under a maximum likelihood 
 #' framework, using site-level occurrence information. For large matrix this 
-#' function supports parallel computation with package \code{\link{future}}
+#' function supports parallel computation with package \code{future}.
+#' 
 #' \itemize{
 #'     \item the method used to compute ancestral range probabilities can be 
 #'         \code{single_site} or \code{disp_assembly}. For both methods SBEARS use the function 
@@ -110,7 +111,7 @@ calc_sbears <-
       )
     }
     
-    if(class(phy) != "phylo"){
+    if(!inherits(phy, "phylo")){
       stop(
         paste(
           "Invalid input!",
