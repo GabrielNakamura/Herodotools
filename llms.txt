@@ -145,12 +145,18 @@ Debastiani and Leandro Duarte
 - [`calc_tip_based_trait_evo()`](https://gabrielnakamura.github.io/Herodotools/reference/calc_tip_based_trait_evo.md)
   : Tip-based metrics of trait evolution
 
+- [`comm_sbears`](https://gabrielnakamura.github.io/Herodotools/reference/comm_sbears.md)
+  : Community composition of Sigmodontinae species
+
 - [`comp_ada_nodes_sites()`](https://gabrielnakamura.github.io/Herodotools/reference/comp_ada_nodes_sites.md)
   : Axiliary function to compute node composition by sites
 
 - [`comp_kernel_gravel()`](https://gabrielnakamura.github.io/Herodotools/reference/comp_kernel_gravel.md)
   : Occupancy probability of each node in each site considering a kernel
   density funcion
+
+- [`coords_sbears`](https://gabrielnakamura.github.io/Herodotools/reference/coords_sbears.md)
+  : Spatial coordinates of sites
 
 - [`find_max_nclust()`](https://gabrielnakamura.github.io/Herodotools/reference/find_max_nclust.md)
   : Estimate the maximum number of groups in DAPC analysis
@@ -188,6 +194,9 @@ Debastiani and Leandro Duarte
 
 - [`insert_nodes()`](https://gabrielnakamura.github.io/Herodotools/reference/insert_nodes.md)
   : Insert internal nodes in the phylogenetic tree
+
+- [`phy_sbears`](https://gabrielnakamura.github.io/Herodotools/reference/phy_sbears.md)
+  : Phylogeny of 260 Sigmodontinae species
 
 - [`regions`](https://gabrielnakamura.github.io/Herodotools/reference/regions.md)
   :

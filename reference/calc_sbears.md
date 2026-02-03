@@ -43,6 +43,11 @@ calc_sbears(
 
   A scalar representing the slope of the dispersal kernel function.
 
+- min_disp_prob:
+
+  A scalar between 0 and 1 representing the minimum probability of
+  receiving an immigrant node from a focal cell
+
 - compute.node.by.sites:
 
   Logical, TRUE (default) computes a matrix of node occurrence by site.
