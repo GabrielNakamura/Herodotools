@@ -105,6 +105,12 @@
 - [`phy_sbears`](https://gabrielnakamura.github.io/Herodotools/reference/phy_sbears.md)
   : Phylogeny of 260 Sigmodontinae species
 
+- [`plot_age_arrival()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_age_arrival.md)
+  : Plot in-situ diversification metrics across geographic space
+
+- [`plot_insitu_diversification()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_insitu_diversification.md)
+  : Plot in-situ diversification metrics across geographic space
+
 - [`regions`](https://gabrielnakamura.github.io/Herodotools/reference/regions.md)
   :
 
