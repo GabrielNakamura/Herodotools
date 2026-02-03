@@ -11,7 +11,15 @@ comp_kernel_gravel(x, phy, coords, w_slope, min_disp_prob)
 
 \item{phy}{phylo object}
 
-\item{coords}{data frame with spatial coordinate of communities}
+\item{coords}{Data frame with two columns containing spatial coordinate of
+communities}
+
+\item{w_slope}{A scalar representing the slope of the dispersal kernel function.
+This is the same as passed to \code{calc_sbears} function}
+
+\item{min_disp_prob}{A scalar between 0 and 1 representing the minimum
+probability of receiving an immigrant node from a focal cell. Same as
+passed to \code{calc_sbears} function}
 }
 \value{
 A list with length equal the number of sites. Each element of the list

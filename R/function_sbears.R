@@ -9,6 +9,8 @@
 #' @param method character indicating how ancestral range probabilities are computed.
 #'     The options are "single_site" or "disp_assembly"
 #' @param w_slope A scalar representing the slope of the dispersal kernel function.
+#' @param min_disp_prob A scalar between 0 and 1 representing the minimum 
+#'     probability of receiving an immigrant node from a focal cell
 #' @param compute.node.by.sites Logical, TRUE (default) computes a matrix of node occurrence by site.
 #' @param make.node.label Logical, if TRUE (default) the nodes of the phylogeny will be named as the letter "N" preceding node number
 #' 
@@ -95,7 +97,7 @@ calc_sbears <-
            coords,
            method = c("single_site", "disp_assembly"),
            w_slope = 5,
-           min_disp_prob=0.8,
+           min_disp_prob = 0.8,
            compute.node.by.sites = TRUE,
            make.node.label = TRUE
   ){

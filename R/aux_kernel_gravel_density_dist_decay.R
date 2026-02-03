@@ -2,7 +2,13 @@
 #'
 #' @param x Node by communities matrix
 #' @param phy phylo object 
-#' @param coords data frame with spatial coordinate of communities
+#' @param coords Data frame with two columns containing spatial coordinate of
+#'     communities
+#' @param w_slope  A scalar representing the slope of the dispersal kernel function.
+#'     This is the same as passed to `calc_sbears` function
+#' @param min_disp_prob  A scalar between 0 and 1 representing the minimum 
+#'     probability of receiving an immigrant node from a focal cell. Same as 
+#'     passed to `calc_sbears` function
 #'
 #' @returns A list with length equal the number of sites. Each element of the list
 #'     contains a matrix with nodes in rows and sites in columns and the probability
