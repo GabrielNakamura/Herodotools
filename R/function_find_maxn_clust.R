@@ -10,10 +10,10 @@ calc_pairwise_group_classification <-
 
 #' Estimate the maximum number of groups in DAPC analysis
 #'
-#' @details
-#' Additional details...
-#' 
-#' 
+#' @details This function can be used to find the maximum number of clusters
+#'     that maximizes the congruence of the grouping procedure. Basically it 
+#'     consists in repeat DAPC analysis multiple times using a set of candidate
+#'     maximum values (indicated in the argument \code{max.nclust})
 #' @param x A data.frame or matrix object containing eigenvectors by sites.
 #' @param threshold Scalar. The number of eigenvectors used to perform classification.
 #' @param nperm Scalar. Number of times classification will be performed.
@@ -98,8 +98,8 @@ find_max_nclust <-
             # just in case the group sample is used, if all the samples they are only in a different order
             groups <- clust_vec$grp[group.sample]
             return(groups)
-          })
-        })
+          }, future.seed=TRUE)
+        }, future.seed=TRUE)
     })
     
     # renaming all classifications for all levels of max cluster and all repetitions

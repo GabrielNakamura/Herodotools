@@ -103,15 +103,15 @@ ncores <- future::availableCores()  # dynamic
 safety_margin <- 1
 workers <- max(1, ncores - safety_margin)
 
-plan(multisession, workers = workers) this 
+plan(multisession, workers = workers)  
 future::plan(sequential)
-handlers(global = TRUE)
+
 handlers("txtprogressbar")   # terminal progress bar + timing info
 ```
 
 Then, run the `find_max_clust` function
 
-```{r}
+```{r, warning=FALSE}
 
 matrix_optimal_maxclust <- 
   find_max_nclust(x = vec_bray,
@@ -124,11 +124,13 @@ matrix_optimal_maxclust <-
                   subset = 100,
                   confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99))
 
+matrix_optimal_maxclust
+
 ```
 This matrix summarizes the results of the analysis of stability of cluster computation for different values of the maximum number of groups. Each row corresponds to a tested number of groups and contains the associated confidence level. The confidence level represents the proportion of correlation values that are equal to or greater than the threshold being evaluated. Values closer to 1 indicate a higher stability of the clustering solution for that number of groups under the specified confidence level. In other words, values approaching 1 suggest that a given number of groups yields consistent and reliable cluster structures. 
 
 In this example, the maximum number of groups that yields the most stable solution
-is 3. Therefore, we use this value in the `evoregion()` computation that follows.
+is 5. Therefore, we use this value in the `evoregion()` computation that follows.
 
 # Computing evoregions {#evoregion}
 
@@ -158,7 +160,7 @@ assigned to the groups. Without setting a seed, the group labels (i.e., the
 cluster numbers) may differ across runs even when the grouping structure remains
 the same. 
 
-Here, we set `max.n.clust = 3`, based on the result obtained in the previous step.
+Here, we set `max.n.clust = 5`, based on the result obtained in the previous step.
 
 
 ```{r}
@@ -166,7 +168,7 @@ regions <-
   Herodotools::calc_evoregions(
   comm = akodon_pa_tree,
   phy = akodon_newick, 
-  seed = 100, max.n.clust = 3
+  seed = 100, max.n.clust = 5
   )
 
 site_region <- regions$cluster_evoregions # this is the classification result for each site
@@ -198,8 +200,11 @@ map_limits <- list(
 sf::st_crs(sf_evoregion) <- sf::st_crs(coastline)
 
 # Colours to plot evoregions
-col_two_hues <- c(
+col_five_hues <- c(
   "#3d291a",
+  "#a9344f",
+  "#578a5b",
+  "#83a6c4",
   "#fcc573"
 )
 
@@ -216,7 +221,7 @@ map_evoregion <-
   ggplot2::scale_fill_manual(
     name = "", 
     labels = LETTERS[1:5],
-    values = rev(col_two_hues)
+    values = rev(col_five_hues)
   ) +
   ggplot2::geom_sf(data = coastline) +
   ggplot2::geom_sf(
@@ -280,13 +285,13 @@ map_joint_evoregion_afilliation <-
                alpha = sites[, "afilliation"]) + 
    ggplot2::scale_fill_manual(
      name = "", 
-     labels = LETTERS[1:2],
-     values = rev(col_two_hues)
+     labels = LETTERS[1:5],
+     values = rev(col_five_hues)
    ) +
    ggplot2::geom_sf(data = coastline, size = 0.4) +
    ggplot2::geom_sf(
      data = sf_evoregion, 
-     color = rev(col_two_hues),
+     color = rev(col_five_hues),
      fill = NA, 
      size = 0.7) +
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +

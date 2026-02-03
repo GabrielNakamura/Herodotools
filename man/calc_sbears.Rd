@@ -11,8 +11,8 @@ calc_sbears(
   method = c("single_site", "disp_assembly"),
   w_slope = 5,
   min_disp_prob = 0.8,
-  compute.node.by.sites = FALSE,
-  make.node.label = FALSE
+  compute.node.by.sites = TRUE,
+  make.node.label = TRUE
 )
 }
 \arguments{
@@ -30,15 +30,24 @@ The options are "single_site" or "disp_assembly"}
 
 \item{w_slope}{A scalar representing the slope of the dispersal kernel function.}
 
+\item{min_disp_prob}{A scalar between 0 and 1 representing the minimum
+probability of receiving an immigrant node from a focal cell}
+
 \item{compute.node.by.sites}{Logical, TRUE (default) computes a matrix of node occurrence by site.}
 
 \item{make.node.label}{Logical, if TRUE (default) the nodes of the phylogeny will be named as the letter "N" preceding node number}
 }
 \value{
-a list with three elements. reconstruction is the result of ancestral
-.   area reconstruction; phylogeny is the matrix containing
-the occurrence of nodes in sites and joint.phylo.obs is the joint occurrence
-of nodes and species in phylogenetic tree.
+A list with two elements.
+\itemize{
+\item \code{reconstruction}: a matrix with ancestral nodes in rows and
+assemblages in columns. The numeric values represent the occupation
+probability of each ancestral node in each assemblage.
+\item \code{site_node_composition}: a matrix with assemblage in rows and
+node names in columns. The values represent the presence of a given
+node in a given assemblage based on the occurrence of current species
+in the assemblages.
+}
 }
 \description{
 Site-Based Estimation of Ancestral Range of Species
@@ -48,7 +57,9 @@ SBEARS (Site-Based Estimation of Ancestral Range of Species) is a method for
 ancestral state reconstruction of species geographic ranges. It operates at
 fine spatial resolution and does not require predefined discrete biogeographic
 areas. The method estimates ancestral ranges under a maximum likelihood
-framework, using site-level occurrence information.
+framework, using site-level occurrence information. For large matrix this
+function supports parallel computation with package \code{future}.
+
 \itemize{
 \item the method used to compute ancestral range probabilities can be
 \code{single_site} or \code{disp_assembly}. For both methods SBEARS use the function
@@ -68,8 +79,41 @@ from a cell to any other can be defined using a dispersal kernel function
 proposed by Gravel et al (2006).
 }
 }
+\examples{
+# phylogenetic tree
+set.seed(42)
+phylo <- ape::rcoal(n = 10)
+phylo <- ape::makeNodeLabel(phy = phylo)
+
+# community composition matrix
+comm <- 
+ matrix(sample(c(0, 1), size = 10*20, replace = TRUE),
+        nrow = 20, 
+        ncol = 10, 
+        dimnames = list(paste("comm", 1:20), phylo$tip.label)
+ )
+
+# coordinates - this is necessary for "disperal_assembly" algorithm
+xy_coords <- 
+ matrix(runif(1:10), 
+        nrow = nrow(comm),
+        ncol = 2, 
+        dimnames = list(rownames(comm), c("lng", "lat")
+        )
+ )
+
+# running sbears with "single_site" algorithm
+out_sbears <- 
+ calc_sbears(x = comm,
+             phy = phylo, 
+             coords = xy_coords, 
+             method = "single_site")
+
+# matrix containing ancestral reconsturction, nodes are rows and columns are sites
+anc_reconstruction <- out_sbears$reconstruction
+}
 \references{
 Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling
 niche and neutrality: the continuum hypothesis. 2006. Ecology Letters
-\doi{10.1111/j.1461-0248.2006.00884.x}
+\href{https://doi.org/10.1111/j.1461-0248.2006.00884.x}{doi.org/10.1111/j.1461-0248.2006.00884.x}
 }

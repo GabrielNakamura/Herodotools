@@ -1,3 +1,45 @@
+#' Community composition of Sigmodontinae species
+#'
+#' Community composition matrix in dense format with presence/absence of 
+#'     260 species in 46 sites
+#'     
+#'
+#' @format 
+#' A data frame object with 46 rows and 260 columns, each column
+#'     correspond to a species name and the rows to sites 
+#'     
+#' 
+#' @source <https://zenodo.org/records/16933539>
+"comm_sbears"
+
+#' Spatial coordinates of sites 
+#'
+#' Spatial coordinates containing longitute and latitude of 46
+#'     sites
+#'     
+#' @format 
+#' A data frame object with 46 rows and 2 columns:
+#' \describe{
+#'     \item {longitude} {Numeric. Longitude of each site in decimal degrees}
+#'     \item {latitude} {Numeric. Latitude of each site in decimal degrees}
+#' }
+#'     
+#' @source <https://zenodo.org/records/16933539>
+"coords_sbears"
+
+#' Phylogeny of 260 Sigmodontinae species
+#'
+#' Phylogeny of Sigmodontinae species 
+#'     
+#' @format 
+#' A phylo object containing 260 tips and 259 internal nodes 
+#'    describing the phylogenetic relationship among 260 sigmodontine
+#'    species. The tree is rooted and include branch lengths
+#'     
+#' @source <https://zenodo.org/records/16933539>
+"phy_sbears"
+
+
 #' Hypothetical phylogenetic tree 
 #'
 #' This is a made up data that simulates a phylogenetic tree in newick format. This tree contains
