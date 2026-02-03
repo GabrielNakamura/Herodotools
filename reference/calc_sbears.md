@@ -60,10 +60,10 @@ A list with two elements.
   assemblages in columns. The numeric values represent the occupation
   probability of each ancestral node in each assemblage.
 
-      \item \code{site_node_composition}: a matrix with assemblage in rows and
-          node names in columns. The values represent the presence of a given
-          node in a given assemblage based on the occurrence of current species
-          in the assemblages.
+- `site_node_composition`: a matrix with assemblage in rows and node
+  names in columns. The values represent the presence of a given node in
+  a given assemblage based on the occurrence of current species in the
+  assemblages.
 
 ## Details
 
@@ -73,7 +73,7 @@ operates at fine spatial resolution and does not require predefined
 discrete biogeographic areas. The method estimates ancestral ranges
 under a maximum likelihood framework, using site-level occurrence
 information. For large matrix this function supports parallel
-computation with package `future`
+computation with package `future`.
 
 - the method used to compute ancestral range probabilities can be
   `single_site` or `disp_assembly`. For both methods SBEARS use the
@@ -96,16 +96,15 @@ computation with package `future`
 
 Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling niche and
 neutrality: the continuum hypothesis. 2006. Ecology Letters
-[doi:10.1111/j.1461-0248.2006.00884.x](https://doi.org/10.1111/j.1461-0248.2006.00884.x)
+[doi.org/10.1111/j.1461-0248.2006.00884.x](https://doi.org/10.1111/j.1461-0248.2006.00884.x)
 
 ## Examples
 
 ``` r
 # phylogenetic tree
-phylo <- geiger::sim.bdtree(n = 10, seed = 42)
-#> Error in loadNamespace(x): there is no package called ‘geiger’
+set.seed(42)
+phylo <- ape::rcoal(n = 10)
 phylo <- ape::makeNodeLabel(phy = phylo)
-#> Error: object 'phylo' not found
 
 # community composition matrix
 comm <- 
@@ -114,7 +113,6 @@ comm <-
         ncol = 10, 
         dimnames = list(paste("comm", 1:20), phylo$tip.label)
  )
-#> Error: object 'phylo' not found
 
 # coordinates - this is necessary for "disperal_assembly" algorithm
 xy_coords <- 
@@ -124,7 +122,6 @@ xy_coords <-
         dimnames = list(rownames(comm), c("lng", "lat")
         )
  )
-#> Error: object 'comm' not found
 
 # running sbears with "single_site" algorithm
 out_sbears <- 
@@ -132,9 +129,7 @@ out_sbears <-
              phy = phylo, 
              coords = xy_coords, 
              method = "single_site")
-#> Error: object 'phylo' not found
 
 # matrix containing ancestral reconsturction, nodes are rows and columns are sites
 anc_reconstruction <- out_sbears$reconstruction
-#> Error: object 'out_sbears' not found
 ```

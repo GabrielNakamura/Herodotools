@@ -98,11 +98,11 @@ The options are "single_site" or "disp_assembly"</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with two elements.</p><ul><li><p><code>reconstruction</code>: a matrix with ancestral nodes in rows and
 assemblages in columns. The numeric values represent the occupation
-probability of each ancestral node in each assemblage.</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>\item \code{site_node_composition}<span class="sc">:</span> a matrix with assemblage <span class="cf">in</span> rows and</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    node names <span class="cf">in</span> columns. The values represent the presence of a given</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    node <span class="cf">in</span> a given assemblage based on the occurrence of current species</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="cf">in</span> the assemblages.</span></code></pre><p></p></div></li>
+probability of each ancestral node in each assemblage.</p></li>
+<li><p><code>site_node_composition</code>: a matrix with assemblage in rows and
+node names in columns. The values represent the presence of a given
+node in a given assemblage based on the occurrence of current species
+in the assemblages.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -111,7 +111,8 @@ ancestral state reconstruction of species geographic ranges. It operates at
 fine spatial resolution and does not require predefined discrete biogeographic
 areas. The method estimates ancestral ranges under a maximum likelihood
 framework, using site-level occurrence information. For large matrix this
-function supports parallel computation with package <code>future</code></p><ul><li><p>the method used to compute ancestral range probabilities can be
+function supports parallel computation with package <code>future</code>.</p>
+<ul><li><p>the method used to compute ancestral range probabilities can be
 <code>single_site</code> or <code>disp_assembly</code>. For both methods SBEARS use the function
 <code><a href="https://rdrr.io/pkg/phytools/man/fastAnc.html" class="external-link">fastAnc</a></code> to reconstruct the the ancestral ranges.
 In <code>single_site</code> each site is taken
@@ -132,16 +133,15 @@ proposed by Gravel et al (2006).</p></li>
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling
 niche and neutrality: the continuum hypothesis. 2006. Ecology Letters
-<a href="https://doi.org/10.1111/j.1461-0248.2006.00884.x" class="external-link">doi:10.1111/j.1461-0248.2006.00884.x</a></p>
+<a href="https://doi.org/10.1111/j.1461-0248.2006.00884.x" class="external-link">doi.org/10.1111/j.1461-0248.2006.00884.x</a></p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># phylogenetic tree</span></span></span>
-<span class="r-in"><span><span class="va">phylo</span> <span class="op">&lt;-</span> <span class="fu">geiger</span><span class="fu">::</span><span class="fu">sim.bdtree</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘geiger’</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phylo</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/rtree.html" class="external-link">rcoal</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">phylo</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/makeNodeLabel.html" class="external-link">makeNodeLabel</a></span><span class="op">(</span>phy <span class="op">=</span> <span class="va">phylo</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'phylo' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># community composition matrix</span></span></span>
 <span class="r-in"><span><span class="va">comm</span> <span class="op">&lt;-</span> </span></span>
@@ -150,7 +150,6 @@ niche and neutrality: the continuum hypothesis. 2006. Ecology Letters
 <span class="r-in"><span>        ncol <span class="op">=</span> <span class="fl">10</span>, </span></span>
 <span class="r-in"><span>        dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"comm"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span>, <span class="va">phylo</span><span class="op">$</span><span class="va">tip.label</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'phylo' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># coordinates - this is necessary for "disperal_assembly" algorithm</span></span></span>
 <span class="r-in"><span><span class="va">xy_coords</span> <span class="op">&lt;-</span> </span></span>
@@ -160,7 +159,6 @@ niche and neutrality: the continuum hypothesis. 2006. Ecology Letters
 <span class="r-in"><span>        dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">comm</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lng"</span>, <span class="st">"lat"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>        <span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'comm' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># running sbears with "single_site" algorithm</span></span></span>
 <span class="r-in"><span><span class="va">out_sbears</span> <span class="op">&lt;-</span> </span></span>
@@ -168,11 +166,9 @@ niche and neutrality: the continuum hypothesis. 2006. Ecology Letters
 <span class="r-in"><span>             phy <span class="op">=</span> <span class="va">phylo</span>, </span></span>
 <span class="r-in"><span>             coords <span class="op">=</span> <span class="va">xy_coords</span>, </span></span>
 <span class="r-in"><span>             method <span class="op">=</span> <span class="st">"single_site"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'phylo' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># matrix containing ancestral reconsturction, nodes are rows and columns are sites</span></span></span>
 <span class="r-in"><span><span class="va">anc_reconstruction</span> <span class="op">&lt;-</span> <span class="va">out_sbears</span><span class="op">$</span><span class="va">reconstruction</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'out_sbears' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
