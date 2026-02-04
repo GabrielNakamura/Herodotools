@@ -17,11 +17,11 @@
 #' Spatial coordinates containing longitute and latitude of 46
 #'     sites
 #'     
-#' @format 
+#' @format
 #' A data frame object with 46 rows and 2 columns:
 #' \describe{
-#'     \item {longitude} {Numeric. Longitude of each site in decimal degrees}
-#'     \item {latitude} {Numeric. Latitude of each site in decimal degrees}
+#'   \item{longitude}{Numeric. Longitude of each site in decimal degrees}
+#'   \item{latitude}{Numeric. Latitude of each site in decimal degrees}
 #' }
 #'     
 #' @source <https://zenodo.org/records/16933539>
