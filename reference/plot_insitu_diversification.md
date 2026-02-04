@@ -86,7 +86,7 @@ akodon_diversification <- Herodotools::calc_insitu_diversification(W = akodon_pa
                                       type = "equal.splits")
 #Load data
 
-site_xy <- akodon_sites %>%
+site_xy <- akodon_sites |>
     dplyr::select(LONG, LAT)
 
 coastline <- rnaturalearth::ne_coastline(returnclass = "sf")

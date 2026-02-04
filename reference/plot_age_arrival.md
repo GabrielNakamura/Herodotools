@@ -1,6 +1,7 @@
-# Plot in-situ diversification metrics across geographic space
+# Plot the mean arrival age of species in an assemblage based in an ancestral area reconstruction across geographic space
 
-Plot in-situ diversification metrics across geographic space
+Plot the mean arrival age of species in an assemblage based in an
+ancestral area reconstruction across geographic space
 
 ## Usage
 
@@ -61,7 +62,7 @@ akodon_age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree,
                                          biogeo = biogeo_area)
 #Load data
 
-site_xy <- akodon_sites %>%
+site_xy <- akodon_sites |>
     dplyr::select(LONG, LAT)
 
 coastline <- rnaturalearth::ne_coastline(returnclass = "sf")

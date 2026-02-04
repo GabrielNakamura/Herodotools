@@ -199,7 +199,14 @@ Debastiani and Leandro Duarte
   : Phylogeny of 260 Sigmodontinae species
 
 - [`plot_age_arrival()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_age_arrival.md)
-  : Plot in-situ diversification metrics across geographic space
+  : Plot the mean arrival age of species in an assemblage based in an
+  ancestral area reconstruction across geographic space
+
+- [`plot_dispersal_from()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_dispersal_from.md)
+  : Plot dispersal contribution from source areas
+
+- [`plot_evoregions()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_evoregions.md)
+  : Plot the evoregions
 
 - [`plot_insitu_diversification()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_insitu_diversification.md)
   : Plot in-situ diversification metrics across geographic space
