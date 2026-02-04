@@ -11,6 +11,7 @@
 <url><loc>https://gabrielnakamura.github.io/Herodotools/articles/tip_based_trait_evolution.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/authors.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/index.html</loc></url>
+<url><loc>https://gabrielnakamura.github.io/Herodotools/reference/PD_decomposition.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/ada.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon_newick.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/akodon_sites.html</loc></url>
@@ -44,6 +45,8 @@
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/get_tipranges_to_BioGeoBEARS.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/index.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/insert_nodes.html</loc></url>
+<url><loc>https://gabrielnakamura.github.io/Herodotools/reference/organize_pd_decomp.html</loc></url>
+<url><loc>https://gabrielnakamura.github.io/Herodotools/reference/partition_pd.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/phy_sbears.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/pipe.html</loc></url>
 <url><loc>https://gabrielnakamura.github.io/Herodotools/reference/plot_ada.html</loc></url>

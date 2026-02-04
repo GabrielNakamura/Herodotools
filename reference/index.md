@@ -2,6 +2,9 @@
 
 ## All functions
 
+- [`PD_decomposition()`](https://gabrielnakamura.github.io/Herodotools/reference/PD_decomposition.md)
+  : Phylogenetic diversity decomposition
+
 - [`akodon_newick`](https://gabrielnakamura.github.io/Herodotools/reference/akodon_newick.md)
   : Phylogenetic tree in of Akodon genus
 
@@ -102,6 +105,12 @@
 - [`insert_nodes()`](https://gabrielnakamura.github.io/Herodotools/reference/insert_nodes.md)
   : Insert internal nodes in the phylogenetic tree
 
+- [`organize_pd_decomp()`](https://gabrielnakamura.github.io/Herodotools/reference/organize_pd_decomp.md)
+  : Auxiliar to organize output from PD decomposition function
+
+- [`partition_pd()`](https://gabrielnakamura.github.io/Herodotools/reference/partition_pd.md)
+  : Auxiliar function used to calculate PD components
+
 - [`phy_sbears`](https://gabrielnakamura.github.io/Herodotools/reference/phy_sbears.md)
   : Phylogeny of 260 Sigmodontinae species
 
@@ -110,10 +119,10 @@
   ancestral area reconstruction across geographic space
 
 - [`plot_dispersal_from()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_dispersal_from.md)
-  : Plot dispersal contribution from source areas
+  : Plot historical dispersal contribution from source areas
 
 - [`plot_evoregions()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_evoregions.md)
-  : Plot the evoregions
+  : Plot Evoregions Classification
 
 - [`plot_insitu_diversification()`](https://gabrielnakamura.github.io/Herodotools/reference/plot_insitu_diversification.md)
   : Plot in-situ diversification metrics across geographic space

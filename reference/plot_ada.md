@@ -1,6 +1,6 @@
-# Plotting ancestral area character in space
+# Plotting ancestral area in space
 
-Plotting ancestral area character in space
+Plotting ancestral area in space
 
 ## Usage
 
@@ -20,11 +20,13 @@ plot_ada(
 
 - ada.res:
 
-  An object from ada function
+  An object from
+  [`ada`](https://gabrielnakamura.github.io/Herodotools/reference/ada.md)
+  function
 
 - grid:
 
-  An spatial object containing the cells used to calculate ancestral
+  A spatial object containing the cells used to calculate ancestral
   diversity distribution with ada
 
 - coords:
