@@ -52,7 +52,11 @@ partition_pd <-
     # adding a group to all species - this will be useful to plot the partitions
     data2 <- 
       data2 |>  
-      mutate(group = coalesce(partition.IS, partition.IM, partition.EM, partition.ESD))  
+      dplyr::mutate(group = dplyr::coalesce(partition.IS,
+                                            partition.IM, 
+                                            partition.EM, 
+                                            partition.ESD)
+                    )  
     
     # calculating PD components
     PDinsitu <- 

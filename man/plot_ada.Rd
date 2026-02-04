@@ -2,7 +2,7 @@
 % Please edit documentation in R/function_plot_ada.R
 \name{plot_ada}
 \alias{plot_ada}
-\title{Plotting ancestral area character in space}
+\title{Plotting ancestral area in space}
 \usage{
 plot_ada(
   ada.res,
@@ -15,18 +15,19 @@ plot_ada(
 )
 }
 \arguments{
-\item{ada.res}{An object from ada function}
+\item{ada.res}{An object from \code{\link{ada}} function}
 
-\item{grid}{An spatial object containing the cells used to calculate ancestral diversity distribution
-with ada}
+\item{grid}{A spatial object containing the cells used to calculate ancestral
+diversity distribution with ada}
 
 \item{coords}{A two column matrix containing the values of
 Longitude (first column) and Latitude (second column)}
 
 \item{resolution}{Scalar informing the resolution of grids in grid object}
 
-\item{patterns}{Character, a vector containing the names of the metrics to be spatialized or "all" to
-create a map for all metrics. The  characters allowed to be passed are "rich", "Nnodes", "PeakDiv",
+\item{patterns}{Character, a vector containing the names of the metrics to be
+spatialized or "all" to create a map for all metrics. The  characters
+allowed to be passed are "rich", "Nnodes", "PeakDiv",
 "Skewness", "LowDistPeak", "HighDistPeak", "PeakRange". Default is "all"}
 
 \item{color_palette}{Character indicating the palette to be used to plot spatial patterns. it can be one
@@ -39,6 +40,6 @@ Default is "+proj=robin"}
 A list containing spatial plots for the metrics calculated in ada.res
 }
 \description{
-Plotting ancestral area character in space
+Plotting ancestral area in space
 }
 \keyword{internal}

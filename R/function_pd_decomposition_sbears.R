@@ -9,9 +9,62 @@
 #' @param make.node.label Logical. If TRUE (the default) the nodes of the phylogeny
 #'      will be named with the letter N preceding the number of the node
 #'
-#' @return a list of length two. The element of the list named decomposition is 
-#'     a data frame with decomposition values of PD for all communities.
-#'     The element of the list named tree_table_potential is a tibble with node information for the potential tree for each community
+#' @return a list of length two. 
+#' \itemize{
+#'     \item \code{decomp_potential}: is a list with results of PD decomposition
+#'         considering the range area model reconstruction. This list contains:
+#'         \item \code{PD_decomposition}: A data frame with three colums. 
+#'         \code{partition} is a character indicating the component of PD, 
+#'         \code{value} is a numeric columns with respective PD compoent and 
+#'         \code{community} is a character column with the name of the community 
+#'         
+#'      \item \code{decomp_faith}: is a list with the same structure of  
+#'          \code{decomp_potential}, but contains the results of PD decomposition
+#'          considering only the current occurrence of lineages in communities
+#' }
+#' 
+#' @examples
+#' # phylogenetic tree
+#' set.seed(42)
+#' phylo <- ape::rcoal(n = 10)
+#' phylo <- ape::makeNodeLabel(phy = phylo)
+#' 
+#' # community composition matrix
+#' comm <- 
+#'   matrix(sample(c(0, 1), size = 10*20, replace = TRUE),
+#'          nrow = 20, 
+#'          ncol = 10, 
+#'          dimnames = list(paste("comm", 1:20), phylo$tip.label)
+#'   )
+#' 
+#' # coordinates - this is necessary for "disperal_assembly" algorithm
+#' xy_coords <- 
+#'   matrix(runif(1:10), 
+#'          nrow = nrow(comm),
+#'          ncol = 2, 
+#'          dimnames = list(rownames(comm), c("lng", "lat")
+#'          )
+#'   )
+#' 
+#' # running sbears with "single_site" algorithm
+#' out_sbears <- 
+#'   calc_sbears(x = comm,
+#'               phy = phylo, 
+#'               coords = xy_coords, 
+#'               method = "single_site")
+#' 
+#' # sbears object can be used directly in PD_decomposition function
+#' 
+#' out_decomp <- 
+#'   PD_decomposition(comm = comm,
+#'                    sbears.obj = out_sbears, 
+#'                    phy = phylo, 
+#'                    threshold = 0.5)
+#' 
+#' # Data frame with results from PD decomposition
+#' out_pd_decomposition <- out_decomp$decomp_potential$PD_decomposition
+#'     
+#'     
 #' @export
 
 PD_decomposition <- 
