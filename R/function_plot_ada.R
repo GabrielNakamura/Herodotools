@@ -1,10 +1,11 @@
-#' Plotting ancestral area character in space
+#' Plotting ancestral area in space
 #'
-#' @param ada.res An object from ada function
-#' @param grid An spatial object containing the cells used to calculate ancestral diversity distribution 
-#'     with ada
-#' @param patterns Character, a vector containing the names of the metrics to be spatialized or "all" to 
-#'     create a map for all metrics. The  characters allowed to be passed are "rich", "Nnodes", "PeakDiv",
+#' @param ada.res An object from \code{\link{ada}} function
+#' @param grid A spatial object containing the cells used to calculate ancestral
+#'      diversity distribution with ada
+#' @param patterns Character, a vector containing the names of the metrics to be
+#'     spatialized or "all" to create a map for all metrics. The  characters 
+#'     allowed to be passed are "rich", "Nnodes", "PeakDiv",
 #'     "Skewness", "LowDistPeak", "HighDistPeak", "PeakRange". Default is "all"
 #' @param coords A two column matrix containing the values of 
 #'     Longitude (first column) and Latitude (second column)

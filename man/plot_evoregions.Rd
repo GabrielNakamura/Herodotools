@@ -2,7 +2,7 @@
 % Please edit documentation in R/function_plot_evoregions.R
 \name{plot_evoregions}
 \alias{plot_evoregions}
-\title{Plot the evoregions}
+\title{Plot Evoregions Classification}
 \usage{
 plot_evoregions(evoregions, coords, shapefile)
 }
@@ -22,7 +22,7 @@ study area limits).}
 A \code{ggplot2} object is returned.
 }
 \description{
-Plot the evoregions
+Plot Evoregions Classification
 }
 \examples{
 \dontrun{

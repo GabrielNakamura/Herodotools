@@ -2,7 +2,7 @@
 % Please edit documentation in R/function_plot_dispersal.R
 \name{plot_dispersal_from}
 \alias{plot_dispersal_from}
-\title{Plot dispersal contribution from source areas}
+\title{Plot historical dispersal contribution from source areas}
 \usage{
 plot_dispersal_from(
   dispersal_from,
@@ -48,7 +48,7 @@ If \code{FALSE}, a single area defined by \code{area_col} is plotted.}
 A \code{ggplot} object.
 }
 \description{
-This function plots spatial patterns of dispersal contribution from
+This function plots spatial patterns of historical dispersal contribution from
 one or multiple source areas. The user can visualize a single area
 or multiple areas simultaneously using \code{facet_wrap()}.
 }

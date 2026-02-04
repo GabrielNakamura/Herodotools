@@ -1,8 +1,8 @@
-#' Plot dispersal contribution from source areas
+#' Plot historical dispersal contribution from source areas
 #'
-#' This function plots spatial patterns of dispersal contribution from
-#' one or multiple source areas. The user can visualize a single area
-#' or multiple areas simultaneously using \code{facet_wrap()}.
+#' This function plots spatial patterns of historical dispersal contribution from
+#'     one or multiple source areas. The user can visualize a single area 
+#'     or multiple areas simultaneously using \code{facet_wrap()}.
 #'
 #' When multiple areas are plotted, the order of the facets follows
 #' the order of the columns provided in \code{area_cols}, not alphabetical order.
