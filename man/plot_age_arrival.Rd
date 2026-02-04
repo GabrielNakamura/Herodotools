@@ -2,7 +2,7 @@
 % Please edit documentation in R/function_plot_age_comm.R
 \name{plot_age_arrival}
 \alias{plot_age_arrival}
-\title{Plot in-situ diversification metrics across geographic space}
+\title{Plot the mean arrival age of species in an assemblage based in an ancestral area reconstruction across geographic space}
 \usage{
 plot_age_arrival(
   age_arrival_comm,
@@ -31,7 +31,7 @@ quantitative variables in \code{rcartocolor::scale_fill_carto_c}.}
 A \code{ggplot2} object is returned.
 }
 \description{
-Plot in-situ diversification metrics across geographic space
+Plot the mean arrival age of species in an assemblage based in an ancestral area reconstruction across geographic space
 }
 \examples{
 \dontrun{
@@ -44,7 +44,7 @@ akodon_age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree,
                                          biogeo = biogeo_area)
 #Load data
 
-site_xy <- akodon_sites \%>\%
+site_xy <- akodon_sites |>
     dplyr::select(LONG, LAT)
 
 coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
