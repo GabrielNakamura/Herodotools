@@ -5,7 +5,6 @@ vignette: >
   %\VignetteIndexEntry{Using Herodotools to analyses of historical biogeography}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{cowplot}
   %\VignetteDepends{here}
   %\VignetteDepends{patchwork}
   %\VignetteDepends{rnaturalearth}
@@ -513,16 +512,11 @@ map_dispersal_D <-
    ggplot2::ggtitle("From D") + 
    ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") + 
-   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
-                               direction = "horizontal",
-                               ticks.colour = "grey20",
-                               title.position = "top",
-                               label.position = "bottom",
-                               title.hjust = 0.5)) +
    ggplot2::theme(
-    legend.position = "bottom",
+    legend.position = "right",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8), 
     axis.text = element_text(size = 3),
     plot.subtitle = element_text(hjust = 0.5)
   )
@@ -539,16 +533,11 @@ map_dispersal_A <-
    ggplot2::ggtitle("From A") + 
    ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") + 
-  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
-                               direction = "horizontal",
-                               ticks.colour = "grey20",
-                               title.position = "top",
-                               label.position = "bottom",
-                               title.hjust = 0.5)) +
    ggplot2::theme(
-    legend.position = "bottom",
+    legend.position = "right",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8), 
     axis.text = element_text(size = 3),
     plot.subtitle = element_text(hjust = 0.5)
   )
@@ -564,26 +553,30 @@ map_dispersal_B <-
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("From B") + 
    ggplot2::theme_bw() +
-   ggplot2::labs(fill = "% of\ncontribution") +
+   ggplot2::labs(fill = "% of contribution") +
    ggplot2::theme(
      legend.position = "right",
      axis.title = element_blank(),
      legend.text = element_text(size = 6), 
+     legend.title = element_text(size = 8), 
      axis.text = element_text(size = 3),
      plot.subtitle = element_text(hjust = 0.5)   
    )
 
 ```
 
-```{r outFig6, echo=FALSE,eval=TRUE,fig.cap="Figure 6 - Maps showing regionalization based on phylogenetic turnover (evoregion - top figure), and the contribution of regions A, B and D to other regions regarding historical dispersal of lineages",out.width="70%"}
-leg <- cowplot::get_legend(map_dispersal_B)
-plot1 <- cowplot::plot_grid(map_dispersal_A + theme(legend.position = "none"), 
-                   map_dispersal_B + theme(legend.position = "none"), 
-                   map_dispersal_D + theme(legend.position = "none"), leg,
-                   ncol = 4, rel_widths = c(2, 2, 2, 1))
+```{r outFig6, echo=TRUE,eval=TRUE,fig.cap="Figure 6 - Maps showing regionalization based on phylogenetic turnover (evoregion - top figure), and the contribution of regions A, B and D to other regions regarding historical dispersal of lineages",fig.height= 5, fig.width= 5}
+l_map_disp <- list(
+  map_dispersal_A , 
+  map_dispersal_B,
+  map_dispersal_D 
+)
 
-cowplot::plot_grid(map_evoregion + theme(legend.position = "right"), plot1, ncol = 1,
-                   rel_heights = c(2, 1.2))
+
+chart_disp <- wrap_plots(l_map_disp, guides = "collect")
+
+(map_evoregion / chart_disp) +
+  plot_layout(heights = c(2, 1.2))
 ```
 
 

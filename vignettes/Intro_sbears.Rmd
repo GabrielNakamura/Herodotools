@@ -5,6 +5,8 @@ vignette: >
   %\VignetteIndexEntry{Intro_sbears}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{progressr}
+  %\VignetteDepends{geodist}
 ---
 
 ```{r, include = FALSE}

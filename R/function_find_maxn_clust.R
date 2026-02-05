@@ -56,6 +56,20 @@ find_max_nclust <-
            confidence.level = c(0.7, 0.8, 0.9, 0.95, 0.99)
   ) 
   {
+    
+    pkg_req <- c("progressr")
+    
+    for(pkg in pkg_req) {
+      if (!requireNamespace(pkg, quietly = TRUE)) {
+        stop(
+          paste0("Package '", pkg, "' must be installed to use this function."),
+          call. = FALSE
+        )
+      }
+    }
+    
+    
+    
     # in case of big matrices, use only a subset of that matrix
     if(dim(x)[1] > 1000){
       group.affinity <- matrix(NA, subset, subset)

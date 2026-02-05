@@ -98,7 +98,7 @@ PD_decomposition <-
                         Freq == 1)[, -3]
     colnames(community) <- c("grids", "species")
     phy_tibble <- tidytree::as_tibble(phy)
-    pb <- txtProgressBar(min = 0,      
+    pb <- utils::txtProgressBar(min = 0,      
                          max = length(list_res), 
                          style = 3,    
                          width = 50,   
@@ -216,7 +216,7 @@ PD_decomposition <-
       list_res4[[i]] <- partition_faith$table_tree
       
       # progress bar
-      setTxtProgressBar(pb, i)
+      utils::setTxtProgressBar(pb, i)
     }
     
     # summarizing results

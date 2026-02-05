@@ -57,16 +57,12 @@ Imports:
     here,
     HDInterval,
     magrittr,
-    moments,
     PCPS,
     phylobase,
     phyloregion,
     phytools,
     picante,
-    progressr,
     purrr,
-    rlang,
-    rlist,
     scales,
     SYNCSA,
     tibble,
@@ -79,14 +75,15 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: 
     cladoRcpp,
-    cowplot,
     daee,
     future,
     ggplot2,
     glue,
     knitr,
+    moments,
     patchwork,
     phangorn,
+    progressr,
     raster,
     rcartocolor,
     rmarkdown,
@@ -98,7 +95,9 @@ Suggests:
     tidyr, 
     ade4,
     betapart,
-    geodist
+    geodist,
+    rlist,
+    rlang
 Remotes: 
     nmatzke/BioGeoBEARS,
     vanderleidebastiani/daee

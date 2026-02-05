@@ -111,6 +111,8 @@ out_sbears <-
 
 # matrix containing ancestral reconsturction, nodes are rows and columns are sites
 anc_reconstruction <- out_sbears$reconstruction
+
+
 }
 \references{
 Gravel D., Canhan C.D., Beaudet M. and Messier C. Reconciling

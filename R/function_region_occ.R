@@ -6,7 +6,6 @@
 #'
 #' @param comm Occurrence data frame with species in colums and rows corresponding to assemblages
 #' @param site.region a character vector indicating the membership of each assemblage to regions
-#' @importFrom rlang .data
 #' @return An occurrence data frame with species as rownames and regions as columns
 #' @export
 #' 
@@ -25,6 +24,11 @@
 #' get_region_occ(comm=akodon_pa_tree,site.region=site_evoregion)
 get_region_occ <- 
   function(comm, site.region){
+    
+    if (!requireNamespace("rlang", quietly = TRUE)) {
+      stop("Package 'rlang' is required for this functionality.", call. = FALSE)
+    }
+    
   evoregion.data <- 
     # bind compostion matrix and the site evoregion
     dplyr::bind_cols(

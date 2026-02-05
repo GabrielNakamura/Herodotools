@@ -90,6 +90,8 @@
 #'
 #' # matrix containing ancestral reconsturction, nodes are rows and columns are sites
 #' anc_reconstruction <- out_sbears$reconstruction
+#' 
+#' 
 
 calc_sbears <-
   function(x,
@@ -102,6 +104,18 @@ calc_sbears <-
            make.node.label = TRUE
   ){
     
+    
+    pkg_req <- c("geodist", "progressr")
+    
+    for(pkg in pkg_req) {
+      if (!requireNamespace(pkg, quietly = TRUE)) {
+        stop(
+          paste0("Package '", pkg, "' must be installed to use this function."),
+          call. = FALSE
+        )
+      }
+    }
+
     # checking procedures
     if(method != "single_site" & method != "disp_assembly"){
       stop(

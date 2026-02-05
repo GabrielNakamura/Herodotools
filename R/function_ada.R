@@ -32,10 +32,22 @@ ada <- function(x,
                 threshold = 0.7, 
                 compute.fields = F){
   
+  pkg_req <- c("rlist", "moments")
+  
+  for(pkg in pkg_req) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      stop(
+        paste0("Package '", pkg, "' must be installed to use this function."),
+        call. = FALSE
+      )
+    }
+  }
+  
   if(any(x > 1) == TRUE){
     x <- ifelse(x >= 1, 1, 0)
   }
   
+
   # Enter and organize data:
   match <- picante::match.phylo.comm(phy, x)
   x <- match$comm
