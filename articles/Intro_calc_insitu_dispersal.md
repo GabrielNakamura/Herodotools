@@ -509,16 +509,11 @@ map_dispersal_D <-
    ggplot2::ggtitle("From D") + 
    ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") + 
-   ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
-                               direction = "horizontal",
-                               ticks.colour = "grey20",
-                               title.position = "top",
-                               label.position = "bottom",
-                               title.hjust = 0.5)) +
    ggplot2::theme(
-    legend.position = "bottom",
+    legend.position = "right",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8), 
     axis.text = element_text(size = 3),
     plot.subtitle = element_text(hjust = 0.5)
   )
@@ -535,16 +530,11 @@ map_dispersal_A <-
    ggplot2::ggtitle("From A") + 
    ggplot2::theme_bw() +
    ggplot2::labs(fill = "% of contribution") + 
-  ggplot2::guides(fill = guide_colorbar(barheight = unit(2.3, units = "mm"),  
-                               direction = "horizontal",
-                               ticks.colour = "grey20",
-                               title.position = "top",
-                               label.position = "bottom",
-                               title.hjust = 0.5)) +
    ggplot2::theme(
-    legend.position = "bottom",
+    legend.position = "right",
     axis.title = element_blank(),
     legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8), 
     axis.text = element_text(size = 3),
     plot.subtitle = element_text(hjust = 0.5)
   )
@@ -560,14 +550,29 @@ map_dispersal_B <-
    ggplot2::coord_sf(xlim = map_limits$x, ylim = map_limits$y) +
    ggplot2::ggtitle("From B") + 
    ggplot2::theme_bw() +
-   ggplot2::labs(fill = "% of\ncontribution") +
+   ggplot2::labs(fill = "% of contribution") +
    ggplot2::theme(
      legend.position = "right",
      axis.title = element_blank(),
      legend.text = element_text(size = 6), 
+     legend.title = element_text(size = 8), 
      axis.text = element_text(size = 3),
      plot.subtitle = element_text(hjust = 0.5)   
    )
+```
+
+``` r
+l_map_disp <- list(
+  map_dispersal_A , 
+  map_dispersal_B,
+  map_dispersal_D 
+)
+
+
+chart_disp <- wrap_plots(l_map_disp, guides = "collect")
+
+(map_evoregion / chart_disp) +
+  plot_layout(heights = c(2, 1.2))
 ```
 
 ![Figure 6 - Maps showing regionalization based on phylogenetic turnover
