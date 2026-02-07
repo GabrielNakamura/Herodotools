@@ -140,8 +140,8 @@ that a given number of groups yields consistent and reliable cluster
 structures.
 
 In this example, the maximum number of groups that yields the most
-stable solution is 5. Therefore, we use this value in the `evoregion()`
-computation that follows.
+stable solution is 5. Therefore, we will use this value in the
+`evoregion()` computation that follows.
 
 ## Computing evoregions
 
@@ -153,6 +153,7 @@ performs a biogeographical regionalization based on a [phylogenetic
 fuzzy matrix](https://doi.org/10.1111/2041-210X.12547), combined with a
 [Discriminant Analysis of Principal Components (DAPC) using k-means
 clustering](https://bmcgenomdata.biomedcentral.com/articles/10.1186/1471-2156-11-94).
+
 Evoregions represent areas that correspond to centers of lineage
 diversification, reflecting historical evolutionary radiations within
 clades (Maestri & Duarte, 2020).
@@ -164,12 +165,12 @@ clusters using the “elbow” method, as implemented in the {phyloregion}
 package
 (<https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13478>).
 
-However, we strongly recommend using the
+However, **we strongly recommend** using the
 [`find_max_nclust()`](https://gabrielnakamura.github.io/Herodotools/reference/find_max_nclust.md)
 function to determine the maximum number of clusters, as demonstrated in
 the previous section. This approach identifies the most stable
-clustering solution and is therefore more aligned with the
-methodological rationale of the evoregion framework.
+clustering solution and is more aligned with the methodological
+rationale of the evoregion framework.
 
 The `seed` argument ensures reproducibility: if the analysis is repeated
 with the same data and argument settings, the same numerical labels are
@@ -191,7 +192,7 @@ regions <-
 site_region <- regions$cluster_evoregions # this is the classification result for each site
 ```
 
-We can plot the regions in the map
+We can plot the regions in the map.
 
 ``` r
 evoregion_df <- data.frame(
