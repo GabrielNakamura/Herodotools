@@ -81,75 +81,75 @@ calc_evoregions <-
            n.iter.clust = 1e7, 
            criterion.clust = "diffNgroup", 
            seed = NULL
-)
-{
-  
-  if(ape::is.ultrametric(phy) != TRUE){
-    stop("Phylogeny must be ultrametric")
-  }
-  
-  if(ncol(comm) != length(phy$tip.label)){
-    stop("The number of species in the 'comm' and 'phy' do not match. Please use picante::match.phylo.comm() for solve for species matching.")
-  }
-  
-  sp_match_1 <- names(comm) %in% phy$tip.label
-  sp_match_2 <- phy$tip.label %in% names(comm)
-  
-  if(!any(c(sp_match_1, sp_match_2))){
-    stop("The names of species in the 'comm' and 'phy' do not match. Please use picante::match.phylo.comm() to solve species matching.")
-  }
-  
-  match <- picante::match.phylo.comm(phy, comm) #standardize species in phylo and comm
-  phy <- match$phy
-  comm <- match$comm
-  
-  if(is.null(max.n.clust)){
+  )
+  {
+    
+    if(ape::is.ultrametric(phy) != TRUE){
+      stop("Phylogeny must be ultrametric")
+    }
+    
+    if(ncol(comm) != length(phy$tip.label)){
+      stop("The number of species in the 'comm' and 'phy' do not match. Please use picante::match.phylo.comm() for solve for species matching.")
+    }
+    
+    sp_match_1 <- colnames(comm) %in% phy$tip.label
+    sp_match_2 <- phy$tip.label %in% colnames(comm)
+    
+    if(!any(c(sp_match_1, sp_match_2))){
+      stop("The names of species in the 'comm' and 'phy' do not match. Please use picante::match.phylo.comm() to solve species matching.")
+    }
+    
+    match <- picante::match.phylo.comm(phy, comm) #standardize species in phylo and comm
+    phy <- match$phy
+    comm <- match$comm
+    
+    if(is.null(max.n.clust)){
       matrixP <- SYNCSA::matrix.p(comm = comm, phylodist = cophenetic(phy))
       optimal_matrixP <- phyloregion::optimal_phyloregion(
         x = sqrt(vegan::vegdist(matrixP$matrix.P)), 
         method = "average"
       )
       max.n.clust <- optimal_matrixP$optimal$k
+    }
+    
+    
+    pcps.comm.bray <- PCPS::pcps(
+      comm,
+      phylodist = cophenetic(phy), 
+      method = method.dist
+    )
+    
+    P <- pcps.comm.bray$P
+    values.bray <- pcps.comm.bray$values
+    thresh.bray <- max(which(values.bray[, 2] >= tresh.dist))
+    cum.sum.thresh.bray <- cumsum(as.data.frame(values.bray[, 2])
+    )[1:thresh.bray, ][3]
+    vec.bray <- pcps.comm.bray$vectors
+    
+    set.seed(seed)
+    clust.vec.bray <- adegenet::find.clusters(vec.bray[, 1:thresh.bray], 
+                                              clust = NULL, 
+                                              choose.n.clust = FALSE, 
+                                              n.pca = thresh.bray, 
+                                              method = method.clust, 
+                                              stat = stat.clust, 
+                                              n.iter = n.iter.clust, 
+                                              criterion = criterion.clust, 
+                                              max.n.clust = max.n.clust)
+    list_res <- vector(mode = "list", length = 2)
+    
+    
+    list_res[[1]] <- list(
+      vectors = vec.bray,
+      prop_explainded = values.bray[,2],
+      tresh_dist = tresh.dist
+    )
+    list_res[[2]] <- clust.vec.bray$grp
+    
+    
+    names(list_res) <- c("PCPS", 
+                         "cluster_evoregions")
+    
+    class(list_res) <- "evoregion"
+    return(list_res)
   }
-  
-  
-  pcps.comm.bray <- PCPS::pcps(
-    comm,
-    phylodist = cophenetic(phy), 
-    method = method.dist
-  )
-  
-  P <- pcps.comm.bray$P
-  values.bray <- pcps.comm.bray$values
-  thresh.bray <- max(which(values.bray[, 2] >= tresh.dist))
-  cum.sum.thresh.bray <- cumsum(as.data.frame(values.bray[, 2])
-  )[1:thresh.bray, ][3]
-  vec.bray <- pcps.comm.bray$vectors
-  
-  set.seed(seed)
-  clust.vec.bray <- adegenet::find.clusters(vec.bray[, 1:thresh.bray], 
-                                            clust = NULL, 
-                                            choose.n.clust = FALSE, 
-                                            n.pca = thresh.bray, 
-                                            method = method.clust, 
-                                            stat = stat.clust, 
-                                            n.iter = n.iter.clust, 
-                                            criterion = criterion.clust, 
-                                            max.n.clust = max.n.clust)
-  list_res <- vector(mode = "list", length = 2)
-  
-  
-  list_res[[1]] <- list(
-    vectors = vec.bray,
-    prop_explainded = values.bray[,2],
-    tresh_dist = tresh.dist
-  )
-  list_res[[2]] <- clust.vec.bray$grp
-  
-  
-  names(list_res) <- c("PCPS", 
-                       "cluster_evoregions")
-  
-  class(list_res) <- "evoregion"
-  return(list_res)
-}
