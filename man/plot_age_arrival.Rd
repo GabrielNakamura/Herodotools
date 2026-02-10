@@ -38,29 +38,84 @@ Plot the mean arrival age of species in an assemblage based in an ancestral area
 
 # Compute diversification metrics
 
-akodon_age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree,
-                                         tree = akodon_newick,
-                                         ancestral.area = node_area,
-                                         biogeo = biogeo_area)
-#Load data
+data("akodon_sites") # site in rows and species and coordinates in columns
+data("akodon_newick") # phylogeny
 
-site_xy <- akodon_sites |>
-    dplyr::select(LONG, LAT)
+# pre computed evoregion
+load(file = system.file("extdata", "regions_results.RData", 
+                        package = "Herodotools")) 
+site_region <- regions$Cluster_Evoregions # evoregions
 
+# subseting longitude and latitude in a separate dataframe
+site_xy <- akodon_sites \%>\% 
+  dplyr::select(LONG, LAT) 
+
+# subsetting species presence in a separate dataframe
+akodon_pa <- akodon_sites \%>\% 
+  dplyr::select(-LONG, -LAT)
+
+# joining classification with site coordinates
+evoregion_df <- data.frame(
+  site_xy, 
+  site_region
+)
+
+# bioregion/ecoregion/evoregion of each site
+biogeo_area <- data.frame(biogeo = chartr("12345", 
+                                          "ABCDE", 
+                                          evoregion_df$site_region)) 
+
+# pre computed biogeobears model 
+load(file = system.file("extdata", 
+                        "resDEC_akodon.RData",
+                        package = "Herodotools")) 
+
+# subseting occurrence matrix keeping only species in the phylogenetic tree
+spp_in_tree <- names(akodon_pa) \%in\% akodon_newick$tip.label
+akodon_pa_tree <- akodon_pa[, spp_in_tree]
+
+
+# getting the ancestral range area for each node 
+node_area <- 
+  Herodotools::get_node_range_BioGeoBEARS(
+    resDEC,
+    phyllip.file = here::here("inst", "extdata", "geo_area_akodon.data"),
+    akodon_newick,
+    max.range.size = 4 
+  )
+
+# calculating age arrival
+akodon_age_comm <- 
+  Herodotools::calc_age_arrival(W = akodon_pa_tree,
+                                tree = akodon_newick,
+                                ancestral.area = node_area,
+                                biogeo = biogeo_area)
+
+
+# downloading coastline 
 coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
 
+# defining map limits
+map_limits <- list(
+  x = c(-95, -30),
+  y = c(-55, 12)
+)
+
+# cropping map keeping only Soutbh America
 coastline_crop <- sf::st_crop(coastline,
-                          xmin = map_limits$x[1],
-                          xmax = map_limits$x[2],
-                          ymin = map_limits$y[1],
-                          ymax = map_limits$y[2])
+                              xmin = map_limits$x[1],
+                              xmax = map_limits$x[2],
+                              ymin = map_limits$y[1],
+                              ymax = map_limits$y[2])
 
 
+# plotting mean age of arrival for each cell
 plot_age_arrival(age_arrival_comm = akodon_age_comm,
                  coords = site_xy,
                  shapefile = coastline_crop)
 
 }
+
 
 }
 \author{

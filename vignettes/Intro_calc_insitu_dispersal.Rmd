@@ -149,7 +149,7 @@ To facilitate the demonstration, we will use a pre-computed classification from
 
 ```{r save_evoregion_calc, echo=FALSE, eval=TRUE}
 
-load(file = "../inst/extdata/regions_results.RData")
+load(file = system.file("extdata", "regions_results.RData", package = "Herodotools")) 
 site_region <- regions$Cluster_Evoregions
 
 ```

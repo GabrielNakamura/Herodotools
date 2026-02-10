@@ -49,50 +49,93 @@
 #'
 #' @examples 
 #' \dontrun{
-#'
+#' # Compute diversification metrics
+#' 
+#' data("akodon_sites") # site in rows and species and coordinates in columns
+#' data("akodon_newick") # phylogeny
+#' 
+#' # pre computed evoregion
+#' load(file = system.file("extdata", "regions_results.RData", 
+#'                         package = "Herodotools")) 
+#' site_region <- regions$Cluster_Evoregions # evoregions
+#' 
+#' # subseting longitude and latitude in a separate dataframe
+#' site_xy <- akodon_sites %>% 
+#'   dplyr::select(LONG, LAT) 
+#' 
+#' # subsetting species presence in a separate dataframe
+#' akodon_pa <- akodon_sites %>% 
+#'   dplyr::select(-LONG, -LAT)
+#' 
+#' # joining classification with site coordinates
+#' evoregion_df <- data.frame(
+#'   site_xy, 
+#'   site_region
+#' )
+#' 
+#' # bioregion/ecoregion/evoregion of each site
+#' biogeo_area <- data.frame(biogeo = chartr("12345", 
+#'                                           "ABCDE", 
+#'                                           evoregion_df$site_region)) 
+#' 
+#' # pre computed biogeobears model 
+#' load(file = system.file("extdata", 
+#'                         "resDEC_akodon.RData",
+#'                         package = "Herodotools")) 
+#' 
+#' # subseting occurrence matrix keeping only species in the phylogenetic tree
+#' spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
+#' akodon_pa_tree <- akodon_pa[, spp_in_tree]
+#' 
+#' 
+#' # getting the ancestral range area for each node 
+#' node_area <- 
+#'   Herodotools::get_node_range_BioGeoBEARS(
+#'     resDEC,
+#'     phyllip.file = here::here("inst", "extdata", "geo_area_akodon.data"),
+#'     akodon_newick,
+#'     max.range.size = 4 
+#'   )
+#' 
 #' # Compute dispersal
-#'
 #' akodon_dispersal <-  Herodotools::calc_dispersal_from(W = akodon_pa_tree,
-#'                                  tree = akodon_newick,
-#'                                  ancestral.area = node_area,
-#'                                  biogeo = biogeo_area)
-#'
+#'                                                       tree = akodon_newick,
+#'                                                       ancestral.area = node_area,
+#'                                                       biogeo = biogeo_area)
+#' 
 #' #Load data
-#'
 #' site_xy <- akodon_sites |>
-#'     dplyr::select(LONG, LAT)
-#'
+#'   dplyr::select(LONG, LAT)
+#' 
+#' # coastline for maps
 #' coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
-#'
+#' 
+#' # defining map limits
+#' map_limits <- list(
+#'   x = c(-95, -30),
+#'   y = c(-55, 12)
+#' )
+#' 
+#' # just cropping coastline
 #' coastline_crop <- sf::st_crop(coastline,
-#'                           xmin = map_limits$x[1],
-#'                           xmax = map_limits$x[2],
-#'                           ymin = map_limits$y[1],
-#'                           ymax = map_limits$y[2])
-#'
-#' #Single map
-#'
-#' plot_dispersal_from(dispersal_from = akodon_dispersal,
-#'                     coords = site_xy,
-#'                     shapefile = coastline_crop,
-#'                     area_col = 1,
-#'                     facet = FALSE)
-#'
+#'                               xmin = map_limits$x[1],
+#'                               xmax = map_limits$x[2],
+#'                               ymin = map_limits$y[1],
+#'                               ymax = map_limits$y[2])
+#' 
+#' 
 #' #Multiple maps
-#'
 #' plot_dispersal_from(dispersal_from = akodon_dispersal,
 #'                     coords = site_xy,
 #'                     shapefile = coastline_crop,
 #'                     area_cols = c(1, 3, 5),
 #'                     facet = TRUE)
-#'
+#' 
 #' #All maps
-#'
 #' plot_dispersal_from(akodon_dispersal,
 #'                     coords = site_xy,
 #'                     shapefile = coastline_crop,
 #'                     facet = TRUE)
-#'
 #' #' }
 #'
 #' @author Maria Gabriela Junqueira and Gabriel Nakamura

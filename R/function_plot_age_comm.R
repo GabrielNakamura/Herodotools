@@ -21,30 +21,85 @@
 #' \dontrun{
 #'
 #' # Compute diversification metrics
-#'
-#' akodon_age_comm <- Herodotools::calc_age_arrival(W = akodon_pa_tree,
-#'                                          tree = akodon_newick,
-#'                                          ancestral.area = node_area,
-#'                                          biogeo = biogeo_area)
-#' #Load data
-#'
-#' site_xy <- akodon_sites |>
-#'     dplyr::select(LONG, LAT)
-#'
+#' 
+#' data("akodon_sites") # site in rows and species and coordinates in columns
+#' data("akodon_newick") # phylogeny
+#' 
+#' # pre computed evoregion
+#' load(file = system.file("extdata", "regions_results.RData", 
+#'                         package = "Herodotools")) 
+#' site_region <- regions$Cluster_Evoregions # evoregions
+#' 
+#' # subseting longitude and latitude in a separate dataframe
+#' site_xy <- akodon_sites %>% 
+#'   dplyr::select(LONG, LAT) 
+#' 
+#' # subsetting species presence in a separate dataframe
+#' akodon_pa <- akodon_sites %>% 
+#'   dplyr::select(-LONG, -LAT)
+#' 
+#' # joining classification with site coordinates
+#' evoregion_df <- data.frame(
+#'   site_xy, 
+#'   site_region
+#' )
+#' 
+#' # bioregion/ecoregion/evoregion of each site
+#' biogeo_area <- data.frame(biogeo = chartr("12345", 
+#'                                           "ABCDE", 
+#'                                           evoregion_df$site_region)) 
+#' 
+#' # pre computed biogeobears model 
+#' load(file = system.file("extdata", 
+#'                         "resDEC_akodon.RData",
+#'                         package = "Herodotools")) 
+#' 
+#' # subseting occurrence matrix keeping only species in the phylogenetic tree
+#' spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
+#' akodon_pa_tree <- akodon_pa[, spp_in_tree]
+#' 
+#' 
+#' # getting the ancestral range area for each node 
+#' node_area <- 
+#'   Herodotools::get_node_range_BioGeoBEARS(
+#'     resDEC,
+#'     phyllip.file = here::here("inst", "extdata", "geo_area_akodon.data"),
+#'     akodon_newick,
+#'     max.range.size = 4 
+#'   )
+#' 
+#' # calculating age arrival
+#' akodon_age_comm <- 
+#'   Herodotools::calc_age_arrival(W = akodon_pa_tree,
+#'                                 tree = akodon_newick,
+#'                                 ancestral.area = node_area,
+#'                                 biogeo = biogeo_area)
+#' 
+#' 
+#' # downloading coastline 
 #' coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
-#'
+#' 
+#' # defining map limits
+#' map_limits <- list(
+#'   x = c(-95, -30),
+#'   y = c(-55, 12)
+#' )
+#' 
+#' # cropping map keeping only Soutbh America
 #' coastline_crop <- sf::st_crop(coastline,
-#'                           xmin = map_limits$x[1],
-#'                           xmax = map_limits$x[2],
-#'                           ymin = map_limits$y[1],
-#'                           ymax = map_limits$y[2])
-#'
-#'
+#'                               xmin = map_limits$x[1],
+#'                               xmax = map_limits$x[2],
+#'                               ymin = map_limits$y[1],
+#'                               ymax = map_limits$y[2])
+#' 
+#' 
+#' # plotting mean age of arrival for each cell
 #' plot_age_arrival(age_arrival_comm = akodon_age_comm,
 #'                  coords = site_xy,
 #'                  shapefile = coastline_crop)
-#'
+#' 
 #' }
+#' 
 #'
 #' @author Maria Gabriela Junqueira and Gabriel Nakamura
 #'
@@ -88,7 +143,7 @@ plot_age_arrival <- function(age_arrival_comm,
   # step 3 - output ----
   ggplot2::ggplot(df_sites) +
     ggplot2::geom_raster(
-      aes(x = LONG, y = LAT, fill = mean_age_arrival)
+      ggplot2::aes(x = LONG, y = LAT, fill = mean_age_arrival)
     ) +
     rcartocolor::scale_fill_carto_c(
       type = "quantitative",
@@ -103,20 +158,20 @@ plot_age_arrival <- function(age_arrival_comm,
       color = "black",
       linewidth = 0.7
     ) +
-    ggplot2::guides(fill = guide_colorbar(barheight = unit(50, units = "mm"),
-                                          barwidth = unit(2.5, units = "mm"),
-                                          direction = "vertical",
-                                          ticks.colour = "#ffffff",
-                                          title.position = "top",
-                                          title.hjust = 0.5)) +
+    ggplot2::guides(fill = ggplot2::guide_colorbar(barheight = grid::unit(50, units = "mm"),
+                                                   barwidth = grid::unit(2.5, units = "mm"),
+                                                   direction = "vertical",
+                                                   ticks.colour = "#ffffff",
+                                                   title.position = "top",
+                                                   title.hjust = 0.5)) +
     ggplot2::theme_bw() +
     ggplot2::xlab("\nLongitude") +
     ggplot2::ylab("Latitude\n") +
     ggplot2::labs(fill = "Mean arrival age (Myr)\n") +
     ggplot2::theme(
-      panel.grid.major = element_line(linetype = "dashed",
+      panel.grid.major = ggplot2::element_line(linetype = "dashed",
                                       lineend = "round"),
-      axis.title = element_blank(),
-      axis.text.y = element_text(angle = 90, hjust = .45)
+      axis.title = ggplot2::element_blank(),
+      axis.text.y = ggplot2::element_text(angle = 90, hjust = .45)
     )
 }
