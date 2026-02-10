@@ -97,29 +97,84 @@ quantitative variables in <code><a href="https://jakubnowosad.com/rcartocolor/re
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Compute diversification metrics</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">akodon_age_comm</span> <span class="op">&lt;-</span> <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="calc_age_arrival.html">calc_age_arrival</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon_pa_tree</span>,</span></span>
-<span class="r-in"><span>                                         tree <span class="op">=</span> <span class="va">akodon_newick</span>,</span></span>
-<span class="r-in"><span>                                         ancestral.area <span class="op">=</span> <span class="va">node_area</span>,</span></span>
-<span class="r-in"><span>                                         biogeo <span class="op">=</span> <span class="va">biogeo_area</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#Load data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"akodon_sites"</span><span class="op">)</span> <span class="co"># site in rows and species and coordinates in columns</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"akodon_newick"</span><span class="op">)</span> <span class="co"># phylogeny</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">site_xy</span> <span class="op">&lt;-</span> <span class="va">akodon_sites</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">LONG</span>, <span class="va">LAT</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># pre computed evoregion</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"regions_results.RData"</span>, </span></span>
+<span class="r-in"><span>                        package <span class="op">=</span> <span class="st">"Herodotools"</span><span class="op">)</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="va">site_region</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">$</span><span class="va">Cluster_Evoregions</span> <span class="co"># evoregions</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># subseting longitude and latitude in a separate dataframe</span></span></span>
+<span class="r-in"><span><span class="va">site_xy</span> <span class="op">&lt;-</span> <span class="va">akodon_sites</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">LONG</span>, <span class="va">LAT</span><span class="op">)</span> </span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># subsetting species presence in a separate dataframe</span></span></span>
+<span class="r-in"><span><span class="va">akodon_pa</span> <span class="op">&lt;-</span> <span class="va">akodon_sites</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">LONG</span>, <span class="op">-</span><span class="va">LAT</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># joining classification with site coordinates</span></span></span>
+<span class="r-in"><span><span class="va">evoregion_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">site_xy</span>, </span></span>
+<span class="r-in"><span>  <span class="va">site_region</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># bioregion/ecoregion/evoregion of each site</span></span></span>
+<span class="r-in"><span><span class="va">biogeo_area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>biogeo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">chartr</a></span><span class="op">(</span><span class="st">"12345"</span>, </span></span>
+<span class="r-in"><span>                                          <span class="st">"ABCDE"</span>, </span></span>
+<span class="r-in"><span>                                          <span class="va">evoregion_df</span><span class="op">$</span><span class="va">site_region</span><span class="op">)</span><span class="op">)</span> </span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pre computed biogeobears model </span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, </span></span>
+<span class="r-in"><span>                        <span class="st">"resDEC_akodon.RData"</span>,</span></span>
+<span class="r-in"><span>                        package <span class="op">=</span> <span class="st">"Herodotools"</span><span class="op">)</span><span class="op">)</span> </span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># subseting occurrence matrix keeping only species in the phylogenetic tree</span></span></span>
+<span class="r-in"><span><span class="va">spp_in_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">akodon_pa</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">akodon_newick</span><span class="op">$</span><span class="va">tip.label</span></span></span>
+<span class="r-in"><span><span class="va">akodon_pa_tree</span> <span class="op">&lt;-</span> <span class="va">akodon_pa</span><span class="op">[</span>, <span class="va">spp_in_tree</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># getting the ancestral range area for each node </span></span></span>
+<span class="r-in"><span><span class="va">node_area</span> <span class="op">&lt;-</span> </span></span>
+<span class="r-in"><span>  <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="get_node_range_BioGeoBEARS.html">get_node_range_BioGeoBEARS</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">resDEC</span>,</span></span>
+<span class="r-in"><span>    phyllip.file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"extdata"</span>, <span class="st">"geo_area_akodon.data"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="va">akodon_newick</span>,</span></span>
+<span class="r-in"><span>    max.range.size <span class="op">=</span> <span class="fl">4</span> </span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># calculating age arrival</span></span></span>
+<span class="r-in"><span><span class="va">akodon_age_comm</span> <span class="op">&lt;-</span> </span></span>
+<span class="r-in"><span>  <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="calc_age_arrival.html">calc_age_arrival</a></span><span class="op">(</span>W <span class="op">=</span> <span class="va">akodon_pa_tree</span>,</span></span>
+<span class="r-in"><span>                                tree <span class="op">=</span> <span class="va">akodon_newick</span>,</span></span>
+<span class="r-in"><span>                                ancestral.area <span class="op">=</span> <span class="va">node_area</span>,</span></span>
+<span class="r-in"><span>                                biogeo <span class="op">=</span> <span class="va">biogeo_area</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># downloading coastline </span></span></span>
 <span class="r-in"><span><span class="va">coastline</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_coastline.html" class="external-link">ne_coastline</a></span><span class="op">(</span>returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># defining map limits</span></span></span>
+<span class="r-in"><span><span class="va">map_limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">95</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">55</span>, <span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># cropping map keeping only Soutbh America</span></span></span>
 <span class="r-in"><span><span class="va">coastline_crop</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">coastline</span>,</span></span>
-<span class="r-in"><span>                          xmin <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>                          xmax <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>                          ymin <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>                          ymax <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                              xmin <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                              xmax <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                              ymin <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                              ymax <span class="op">=</span> <span class="va">map_limits</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plotting mean age of arrival for each cell</span></span></span>
 <span class="r-in"><span><span class="fu">plot_age_arrival</span><span class="op">(</span>age_arrival_comm <span class="op">=</span> <span class="va">akodon_age_comm</span>,</span></span>
 <span class="r-in"><span>                 coords <span class="op">=</span> <span class="va">site_xy</span>,</span></span>
 <span class="r-in"><span>                 shapefile <span class="op">=</span> <span class="va">coastline_crop</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
