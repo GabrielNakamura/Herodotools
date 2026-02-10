@@ -1,3 +1,3 @@
-# Herodotools 2.0.0
+# Herodotools 2.0.1
 
-* Initial CRAN submission.
+* 
