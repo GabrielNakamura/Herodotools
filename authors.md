@@ -24,13 +24,12 @@
 
 Nakamura G, Rodrigues A, Luza A, Debastiani V, Maestri R, Duarte L
 (2026). *Herodotools: Tools for Historical Biogeography analysis*. R
-package version 2.0.0.9001,
-<https://gabrielnakamura.github.io/Herodotools/>.
+package version 2.0.1, <https://gabrielnakamura.github.io/Herodotools/>.
 
     @Manual{,
       title = {Herodotools: Tools for Historical Biogeography analysis},
       author = {Gabriel Nakamura and Arthur Rodrigues and André Luza and Vanderlei Debastiani and Renan Maestri and Leandro Duarte},
       year = {2026},
-      note = {R package version 2.0.0.9001},
+      note = {R package version 2.0.1},
       url = {https://gabrielnakamura.github.io/Herodotools/},
     }
