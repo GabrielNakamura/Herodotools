@@ -12,4 +12,8 @@
     
 * `find_max_nclust` now supports parallel computation 
 
+* New plotting functions `plot_age_comm`, `plot_ada`, `plot_dispersal`, 
+    `plot_evoregions` and `plot_insitu_diversification` are provided and can be 
+    used directly with the outputs of most Herodotools functions
+
 

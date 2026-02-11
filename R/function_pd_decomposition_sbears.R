@@ -87,8 +87,9 @@ PD_decomposition <-
     # reconstruction <- phyloregion::dense2long(t(ifelse(sbears.obj$reconstruction >= threshold, 1, 0))) # nodes predicted from reconstruction
     # reshaping dense to long matrix
     pres_reconstruction <- ifelse(sbears.obj$reconstruction >= threshold, 1, 0)
+    reconstruction_df <- as.data.frame(as.table(t(pres_reconstruction)))
     reconstruction <- 
-      subset(as.data.frame(as.table(t(pres_reconstruction))), Freq >= 1)
+      reconstruction_df[reconstruction_df$Freq >= 1, ]
     reconstruction <- reconstruction[, -3]
     colnames(reconstruction) <- c("grids", "species")
     

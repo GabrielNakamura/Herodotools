@@ -95,7 +95,7 @@ plot_evoregions <- function(evoregions,
 
   ggplot2::ggplot(df_evoregions) +
     ggplot2::geom_raster(
-      aes(x = LONG, y = LAT, fill = as.factor(site_region))) +
+      ggplot2::aes(x = LONG, y = LAT, fill = as.factor(site_region))) +
     rcartocolor::scale_fill_carto_d(
       type = "qualitative",
       palette = "Bold",
@@ -114,9 +114,9 @@ plot_evoregions <- function(evoregions,
     ggplot2::xlab("\nLongitude") +
     ggplot2::ylab("Latitude\n") +
     ggplot2::theme(
-      panel.grid.major = element_line(linetype = "dashed",lineend = "round"),
-      axis.text.y = element_text(angle = 90, hjust = .45),
-      axis.title = element_text(size = 12, face = "bold"),
+      panel.grid.major = ggplot2::element_line(linetype = "dashed",lineend = "round"),
+      axis.text.y = ggplot2::element_text(angle = 90, hjust = .45),
+      axis.title = ggplot2::element_text(size = 12, face = "bold"),
       legend.key.spacing.x = unit(1.5, "mm"),
       legend.key.spacing.y = unit(1.5, "mm"),
     )

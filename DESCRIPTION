@@ -67,6 +67,7 @@ Imports:
     SYNCSA,
     tibble,
     tidytree,
+    utils,
     vegan
 VignetteBuilder: knitr
 Encoding: UTF-8

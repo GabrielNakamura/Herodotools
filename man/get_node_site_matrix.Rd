@@ -20,7 +20,6 @@ output will be saved in the directory root}
 }
 \value{
 A list with four components:
-\itemize{
 \item{node_site_matrix}{A matrix containing the sites in the rows
 and the nodes of the tree in the columns}
 \item{tree}{A phylo object with the species produced in the simulation
@@ -28,7 +27,6 @@ process. The nodes were renamed from the original phylogeny}
 \item{nameIndexGuide}{A data frame with node information}
 \item{coordinates}{A data frame with coordinate information for
 the sites in node_site_matrix}
-}
 }
 \description{
 Extract a composition matrix of communities and nodes
