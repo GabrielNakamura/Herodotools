@@ -31,15 +31,23 @@ get_node_site_matrix(simulation_path, save = FALSE, output_file = NULL)
 
 A list with four components:
 
-- node_site_matrixA matrix containing the sites in the rows and the
-  nodes of the tree in the columns
+- node_site_matrix:
 
-- treeA phylo object with the species produced in the simulation
-  process. The nodes were renamed from the original phylogeny
+  A matrix containing the sites in the rows and the nodes of the tree in
+  the columns
 
-- nameIndexGuideA data frame with node information
+- tree:
 
-- coordinatesA data frame with coordinate information for the sites in
+  A phylo object with the species produced in the simulation process.
+  The nodes were renamed from the original phylogeny
+
+- nameIndexGuide:
+
+  A data frame with node information
+
+- coordinates:
+
+  A data frame with coordinate information for the sites in
   node_site_matrix
 
 ## Examples
