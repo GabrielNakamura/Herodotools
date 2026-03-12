@@ -1,4 +1,4 @@
-# Computing evoregions analysis
+# Computing evoregions
 
 This article outlines the basic workflow for constructing *evoregions*,
 starting from defining the maximum number of clusters to the

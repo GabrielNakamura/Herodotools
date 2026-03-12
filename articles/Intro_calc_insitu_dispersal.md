@@ -218,8 +218,8 @@ a_region <- Herodotools::get_region_occ(comm = akodon_pa_tree, site.region = sit
 
 The object generated in the previous step can be passed to an auxiliary
 Herodotools function to easily produce the
-[PHYLIP](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.md)
-file required for ancestral area reconstruction in BioGeoBEARS.
+[PHYLIP](http://phylo.wikidot.com/biogeobears) file required for
+ancestral area reconstruction in BioGeoBEARS.
 
 ``` r
 # save phyllip file

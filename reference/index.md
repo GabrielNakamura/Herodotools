@@ -139,6 +139,9 @@
 - [`rodent_phylo`](https://gabrielnakamura.github.io/Herodotools/reference/rodent_phylo.md)
   : Phylogenetic tree with 285 species
 
+- [`site_region`](https://gabrielnakamura.github.io/Herodotools/reference/site_region.md)
+  : Classification of communities in evoregions
+
 - [`toy_treeEx`](https://gabrielnakamura.github.io/Herodotools/reference/toy_treeEx.md)
   : Hypothetical phylogenetic tree
 

@@ -4,8 +4,8 @@
 
 - [Using Biogeographical Stochastic Mapping on
   Herodotools](https://gabrielnakamura.github.io/Herodotools/articles/bsm_analysis.md):
-- [Computing evoregions
-  analysis](https://gabrielnakamura.github.io/Herodotools/articles/building-evoregions.md):
+- [Computing
+  evoregions](https://gabrielnakamura.github.io/Herodotools/articles/building-evoregions.md):
 - [Community Phylogenetic
   Metrics](https://gabrielnakamura.github.io/Herodotools/articles/community-phylogenetic-metrics.md):
 - [Calculating in situ diversification and historical

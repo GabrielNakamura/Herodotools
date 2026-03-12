@@ -34,7 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/bsm_analysis.html">Using Biogeographical Stochastic Mapping on Herodotools</a></li>
-    <li><a class="dropdown-item" href="../articles/building-evoregions.html">Computing evoregions analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/building-evoregions.html">Computing evoregions</a></li>
     <li><a class="dropdown-item" href="../articles/community-phylogenetic-metrics.html">Community Phylogenetic Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/Intro_calc_insitu_dispersal.html">Calculating in situ diversification and historical dispersal</a></li>
     <li><a class="dropdown-item" href="../articles/Intro_sbears.html">Introduction to SBEARS - Site Based Estimation of Ancestral Range of Species</a></li>
@@ -270,8 +270,8 @@ species as rows and evoregions as columns.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="va">a_region</span> <span class="op">&lt;-</span> <span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/get_region_occ.html">get_region_occ</a></span><span class="op">(</span>comm <span class="op">=</span> <span class="va">akodon_pa_tree</span>, site.region <span class="op">=</span> <span class="va">site_region</span><span class="op">)</span></span></code></pre></div>
 <p>The object generated in the previous step can be passed to an
-auxiliary Herodotools function to easily produce the <a href="http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html" class="external-link">PHYLIP</a>
-file required for ancestral area reconstruction in BioGeoBEARS.</p>
+auxiliary Herodotools function to easily produce the <a href="http://phylo.wikidot.com/biogeobears" class="external-link">PHYLIP</a> file required for
+ancestral area reconstruction in BioGeoBEARS.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save phyllip file</span></span>
 <span><span class="fu">Herodotools</span><span class="fu">::</span><span class="fu"><a href="../reference/get_tipranges_to_BioGeoBEARS.html">get_tipranges_to_BioGeoBEARS</a></span><span class="op">(</span></span>
