@@ -147,13 +147,6 @@ map_richness
 To facilitate the demonstration, we will use a pre-computed classification from
     evoregion analysis.
 
-```{r save_evoregion_calc, echo=FALSE, eval=TRUE}
-
-load(file = system.file("extdata", "regions_results.RData", package = "Herodotools")) 
-site_region <- regions$Cluster_Evoregions
-
-```
-
 We have to transform the evoregion results to spatial object in order to visualize in a map the regions. This can be done using the following code:
 
 ```{r spatProcessEvoregion, echo=TRUE,eval=TRUE}
@@ -252,7 +245,7 @@ a_region <- Herodotools::get_region_occ(comm = akodon_pa_tree, site.region = sit
 
 
 The object generated in the previous step can be passed to an auxiliary Herodotools
-    function to easily produce the [PHYLIP](http://scikit-bio.org/docs/0.2.3/generated/skbio.io.phylip.html) 
+    function to easily produce the [PHYLIP](http://phylo.wikidot.com/biogeobears) 
     file required for ancestral area reconstruction in BioGeoBEARS. 
     
 ```{r echo=TRUE,eval=TRUE}

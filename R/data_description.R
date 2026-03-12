@@ -102,3 +102,15 @@
 #' 
 #' Data frame with three columns with averaged values of tip based metrics of trait evolution
 'averaged_rates'
+
+#' Classification of communities in evoregions
+#'
+#' Classification of communities in evoregions for akodon genus in 
+#'     the neotropics with factors indicating the number of evoregions 
+#'     
+#'
+#' @format 
+#' A vector of length 732 and five levels 
+#' 
+#' @source <https://zenodo.org/records/16933539>
+"site_region"

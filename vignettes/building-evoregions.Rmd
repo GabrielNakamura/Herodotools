@@ -1,5 +1,5 @@
 ---
-title: "Computing evoregions analysis"
+title: "Computing evoregions"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{building-evoregions}
