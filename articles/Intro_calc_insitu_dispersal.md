@@ -124,6 +124,7 @@ visualize in a map the regions. This can be done using the following
 code:
 
 ``` r
+data("site_region") # pre computation evoregions
 evoregion_df <- data.frame(
   site_xy, 
   site_region
