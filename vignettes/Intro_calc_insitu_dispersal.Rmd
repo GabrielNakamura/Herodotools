@@ -76,6 +76,7 @@ Now we need to read the files corresponding to the distribution of species in
 library(Herodotools)
 data("akodon_sites")
 data("akodon_newick")
+
 ```
 
 # Data processing {#processing}
@@ -150,6 +151,7 @@ To facilitate the demonstration, we will use a pre-computed classification from
 We have to transform the evoregion results to spatial object in order to visualize in a map the regions. This can be done using the following code:
 
 ```{r spatProcessEvoregion, echo=TRUE,eval=TRUE}
+data("site_region") # pre computation evoregions
 evoregion_df <- data.frame(
   site_xy, 
   site_region

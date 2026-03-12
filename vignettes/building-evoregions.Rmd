@@ -54,7 +54,7 @@ In this tutorial, we use example data provided in the {Herodotools} package. The
 `akodon_site` dataset represents the occurrence of species across assemblages
 mapped in 1° × 1° grid cells. The `akodon_newick` object contains the phylogenetic
 tree (in Newick format) describing the evolutionary relationships among species
-of the tribe Akodontini.
+of the tribe Akodontini. 
     
 ```{r setup, echo=TRUE, eval=TRUE}
 library(Herodotools)
