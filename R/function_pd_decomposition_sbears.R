@@ -121,9 +121,14 @@ PD_decomposition <-
         ]
       offspring_data <-
         tidytree::offspring(phy_tibble, 
-                            nodes_reconstruction$species)
+                            as.character(nodes_reconstruction$species))
       if(class(offspring_data)[1] == "list"){
-        df_offspring_rec <- do.call(rbind, tidytree::offspring(phy_tibble, as.character(nodes_reconstruction$species)))
+        df_offspring_rec <- 
+          do.call(rbind, 
+                  tidytree::offspring(phy_tibble, 
+                                      as.character(nodes_reconstruction$species)
+                  )
+          )
       } else{
         df_offspring_rec <- offspring_data
       }
