@@ -58,7 +58,7 @@ Imports:
     here,
     HDInterval,
     magrittr,
-    PCPS,
+    PCPS (>= 1.0.9),
     phylobase,
     phyloregion,
     phytools,
@@ -104,3 +104,4 @@ Remotes:
     vanderleidebastiani/daee
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3
