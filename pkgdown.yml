@@ -1,5 +1,5 @@
-pandoc: 3.1.11
-pkgdown: 2.2.0
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   bsm_analysis: bsm_analysis.html
@@ -8,7 +8,7 @@ articles:
   Intro_calc_insitu_dispersal: Intro_calc_insitu_dispersal.html
   Intro_sbears: Intro_sbears.html
   tip_based_trait_evolution: tip_based_trait_evolution.html
-last_built: 2026-03-17T18:49Z
+last_built: 2026-08-17T22:59Z
 urls:
   reference: https://gabrielnakamura.github.io/Herodotools/reference
   article: https://gabrielnakamura.github.io/Herodotools/articles

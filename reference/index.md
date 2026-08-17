@@ -75,6 +75,10 @@
   : Auxiliary function used to define the occurrence threshold used to
   define node presences
 
+- [`genvectors()`](https://gabrielnakamura.github.io/Herodotools/reference/genvectors.md)
+  [`print(`*`<genvectors>`*`)`](https://gabrielnakamura.github.io/Herodotools/reference/genvectors.md)
+  : GenVectors
+
 - [`get_bsm_node_area()`](https://gabrielnakamura.github.io/Herodotools/reference/get_bsm_node_area.md)
   : Get the node area states from the biogeographical stochastic
   mapping's result
@@ -101,6 +105,9 @@
 
 - [`get_tipranges_to_BioGeoBEARS()`](https://gabrielnakamura.github.io/Herodotools/reference/get_tipranges_to_BioGeoBEARS.md)
   : Generates lagrangePHYLIP file for using in BioGeoBEARS
+
+- [`haplodist()`](https://gabrielnakamura.github.io/Herodotools/reference/haplodist.md)
+  : haplodist
 
 - [`insert_nodes()`](https://gabrielnakamura.github.io/Herodotools/reference/insert_nodes.md)
   : Insert internal nodes in the phylogenetic tree

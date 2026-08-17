@@ -52,7 +52,11 @@ rodents. The community matrix corresponds to grids of approximately XX
 km².
 
 ``` r
+
 library(Herodotools)
+#> Registered S3 method overwritten by 'pegas':
+#>   method      from
+#>   print.amova ade4
 data("comm_sbears")
 data("coords_sbears")
 data("phy_sbears")
@@ -64,6 +68,7 @@ To perform the single site algorithm, we can use the `calc_sbears`
 function with the argument `method = "single_site"`.
 
 ``` r
+
 out_single_site <- calc_sbears(x = comm_sbears, 
                                phy = phy_sbears, 
                                coords = coords_sbears,
@@ -78,6 +83,7 @@ computation time can otherwise be substantial. To run the function in
 parallel, the user can proceed as follows:
 
 ``` r
+
 # setting function to work in parallel according to user settings
 library(future)
 library(progressr)
@@ -124,6 +130,7 @@ the minimum dispersal probability of a node between two cells in
 geographic space.
 
 ``` r
+
 out_disp_assembly <- calc_sbears(x = comm_sbears,
                                  phy = phy_sbears, 
                                  coords = coords_sbears, 
@@ -144,6 +151,7 @@ We can use the objects from `calc_sbears` function to plot the ancestral
 range of ancestral nodes.
 
 ``` r
+
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'

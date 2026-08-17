@@ -21,6 +21,7 @@ the figures. If you do not have the packages already installed, they
 will be installed using the following code.
 
 ``` r
+
 libs <- c("ape", "picante", "dplyr", "tidyr", "purrr",
           "raster", "terra", "ggplot2", "stringr",
           "here", "sf", "rnaturalearth", "rcartocolor", "patchwork")
@@ -34,6 +35,7 @@ are required to run the analysis in this vignette. We suggest installing
 and reading these packages from Github using the following code:
 
 ``` r
+
 if (!requireNamespace(c("daee","BioGeoBEARS"), quietly = TRUE)){
   devtools::install_github("vanderleidebastiani/daee")
   devtools::install_github("nmatzke/BioGeoBEARS")
@@ -47,7 +49,11 @@ species in assemblages of 1x1 cell degrees, and phylogenetic
 relationship that will be used in downstream analysis with Herodotools
 
 ``` r
+
 library(Herodotools)
+#> Registered S3 method overwritten by 'pegas':
+#>   method      from
+#>   print.amova ade4
 data("akodon_sites")
 data("akodon_newick")
 ```
@@ -58,6 +64,7 @@ Here we will perform a few data processing in order to get spatial and
 occurrence information
 
 ``` r
+
 site_xy <- akodon_sites %>% 
   dplyr::select(LONG, LAT) 
 
@@ -69,6 +76,7 @@ Checking if species names between occurrence matrix and phylogenetic
 tree are matching
 
 ``` r
+
 spp_in_tree <- names(akodon_pa) %in% akodon_newick$tip.label
 akodon_pa_tree <- akodon_pa[, spp_in_tree]
 ```
@@ -79,6 +87,7 @@ Here we plot richness pattern for Akodon genus. For this we will use the
 ggplot2 package to produce some maps
 
 ``` r
+
 library(ggplot2)
 coastline <- rnaturalearth::ne_coastline(returnclass = "sf")
 map_limits <- list(
@@ -124,6 +133,7 @@ visualize in a map the regions. This can be done using the following
 code:
 
 ``` r
+
 data("site_region") # pre computation evoregions
 evoregion_df <- data.frame(
   site_xy, 
@@ -160,6 +170,7 @@ col_five_hues <- c(
 Evoregions can be mapped using the following code
 
 ``` r
+
 
 map_evoregion <- 
   evoregion_df %>% 
@@ -214,6 +225,7 @@ and evoregions as columns.
 
 ``` r
 
+
 a_region <- Herodotools::get_region_occ(comm = akodon_pa_tree, site.region = site_region)
 ```
 
@@ -223,6 +235,7 @@ Herodotools function to easily produce the
 ancestral area reconstruction in BioGeoBEARS.
 
 ``` r
+
 # save phyllip file
 Herodotools::get_tipranges_to_BioGeoBEARS(
   a_region, 
@@ -245,6 +258,7 @@ run the BioGeoBEARS models, you can access it at
 Reading the file containing the results of DEC model reconstruction:
 
 ``` r
+
 
 # ancestral reconstruction
 load(file = system.file("extdata", "resDEC_akodon.RData", package = "Herodotools")) 
@@ -275,6 +289,7 @@ of this metric, see [Van Dijk et
 al. 2021](https://academic.oup.com/biolinnean/article-abstract/134/1/57/6297962)
 
 ``` r
+
 
 # converting numbers to character
 biogeo_area <- data.frame(biogeo = chartr("12345", "ABCDE", evoregion_df$site_region)) 
@@ -307,6 +322,7 @@ With mean age for each assemblage we can map the ages for all
 assemblages
 
 ``` r
+
 
 sites <- dplyr::bind_cols(site_xy, site_region =  site_region, age = age_comm$mean_age_per_assemblage)
 
@@ -369,6 +385,7 @@ diversification that occurred due to *in-situ diversification process*,
 and we call it in-situ diversification metric.
 
 ``` r
+
 akodon_diversification <- 
   Herodotools::calc_insitu_diversification(W = akodon_pa_tree,
                                            tree = akodon_newick, 
@@ -392,6 +409,7 @@ list containing the following elements:
     rates per site.
 
 ``` r
+
 sites <- dplyr::bind_cols(site_xy,
                    site_region =  site_region,
                    age = age_comm$mean_age_per_assemblage,
@@ -474,6 +492,7 @@ considered in this analysis.
 
 ``` r
 
+
 akodon_dispersal <- 
 Herodotools::calc_dispersal_from(W = akodon_pa_tree,
                tree = akodon_newick, 
@@ -486,6 +505,7 @@ the focal area of ancestral range in each map have no values of dipersal
 from metric, since it is the source of dispersal to the other regions.
 
 ``` r
+
 
 sites <- dplyr::bind_cols(site_xy,
                    site_region =  site_region, 
@@ -563,6 +583,7 @@ map_dispersal_B <-
 ```
 
 ``` r
+
 l_map_disp <- list(
   map_dispersal_A , 
   map_dispersal_B,

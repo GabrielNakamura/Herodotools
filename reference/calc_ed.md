@@ -71,6 +71,7 @@ https://doi.org/10.1098/rstb.2006.1977
 ## Examples
 
 ``` r
+
 # example for calc_ed
 # generate simlutated data ----
 set.seed(4523)

@@ -29,8 +29,17 @@ First we will load trait and phylogenetic data we need to run the
 function `calc_tip_based_trait_evo`.
 
 ``` r
+
 # load packages
 library(Herodotools)
+```
+
+    ## Registered S3 method overwritten by 'pegas':
+    ##   method      from
+    ##   print.amova ade4
+
+``` r
+
 library(dplyr)
 ```
 
@@ -46,6 +55,7 @@ library(dplyr)
     ##     intersect, setdiff, setequal, union
 
 ``` r
+
 library(ggplot2)
 library(patchwork)
 
@@ -58,6 +68,7 @@ data("trait")
 Now calculate the metrics.
 
 ``` r
+
 match_data <- picante::match.phylo.data(rodent_phylo, trait)
 
 # run `calc_tip_based_trait_evo` function 
@@ -74,6 +85,7 @@ Since this analysis can take several minutes we can read the result
 obtained using the same code above
 
 ``` r
+
 load(system.file("extdata", "transition_rate_res.RData", package = "Herodotools"))
 ```
 
@@ -83,6 +95,7 @@ First we will load assemblage and geographic data comprising 1770 grid
 cells located at the Neotropics.
 
 ``` r
+
 # load community data
 comm_data <- read.table(
    system.file("extdata", "PresAbs_228sp_Neotropical_MainDataBase_Ordenado.txt", 
@@ -101,6 +114,7 @@ Now we calculate the values of tip-based metrics for all species for
 each assemblage.
 
 ``` r
+
 # transition rates for each community
 averaged_rates <- purrr::map_dfr(1:nrow(comm_data), function (i){
   # across assemblages
@@ -142,6 +156,7 @@ sigmodontine rodents in south America, and ii) the occurrence of several
 species closely related to basal lineages.
 
 ``` r
+
 data("averaged_rates", package = "Herodotools")
 
 # prepare data to map

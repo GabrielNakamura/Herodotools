@@ -75,6 +75,7 @@ Macroecology, Macroevolution and Community Phylogenetics.
 To install the development version of this package the user must type:
 
 ``` r
+
 if (!requireNamespace("devtools", quietly = TRUE)){
     install.packages("devtools")
   }

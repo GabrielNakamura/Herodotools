@@ -39,7 +39,11 @@ object contains the phylogenetic tree (in Newick format) describing the
 evolutionary relationships among species of the tribe Akodontini.
 
 ``` r
+
 library(Herodotools)
+#> Registered S3 method overwritten by 'pegas':
+#>   method      from
+#>   print.amova ade4
 data("akodon_sites")
 data("akodon_newick")
 
@@ -62,6 +66,7 @@ function. This can be done using the `pcps()` function from the {PCPS}
 package.
 
 ``` r
+
 pcps_bray <-
   PCPS::pcps(akodon_pa_tree, phylodist = cophenetic(akodon_newick), method = "bray")
 
@@ -81,6 +86,7 @@ backend using
 first.
 
 ``` r
+
 # setting function to work in parallel according to user settings
 library(future)
 library(progressr)
@@ -100,6 +106,7 @@ Then, run the `find_max_clust` function
 
 ``` r
 
+
 matrix_optimal_maxclust <- 
   find_max_nclust(x = vec_bray,
                   threshold = thresh_bray, 
@@ -114,18 +121,18 @@ matrix_optimal_maxclust <-
 matrix_optimal_maxclust
 #>             confidence_lev_0.7 confidence_lev_0.8 confidence_lev_0.9
 #> group.max3           1.0000000          1.0000000          1.0000000
-#> group.max4           0.9800000          0.7200000          0.0000000
-#> group.max5           1.0000000          1.0000000          0.9966667
-#> group.max7           1.0000000          0.9966667          0.9966667
-#> group.max9           1.0000000          0.9933333          0.9800000
-#> group.max10          0.9933333          0.9800000          0.9700000
+#> group.max4           0.9866667          0.7533333          0.7533333
+#> group.max5           1.0000000          1.0000000          1.0000000
+#> group.max7           1.0000000          0.9933333          0.9933333
+#> group.max9           1.0000000          0.9866667          0.9766667
+#> group.max10          0.9900000          0.9733333          0.9666667
 #>             confidence_lev_0.95 confidence_lev_0.99
 #> group.max3            1.0000000           1.0000000
 #> group.max4            0.0000000           0.0000000
-#> group.max5            0.9966667           0.9966667
-#> group.max7            0.9966667           0.9933333
-#> group.max9            0.9800000           0.9800000
-#> group.max10           0.9633333           0.9633333
+#> group.max5            1.0000000           1.0000000
+#> group.max7            0.9933333           0.9933333
+#> group.max9            0.9766667           0.9766667
+#> group.max10           0.9666667           0.9666667
 ```
 
 This matrix summarizes the results of the analysis of stability of
@@ -182,6 +189,7 @@ Here, we set `max.n.clust = 5`, based on the result obtained in the
 previous step.
 
 ``` r
+
 regions <- 
   Herodotools::calc_evoregions(
   comm = akodon_pa_tree,
@@ -195,6 +203,7 @@ site_region <- regions$cluster_evoregions # this is the classification result fo
 We can plot the regions in the map.
 
 ``` r
+
 evoregion_df <- data.frame(
   site_xy, 
   site_region
@@ -230,6 +239,7 @@ col_five_hues <- c(
 Finally, plotting evoregions in the map
 
 ``` r
+
 library(ggplot2)
 map_evoregion <- 
   evoregion_df |> 
@@ -279,6 +289,7 @@ region with the function `calc_affiliation_evoreg`
 
 ``` r
 
+
 # distance matrix using 4 significant PCPS axis accordingly to the 5% threshold 
 dist_phylo_PCPS <- vegan::vegdist(vec_bray[, 1:thresh_bray], method = "euclidean")
 
@@ -298,6 +309,7 @@ In other words, the more faded a cell’s color, the weaker its
 affiliation to the assigned evoregion.
 
 ``` r
+
 map_joint_evoregion_afilliation <- 
    evoregion_df %>% 
    ggplot() + 

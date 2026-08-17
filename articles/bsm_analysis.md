@@ -41,6 +41,7 @@ assemblage level perspective.
 
 ``` r
 
+
 # load the package -------------------------------------------------------------
 library(Herodotools)
 library(rnaturalearth)
@@ -80,6 +81,7 @@ elements, one with the cladogentic and the other with the anagenetic
 events.
 
 ``` r
+
 # calc_bsm ---------------------------------------------------------------------
 
 bsm_result <- calc_bsm(
@@ -114,6 +116,7 @@ and
 
 ``` r
 
+
 # prepare  insertions -------------------------------------------------------
 ## get_insert_df ----
 
@@ -144,6 +147,7 @@ the argument `node_area` is not NULL, all the node area are included in
 the data frame.
 
 ``` r
+
 # insert_nodes -----------------------------------------------------------------
 
 bsm_tree <- insert_nodes(
@@ -157,6 +161,7 @@ internal nodes. Also note that there are more internal nodes than tips,
 which means there are non-bifurcating nodes (or singleton nodes).
 
 ``` r
+
 bsm_tree[[1]]$phylo
 #> 
 #> Phylogenetic tree with 30 tips and 52 internal nodes.
@@ -187,6 +192,7 @@ coordinates from the presence-absence data in the `akodon_sites`, filter
 species present in the phylogeny, and load the evoregions of the sites.
 
 ``` r
+
 
 # separate coords from presence-absence
 
@@ -233,6 +239,7 @@ time across several BSMs.
 
 ``` r
 
+
 # calculating age arrival -----
 l_age_comm <- lapply(bsm_tree, function(bsm_map){
   
@@ -270,6 +277,7 @@ We create a loop to calculate the in situ diversification for each BSM
 map.
 
 ``` r
+
 # calculating in situ diversification -----
 
 l_div_insitu <- lapply(bsm_tree, function(bsm_map){
@@ -301,6 +309,7 @@ The code below extract each of the community metrics and summarize it
 for visualization.
 
 ``` r
+
 
 
 # jetz_comm_mean ----
@@ -337,6 +346,7 @@ Finally, we create figures with mean estimates across BSM metrics and
 uncertainty around those mean estimates.
 
 ``` r
+
 # Visualization ----
 
 # create a theme
@@ -364,6 +374,7 @@ theme_htools <- list(
 #### Mean across BSMs
 
 ``` r
+
 
 # Spatial patterns, mean across BSMs ----
 
@@ -410,6 +421,7 @@ plot_DR_prop_mean <- bsm_metrics %>%
 
 ``` r
 
+
 l_plot_bsm_mean <- list(plot_age_mean, plot_DR_jetz, plot_DR_insitu_mean, plot_DR_prop_mean)
 
 patchwork::wrap_plots(l_plot_bsm_mean, nrow = 1, axes = "collect") +
@@ -421,6 +433,7 @@ patchwork::wrap_plots(l_plot_bsm_mean, nrow = 1, axes = "collect") +
 #### Uncertainty across BSMs
 
 ``` r
+
 
 # Spatial patterns, uncertainty across BSMs ----
 
@@ -457,6 +470,7 @@ plot_DR_prop_sd <- bsm_metrics %>%
 ```
 
 ``` r
+
 
 l_plot_bsm_sd <- list(plot_age_sd, plot_DR_insitu_sd, plot_DR_prop_sd)
 
