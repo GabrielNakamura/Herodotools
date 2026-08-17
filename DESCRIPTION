@@ -102,7 +102,7 @@ Suggests:
     rlang
 Remotes: 
     nmatzke/BioGeoBEARS,
-    vanderleidebastiani/daee
+    vanderleidebastiani/daee,
     url::https://cran.r-project.org/src/contrib/Archive/MultinomialCI/MultinomialCI_1.2.tar.gz
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
